@@ -4,7 +4,7 @@
  */
 
 import { cleanEnv } from "envalid";
-import { port, str, email } from "envalid/dist/validators";
+import { port, str, email, json } from "envalid/dist/validators";
 
 export default cleanEnv(process.env, {
   PORT: port(), // Port to run backend on
@@ -12,4 +12,5 @@ export default cleanEnv(process.env, {
   FRONTEND_ORIGIN: str(), // URL of frontend, to allow CORS from frontend
   EMAIL_USER: email(), // Email address to use for sending emails
   EMAIL_APP_PASSWORD: str(), // App password to use for sending emails
+  BACKEND_FIREBASE_SETTINGS: json(), // Firebase settings for backend, stored as a JSON string
 });

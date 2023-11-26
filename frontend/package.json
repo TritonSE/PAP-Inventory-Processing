@@ -12,6 +12,8 @@
     "prepare": "cd .. && husky install .husky"
   },
   "dependencies": {
+    "envalid": "^8.0.0",
+    "firebase": "^10.6.0",
     "next": "14.0.3",
     "react": "^18",
     "react-dom": "^18"
