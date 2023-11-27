@@ -1,0 +1,32 @@
+name: Run frontend & backend unit tests
+on:
+  pull_request:
+    branches: 
+      - main
+jobs:
+  backend:
+    name: Backend tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Run tests
+        working-directory: backend
+        env:
+          CI: true
+        run: |
+          npm ci
+          npm run test
+  frontend:
+    name: Frontend tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - name: Run tests
+        working-directory: frontend
+        env:
+          CI: true
+        run: |
+          npm ci
+          npm run test
