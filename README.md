@@ -40,3 +40,7 @@ This project has ESLint and Prettier set up to run linting and code formatting, 
 - `npm run lint-check` runs lint checks on your code.
 - `npm run lint-fix` fixes any automatically fixable lint errors.
 - `npm run format` runs code formatting checks and fixes any formatting errors.
+
+### Tests
+
+This project has unit tests for the frontend and backend, using the Jest testing framework. The tests are located in the `__tests__` directories within both the `frontend` and `backend` directories. To run unit tests for either frontend or backend, run `npm run test`.

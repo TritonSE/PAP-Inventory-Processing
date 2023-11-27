@@ -4,6 +4,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "nodemon src/server.ts",
+    "test": "jest",
     "format": "prettier --write .",
     "lint-fix": "(eslint --fix --cache --report-unused-disable-directives . || true) && prettier --write .",
     "lint-check": "eslint --cache --report-unused-disable-directives --max-warnings 0 . && prettier --check .",
@@ -17,16 +18,22 @@
     "express-validator": "^7.0.1",
     "firebase-admin": "^11.11.1",
     "http-errors": "^2.0.0",
+    "jest": "^29.7.0",
     "module-alias": "^2.2.3",
     "mongodb": "^5.7.0",
+    "mongodb-memory-server": "^9.1.1",
     "mongoose": "^7.4.0",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.9.7",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.1.1"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.17",
     "@types/http-errors": "^2.0.1",
+    "@types/jest": "^29.5.10",
     "@types/nodemailer": "^6.4.14",
+    "@types/supertest": "^2.0.16",
     "@typescript-eslint/eslint-plugin": "^6.1.0",
     "@typescript-eslint/parser": "^6.1.0",
     "eslint": "^8.45.0",
