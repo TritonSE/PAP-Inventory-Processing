@@ -4,7 +4,7 @@
  */
 
 import { cleanEnv } from "envalid";
-import { str, json } from "envalid/dist/validators";
+import { json, str } from "envalid/dist/validators";
 
 /**
  * Note that in NextJS, environment variables' names must start with
