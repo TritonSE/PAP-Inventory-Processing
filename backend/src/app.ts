@@ -29,7 +29,7 @@ app.use(
  * Error handler; all errors thrown by server are handled here.
  * Explicit typings required here because TypeScript cannot infer the argument types.
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   // 500 is the "internal server error" error code, this will be our fallback
   let statusCode = 500;
