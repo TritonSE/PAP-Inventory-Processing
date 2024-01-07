@@ -1,8 +1,9 @@
-import request from "supertest";
-import app from "src/app";
-import mongoose from "mongoose";
-import { MongoMemoryServer } from "mongodb-memory-server";
 import { MongoClient } from "mongodb";
+import { MongoMemoryServer } from "mongodb-memory-server";
+import mongoose from "mongoose";
+import request from "supertest";
+
+import app from "src/app";
 
 const TEST_DB_NAME = "test";
 

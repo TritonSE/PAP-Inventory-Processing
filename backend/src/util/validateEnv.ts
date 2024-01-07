@@ -4,7 +4,7 @@
  */
 
 import { cleanEnv } from "envalid";
-import { port, str, email, json } from "envalid/dist/validators";
+import { email, json, port, str } from "envalid/dist/validators";
 
 export default cleanEnv(process.env, {
   PORT: port(), // Port to run backend on

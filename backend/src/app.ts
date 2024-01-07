@@ -3,8 +3,8 @@
  */
 
 import "dotenv/config";
-import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
+import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
 
 const app = express();
@@ -29,10 +29,8 @@ app.use(
  * Error handler; all errors thrown by server are handled here.
  * Explicit typings required here because TypeScript cannot infer the argument types.
  */
+// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
-  // Don't use "next" argument
-  next;
-
   // 500 is the "internal server error" error code, this will be our fallback
   let statusCode = 500;
   let errorMessage = "An error has occurred.";
