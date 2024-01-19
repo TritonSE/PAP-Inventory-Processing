@@ -16,3 +16,7 @@ const vsrSchema = new Schema({
   incomeLevel: { type: String, require: true },
   sizeOfHome: { type: String, require: true },
 });
+
+type VSR = InferSchemaType<typeof vsrSchema>;
+
+export default model<VSR>("VSR", vsrSchema);

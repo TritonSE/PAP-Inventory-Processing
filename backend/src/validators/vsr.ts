@@ -111,3 +111,20 @@ const makeSizeOfHomeValidator = () =>
     .withMessage("Size of Home is required")
     .isString()
     .withMessage("Size of Home must be a string");
+
+export const createVSR = [
+  makeNameValidator(),
+  makeDateValidator(),
+  makeGenderValidator(),
+  makeAgeValidator(),
+  makeMaritalStatusValidator(),
+  makeSpouseNameValidator(),
+  makeNumOfBoysValidator(),
+  makeNumOfGirlsValidator(),
+  makeAgesOfBoysValidator(),
+  makeAgesOfGirlsValidator(),
+  makeEthnicityValidator(),
+  makeEmploymentStatusValidator(),
+  makeIncomeLevelValidator(),
+  makeSizeOfHomeValidator(),
+];
