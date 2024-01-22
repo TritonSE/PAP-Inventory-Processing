@@ -1,0 +1,10 @@
+.box Accordian {
+  display: inline-block;
+  background-color: #fff;
+}
+
+.box .details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

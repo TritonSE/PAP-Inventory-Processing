@@ -1,0 +1,40 @@
+.page {
+  background-color: var(--color-tse-primary-light);
+}
+
+.toDashboard {
+  margin-top: 27px;
+  margin-left: 63px;
+}
+
+.allDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 105px;
+}
+
+.allDetails > * {
+  margin-bottom: 64px;
+  width: calc(100% * 5 / 6);
+}
+
+.otherDetails {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.personalInfo {
+  display: flex;
+  flex-direction: column;
+  width: calc(100vw * 49 / 144);
+}
+
+.personalInfo > * {
+  margin-bottom: 18px;
+}
+
+.furnishings {
+  width: calc(100vw * 655 / 1440);
+}
