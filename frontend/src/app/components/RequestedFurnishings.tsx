@@ -11,7 +11,7 @@ export const RequestedFurnishings = () => {
     <div className={styles.box}>
       <Accordion>
         <AccordionSummary aria-controls="panel2-content" id="panel2-header">
-          <Typography>Requested Furnishings</Typography>
+          <Typography className={styles.title}>Requested Furnishings</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>

@@ -11,7 +11,7 @@ export const AdditionalFiles = () => {
     <div className={styles.box}>
       <Accordion>
         <AccordionSummary aria-controls="panel2-content" id="panel2-header">
-          <Typography>Additional Files</Typography>
+          <Typography className={styles.title}>Additional Files</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>

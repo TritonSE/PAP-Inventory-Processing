@@ -1,7 +1,7 @@
 .items span {
   display: inline-block;
   color: var(--Accent-Blue-2, #04183b);
-  font-family: Lora;
+  font-family: var(--font-title);
   font-size: 38px;
   font-style: normal;
   font-weight: 700;

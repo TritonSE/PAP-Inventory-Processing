@@ -18,3 +18,12 @@
   flex-direction: row;
   justify-content: space-between;
 }
+
+.title {
+  font-family: var(--font-title);
+  color: var(--Primary-Background-Dark, #232220);
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}

@@ -3,23 +3,39 @@
 }
 
 .toDashboard {
-  margin-top: 27px;
-  margin-left: 63px;
+  margin-top: 58px;
+}
+
+.name {
+  margin-top: 29px;
+  margin-bottom: 64px;
+}
+
+.toDashboard > * {
+  margin-right: 18px;
+}
+
+.toDashboard a {
+  color: #818181;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 .allDetails {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 105px;
 }
 
 .allDetails > * {
-  margin-bottom: 64px;
   width: calc(100% * 5 / 6);
 }
 
 .otherDetails {
+  margin-top: 64px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;

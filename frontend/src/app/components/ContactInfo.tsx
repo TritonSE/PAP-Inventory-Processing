@@ -4,14 +4,14 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { SingleDetail } from "src/app/components/SingleDetail";
+import { SingleDetail } from "@/app/components";
 
 export const ContactInfo = () => {
   return (
     <div className={styles.box}>
       <Accordion>
         <AccordionSummary aria-controls="panel2-content" id="panel2-header">
-          <Typography>Contact Information</Typography>
+          <Typography className={styles.title}>Contact Information</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>

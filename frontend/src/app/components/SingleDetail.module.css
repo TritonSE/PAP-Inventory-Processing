@@ -6,16 +6,17 @@
 
 .items .title {
   color: rgba(35, 34, 32, 0.55);
-  font-family: "Open Sans";
+  font-family: var(--font-open-sans);
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  margin-bottom: 14px;
 }
 
 .items .value {
   color: #222;
-  font-family: "Open Sans";
+  font-family: var(--font-open-sans);
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
