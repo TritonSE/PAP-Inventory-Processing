@@ -1,6 +1,15 @@
-.box Accordian {
+.accordian {
   display: inline-block;
   background-color: #fff;
+  width: calc(100vw * 89 / 288);
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: none;
+}
+
+.accordianTitle {
+  height: 48px;
+  border-bottom: 1px solid #d6d6d6;
+  height: 48px;
 }
 
 .box .details {
@@ -22,7 +31,7 @@
 .title {
   font-family: var(--font-title);
   color: var(--Primary-Background-Dark, #232220);
-  font-size: 20px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;

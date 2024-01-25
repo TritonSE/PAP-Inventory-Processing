@@ -1,17 +1,22 @@
 import React from "react";
-import styles from "src/app/components/AdditionalFiles.module.css";
+import styles from "src/app/components/AdditionalInfo.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail } from "@/app/components";
 
-export const AdditionalFiles = () => {
+export const AdditionalInfo = () => {
   return (
     <div className={styles.box}>
-      <Accordion>
-        <AccordionSummary aria-controls="panel2-content" id="panel2-header">
-          <Typography className={styles.title}>Additional Files</Typography>
+      <Accordion className={styles.accordian}>
+        <AccordionSummary
+          className={styles.accordianTitle}
+          expandIcon={<img src="/dropdown.svg" />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography className={styles.title}>Additional Information</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>

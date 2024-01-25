@@ -5,6 +5,6 @@ export { CaseDetails } from "./CaseDetails";
 export { ContactInfo } from "./ContactInfo";
 export { PersonalInformation } from "./PersonalInformation";
 export { MilitaryBackground } from "./MilitaryBackground";
-export { AdditionalFiles } from "./AdditionalFiles";
+export { AdditionalInfo } from "./AdditionalInfo";
 export { RequestedFurnishings } from "./RequestedFurnishings";
 export { SingleDetail } from "./SingleDetail";

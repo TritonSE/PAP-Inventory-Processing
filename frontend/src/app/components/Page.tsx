@@ -6,7 +6,7 @@ import {
   CaseDetails,
   PersonalInformation,
   MilitaryBackground,
-  AdditionalFiles,
+  AdditionalInfo,
   RequestedFurnishings,
 } from "@/app/components";
 import styles from "src/app/components/Page.module.css";
@@ -19,11 +19,11 @@ export const Page = (/* implement later*/) => {
   return (
     <div className={styles.page}>
       <HeaderBar />
+      <div className={styles.toDashboard}>
+        <img width={24} height={24} src="/ic_arrowback.svg" />
+        <a href="complete">Dashboard</a>
+      </div>
       <div className={styles.allDetails}>
-        <div className={styles.toDashboard}>
-          <img width={14} height={12} src="/backarrow.svg" />
-          <a href="complete">Back To Dashboard</a>
-        </div>
         <div className={styles.name}>
           <UserTag></UserTag>
         </div>
@@ -34,7 +34,7 @@ export const Page = (/* implement later*/) => {
               <ContactInfo />
               <PersonalInformation />
               <MilitaryBackground />
-              <AdditionalFiles />
+              <AdditionalInfo />
             </div>
             <div className={styles.furnishings}>
               <RequestedFurnishings />

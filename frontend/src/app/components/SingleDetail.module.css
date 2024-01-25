@@ -7,18 +7,20 @@
 .items .title {
   color: rgba(35, 34, 32, 0.55);
   font-family: var(--font-open-sans);
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 
 .items .value {
   color: #222;
   font-family: var(--font-open-sans);
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  padding-top: 6px;
+  padding-bottom: 6px;
 }

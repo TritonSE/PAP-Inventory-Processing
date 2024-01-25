@@ -2,8 +2,8 @@
   display: inline-block;
   color: var(--Accent-Blue-2, #04183b);
   font-family: var(--font-title);
-  font-size: 38px;
+  font-size: 40px;
   font-style: normal;
   font-weight: 700;
-  line-height: normal;
+  line-height: 51.2px;
 }

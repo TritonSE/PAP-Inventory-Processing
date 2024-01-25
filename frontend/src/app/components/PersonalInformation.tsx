@@ -9,8 +9,13 @@ import { SingleDetail } from "@/app/components";
 export const PersonalInformation = () => {
   return (
     <div className={styles.box}>
-      <Accordion>
-        <AccordionSummary aria-controls="panel2-content" id="panel2-header">
+      <Accordion className={styles.accordian}>
+        <AccordionSummary
+          className={styles.accordianTitle}
+          expandIcon={<img src="/dropdown.svg" />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
           <Typography className={styles.title}>Personal Information</Typography>
         </AccordionSummary>
         <AccordionDetails>

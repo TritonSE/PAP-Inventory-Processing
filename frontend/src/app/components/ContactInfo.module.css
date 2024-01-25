@@ -1,29 +1,45 @@
-.box Accordian {
+.accordian {
   display: inline-block;
   background-color: #fff;
+  width: calc(100vw * 89 / 288);
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: none;
 }
 
-.box .details {
+.accordianTitle {
+  height: 48px;
+  border-bottom: 1px solid #d6d6d6;
+}
+
+.details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: 12px;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-bottom: 14px;
 }
 
-.box .details > * {
-  margin-top: 32px;
-}
-
-.box .details .row {
+.row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
+.row:not(:last-child) {
+  padding-bottom: 32px;
+}
+
 .title {
   font-family: var(--font-title);
   color: var(--Primary-Background-Dark, #232220);
-  font-size: 20px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }

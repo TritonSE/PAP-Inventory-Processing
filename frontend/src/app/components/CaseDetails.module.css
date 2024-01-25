@@ -1,8 +1,9 @@
-.box Accordian {
+.accordian {
   display: inline-block;
   background-color: #fff;
-  border-radius: 6px 6px 0px 0px;
-  border-bottom: 1px solid #d6d6d6;
+  width: calc(100vw * 5 / 6);
+  border-radius: 6px 6px 6px 6px;
+  box-shadow: none;
 }
 
 .title {
@@ -12,10 +13,21 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  margin-left: 6px;
+}
+
+.accordianTitle {
+  height: 48px;
+  border-bottom: 1px solid #d6d6d6;
+  height: 48px;
 }
 
 .box .details {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  margin-left: 4px;
+  margin-right: 4px;
+  padding-bottom: 5px;
+  margin-top: 15px;
 }

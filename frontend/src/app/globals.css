@@ -1,4 +1,5 @@
 :root {
+  --color-background: #eceff3;
   --color-tse-primary-light: #f7f7f7;
   --color-tse-primary-dark: #232220;
   --color-tse-secondary-1: #102d5f;
@@ -12,6 +13,7 @@
   --color-tse-secondary-light-blue: #c7def1;
   --font-title: "Lora", serif;
   --font-open-sans: "Open Sans", sans-serif;
+  --font-inter: "Inter", sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

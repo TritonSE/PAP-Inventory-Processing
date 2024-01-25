@@ -9,8 +9,13 @@ import { SingleDetail } from "@/app/components";
 export const MilitaryBackground = () => {
   return (
     <div className={styles.box}>
-      <Accordion>
-        <AccordionSummary aria-controls="panel2-content" id="panel2-header">
+      <Accordion className={styles.accordian}>
+        <AccordionSummary
+          className={styles.accordianTitle}
+          expandIcon={<img src="/dropdown.svg" />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
           <Typography className={styles.title}>Military Background</Typography>
         </AccordionSummary>
         <AccordionDetails>

@@ -1,27 +1,31 @@
 .page {
-  background-color: var(--color-tse-primary-light);
+  background-color: var(--color-background);
 }
 
 .toDashboard {
   margin-top: 58px;
+  max-width: 137px;
+  height: 40px;
+  padding-left: 10px;
+  padding-top: 8px;
+  margin-left: calc(100vw * 1 / 12);
+  border-radius: 4px;
+  border: 1px solid var(--Secondary-Accent1, #102d5f);
+  justify-content: center;
 }
 
 .name {
   margin-top: 29px;
-  margin-bottom: 64px;
-}
-
-.toDashboard > * {
-  margin-right: 18px;
+  margin-bottom: 32px;
 }
 
 .toDashboard a {
-  color: #818181;
+  color: #222;
   font-family: var(--font-open-sans);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
-  line-height: normal;
+  padding-left: 10px;
 }
 
 .allDetails {
@@ -35,7 +39,7 @@
 }
 
 .otherDetails {
-  margin-top: 64px;
+  margin-top: 32px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -48,7 +52,7 @@
 }
 
 .personalInfo > * {
-  margin-bottom: 18px;
+  margin-bottom: 32px;
 }
 
 .furnishings {
