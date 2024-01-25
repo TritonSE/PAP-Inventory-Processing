@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/app/components/AdditionalInfo.module.css";
+import styles from "@/app/components/PersonalInformation.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -20,10 +20,15 @@ export const AdditionalInfo = () => {
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>
-            <SingleDetail title="Case ID" value="A0000011" />
-            <SingleDetail title="Date Received" value="12-18-2024 [09:32 AM]" />
-            <SingleDetail title="Status" value="Received" />
-            <SingleDetail title="Last Updated" value="12-18-2024 [09:32 AM]" />
+            <div className={styles.row}>
+              <SingleDetail
+                title="Are you interested in a companionship animal (pet)?"
+                value="No"
+              />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="How did you hear about us?" value="Colleague" />
+            </div>
           </div>
         </AccordionDetails>
       </Accordion>

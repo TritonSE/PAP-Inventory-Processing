@@ -20,10 +20,45 @@ export const PersonalInformation = () => {
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>
-            <SingleDetail title="Case ID" value="A0000011" />
-            <SingleDetail title="Date Received" value="12-18-2024 [09:32 AM]" />
-            <SingleDetail title="Status" value="Received" />
-            <SingleDetail title="Last Updated" value="12-18-2024 [09:32 AM]" />
+            <div className={styles.row}>
+              <SingleDetail title="Name" value="Justin Timberlake" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Street Address" value="6666 NSYNC Ave." />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="City" value="San Diego" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="State" value="CA" />
+              <SingleDetail title="Zip Code" value="92092" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Marital Status" value="Married" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Spouse's Name" value="Jane Timberlake" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Number of boy(s)" value="2" />
+              <SingleDetail title="Age(s)" value="10,12" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Number of girl(s)" value="2" />
+              <SingleDetail title="Age(s)" value="10,12" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Ethnicity" value="Caucasian" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Employment Status" value="Currenlty Looking" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Income Level" value="$12,500 and under" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Size of Home" value="Apartment" />
+            </div>
           </div>
         </AccordionDetails>
       </Accordion>

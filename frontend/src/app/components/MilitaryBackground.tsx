@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/app/components/MilitaryBackground.module.css";
+import styles from "src/app/components/PersonalInformation.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -20,14 +20,25 @@ export const MilitaryBackground = () => {
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>
-            <SingleDetail title="Email Address" value="JTimberlake@gmail.com" />
             <div className={styles.row}>
-              <SingleDetail title="Phone Number" value="+1 (222) 333-4444" />
-              <SingleDetail title="Gender" value="Male" />
-              <SingleDetail title="Age" value="34" />
+              <SingleDetail title="Branch" value="Army" />
             </div>
-            <SingleDetail title="Street Address" value="6666 NSYNC Ave" />
-            <SingleDetail title="City, State, Zip" value="San Diego, CA, 92093" />
+            <div className={styles.row}>
+              <SingleDetail title="Conflicts" value="Irag" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Other" value="Please list" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Discharge Status" value="Medical" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Service Connected" value="Yes" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Last Rank" value="Private" />
+              <SingleDetail title="Military ID Number" value="1111" />
+            </div>
           </div>
         </AccordionDetails>
       </Accordion>

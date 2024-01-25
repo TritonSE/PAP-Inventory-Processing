@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/app/components/RequestedFurnishings.module.css";
+import styles from "src/app/components/PersonalInformation.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -20,10 +20,27 @@ export const RequestedFurnishings = () => {
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>
-            <SingleDetail title="Case ID" value="A0000011" />
-            <SingleDetail title="Date Received" value="12-18-2024 [09:32 AM]" />
-            <SingleDetail title="Status" value="Received" />
-            <SingleDetail title="Last Updated" value="12-18-2024 [09:32 AM]" />
+            <div className={styles.row}>
+              <SingleDetail title="Bedroom" value="Justin Timberlake" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Bathroom" value="6666 NSYNC Ave." />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Kitchen" value="San Diego" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Living Room:" value="CA" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Dining Room:" value="Married" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Other:" value="Jane Timberlake" />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Additional Items:" value="2" />
+            </div>
           </div>
         </AccordionDetails>
       </Accordion>

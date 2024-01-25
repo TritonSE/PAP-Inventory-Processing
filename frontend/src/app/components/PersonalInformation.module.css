@@ -7,24 +7,37 @@
 }
 
 .accordianTitle {
-  border-bottom: 1px solid #d6d6d6;
   height: 48px;
+  border-bottom: 1px solid #d6d6d6;
+  padding-left: 22px;
+  padding-right: 22px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
-.box .details {
+.details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: 12px;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-bottom: 14px;
 }
-
-.box .details > * {
-  margin-bottom: 32px;
-}
-
-.box .details .row {
+.details > * {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.row:not(:last-child) {
+  padding-bottom: 32px;
 }
 
 .title {
@@ -34,8 +47,4 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 8px;
-  padding-bottom: 8px;
 }
