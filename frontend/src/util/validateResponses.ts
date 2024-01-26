@@ -1,8 +1,8 @@
-function isnum(num: string): boolean {
+export function isnum(num: string): boolean {
   return /^\d+$/.test(num);
 }
 
-function validateDate(date: string): string {
+export function validateDate(date: string): string {
   const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
   if (dateRegex.test(date)) {
     return "Success";
@@ -11,7 +11,7 @@ function validateDate(date: string): string {
   }
 }
 
-function validateAge(age: string): string {
+export function validateAge(age: string): string {
   if (!isnum(age)) {
     return "Age is not a number";
   } else {
@@ -19,7 +19,7 @@ function validateAge(age: string): string {
   }
 }
 
-function validateSpouseName(maritalStatus: string, spouseName: string): string {
+export function validateSpouseName(maritalStatus: string, spouseName: string): string {
   if (maritalStatus === "Married") {
     return spouseName === "" ? "Spouse name is required" : "Success";
   } else if (maritalStatus === "Single") {
@@ -28,12 +28,12 @@ function validateSpouseName(maritalStatus: string, spouseName: string): string {
   return "Success";
 }
 
-function checkAgesFormat(ages: string): boolean {
+export function checkAgesFormat(ages: string): boolean {
   const ageRegex = /^\d+(,\s*\d+)*$/;
   return ageRegex.test(ages);
 }
 
-function validateNumChildren(numChildren: string, ages: string): string {
+export function validateNumChildren(numChildren: string, ages: string): string {
   if (!isnum(numChildren)) {
     return "Number of children is not a number";
   }
@@ -64,7 +64,7 @@ function validateNumChildren(numChildren: string, ages: string): string {
   return "Unknown error";
 }
 
-function validateEthnicityOther(ethnicities: string, other: string) {
+export function validateEthnicityOther(ethnicities: string, other: string) {
   if ((ethnicities === "" && other !== "") || (ethnicities !== "" && other === "")) {
     return "Success";
   } else if (ethnicities === "" && other === "") {
