@@ -1,6 +1,11 @@
 import "@testing-library/jest-dom";
 
-import { isnum, validateAge, validateSpouseName } from "../src/util/validateResponses";
+import {
+  isnum,
+  validateAge,
+  validateEthnicityOther,
+  validateSpouseName,
+} from "../src/util/validateResponses";
 
 describe("Frontend Validator Tests", () => {
   describe("IsNum", () => {
@@ -72,6 +77,32 @@ describe("Frontend Validator Tests", () => {
       expect(validateSpouseName("It's Complicated", "")).toEqual("Success");
       expect(validateSpouseName("It's Complicated", "Bob")).toEqual("Success");
       expect(validateSpouseName("It's Complicated", "Bob Smith")).toEqual("Success");
+    });
+  });
+
+  describe("ValidateEthnicityOther", () => {
+    it("Correctly classifies no ethnicity and no other", () => {
+      expect(validateEthnicityOther("", "")).toEqual("Please fill out the other field");
+    });
+
+    it("Correctly classifies no ethnicity and other", () => {
+      expect(validateEthnicityOther("", "Other")).toEqual("Success");
+      expect(validateEthnicityOther("", "Polynesian")).toEqual("Success");
+    });
+
+    it("Correctly classifies has ethnicity and has other", () => {
+      expect(validateEthnicityOther("Asian", "Other")).toEqual(
+        "Please leave the other field empty",
+      );
+      expect(validateEthnicityOther("Asian", "Polynesian")).toEqual(
+        "Please leave the other field empty",
+      );
+    });
+
+    it("Correctly classifies ethnicity, no other", () => {
+      expect(validateEthnicityOther("Asian", "")).toEqual("Success");
+      expect(validateEthnicityOther("Hispanic", "")).toEqual("Success");
+      expect(validateEthnicityOther("Not Given", "")).toEqual("Success");
     });
   });
 });

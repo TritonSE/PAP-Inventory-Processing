@@ -29,11 +29,6 @@ export function validateSpouseName(maritalStatus: string, spouseName: string): s
   return "Success";
 }
 
-export function checkAgesFormat(ages: string): boolean {
-  const ageRegex = /^\d+(,\s*\d+)*$/;
-  return ageRegex.test(ages);
-}
-
 export function validateEthnicityOther(ethnicities: string, other: string) {
   if ((ethnicities === "" && other !== "") || (ethnicities !== "" && other === "")) {
     return "Success";
