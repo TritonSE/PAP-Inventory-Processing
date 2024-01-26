@@ -3,7 +3,8 @@ export function isnum(num: string): boolean {
 }
 
 export function validateDate(date: string): string {
-  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  //4 digit number / 2 digit number / 2 digit number
+  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
   if (dateRegex.test(date)) {
     return "Success";
   } else {
