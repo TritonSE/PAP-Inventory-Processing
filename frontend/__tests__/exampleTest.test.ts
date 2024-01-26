@@ -1,6 +1,6 @@
 import "@testing-library/jest-dom";
 
-import { isnum, validateAge } from "../src/util/validateResponses";
+import { isnum, validateAge, validateSpouseName } from "../src/util/validateResponses";
 
 describe("Frontend Validator Tests", () => {
   describe("IsNum", () => {
@@ -44,6 +44,34 @@ describe("Frontend Validator Tests", () => {
       expect(validateAge("abc")).toEqual("Age is not a number");
       expect(validateAge("a")).toEqual("Age is not a number");
       expect(validateAge("-5")).toEqual("Age is not a number");
+    });
+  });
+
+  describe("ValidateSpouseName", () => {
+    it("Correctly classifies married and has spouse name", () => {
+      expect(validateSpouseName("Married", "Bob")).toEqual("Success");
+      expect(validateSpouseName("Married", "Bob Smith")).toEqual("Success");
+      expect(validateSpouseName("Married", "Bob Smith Jr.")).toEqual("Success");
+    });
+
+    it("Correctly classifies married and has no spouse name", () => {
+      expect(validateSpouseName("Married", "")).toEqual("Spouse name is required");
+    });
+
+    it("Correctly classifies single and has spouse name", () => {
+      expect(validateSpouseName("Single", "Bob")).toEqual("Spouse name is not required");
+      expect(validateSpouseName("Single", "Bob Smith")).toEqual("Spouse name is not required");
+      expect(validateSpouseName("Single", "Bob Smith Jr.")).toEqual("Spouse name is not required");
+    });
+
+    it("Correctly classifies single and has no spouse name", () => {
+      expect(validateSpouseName("Single", "")).toEqual("Success");
+    });
+
+    it("Correctly classifies is complicated", () => {
+      expect(validateSpouseName("It's Complicated", "")).toEqual("Success");
+      expect(validateSpouseName("It's Complicated", "Bob")).toEqual("Success");
+      expect(validateSpouseName("It's Complicated", "Bob Smith")).toEqual("Success");
     });
   });
 });
