@@ -44,7 +44,7 @@ const makeAgeValidator = () =>
     .withMessage("Age must be a positive integer");
 
 const makeMaritalStatusValidator = () =>
-  body("martialStatus")
+  body("maritalStatus")
     .exists({ checkFalsy: true })
     .withMessage("Marital Status is required")
     .isString()
@@ -61,21 +61,6 @@ const makeNumOfBoysValidator = () =>
     .optional({ checkFalsy: true })
     .isInt({ min: 0 })
     .withMessage("Number of Boys must be a positive integer");
-
-const makeNumOfGirlsValidator = () =>
-  body("numOfGirls")
-    .optional({ checkFalsy: true })
-    .isInt({ min: 0 })
-    .withMessage("Number of Girls must be a positive integer");
-
-const makeAgesOfBoysValidator = () =>
-  body("agesOfBoys")
-    .optional({ checkFalsy: true })
-    .isArray()
-    .withMessage("Ages of Boys must be an array of numbers")
-    .custom((ages: number[]) => ages.every((age) => Number.isInteger(age) && age >= 0))
-    .withMessage("Each age in Ages of Boys must be a positive integer");
-
 const makeAgesOfGirlsValidator = () =>
   body("agesOfGirls")
     .optional({ checkFalsy: true })
@@ -120,8 +105,6 @@ export const createVSR = [
   makeMaritalStatusValidator(),
   makeSpouseNameValidator(),
   makeNumOfBoysValidator(),
-  makeNumOfGirlsValidator(),
-  makeAgesOfBoysValidator(),
   makeAgesOfGirlsValidator(),
   makeEthnicityValidator(),
   makeEmploymentStatusValidator(),

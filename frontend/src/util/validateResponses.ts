@@ -3,7 +3,8 @@ export function isnum(num: string): boolean {
 }
 
 export function validateDate(date: string): string {
-  const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
+  //4 digit number / 2 digit number / 2 digit number
+  const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
   if (dateRegex.test(date)) {
     return "Success";
   } else {
@@ -26,42 +27,6 @@ export function validateSpouseName(maritalStatus: string, spouseName: string): s
     return spouseName === "" ? "Success" : "Spouse name is not required";
   }
   return "Success";
-}
-
-export function checkAgesFormat(ages: string): boolean {
-  const ageRegex = /^\d+(,\s*\d+)*$/;
-  return ageRegex.test(ages);
-}
-
-export function validateNumChildren(numChildren: string, ages: string): string {
-  if (!isnum(numChildren)) {
-    return "Number of children is not a number";
-  }
-
-  const numChildrenInt: number = parseInt(numChildren);
-
-  if (numChildrenInt < 0) {
-    return "Number of children cannot be negative";
-  } else if (numChildrenInt === 0) {
-    if (ages !== "") {
-      return "Number of children is 0 but ages are not empty";
-    }
-  } else if (numChildrenInt > 0) {
-    if (ages === "") {
-      return "Number of children is greater than 0 but ages are empty";
-    } else if (!checkAgesFormat(ages)) {
-      return "Ages are not in the correct format, please provide a comma separated list of numbers";
-    } else if (checkAgesFormat(ages)) {
-      const agesArr = ages.split(",").map((age) => parseInt(age));
-      if (agesArr.length !== numChildrenInt) {
-        return "Number of children does not match number of ages";
-      } else {
-        return "Success";
-      }
-    }
-  }
-
-  return "Unknown error";
 }
 
 export function validateEthnicityOther(ethnicities: string, other: string) {
