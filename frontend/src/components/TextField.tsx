@@ -8,14 +8,11 @@ export interface TextFieldProps extends MUITextFieldProps<"outlined"> {
   helperText?: string;
 }
 
-const TextField = ({ label, error = false, ...props }: TextFieldProps) => {  
+const TextField = ({ label, error = false, ...props }: TextFieldProps) => {
   return (
     <div className={styles.wrapperClass}>
-    <p className={styles.label}>{label}</p>
-        <MUITextField 
-            className={styles.inputClass} 
-            {...props}              
-          />
+      <p className={styles.label}>{label}</p>
+      <MUITextField className={styles.inputClass} {...props} />
     </div>
   );
 };

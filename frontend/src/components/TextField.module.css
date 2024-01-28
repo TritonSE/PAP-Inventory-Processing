@@ -1,29 +1,28 @@
-.wrapperClass{
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 4px;
-    flex: 1 0 0;
-    font-size: 16px;
+.wrapperClass {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1 0 0;
+  font-size: 16px;
 }
 
-.label{
-    color: var(--Light-Gray, #818181);
-    font-family: "Open Sans";
-    font-style: normal;
-    font-weight: 400;
-    line-height: normal;
+.label {
+  color: var(--Light-Gray, #818181);
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
-.inputClass{
-    display: flex;
-    padding: 6px 12px;
-    align-items: flex-start;
-    gap: 10px;
-    align-self: stretch;
-    color: var(--Dark-Gray, #484848);
-    font-family: "Open Sans";
-    font-weight: 300;
-    line-height: normal;
+.inputClass {
+  display: flex;
+  padding: 6px 12px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  color: var(--Dark-Gray, #484848);
+  font-family: "Open Sans";
+  font-weight: 300;
+  line-height: normal;
 }
-

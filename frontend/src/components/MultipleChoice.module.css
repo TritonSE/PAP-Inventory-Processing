@@ -11,19 +11,19 @@
   font-weight: 400;
   line-height: normal;
   border-radius: 64px;
-  border: 1px solid var(--Secondary-1, #102D5F);
+  border: 1px solid var(--Secondary-1, #102d5f);
 }
 
 .chipSelected {
   color: white;
-  background: #102D5F;
+  background: #102d5f;
 }
 
-.chipSelected:hover{
-  background: #102D5F;
+.chipSelected:hover {
+  background: #102d5f;
 }
 
-.label{
+.label {
   color: var(--Light-Gray, #818181);
   font-family: "Open Sans";
   font-size: 14px;
@@ -33,12 +33,11 @@
 }
 
 .chipUnselected {
-  color: var(--Accent-Blue-1, #102D5F);
-  background: rgba(255, 255, 255, 0.00);
+  color: var(--Accent-Blue-1, #102d5f);
+  background: rgba(255, 255, 255, 0);
 }
 
 /*Need exact color for this*/
-.chipUnselected:hover{
-  background:rgb(213, 232, 239); 
+.chipUnselected:hover {
+  background: rgb(213, 232, 239);
 }
-

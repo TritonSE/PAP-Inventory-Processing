@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
-import Chip from '@mui/material/Chip'; 
-import styles from '@/components/MultipleChoice.module.css'
+import React, { useState } from "react";
+import Chip from "@mui/material/Chip";
+import styles from "@/components/MultipleChoice.module.css";
 
 export interface MultipleChoiceProps {
   label: string;
   options: string[];
   value: string;
-  onChange: (selected: string) => void
+  onChange: (selected: string) => void;
   error?: boolean;
   helperText?: string;
-}  
+}
 
-
-const MultipleChoice = ({label, options, value, onChange, error, helperText, ...props }: MultipleChoiceProps) => 
-{
+const MultipleChoice = ({
+  label,
+  options,
+  value,
+  onChange,
+  error,
+  helperText,
+  ...props
+}: MultipleChoiceProps) => {
   return (
     <div>
       <p className={styles.label}>{label}</p>
@@ -33,5 +39,3 @@ const MultipleChoice = ({label, options, value, onChange, error, helperText, ...
 };
 
 export default MultipleChoice;
-
-
