@@ -1,4 +1,4 @@
-import { CustomError } from "./errors";
+import { CustomError } from "src/errors/errors";
 
 const NO_SERVICE_ACCOUNT_KEY = "Could not find service account key env variable";
 
