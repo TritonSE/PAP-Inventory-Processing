@@ -1,0 +1,44 @@
+/* MultipleChoice.module.css */
+
+.chip {
+  margin: 0 12.5px;
+  border-width: 1px;
+  border-style: solid;
+  text-align: center;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 64px;
+  border: 1px solid var(--Secondary-1, #102D5F);
+}
+
+.chipSelected {
+  color: white;
+  background: #102D5F;
+}
+
+.chipSelected:hover{
+  background: #102D5F;
+}
+
+.label{
+  color: var(--Light-Gray, #818181);
+  font-family: "Open Sans";
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.chipUnselected {
+  color: var(--Accent-Blue-1, #102D5F);
+  background: rgba(255, 255, 255, 0.00);
+}
+
+/*Need exact color for this*/
+.chipUnselected:hover{
+  background:rgb(213, 232, 239); 
+}
+
