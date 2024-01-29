@@ -3,7 +3,7 @@
 }
 
 .toDashboard {
-  margin-top: 58px;
+  margin-top: 35px;
   max-width: 137px;
   height: 40px;
   padding-left: 10px;
@@ -12,6 +12,46 @@
   border-radius: 4px;
   border: 1px solid var(--Secondary-Accent1, #102d5f);
   justify-content: center;
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  width: calc(100% * 5 / 6);
+  justify-content: space-between;
+}
+
+.actions {
+  margin-top: 29px;
+  margin-bottom: 32px;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.actions > * {
+  padding-left: 32px;
+}
+
+.button {
+  border-radius: 4px;
+  border: 1px solid var(--color-tse-accent-blue-1);
+  background-color: var(--color-tse-accent-blue-1);
+  height: 46px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+}
+
+.button > * {
+  padding-right: 6px;
 }
 
 .name {

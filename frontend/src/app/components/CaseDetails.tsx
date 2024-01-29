@@ -4,7 +4,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { SingleDetail } from "@/app/components";
+import { SingleDetail, DropdownDetail } from "@/app/components";
 
 export const CaseDetails = () => {
   const expanded = true;
@@ -23,7 +23,7 @@ export const CaseDetails = () => {
             <SingleDetail title="Case ID:" value="A0000011" />
             <SingleDetail title="Date Received:" value="12-18-2024 [09:32 AM]" />
             <SingleDetail title="Last Updated:" value="12-18-2024 [09:32 AM]" />
-            <SingleDetail title="Status" value="Pending" />
+            <DropdownDetail title="Status" value="Pending" />
           </div>
         </AccordionDetails>
       </Accordion>

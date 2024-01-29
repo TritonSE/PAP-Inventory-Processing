@@ -25,9 +25,12 @@
 .box .details {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
   margin-left: 4px;
   margin-right: 4px;
   padding-bottom: 5px;
   margin-top: 15px;
+}
+
+.box .details > * {
+  padding-right: 100px;
 }

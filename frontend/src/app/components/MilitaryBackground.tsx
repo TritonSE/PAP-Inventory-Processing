@@ -4,7 +4,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { SingleDetail } from "@/app/components";
+import { SingleDetail, ListDetail } from "@/app/components";
 
 export const MilitaryBackground = () => {
   return (
@@ -21,19 +21,19 @@ export const MilitaryBackground = () => {
         <AccordionDetails>
           <div className={styles.details}>
             <div className={styles.row}>
-              <SingleDetail title="Branch" value="Army" />
+              <ListDetail title="Branch" values={["Army"]} />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Conflicts" value="Irag" />
+              <ListDetail title="Conflicts" values={["Iraq", "Afganistan", "Irani Crisis"]} />
             </div>
             <div className={styles.row}>
               <SingleDetail title="Other" value="Please list" />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Discharge Status" value="Medical" />
+              <ListDetail title="Discharge Status" values={["Medical"]} />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Service Connected" value="Yes" />
+              <ListDetail title="Service Connected" values={["Yes"]} />
             </div>
             <div className={styles.row}>
               <SingleDetail title="Last Rank" value="Private" />

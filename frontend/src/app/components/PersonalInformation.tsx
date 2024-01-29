@@ -4,7 +4,7 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { SingleDetail } from "@/app/components";
+import { SingleDetail, ListDetail } from "@/app/components";
 
 export const PersonalInformation = () => {
   return (
@@ -34,7 +34,7 @@ export const PersonalInformation = () => {
               <SingleDetail title="Zip Code" value="92092" />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Marital Status" value="Married" />
+              <ListDetail title="Marital Status" values={["Married"]} />
             </div>
             <div className={styles.row}>
               <SingleDetail title="Spouse's Name" value="Jane Timberlake" />
@@ -48,16 +48,16 @@ export const PersonalInformation = () => {
               <SingleDetail title="Age(s)" value="10,12" />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Ethnicity" value="Caucasian" />
+              <ListDetail title="Ethnicity" values={["Caucasian"]} />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Employment Status" value="Currenlty Looking" />
+              <ListDetail title="Employment Status" values={["Currently Looking"]} />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Income Level" value="$12,500 and under" />
+              <ListDetail title="Income Level" values={["$12,500 and under"]} />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Size of Home" value="Apartment" />
+              <ListDetail title="Size of Home" values={["Apartment"]} />
             </div>
           </div>
         </AccordionDetails>

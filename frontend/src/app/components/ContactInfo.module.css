@@ -28,7 +28,11 @@
 .row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+}
+
+.row > * {
+  padding-right: 32px;
+  width: 60%;
 }
 
 .row:not(:last-child) {

@@ -12,20 +12,25 @@
   height: 48px;
 }
 
-.box .details {
+.details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
-.box .details > * {
+.details > * {
   margin-top: 32px;
 }
 
-.box .details .row {
+.row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.row > * {
+  padding-right: 32px;
+  width: 60%;
 }
 
 .title {

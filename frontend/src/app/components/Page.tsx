@@ -24,8 +24,24 @@ export const Page = (/* implement later*/) => {
         <a href="complete">Dashboard</a>
       </div>
       <div className={styles.allDetails}>
-        <div className={styles.name}>
-          <UserTag></UserTag>
+        <div className={styles.headerRow}>
+          <div className={styles.name}>
+            <UserTag></UserTag>
+          </div>
+          <div className={styles.actions}>
+            <a href="REPLACE">
+              <div className={styles.button}>
+                <img width={24} height={24} src="/ic_edit.svg" />
+                Edit Form
+              </div>
+            </a>
+            <a href="REPLACE">
+              <div className={styles.button}>
+                <img width={24} height={24} src="/ic_upload.svg" />
+                Export
+              </div>
+            </a>
+          </div>
         </div>
         <div className={styles.formDetails}>
           <CaseDetails></CaseDetails>
