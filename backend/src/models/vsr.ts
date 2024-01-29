@@ -5,7 +5,7 @@ const vsrSchema = new Schema({
   date: { type: Date, required: true },
   gender: { type: String, require: true },
   age: { type: Number, require: true },
-  marital: { type: String, required: true },
+  maritalStatus: { type: String, required: true },
   spouseName: { type: String },
   agesOfBoys: { type: [Number] },
   agesOfGirls: { type: [Number] },

@@ -22,6 +22,8 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     sizeOfHome,
   } = req.body;
 
+  console.log(req.body);
+
   try {
     // if there are errors, then this function throws an exception
     validationErrorParser(errors);
