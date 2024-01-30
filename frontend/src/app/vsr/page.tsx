@@ -52,6 +52,7 @@ const VeteranServiceRequest: React.FC = () => {
     handleSubmit,
     control,
     formState: { errors },
+    watch,
   } = useForm<IFormInput>();
   const maritalOptions = ["Married", "Single", "It's Complicated"];
   const genderOptions = ["Male", "Female", "Other"];
@@ -94,6 +95,7 @@ const VeteranServiceRequest: React.FC = () => {
           label="Name"
           variant="outlined"
           {...register("name", { required: "Name is required" })}
+          onChange={(e) => console.log("Errors and watch", errors, watch())}
           error={!!errors.name}
           helperText={errors.name?.message}
         />

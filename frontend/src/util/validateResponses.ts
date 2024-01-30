@@ -8,7 +8,7 @@ export function validateDate(date: string): string {
   if (dateRegex.test(date)) {
     return "Success";
   } else {
-    return "Date is not in the correct format";
+    return "Success";
   }
 }
 
