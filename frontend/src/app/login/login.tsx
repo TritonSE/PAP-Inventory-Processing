@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import InputField from "@/components/InputField";
 import Image from "next/image";
 import "src/app/login/Login.css";
@@ -11,6 +12,8 @@ import { initFirebase } from "@/firebase/firebase";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const router = useRouter();
 
   const { app, auth } = initFirebase();
 
@@ -28,9 +31,14 @@ const Login = () => {
   };
 
   const handleLogin = (e: React.FormEvent) => {
-    console.log("inside handleLogin function");
     e.preventDefault();
+    console.log("inside handleLogin function");
     login(email, password);
+  };
+
+  const dummyfunction = (e: React.FormEvent) => {
+    e.preventDefault();
+    router.push("/dummy");
   };
 
   return (
@@ -59,7 +67,7 @@ const Login = () => {
             </div>
           </div>
           <div className="welcome-text">Welcome!</div>
-          <form className="login-form">
+          <form onSubmit={handleLogin} className="login-form">
             <div className="input-group">
               <InputField
                 label="Email"
@@ -76,10 +84,11 @@ const Login = () => {
                 placeholder=""
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                type="password"
               />
             </div>
             <div className="forgot-password">Forgot Password?</div>
-            <button type="button" className="login-button" onClick={handleLogin}>
+            <button type="submit" className="login-button">
               Log In
             </button>
           </form>

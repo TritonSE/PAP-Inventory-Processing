@@ -3,20 +3,28 @@ import styles from "src/components/InputField.module.css"; // Create a CSS modul
 
 interface InputFieldProps {
   label: string;
+  type?: string;
   id: string;
   placeholder: string;
   value: string;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, id, placeholder, value, onChange }) => {
+const InputField: React.FC<InputFieldProps> = ({
+  label,
+  id,
+  placeholder,
+  value,
+  onChange,
+  type = "text",
+}) => {
   return (
     <div className={styles.inputField}>
       <label htmlFor={id} className={styles.label}>
         {label}
       </label>
       <input
-        type="text"
+        type={type}
         id={id}
         placeholder={placeholder}
         value={value}
