@@ -2,6 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
+import InputField from "@/components/InputField";
 import Image from "next/image";
 import "src/app/login/Login.css";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
@@ -60,21 +61,19 @@ const Login = () => {
           <div className="welcome-text">Welcome!</div>
           <form className="login-form">
             <div className="input-group">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                placeholder="e.g. John Doe"
+              <InputField
+                label="Email"
+                id="email"
+                placeholder="e.g. johndoe@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="input-group">
-              <label htmlFor="password">Password</label>
-              <input
-                type="password"
+              <InputField
+                label="Password"
                 id="password"
-                placeholder="Password"
+                placeholder=""
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
