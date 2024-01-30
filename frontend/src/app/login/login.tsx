@@ -14,8 +14,40 @@ const Login = () => {
 
   const { app, auth } = initFirebase();
 
-  const login = (email: string, password: string) => {
-    console.log("inside login function");
+  const sendTokenToBackend = async (token: string) => {
+    try {
+      const response = await fetch(`/api/whoami/${token}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // body: JSON.stringify({ token }),
+      });
+
+      if (response.ok) {
+        const userInfo = await response.json();
+        console.log(userInfo);
+      } else {
+        console.error("Failed to get user info from JWT Token");
+      }
+    } catch (error) {
+      console.log("error sending JWT token to backend", error);
+    }
+  };
+
+  const login = async (email: string, password: string) => {
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const token = await userCredential.user?.getIdToken();
+      if (!token) {
+        console.log("JWT token not retrieved.");
+      } else {
+        await sendTokenToBackend(token);
+      }
+    } catch (error) {
+      console.log("login failed: ", error);
+    }
+    /*
     signInWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         console.log("signed in successfully!");
@@ -25,6 +57,7 @@ const Login = () => {
         console.log("did not sign in :(");
         console.log(error);
       });
+    */
   };
 
   const handleLogin = (e: React.FormEvent) => {
