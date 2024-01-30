@@ -1,13 +1,94 @@
-.main {
+.page {
+  background-color: var(--color-background);
+  padding-bottom: 67px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* align-items: center; */
+  margin-top: 105px;
+  padding-left: 120px;
+  padding-right: 120px;
+  gap: 40px;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: left;
+  /* width: 80%; */
+  gap: 200px;
+  /* background-color: red; */
+  /* align-items: center; */
+  /* padding-left: 120;
+  padding-right: 120; */
+}
+
+.row_half {
+  gap: 40px;
+  display: flex;
+  flex-direction: row;
+  /* align-items: left; */
+}
+
+/* make a row: display: flex; flex-direction: row; */
+
+.buttons {
+  /* margin-top: 58px; */
+  display: flex;
+  flex-direction: row;
+  max-width: 137px;
+  /* height: 40px; */
+  padding-left: 16px;
+  padding-top: 8px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+  border-radius: 4px;
+  gap: 10px;
+  /* margin-left: calc(100vw * 1 / 12); */
+  /* border-radius: 4px;
+  border: 1px solid var(--Secondary-Accent1, #102d5f); */
+  justify-content: center;
+  background-color: var(--color-tse-secondary-1);
+}
+
+.buttontext {
+  color: var(--Primary-Background-Light, #f7f7f7);
+  text-align: center;
+
+  /* Desktop/Body 2 */
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.table {
+  display: flex;
+  /* padding: 6px 0px; */
+  align-items: center;
+  /* align-self: stretch; */
+}
+
+/* .main {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 6rem;
   min-height: 100vh;
-}
+} */
 
-.description {
+/* .description {
   display: inherit;
   justify-content: inherit;
   align-items: inherit;
@@ -110,7 +191,7 @@
   position: relative;
 }
 /* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
+/* @media (hover: hover) and (pointer: fine) {
   .card:hover {
     background: rgba(var(--card-rgb), 0.1);
     border: 1px solid rgba(var(--card-border-rgb), 0.15);
@@ -128,7 +209,7 @@
 }
 
 /* Mobile */
-@media (max-width: 700px) {
+/* @media (max-width: 700px) {
   .content {
     padding: 4rem;
   }
@@ -198,10 +279,10 @@
     background: linear-gradient(to bottom, transparent 0%, rgb(var(--background-end-rgb)) 40%);
     z-index: 1;
   }
-}
+} */
 
 /* Tablet and Smaller Desktop */
-@media (min-width: 701px) and (max-width: 1120px) {
+/* @media (min-width: 701px) and (max-width: 1120px) {
   .grid {
     grid-template-columns: repeat(2, 50%);
   }
@@ -224,4 +305,4 @@
   to {
     transform: rotate(0deg);
   }
-}
+}  */
