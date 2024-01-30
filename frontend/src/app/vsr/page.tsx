@@ -5,6 +5,7 @@ import TextField from "@/components/TextField";
 import MultipleChoice from "@/components/MultipleChoice";
 import Dropdown from "@/components/Dropdown";
 import * as validators from "@/util/validateResponses";
+import { createVSR, CreateVSRRequest } from "@/api/VSRs";
 
 interface IFormInput {
   name: string;
@@ -12,6 +13,38 @@ interface IFormInput {
   marital_status: string;
   gender: string;
 }
+
+// const handleSubmit = () => {
+//   // first, do any validation that we can on the frontend
+//   //todo
+
+//   let createVSRRequest: CreateVSRRequest = {
+//     name: "",
+//     date: "",
+//     gender: "",
+//     age: 0,
+//     maritalStatus: "",
+//     ethnicity: "",
+//     employmentStatus: "",
+//     incomeLevel: "",
+//     sizeOfHome: "",
+//   };
+
+//   createVSR(createVSRRequest).then((result) => {
+//     if (result.success) {
+//     } else {
+//       // You should always clearly inform the user when something goes wrong.
+//       // In this case, we're just doing an `alert()` for brevity, but you'd
+//       // generally want to show some kind of error state or notification
+//       // within your UI. If the problem is with the user's input, then use
+//       // the error states of your smaller components (like the `TextField`s).
+//       // If the problem is something we don't really control, such as network
+//       // issues or an unexpected exception on the server side, then use a
+//       // banner, modal, popup, or similar.
+//       alert(result.error);
+//     }
+//   });
+// };
 
 const VeteranServiceRequest: React.FC = () => {
   const {
@@ -26,20 +59,27 @@ const VeteranServiceRequest: React.FC = () => {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
 
-    try {
-      const response = await fetch("/api/vsr", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+    // Construct the request object
+    let createVSRRequest: CreateVSRRequest = {
+      name: data.name,
+      date: data.date,
+      gender: data.gender,
+      age: 42,
+      maritalStatus: data.marital_status,
+      ethnicity: "PLACEHOLDER", // You'll need to add fields for these if they are required
+      employmentStatus: "PLACEHOLDER",
+      incomeLevel: "PLACEHOLDER",
+      sizeOfHome: "PLACEHOLDER",
+    };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+    try {
+      const response = await createVSR(createVSRRequest);
+
+      if (!response.success) {
+        throw new Error(`HTTP error! status: ${response.error}`);
       }
 
-      const responseJson = await response.json();
+      const responseJson = await response.data;
       console.log(responseJson);
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
