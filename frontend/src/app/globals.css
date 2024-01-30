@@ -11,8 +11,8 @@
   --color-tse-light-gray: #818181;
   --color-tse-dark-gray: #484848;
   --color-tse-secondary-light-blue: #c7def1;
-  --font-title: "Lora", serif;
-  --font-open-sans: "Open Sans", sans-serif;
+  --font-title: "Lora";
+  --font-open-sans: "OpenSans", sans-serif;
   --font-inter: "Inter", sans-serif;
 }
 
@@ -77,4 +77,16 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+@font-face {
+  font-family: Lora;
+  src: url("/lora.woff") format("woff");
+  font-style: normal;
+}
+
+@font-face {
+  font-family: OpenSans;
+  src: url("/opensans.woff") format("woff");
+  font-style: normal;
 }

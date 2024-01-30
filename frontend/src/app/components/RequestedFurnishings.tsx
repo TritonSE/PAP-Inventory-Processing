@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/app/components/PersonalInformation.module.css";
+import styles from "src/app/components/RequestedFurnishings.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -7,12 +7,12 @@ import Typography from "@mui/material/Typography";
 import { SingleDetail, ListDetail } from "@/app/components";
 
 export const RequestedFurnishings = () => {
+  const expanded = true;
   return (
     <div className={styles.box}>
-      <Accordion className={styles.accordian}>
+      <Accordion className={styles.accordian} defaultExpanded expanded={expanded}>
         <AccordionSummary
           className={styles.accordianTitle}
-          expandIcon={<img src="/dropdown.svg" />}
           aria-controls="panel2-content"
           id="panel2-header"
         >

@@ -4,14 +4,19 @@
   width: calc(100vw * 89 / 288);
   border-radius: 6px 6px 6px 6px;
   box-shadow: none;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
-.accordianTitle {
+/* .accordianTitle {
   height: 48px;
-  border-bottom: 1px solid #d6d6d6;
-  height: 48px;
-}
-
+  padding-left: 22px;
+  padding-right: 22px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+} */
 .details {
   display: flex;
   flex-direction: column;
@@ -30,7 +35,7 @@
 
 .row > * {
   padding-right: 32px;
-  width: 60%;
+  width: 100%;
 }
 
 .title {

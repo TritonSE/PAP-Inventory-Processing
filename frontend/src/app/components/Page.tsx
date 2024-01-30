@@ -19,10 +19,12 @@ export const Page = (/* implement later*/) => {
   return (
     <div className={styles.page}>
       <HeaderBar />
-      <div className={styles.toDashboard}>
-        <img width={24} height={24} src="/ic_arrowback.svg" />
-        <a href="complete">Dashboard</a>
-      </div>
+      <a href="complete">
+        <div className={styles.toDashboard}>
+          <img width={24} height={24} src="/ic_arrowback.svg" />
+          Dashboard
+        </div>
+      </a>
       <div className={styles.allDetails}>
         <div className={styles.headerRow}>
           <div className={styles.name}>
@@ -52,11 +54,22 @@ export const Page = (/* implement later*/) => {
               <MilitaryBackground />
               <AdditionalInfo />
             </div>
-            <div className={styles.furnishings}>
-              <RequestedFurnishings />
+            <div>
+              <div className={styles.furnishings}>
+                <RequestedFurnishings />
+              </div>
+              <div className={styles.finalActions}>
+                <div className={styles.request}>
+                  <a href="REPLACE">Request Submission</a>
+                </div>
+                <div className={styles.approve}>
+                  <a href="REPLACE">Approve VSR</a>
+                </div>
+              </div>
             </div>
           </div>
         </div>
+        <div className={styles.footer}></div>
       </div>
     </div>
   );

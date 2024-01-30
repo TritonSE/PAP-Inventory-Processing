@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/app/components/PersonalInformation.module.css";
+import styles from "src/app/components/MilitaryBackground.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";

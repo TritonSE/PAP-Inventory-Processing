@@ -20,10 +20,18 @@ export const CaseDetails = () => {
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>
-            <SingleDetail title="Case ID:" value="A0000011" />
-            <SingleDetail title="Date Received:" value="12-18-2024 [09:32 AM]" />
-            <SingleDetail title="Last Updated:" value="12-18-2024 [09:32 AM]" />
-            <DropdownDetail title="Status" value="Pending" />
+            <SingleDetail title="Case ID:" value="A0000011" valueFontSize="20px" />
+            <SingleDetail
+              title="Date Received:"
+              value="12-18-2024 [09:32 AM]"
+              valueFontSize="20px"
+            />
+            <SingleDetail
+              title="Last Updated:"
+              value="12-18-2024 [09:32 AM]"
+              valueFontSize="20px"
+            />
+            <DropdownDetail title="Status:" value="Received" />
           </div>
         </AccordionDetails>
       </Accordion>

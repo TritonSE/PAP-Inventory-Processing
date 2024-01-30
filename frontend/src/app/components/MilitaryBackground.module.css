@@ -4,13 +4,19 @@
   width: calc(100vw * 89 / 288);
   border-radius: 6px 6px 6px 6px;
   box-shadow: none;
+  padding-left: 6px;
+  padding-right: 6px;
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
-.accordianTitle {
+/* .accordianTitle {
   height: 48px;
-  border-bottom: 1px solid #d6d6d6;
-  height: 48px;
-}
+  padding-left: 22px;
+  padding-right: 22px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+} */
 
 .box .details {
   display: flex;
@@ -40,8 +46,4 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 8px;
-  padding-bottom: 8px;
 }
