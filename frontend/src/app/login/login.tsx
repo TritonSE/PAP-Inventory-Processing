@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 import InputField from "@/components/InputField";
 import Image from "next/image";
 import "src/app/login/Login.css";
@@ -12,8 +11,6 @@ import { initFirebase } from "@/firebase/firebase";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
-  const router = useRouter();
 
   const { app, auth } = initFirebase();
 
@@ -34,11 +31,6 @@ const Login = () => {
     e.preventDefault();
     console.log("inside handleLogin function");
     login(email, password);
-  };
-
-  const dummyfunction = (e: React.FormEvent) => {
-    e.preventDefault();
-    router.push("/dummy");
   };
 
   return (
