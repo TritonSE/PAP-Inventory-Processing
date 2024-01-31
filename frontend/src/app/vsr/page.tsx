@@ -93,6 +93,7 @@ const VeteranServiceRequest: React.FC = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextField
           label="Name"
+          d
           variant="outlined"
           {...register("name", { required: "Name is required" })}
           onChange={(e) => console.log("Errors and watch", errors, watch())}
