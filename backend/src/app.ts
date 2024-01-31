@@ -6,7 +6,7 @@ import "dotenv/config";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
-import vsrRoutes from "./routes/vsr";
+import vsrRoutes from "../src/routes/vsr";
 
 const app = express();
 
@@ -50,6 +50,6 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
   res.status(statusCode).json({ error: errorMessage });
 });
 
-app.use('/api/vsr', vsrRoutes);
+app.use("/api/vsr", vsrRoutes);
 
 export default app;

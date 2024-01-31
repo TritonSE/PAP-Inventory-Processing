@@ -23,7 +23,7 @@ const Dropdown = ({
   return (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
-      <Select value={value} onChange={onChange} error={error}>
+      <Select value={value} onChange={onChange} error={error} displayEmpty>
         {options.map((option) => (
           <MenuItem key={option} value={option}>
             {option}

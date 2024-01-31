@@ -8,13 +8,13 @@ export interface TextFieldProps extends MUITextFieldProps<"outlined"> {
   helperText?: string;
 }
 
-const TextField = forwardRef(({ label, error = false, ...props }: TextFieldProps, ref) => {
+const TextField = ({ label, error, helperText, ...props }: TextFieldProps) => {
   return (
     <div className={styles.wrapperClass}>
       <p className={styles.label}>{label}</p>
-      <MUITextField className={styles.inputClass} inputRef={ref} {...props} />
+      <MUITextField className={styles.inputClass} error={error} {...props} />
     </div>
   );
-});
+};
 
 export default TextField;

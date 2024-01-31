@@ -55,13 +55,13 @@ const VeteranServiceRequest: React.FC = () => {
     watch,
   } = useForm<IFormInput>();
   const maritalOptions = ["Married", "Single", "It's Complicated"];
-  const genderOptions = ["Male", "Female", "Other"];
+  const genderOptions = ["", "Male", "Female", "Other"];
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
 
     // Construct the request object
-    let createVSRRequest: CreateVSRRequest = {
+    const createVSRRequest: CreateVSRRequest = {
       name: data.name,
       date: data.date,
       gender: data.gender,
