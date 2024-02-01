@@ -35,6 +35,8 @@ const columns: GridColDef[] = [
     width: 147,
     headerAlign: "left",
     headerClassName: "header",
+    disableColumnMenu: true,
+    hideSortIcons: true,
   },
   {
     field: "military",
@@ -42,19 +44,27 @@ const columns: GridColDef[] = [
     type: "string",
     width: 206,
     headerClassName: "header",
+    disableColumnMenu: true,
+    hideSortIcons: true,
   },
-  { field: "name", headerName: "Name", width: 233, headerClassName: "header" },
+  {
+    field: "name",
+    headerName: "Name",
+    width: 233,
+    headerClassName: "header",
+    disableColumnMenu: true,
+    hideSortIcons: true,
+  },
 
   {
     field: "date",
     headerName: "Date Received",
     type: "date",
-    // description: "This column has a value getter and is not sortable.",
     sortable: true,
     width: 160,
     headerClassName: "header",
-    // valueGetter: (params: GridValueGetterParams) =>
-    //   `${params.row.firstName || ""} ${params.row.lastName || ""}`,
+    disableColumnMenu: true,
+    hideSortIcons: true,
   },
   {
     field: "status",
@@ -62,6 +72,8 @@ const columns: GridColDef[] = [
     type: "string",
     width: 210,
     headerClassName: "header",
+    disableColumnMenu: true,
+    hideSortIcons: true,
   },
 ];
 
@@ -152,17 +164,33 @@ export default function VSRTable() {
   // return (
   return (
     <Box
+      className={styles.container}
       sx={{
         // height: 300,
         // width: "80%",
         "& .header": {
-          backgroundColor: "rgba(16, 45, 95, 1)",
+          // backgroundColor: "rgba(16, 45, 95, 1)",
           color: "rgba(247, 247, 247, 1)",
-          // backgroundColor: var(--color-tse-accent-blue-1),
+          backgroundColor: "var(--color-tse-accent-blue-1)",
         },
+        ".MuiDataGrid-columnSeparator": {
+          display: "none",
+        },
+        "&.MuiDataGrid-root": {
+          border: "none",
+        },
+        border: 0,
+        borderColor: "primary.light",
+        // "& .MuiDataGrid-row:hover": {
+        //   ":hover" : {
+
+        //   }
+        //   // backgroundColor: "primary.main",
+        // },
       }}
     >
       <DataGrid
+        className={styles.table}
         rows={rows}
         columns={columns}
         initialState={{

@@ -45,6 +45,7 @@
   /* margin-top: 58px; */
   display: flex;
   flex-direction: row;
+  align-items: center;
   max-width: 137px;
   /* height: 40px; */
   padding-left: 16px;
@@ -53,9 +54,6 @@
   padding-bottom: 8px;
   border-radius: 4px;
   gap: 10px;
-  /* margin-left: calc(100vw * 1 / 12); */
-  /* border-radius: 4px;
-  border: 1px solid var(--Secondary-Accent1, #102d5f); */
   justify-content: center;
   background-color: var(--color-tse-secondary-1);
 }

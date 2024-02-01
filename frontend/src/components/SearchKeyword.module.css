@@ -18,9 +18,11 @@
 .searchInput {
   border-radius: 4px;
   border: 0px;
+  border-color: #fff;
   background: #fff;
   color: black;
   color: var(--Neutral-Gray4, #909090);
+  outline: 0px;
 
   /* Desktop/Body 2 */
   font-family: "Open Sans";
