@@ -27,9 +27,8 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
             displayEmpty
             sx={{
               boxShadow: "none",
-              ".MuiOutlinedInput-notchedOutline": { border: 0 },
-              "& .MuiSelect-select": {
-                padding: "0px",
+              "& .MuiPaper-root": {
+                position: "absolute",
               },
             }}
           >
