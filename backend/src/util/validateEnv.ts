@@ -12,6 +12,6 @@ export default cleanEnv(process.env, {
   FRONTEND_ORIGIN: str(), // URL of frontend, to allow CORS from frontend
   EMAIL_USER: email(), // Email address to use for sending emails
   EMAIL_APP_PASSWORD: str(), // App password to use for sending emails
-  EMAIL_NOTIFICATIONS_RECIPIENT: email(), // Recipient of VSR validation email
+  EMAIL_NOTIFICATIONS_RECIPIENT: email(), // Recipient of VSR notification emails
   BACKEND_FIREBASE_SETTINGS: json(), // Firebase settings for backend, stored as a JSON string
 });
