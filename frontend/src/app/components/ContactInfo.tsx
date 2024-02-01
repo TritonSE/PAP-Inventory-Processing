@@ -5,6 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail } from "@/app/components";
+import Image from "next/image";
 
 export const ContactInfo = () => {
   return (
@@ -12,7 +13,7 @@ export const ContactInfo = () => {
       <Accordion className={styles.accordian}>
         <AccordionSummary
           className={styles.accordianTitle}
-          expandIcon={<img src="/dropdown.svg" />}
+          expandIcon={<Image src="/dropdown.svg" width={16} height={12} alt="dropdown" />}
           aria-controls="panel2-content"
           id="panel2-header"
         >

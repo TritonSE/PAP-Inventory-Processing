@@ -10,6 +10,7 @@ import {
   RequestedFurnishings,
 } from "@/app/components";
 import styles from "src/app/components/Page.module.css";
+import Image from "next/image";
 
 export interface PageProps {
   // implement later
@@ -21,7 +22,7 @@ export const Page = (/* implement later*/) => {
       <HeaderBar />
       <a href="complete">
         <div className={styles.toDashboard}>
-          <img width={24} height={24} src="/ic_arrowback.svg" />
+          <Image src="/ic_arrowback.svg" width={24} height={24} alt="arrowback" />
           Dashboard
         </div>
       </a>
@@ -33,13 +34,13 @@ export const Page = (/* implement later*/) => {
           <div className={styles.actions}>
             <a href="REPLACE">
               <div className={styles.button}>
-                <img width={24} height={24} src="/ic_edit.svg" />
+                <Image width={24} height={24} src="/ic_edit.svg" alt="edit" />
                 Edit Form
               </div>
             </a>
             <a href="REPLACE">
               <div className={styles.button}>
-                <img width={24} height={24} src="/ic_upload.svg" />
+                <Image width={24} height={24} src="/ic_upload.svg" alt="upload" />
                 Export
               </div>
             </a>

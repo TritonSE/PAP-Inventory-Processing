@@ -1,11 +1,8 @@
 import React from "react";
 import styles from "src/app/components/DropdownDetail.module.css";
-import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-import { Black_And_White_Picture } from "next/font/google";
 
 export interface DropdownDetailProps {
   title: string;

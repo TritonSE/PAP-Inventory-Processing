@@ -3,6 +3,7 @@
 }
 
 .toDashboard {
+  display: flex;
   color: var(--color-tse-accent-blue-1);
   margin-top: 35px;
   max-width: 137px;
