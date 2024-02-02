@@ -1,4 +1,3 @@
-"use client";
 import React, { useEffect, useState } from "react";
 import styles from "src/app/components/UserTag.module.css";
 import { getVSR, type VSR } from "@/api/VSRs";

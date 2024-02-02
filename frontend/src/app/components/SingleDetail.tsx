@@ -3,7 +3,7 @@ import styles from "src/app/components/SingleDetail.module.css";
 
 export interface SingleDetailProps {
   title: string;
-  value: string;
+  value: string | number | number[];
   valueFontSize?: string;
 }
 

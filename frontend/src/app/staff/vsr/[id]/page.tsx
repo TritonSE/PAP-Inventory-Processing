@@ -1,3 +1,4 @@
+"use client";
 import { Page } from "@/app/components";
 
 export default function Individual() {
