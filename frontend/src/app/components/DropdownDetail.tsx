@@ -24,9 +24,7 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
             displayEmpty
             sx={{
               boxShadow: "none",
-              "& .MuiPaper-root": {
-                position: "absolute",
-              },
+              ".MuiOutlinedInput-notchedOutline": { border: 0 },
             }}
           >
             <MenuItem value={"Received"}>

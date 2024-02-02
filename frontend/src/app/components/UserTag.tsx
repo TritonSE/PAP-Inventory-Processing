@@ -1,14 +1,27 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import styles from "src/app/components/UserTag.module.css";
+import { getVSR, type VSR } from "@/api/VSRs";
+import { useParams } from "next/navigation";
 
 export interface UserTagProps {
-  // fill in after user data stuff implemented
+  // vsr: VSR | undefined;
 }
 
-export function UserTag(/*{user}: UserTagProps*/) {
+export function UserTag(/*{ vsr }: UserTagProps*/) {
+  const [vsr, setVSR] = useState<VSR>({} as VSR);
+  const { id } = useParams();
+
+  useEffect(() => {
+    getVSR(id as string).then((result) => {
+      if (result.success) {
+        setVSR(result.data);
+      }
+    });
+  }, [id]);
   return (
     <div className={styles.items}>
-      <span> Justin Timberlake </span>
+      {vsr === undefined ? <span>Not assigned</span> : <span> {vsr.name} </span>}
     </div>
   );
 }

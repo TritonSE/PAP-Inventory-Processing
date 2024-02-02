@@ -11,6 +11,7 @@ const router = express.Router();
  * TaskValidator.createTask processes the request and determines whether the
  * request should be sent through or an error should be thrown.
  */
+router.get("/:id", VSRController.getVSR);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 
 export default router;

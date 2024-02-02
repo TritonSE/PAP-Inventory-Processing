@@ -20,7 +20,6 @@ async function fetchRequest(
   headers: Record<string, string>,
 ): Promise<Response> {
   const hasBody = body !== undefined;
-
   const newHeaders = { ...headers };
   if (hasBody) {
     newHeaders["Content-Type"] = "application/json";
@@ -59,7 +58,7 @@ async function assertOk(response: Response): Promise<void> {
     // skip errors
   }
 
-  throw new Error(message);
+  // throw new Error(message);
 }
 
 /**

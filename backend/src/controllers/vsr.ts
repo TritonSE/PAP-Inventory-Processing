@@ -1,8 +1,24 @@
 import { RequestHandler } from "express";
 //import createHttpError from "http-errors";
 import { validationResult } from "express-validator";
+import createHttpError from "http-errors";
 import VSRModel from "src/models/vsr";
 import validationErrorParser from "src/util/validationErrorParser";
+
+export const getVSR: RequestHandler = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const vsr = await VSRModel.findById(id).populate("name");
+
+    if (vsr === null) {
+      throw createHttpError(404, "VSR not found at id " + id);
+    }
+    res.status(200).json(vsr);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const createVSR: RequestHandler = async (req, res, next) => {
   // extract any errors that were found by the validator
