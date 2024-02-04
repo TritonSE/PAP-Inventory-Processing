@@ -8,13 +8,11 @@ import { User } from "src/models/users";
 const router = express.Router();
 
 router.get("/api/whoami/:jwttoken", async (req: Request, res: Response, next: NextFunction) => {
-  console.log("inside get route");
   try {
     const JWTToken = req.params.jwttoken;
     const userInfo = await decodeAuthToken(JWTToken);
     if (userInfo) {
       const uid = userInfo.uid;
-      console.log(uid);
       /*
       if (!mongoose.Types.ObjectId.isValid(uid)) {
         throw ServiceError.INVALID_MONGO_ID;
@@ -25,11 +23,11 @@ router.get("/api/whoami/:jwttoken", async (req: Request, res: Response, next: Ne
       if (!user) {
         throw ServiceError.USER_NOT_FOUND;
       }
-      console.log(user);
-      const { role } = user;
+      const { _id: mongoId, role } = user;
       res.status(200).send({
         message: "Current user information",
         user: {
+          mongoId,
           uid,
           role,
         },
