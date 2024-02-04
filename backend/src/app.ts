@@ -6,6 +6,7 @@ import "dotenv/config";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
+import { userRouter } from "src/routes/users";
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use(
 );
 
 // Put routes here (e.g. app.use("/api/example", exampleRoutes); )
+app.use(userRouter);
 
 /**
  * Error handler; all errors thrown by server are handled here.

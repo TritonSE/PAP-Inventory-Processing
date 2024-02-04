@@ -2,7 +2,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { decodeAuthToken } from "src/services/auth";
 import { AuthError } from "src/errors/auth";
 import { ServiceError } from "src/errors/service";
-import mongoose from "mongoose";
+// import mongoose from "mongoose";
 import { User } from "src/models/users";
 
 const router = express.Router();
@@ -14,13 +14,18 @@ router.get("/api/whoami/:jwttoken", async (req: Request, res: Response, next: Ne
     const userInfo = await decodeAuthToken(JWTToken);
     if (userInfo) {
       const uid = userInfo.uid;
+      console.log(uid);
+      /*
       if (!mongoose.Types.ObjectId.isValid(uid)) {
         throw ServiceError.INVALID_MONGO_ID;
       }
-      const user = await User.findById(uid);
+      */
+      // const user = await User.findById(uid);
+      const user = await User.findOne({ uid: uid });
       if (!user) {
         throw ServiceError.USER_NOT_FOUND;
       }
+      console.log(user);
       const { role } = user;
       res.status(200).send({
         message: "Current user information",
@@ -40,3 +45,5 @@ router.get("/api/whoami/:jwttoken", async (req: Request, res: Response, next: Ne
     });
   }
 });
+
+export { router as userRouter };

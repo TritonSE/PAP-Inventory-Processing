@@ -7,6 +7,7 @@ import Image from "next/image";
 import "src/app/login/Login.css";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,9 +15,11 @@ const Login = () => {
 
   const { app, auth } = initFirebase();
 
+  const router = useRouter();
+
   const sendTokenToBackend = async (token: string) => {
     try {
-      const response = await fetch(`/api/whoami/${token}`, {
+      const response = await fetch(`http://localhost:3001/api/whoami/${token}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -27,6 +30,7 @@ const Login = () => {
       if (response.ok) {
         const userInfo = await response.json();
         console.log(userInfo);
+        router.push("/dummyPage");
       } else {
         console.error("Failed to get user info from JWT Token");
       }
