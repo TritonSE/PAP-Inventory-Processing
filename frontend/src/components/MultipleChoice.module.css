@@ -1,7 +1,20 @@
 /* MultipleChoice.module.css */
 
+.wrapperClass {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1 0 0;
+  font-size: 16px;
+  color: var(--Light-Gray, #818181);
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
 .chip {
-  margin: 0 12.5px;
   border-width: 1px;
   border-style: solid;
   text-align: center;
@@ -23,13 +36,10 @@
   background: #102d5f;
 }
 
-.label {
-  color: var(--Light-Gray, #818181);
-  font-family: "Open Sans";
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+.chipContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
 }
 
 .chipUnselected {
@@ -40,4 +50,9 @@
 /*Need exact color for this*/
 .chipUnselected:hover {
   background: rgb(213, 232, 239);
+}
+
+.requiredAsterisk {
+  color: var(--Secondary-2, #be2d46);
+  text-align: left;
 }

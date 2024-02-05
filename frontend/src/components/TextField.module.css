@@ -5,9 +5,6 @@
   gap: 4px;
   flex: 1 0 0;
   font-size: 16px;
-}
-
-.label {
   color: var(--Light-Gray, #818181);
   font-family: "Open Sans";
   font-style: normal;
@@ -15,9 +12,13 @@
   line-height: normal;
 }
 
+.requiredAsterisk {
+  color: var(--Secondary-2, #be2d46);
+  text-align: left;
+}
+
 .inputClass {
   display: flex;
-  padding: 6px 12px;
   align-items: flex-start;
   gap: 10px;
   align-self: stretch;

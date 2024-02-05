@@ -7,6 +7,7 @@ export interface MultipleChoiceProps {
   options: string[];
   value: string;
   onChange: (selected: string) => void;
+  required: boolean;
   error?: boolean;
   helperText?: string;
 }
@@ -16,24 +17,30 @@ const MultipleChoice = ({
   options,
   value,
   onChange,
+  required,
   error,
   helperText,
   ...props
 }: MultipleChoiceProps) => {
   return (
-    <div>
-      <p className={styles.label}>{label}</p>
-      {options.map((option) => (
-        <Chip
-          label={option}
-          key={option}
-          onClick={() => onChange(option)}
-          className={`${styles.chip} ${
-            value === option ? styles.chipSelected : styles.chipUnselected
-          }`}
-          clickable
-        />
-      ))}
+    <div className={styles.wrapperClass}>
+      <p>
+        {required && <span className={styles.requiredAsterisk}>* </span>}
+        {label}
+      </p>
+      <div className={styles.chipContainer}>
+        {options.map((option) => (
+          <Chip
+            label={option}
+            key={option}
+            onClick={() => onChange(option)}
+            className={`${styles.chip} ${
+              value === option ? styles.chipSelected : styles.chipUnselected
+            }`}
+            clickable
+          />
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import { APIResult, handleAPIError, post } from "../src/api/requests";
+import { APIResult, handleAPIError, post } from "@/api/requests";
 
 /*
 

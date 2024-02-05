@@ -1,9 +1,11 @@
 "use client";
 import React from "react";
+import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import TextField from "@/components/TextField";
 import MultipleChoice from "@/components/MultipleChoice";
 import Dropdown from "@/components/Dropdown";
+import HeaderBar from "@/components/HeaderBar";
 import * as validators from "@/util/validateResponses";
 import { createVSR, CreateVSRRequest } from "@/api/VSRs";
 
@@ -12,39 +14,8 @@ interface IFormInput {
   date: string;
   marital_status: string;
   gender: string;
+  age: number;
 }
-
-// const handleSubmit = () => {
-//   // first, do any validation that we can on the frontend
-//   //todo
-
-//   let createVSRRequest: CreateVSRRequest = {
-//     name: "",
-//     date: "",
-//     gender: "",
-//     age: 0,
-//     maritalStatus: "",
-//     ethnicity: "",
-//     employmentStatus: "",
-//     incomeLevel: "",
-//     sizeOfHome: "",
-//   };
-
-//   createVSR(createVSRRequest).then((result) => {
-//     if (result.success) {
-//     } else {
-//       // You should always clearly inform the user when something goes wrong.
-//       // In this case, we're just doing an `alert()` for brevity, but you'd
-//       // generally want to show some kind of error state or notification
-//       // within your UI. If the problem is with the user's input, then use
-//       // the error states of your smaller components (like the `TextField`s).
-//       // If the problem is something we don't really control, such as network
-//       // issues or an unexpected exception on the server side, then use a
-//       // banner, modal, popup, or similar.
-//       alert(result.error);
-//     }
-//   });
-// };
 
 const VeteranServiceRequest: React.FC = () => {
   const {
@@ -65,7 +36,7 @@ const VeteranServiceRequest: React.FC = () => {
       name: data.name,
       date: data.date,
       gender: data.gender,
-      age: 42,
+      age: data.age,
       maritalStatus: data.marital_status,
       ethnicity: "PLACEHOLDER", // You'll need to add fields for these if they are required
       employmentStatus: "PLACEHOLDER",
@@ -88,25 +59,74 @@ const VeteranServiceRequest: React.FC = () => {
   };
 
   return (
-    <div style={{ backgroundColor: "white" }}>
-      <h1>Veteran Service Request Form Page 1</h1>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField
-          label="Name"
-          d
-          variant="outlined"
-          {...register("name", { required: "Name is required" })}
-          onChange={(e) => console.log("Errors and watch", errors, watch())}
-          error={!!errors.name}
-          helperText={errors.name?.message}
-        />
+    <div>
+      <HeaderBar />
+      <div className={styles.main}>
+        <h1>Veteran Service Request Form</h1>
+        <p className={styles.description}>
+          Welcome, Veterans, Active Duty, and Reservists. We invite you to schedule an appointment
+          to explore a selection of household furnishings and essential items available in our
+          warehouse.
+          <br></br>
+          <br></br>
+          Let us know your specific needs, and we'll provide the best assistance possible. Expect a
+          response within 48 business hours; remember to check your junk mail if needed.
+          <br></br>
+          <br></br>
+          If you're a Veteran or Active Military Reservist in search of our services, simply fill
+          out and submit the form below.
+        </p>
 
-        <div>
-          <br />
-          <br />
+        <div className={styles.footer}>
+          <p>
+            Fields marked with <span className={styles.asterisk}>*</span> are required.
+          </p>
         </div>
 
-        <TextField
+        <div className={styles.formContainer}>
+          <div className={styles.form}>
+            <form onSubmit={handleSubmit(onSubmit)}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                {...register("name", { required: "Name is required" })}
+                onChange={(e) => console.log("Errors and watch", errors, watch())}
+                required={true}
+                error={!!errors.name}
+                helperText={errors.name?.message}
+              />
+
+              <div className={styles.formRow}>
+                <Controller
+                  defaultValue=""
+                  name="gender"
+                  control={control}
+                  rules={{ required: "Gender is required" }}
+                  render={({ field }) => (
+                    <Dropdown
+                      label="Gender"
+                      options={genderOptions}
+                      value={field.value}
+                      onChange={(e) => field.onChange(e)}
+                      required={true}
+                      error={!!errors.gender}
+                      helperText={errors.gender?.message}
+                    />
+                  )}
+                />
+
+                <TextField
+                  label="Age"
+                  variant="outlined"
+                  {...register("age", { required: "Age is required" })}
+                  onChange={(e) => console.log("Errors and watch", errors, watch())}
+                  required={true}
+                  error={!!errors.age}
+                  helperText={errors.age?.message}
+                />
+              </div>
+
+              {/* <TextField
           label="Date"
           variant="outlined"
           {...register("date", {
@@ -115,54 +135,38 @@ const VeteranServiceRequest: React.FC = () => {
                 validators.validateDate(value) == "Success" || "Date is not in the correct format",
             },
           })}
+          
           error={!!errors.date}
           helperText={errors.date?.message}
-        />
+        /> */}
 
-        <div>
-          <br />
-          <br />
+              <Controller
+                name="marital_status"
+                control={control}
+                rules={{ required: "Marital status is required" }}
+                render={({ field }) => (
+                  <MultipleChoice
+                    label="Marital Status"
+                    options={maritalOptions}
+                    value={field.value}
+                    onChange={(newValue) => field.onChange(newValue)}
+                    required={true}
+                    error={!!errors.marital_status}
+                    helperText={errors.marital_status?.message}
+                  />
+                )}
+              />
+
+              <div>
+                <br />
+                <br />
+              </div>
+
+              <button type="submit">Submit</button>
+            </form>
+          </div>
         </div>
-
-        <Controller
-          name="marital_status"
-          control={control}
-          rules={{ required: "Marital status is required" }}
-          render={({ field }) => (
-            <MultipleChoice
-              label="Marital Status"
-              options={maritalOptions}
-              value={field.value}
-              onChange={(newValue) => field.onChange(newValue)}
-              error={!!errors.marital_status}
-              helperText={errors.marital_status?.message}
-            />
-          )}
-        />
-
-        <div>
-          <br />
-          <br />
-        </div>
-
-        <Controller
-          name="gender"
-          control={control}
-          rules={{ required: "Gender is required" }}
-          render={({ field }) => (
-            <Dropdown
-              label="Gender"
-              options={genderOptions}
-              value={field.value}
-              onChange={(e) => field.onChange(e)}
-              error={!!errors.gender}
-              helperText={errors.gender?.message}
-            />
-          )}
-        />
-
-        <button type="submit">Submit</button>
-      </form>
+      </div>
     </div>
   );
 };

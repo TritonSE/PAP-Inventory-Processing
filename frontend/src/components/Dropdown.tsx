@@ -7,6 +7,7 @@ export interface DropDownProps {
   options: string[];
   value: string;
   onChange: (event: SelectChangeEvent<string>) => void;
+  required: boolean;
   error?: boolean;
   helperText?: string;
 }
@@ -16,21 +17,34 @@ const Dropdown = ({
   options,
   value,
   onChange,
+  required,
   error,
   helperText,
   ...props
 }: DropDownProps) => {
   return (
-    <FormControl fullWidth>
-      <InputLabel>{label}</InputLabel>
-      <Select value={value} onChange={onChange} error={error} displayEmpty>
-        {options.map((option) => (
-          <MenuItem key={option} value={option}>
-            {option}
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
+    <div className={styles.wrapperClass}>
+      <p>
+        {required && <span className={styles.requiredAsterisk}>* </span>}
+        {label}
+      </p>
+      <FormControl className={styles.form} size="small">
+        <InputLabel>{label}</InputLabel>
+        <Select
+          className={styles.Dropdown}
+          value={value}
+          onChange={onChange}
+          error={error}
+          displayEmpty
+        >
+          {options.map((option) => (
+            <MenuItem key={option} value={option}>
+              {option}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+    </div>
   );
 };
 
