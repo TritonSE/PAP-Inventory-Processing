@@ -15,6 +15,10 @@ interface IFormInput {
   marital_status: string;
   gender: string;
   age: number;
+  ethnicity: string;
+  employment_status: string;
+  income_level: string;
+  size_of_home: string;
 }
 
 const VeteranServiceRequest: React.FC = () => {
@@ -27,6 +31,42 @@ const VeteranServiceRequest: React.FC = () => {
   } = useForm<IFormInput>();
   const maritalOptions = ["Married", "Single", "It's Complicated"];
   const genderOptions = ["", "Male", "Female", "Other"];
+  const employmentOptions = [
+    "Employed",
+    "Unemployed",
+    "Currently Looking",
+    "Retired",
+    "In School",
+    "Unable to work",
+    "Other",
+  ];
+  const incomeOptions = [
+    "$12,500 and under",
+    "$12,501 - $25,000",
+    "$25,001 - $50,000",
+    "$50,001 and over",
+  ];
+
+  const homeOptions = [
+    "House",
+    "Apartment",
+    "Studio",
+    "1 Bedroom",
+    "2 Bedroom",
+    "3 Bedroom",
+    "4 Bedroom",
+    "4+ Bedroom",
+  ];
+
+  const ethnicityOptions = [
+    "Asian",
+    "African American",
+    "Caucasian",
+    "Native American",
+    "Pacific Islander",
+    "Middle Eastern",
+    "Prefer not to say",
+  ];
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
@@ -34,14 +74,14 @@ const VeteranServiceRequest: React.FC = () => {
     // Construct the request object
     const createVSRRequest: CreateVSRRequest = {
       name: data.name,
-      date: data.date,
+      date: new Date().toISOString().slice(0, 10),
       gender: data.gender,
       age: data.age,
       maritalStatus: data.marital_status,
-      ethnicity: "PLACEHOLDER", // You'll need to add fields for these if they are required
-      employmentStatus: "PLACEHOLDER",
-      incomeLevel: "PLACEHOLDER",
-      sizeOfHome: "PLACEHOLDER",
+      ethnicity: data.ethnicity, // You'll need to add fields for these if they are required
+      employmentStatus: data.employment_status,
+      incomeLevel: data.income_level,
+      sizeOfHome: data.size_of_home,
     };
 
     try {
@@ -139,6 +179,22 @@ const VeteranServiceRequest: React.FC = () => {
           error={!!errors.date}
           helperText={errors.date?.message}
         /> */}
+              <Controller
+                name="ethnicity"
+                control={control}
+                rules={{ required: "Ethnicity is required" }}
+                render={({ field }) => (
+                  <MultipleChoice
+                    label="Ethnicity"
+                    options={ethnicityOptions}
+                    value={field.value}
+                    onChange={(newValue) => field.onChange(newValue)}
+                    required={true}
+                    error={!!errors.ethnicity}
+                    helperText={errors.ethnicity?.message}
+                  />
+                )}
+              />
 
               <Controller
                 name="marital_status"
@@ -153,6 +209,57 @@ const VeteranServiceRequest: React.FC = () => {
                     required={true}
                     error={!!errors.marital_status}
                     helperText={errors.marital_status?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                name="employment_status"
+                control={control}
+                rules={{ required: "Employment status is required" }}
+                render={({ field }) => (
+                  <MultipleChoice
+                    label="Employment Status"
+                    options={employmentOptions}
+                    value={field.value}
+                    onChange={(newValue) => field.onChange(newValue)}
+                    required={true}
+                    error={!!errors.employment_status}
+                    helperText={errors.employment_status?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                name="income_level"
+                control={control}
+                rules={{ required: "Income level is required" }}
+                render={({ field }) => (
+                  <MultipleChoice
+                    label="Income Level"
+                    options={incomeOptions}
+                    value={field.value}
+                    onChange={(newValue) => field.onChange(newValue)}
+                    required={true}
+                    error={!!errors.income_level}
+                    helperText={errors.income_level?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                name="size_of_home"
+                control={control}
+                rules={{ required: "Size of home is required" }}
+                render={({ field }) => (
+                  <MultipleChoice
+                    label="Size of Home"
+                    options={homeOptions}
+                    value={field.value}
+                    onChange={(newValue) => field.onChange(newValue)}
+                    required={true}
+                    error={!!errors.size_of_home}
+                    helperText={errors.size_of_home?.message}
                   />
                 )}
               />
