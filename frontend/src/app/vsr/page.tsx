@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import TextField from "@/components/TextField";
@@ -28,7 +28,11 @@ const VeteranServiceRequest: React.FC = () => {
     control,
     formState: { errors },
     watch,
+    setValue,
   } = useForm<IFormInput>();
+  const selectedEthnicity = watch("ethnicity");
+  const [otherEthnicity, setOtherEthnicity] = useState("");
+  console.log("selected", selectedEthnicity);
   const maritalOptions = ["Married", "Single", "It's Complicated"];
   const genderOptions = ["", "Male", "Female", "Other"];
   const employmentOptions = [
@@ -40,6 +44,7 @@ const VeteranServiceRequest: React.FC = () => {
     "Unable to work",
     "Other",
   ];
+
   const incomeOptions = [
     "$12,500 and under",
     "$12,501 - $25,000",
@@ -67,6 +72,13 @@ const VeteranServiceRequest: React.FC = () => {
     "Middle Eastern",
     "Prefer not to say",
   ];
+
+  // Determine if the "Other" textbox should be shown
+  const showOtherTextbox =
+    selectedEthnicity === "Other" ||
+    selectedEthnicity?.includes("Other") ||
+    selectedEthnicity?.length === 0 ||
+    selectedEthnicity === undefined;
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
@@ -179,7 +191,7 @@ const VeteranServiceRequest: React.FC = () => {
           error={!!errors.date}
           helperText={errors.date?.message}
         /> */}
-              <Controller
+              {/* <Controller
                 name="ethnicity"
                 control={control}
                 rules={{ required: "Ethnicity is required" }}
@@ -194,7 +206,54 @@ const VeteranServiceRequest: React.FC = () => {
                     helperText={errors.ethnicity?.message}
                   />
                 )}
-              />
+              /> */}
+              <div>
+                <Controller
+                  name="ethnicity"
+                  control={control}
+                  rules={{ required: "Ethnicity is required" }}
+                  render={({ field }) => (
+                    <MultipleChoice
+                      label="Ethnicity"
+                      options={ethnicityOptions} // Make sure this array includes an "Other" option
+                      value={field.value}
+                      onChange={(newValue) => {
+                        field.onChange(newValue);
+                        // If "Other" is not selected and there was a value in the otherEthnicity state, clear it
+                        if (!newValue.includes("Other") && otherEthnicity) {
+                          setOtherEthnicity("");
+                          setValue("ethnicity", "", { shouldValidate: true });
+                        }
+                      }}
+                      required={true}
+                      error={!!errors.ethnicity}
+                      helperText={errors.ethnicity?.message}
+                    />
+                  )}
+                />
+                {showOtherTextbox && (
+                  <TextField
+                    type="text"
+                    placeholder="Please specify"
+                    name="ethnicity"
+                    value={otherEthnicity}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setOtherEthnicity(value);
+                      setValue("ethnicity", value, { shouldValidate: true });
+                    }}
+                    required={
+                      !selectedEthnicity ||
+                      selectedEthnicity.length === 0 ||
+                      selectedEthnicity.includes("Other")
+                    }
+                    label={""}
+                    variant={"outlined"}
+                  />
+                )}
+
+                {errors.ethnicity && <p>{errors.ethnicity.message}</p>}
+              </div>
 
               <Controller
                 name="marital_status"
