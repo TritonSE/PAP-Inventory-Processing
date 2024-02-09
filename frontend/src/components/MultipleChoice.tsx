@@ -33,7 +33,13 @@ const MultipleChoice = ({
           <Chip
             label={option}
             key={option}
-            onClick={() => onChange(option)}
+            onClick={() => {
+              if (value === option) {
+                onChange("");
+              } else {
+                onChange(option);
+              }
+            }}
             className={`${styles.chip} ${
               value === option ? styles.chipSelected : styles.chipUnselected
             }`}

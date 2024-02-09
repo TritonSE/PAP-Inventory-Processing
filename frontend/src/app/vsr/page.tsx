@@ -231,7 +231,7 @@ const VeteranServiceRequest: React.FC = () => {
                     />
                   )}
                 />
-                {showOtherTextbox && (
+                {/* {
                   <TextField
                     type="text"
                     placeholder="Please specify"
@@ -240,17 +240,12 @@ const VeteranServiceRequest: React.FC = () => {
                     onChange={(e) => {
                       const value = e.target.value;
                       setOtherEthnicity(value);
-                      setValue("ethnicity", value, { shouldValidate: true });
                     }}
-                    required={
-                      !selectedEthnicity ||
-                      selectedEthnicity.length === 0 ||
-                      selectedEthnicity.includes("Other")
-                    }
+                    required={!selectedEthnicity || selectedEthnicity.length === 0}
                     label={""}
                     variant={"outlined"}
                   />
-                )}
+                } */}
 
                 {errors.ethnicity && <p>{errors.ethnicity.message}</p>}
               </div>
