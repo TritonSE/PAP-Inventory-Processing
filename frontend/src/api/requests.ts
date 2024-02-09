@@ -53,6 +53,7 @@ async function assertOk(response: Response): Promise<void> {
     const text = await response.text();
     if (text) {
       message += ": " + text;
+      console.log(message);
     }
   } catch (e) {
     // skip errors
