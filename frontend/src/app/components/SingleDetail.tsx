@@ -13,6 +13,12 @@ export function SingleDetail({ title, value, valueFontSize, className }: SingleD
     fontSize: valueFontSize, // Use the passed font size or default to CSS class
   };
 
+  const email = (
+    <a className={styles.email} href={`mailto: ${value}`}>
+      {value}
+    </a>
+  );
+
   const date = (
     <div className={styles.row}>
       <div className={styles.date} style={valueStyle}>
@@ -33,7 +39,11 @@ export function SingleDetail({ title, value, valueFontSize, className }: SingleD
     <div>
       <div className={className != undefined ? className : styles.items}>
         <div className={styles.title}>{title}</div>
-        {typeof value === "string" && value.includes("[") ? date : basic}
+        {typeof value === "string" && value.includes("[")
+          ? date
+          : typeof value === "string" && value.includes("@")
+            ? email
+            : basic}
       </div>
     </div>
   );

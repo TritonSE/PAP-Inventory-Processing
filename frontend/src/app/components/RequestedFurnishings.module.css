@@ -4,8 +4,6 @@
   width: calc(100vw * 713 / 1440);
   border-radius: 6px 6px 6px 6px;
   box-shadow: none;
-  padding-left: 6px;
-  padding-right: 6px;
   padding-top: 8px;
   padding-bottom: 8px;
 }

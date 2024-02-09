@@ -32,6 +32,7 @@ export const MilitaryBackground = () => {
         expanded={expanded === "panel"}
         onChange={handleChange("panel")}
         sx={{
+          paddingTop: "6px",
           "&.Mui-expanded": {
             paddingTop: "0px",
           },
@@ -44,7 +45,7 @@ export const MilitaryBackground = () => {
           id="panel2-header"
           sx={{
             ...(expanded === "panel" && {
-              borderBottom: "1px solid rgba(0, 0, 0, .125)", // Custom line style
+              borderBottom: "1px solid rgba(214, 214, 214)", // Custom line style
               marginBottom: -1, // Adjust as needed
             }),
           }}

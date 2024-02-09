@@ -12,7 +12,7 @@ export interface DropdownDetailProps {
 
 export function DropdownDetail({ title, value }: DropdownDetailProps) {
   const DropdownIcon = () => (
-    <Image src="/keyboard_arrow_down.svg" width={24} height={24} alt="dropdown" />
+    <Image src="/keyboard_arrow_down24.svg" width={24} height={24} alt="dropdown" />
   );
   return (
     <div>
@@ -32,7 +32,7 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
                 paddingRight: "0px",
                 paddingTop: "0px",
                 paddingBottom: "0px",
-                ":first-child": { paddingRight: "8px" },
+                ":first-of-type": { paddingRight: "8px" },
               },
             }}
             IconComponent={DropdownIcon}

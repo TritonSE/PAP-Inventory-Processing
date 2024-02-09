@@ -38,3 +38,8 @@
   color: #818181;
   white-space: pre;
 }
+
+.email {
+  color: #4274f4;
+  text-decoration: underline;
+}

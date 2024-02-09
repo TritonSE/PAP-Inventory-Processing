@@ -19,7 +19,9 @@ export const RequestedFurnishings = () => {
       }
     });
   }, [id]);
+
   const expanded = true;
+
   return (
     <div className={styles.box}>
       <Accordion className={styles.accordian} defaultExpanded expanded={expanded}>
@@ -35,37 +37,66 @@ export const RequestedFurnishings = () => {
             <div className={styles.row}>
               <ListDetail
                 title="Bedroom:"
-                values={vsr.bedroomFurnishing != undefined ? vsr.bedroomFurnishing : ["N/A"]}
+                values={
+                  vsr.bedroomFurnishing != undefined &&
+                  Object.keys(vsr.bedroomFurnishing).length > 0
+                    ? vsr.bedroomFurnishing
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Bathroom:"
-                values={vsr.bathroomFurnishing != undefined ? vsr.bathroomFurnishing : ["N/A"]}
+                values={
+                  vsr.bathroomFurnishing != undefined &&
+                  Object.keys(vsr.bathroomFurnishing).length > 0
+                    ? vsr.bathroomFurnishing
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Kitchen:"
-                values={vsr.kitchenFurnishing != undefined ? vsr.kitchenFurnishing : ["N/A"]}
+                values={
+                  vsr.kitchenFurnishing != undefined &&
+                  Object.keys(vsr.kitchenFurnishing).length > 0
+                    ? vsr.kitchenFurnishing
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Living Room:"
-                values={vsr.livingRoomFurnishing != undefined ? vsr.livingRoomFurnishing : ["N/A"]}
+                values={
+                  vsr.livingRoomFurnishing != undefined &&
+                  Object.keys(vsr.livingRoomFurnishing).length > 0
+                    ? vsr.livingRoomFurnishing
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Dining Room:"
-                values={vsr.diningRoomFurnishing != undefined ? vsr.diningRoomFurnishing : ["N/A"]}
+                values={
+                  vsr.diningRoomFurnishing != undefined &&
+                  Object.keys(vsr.diningRoomFurnishing).length > 0
+                    ? vsr.diningRoomFurnishing
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Other:"
-                values={vsr.otherFurnishing != undefined ? vsr.otherFurnishing : ["N/A"]}
+                values={
+                  vsr.otherFurnishing != undefined && Object.keys(vsr.otherFurnishing).length > 0
+                    ? vsr.otherFurnishing
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>

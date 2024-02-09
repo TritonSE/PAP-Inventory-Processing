@@ -45,3 +45,8 @@
   padding-top: 8px;
   padding-bottom: 8px;
 }
+
+.noList {
+  color: #818181;
+  font-style: italic;
+}

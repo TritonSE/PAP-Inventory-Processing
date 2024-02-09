@@ -4,10 +4,8 @@
   width: calc(100vw * 89 / 288);
   border-radius: 6px 6px 6px 6px;
   box-shadow: none;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 8px;
   padding-bottom: 8px;
+  transition: padding 0.3s ease;
 }
 
 .details {
@@ -15,6 +13,8 @@
   flex-direction: column;
   justify-content: space-between;
   margin-top: 20px;
+  padding-left: 6px;
+  padding-right: 6px;
 }
 
 .row {
@@ -44,4 +44,5 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  padding-left: 6px;
 }
