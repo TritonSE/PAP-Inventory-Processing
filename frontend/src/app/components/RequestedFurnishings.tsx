@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "src/app/components/RequestedFurnishings.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail, ListDetail } from "@/app/components";
+import { useParams } from "next/navigation";
+import { getVSR, type VSR } from "@/api/VSRs";
 
 export const RequestedFurnishings = () => {
+  const [vsr, setVSR] = useState<VSR>({} as VSR);
+  const { id } = useParams();
+
+  useEffect(() => {
+    getVSR(id as string).then((result) => {
+      if (result.success) {
+        setVSR(result.data);
+      }
+    });
+  }, [id]);
   const expanded = true;
   return (
     <div className={styles.box}>
@@ -21,22 +33,40 @@ export const RequestedFurnishings = () => {
         <AccordionDetails>
           <div className={styles.details}>
             <div className={styles.row}>
-              <ListDetail title="Bedroom" values={["Twin Mat.", "Dresser"]} />
+              <ListDetail
+                title="Bedroom:"
+                values={vsr.bedroomFurnishing != undefined ? vsr.bedroomFurnishing : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
-              <ListDetail title="Bathroom" values={["Bath Rug(s): 2"]} />
+              <ListDetail
+                title="Bathroom:"
+                values={vsr.bathroomFurnishing != undefined ? vsr.bathroomFurnishing : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
-              <ListDetail title="Kitchen" values={["Cups", "Pots and Pans"]} />
+              <ListDetail
+                title="Kitchen:"
+                values={vsr.kitchenFurnishing != undefined ? vsr.kitchenFurnishing : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Living Room:" value="No items selected" />
+              <ListDetail
+                title="Living Room:"
+                values={vsr.livingRoomFurnishing != undefined ? vsr.livingRoomFurnishing : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Dining Room:" value="No items selected" />
+              <ListDetail
+                title="Dining Room:"
+                values={vsr.diningRoomFurnishing != undefined ? vsr.diningRoomFurnishing : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
-              <ListDetail title="Other:" values={["Washer"]} />
+              <ListDetail
+                title="Other:"
+                values={vsr.otherFurnishing != undefined ? vsr.otherFurnishing : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
               <SingleDetail title="Additional Items:" value="n/a" />

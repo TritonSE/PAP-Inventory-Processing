@@ -10,36 +10,31 @@
   padding-bottom: 8px;
 }
 
-/* .accordianTitle {
-  height: 48px;
-  padding-left: 22px;
-  padding-right: 22px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-} */
-
 .details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: 12px;
-  margin-left: 6px;
-  margin-right: 6px;
-  margin-bottom: 14px;
+  margin-top: 20px;
 }
 
 .row {
   display: flex;
   flex-direction: row;
-}
-
-.row > * {
-  padding-right: 32px;
-  width: 60%;
+  position: relative;
 }
 
 .row:not(:last-child) {
   padding-bottom: 32px;
+}
+
+.row > *:not(:last-child) {
+  width: calc(50% - 16px);
+}
+
+.second {
+  position: absolute;
+  left: 50%;
+  transform: translateX(16px);
 }
 
 .title {

@@ -60,6 +60,10 @@
   text-align: center;
 }
 
+#edit:hover {
+  background-color: #c7def1;
+}
+
 .button > * {
   padding-right: 6px;
   vertical-align: middle;
@@ -77,7 +81,6 @@
 }
 
 .allDetails > * {
-  width: calc(100% * 5 / 6);
 }
 
 .otherDetails {
@@ -137,14 +140,14 @@
   font-family: "Lora";
   font-size: 18px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   line-height: normal;
   background: var(--color-tse-secondary-1);
   align-items: end;
   padding-left: 24px;
   padding-right: 24px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .footer {

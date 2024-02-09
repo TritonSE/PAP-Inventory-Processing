@@ -3,6 +3,7 @@ import styles from "src/app/components/DropdownDetail.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import Image from "next/image";
 
 export interface DropdownDetailProps {
   title: string;
@@ -10,8 +11,9 @@ export interface DropdownDetailProps {
 }
 
 export function DropdownDetail({ title, value }: DropdownDetailProps) {
-  //   const handleChange = () => {};
-
+  const DropdownIcon = () => (
+    <Image src="/keyboard_arrow_down.svg" width={24} height={24} alt="dropdown" />
+  );
   return (
     <div>
       <div className={styles.items}>
@@ -25,7 +27,15 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
             sx={{
               boxShadow: "none",
               ".MuiOutlinedInput-notchedOutline": { border: 0 },
+              ".MuiOutlinedInput-input.MuiSelect-select": {
+                paddingLeft: "0px",
+                paddingRight: "0px",
+                paddingTop: "0px",
+                paddingBottom: "0px",
+                ":first-child": { paddingRight: "8px" },
+              },
             }}
+            IconComponent={DropdownIcon}
           >
             <MenuItem value={"Received"}>
               <div className={styles.received}>Received</div>

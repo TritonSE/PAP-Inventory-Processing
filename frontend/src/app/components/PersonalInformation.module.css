@@ -22,7 +22,7 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-top: 12px;
+  margin-top: 20px;
   margin-left: 6px;
   margin-right: 6px;
   margin-bottom: 14px;
@@ -30,13 +30,11 @@
 .details > * {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 
 .row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 
 .row > * {

@@ -22,15 +22,16 @@
   height: 48px;
 }
 
-.box .details {
+.details {
   display: flex;
   flex-direction: row;
   margin-left: 4px;
   margin-right: 4px;
   padding-bottom: 5px;
   margin-top: 15px;
+  overflow: auto;
 }
 
-.box .details > * {
+.details > * {
   padding-right: 100px;
 }

@@ -20,7 +20,7 @@ const vsrSchema = new Schema({
   zipCode: { type: Number, required: true },
   phoneNumber: { type: String, required: true },
   email: { type: String, required: true },
-  branch: { type: String, required: true },
+  branch: { type: [String], required: true },
   conflicts: { type: [String], required: true },
   dischargeStatus: { type: String, required: true },
   serviceConnected: { type: String, required: true },
@@ -34,10 +34,10 @@ const vsrSchema = new Schema({
   livingRoomFurnishing: { type: [String], required: true },
   diningRoomFurnishing: { type: [String], required: true },
   otherFurnishing: { type: [String], required: true },
-  date: { type: Date, required: true },
-  caseId: { type: Number, required: true },
-  dateReceived: { type: Date, required: true },
-  lastUpdated: { type: Date, required: true },
+  date: { type: String, required: true },
+  caseId: { type: String, required: true },
+  dateReceived: { type: String, required: true },
+  lastUpdated: { type: String, required: true },
   status: { type: String, required: true },
 });
 

@@ -21,10 +21,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-}
-
-.details > * {
-  margin-top: 32px;
+  margin-top: 20px;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-bottom: 14px;
 }
 
 .row {
@@ -36,6 +36,10 @@
 .row > * {
   padding-right: 32px;
   width: 100%;
+}
+
+.row:not(:last-child) {
+  padding-bottom: 32px;
 }
 
 .title {

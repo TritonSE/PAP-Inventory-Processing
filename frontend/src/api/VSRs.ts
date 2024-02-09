@@ -28,6 +28,30 @@ export interface VSRJson {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  branch: string[];
+  conflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: string;
+  lastRank: string;
+  militaryId: number;
+  petCompanion: string;
+  bedroomFurnishing: string[];
+  bathroomFurnishing: string[];
+  kitchenFurnishing: string[];
+  livingRoomFurnishing: string[];
+  diningRoomFurnishing: string[];
+  otherFurnishing: string[];
+  caseId: string;
+  dateReceived: string;
+  lastUpdated: string;
+  status: string;
+  hearFrom: string;
 }
 
 export interface VSR {
@@ -44,6 +68,30 @@ export interface VSR {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  branch: string[];
+  conflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: string;
+  lastRank: string;
+  militaryId: number;
+  petCompanion: string;
+  bedroomFurnishing: string[];
+  bathroomFurnishing: string[];
+  kitchenFurnishing: string[];
+  livingRoomFurnishing: string[];
+  diningRoomFurnishing: string[];
+  otherFurnishing: string[];
+  caseId: string;
+  dateReceived: string;
+  lastUpdated: string;
+  status: string;
+  hearFrom: string;
 }
 
 export interface CreateVSRRequest {
@@ -59,6 +107,30 @@ export interface CreateVSRRequest {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  branch: string[];
+  conflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: string;
+  lastRank: string;
+  militaryId: number;
+  petCompanion: string;
+  bedroomFurnishing: string[];
+  bathroomFurnishing: string[];
+  kitchenFurnishing: string[];
+  livingRoomFurnishing: string[];
+  diningRoomFurnishing: string[];
+  otherFurnishing: string[];
+  caseId: string;
+  dateReceived: string;
+  lastUpdated: string;
+  status: string;
+  hearFrom: string;
 }
 
 function parseVSR(vsr: VSRJson) {
@@ -76,6 +148,30 @@ function parseVSR(vsr: VSRJson) {
     employmentStatus: vsr.employmentStatus,
     incomeLevel: vsr.incomeLevel,
     sizeOfHome: vsr.sizeOfHome,
+    streetAddress: vsr.streetAddress,
+    city: vsr.city,
+    state: vsr.state,
+    zipCode: vsr.zipCode,
+    phoneNumber: vsr.phoneNumber,
+    email: vsr.email,
+    branch: vsr.branch,
+    conflicts: vsr.conflicts,
+    dischargeStatus: vsr.dischargeStatus,
+    serviceConnected: vsr.serviceConnected,
+    lastRank: vsr.lastRank,
+    militaryId: vsr.militaryId,
+    petCompanion: vsr.petCompanion,
+    bedroomFurnishing: vsr.bedroomFurnishing,
+    bathroomFurnishing: vsr.bathroomFurnishing,
+    kitchenFurnishing: vsr.kitchenFurnishing,
+    livingRoomFurnishing: vsr.livingRoomFurnishing,
+    diningRoomFurnishing: vsr.diningRoomFurnishing,
+    otherFurnishing: vsr.otherFurnishing,
+    caseId: vsr.caseId,
+    dateReceived: vsr.dateReceived,
+    lastUpdated: vsr.lastUpdated,
+    status: vsr.status,
+    hearFrom: vsr.hearFrom,
   };
 }
 

@@ -14,15 +14,16 @@
   margin-bottom: 10px;
 }
 
-.list {
+.list:last-child {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
+  padding-bottom: 6px;
 }
 
 .list > * {
   margin-right: 16px;
 }
-
 .listItem {
   color: #fff;
   text-align: center;

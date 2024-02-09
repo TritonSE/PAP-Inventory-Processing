@@ -5,20 +5,35 @@ export interface SingleDetailProps {
   title: string;
   value: string | number | number[];
   valueFontSize?: string;
+  className?: string;
 }
 
-export function SingleDetail({ title, value, valueFontSize }: SingleDetailProps) {
+export function SingleDetail({ title, value, valueFontSize, className }: SingleDetailProps) {
   const valueStyle = {
     fontSize: valueFontSize, // Use the passed font size or default to CSS class
   };
 
+  const date = (
+    <div className={styles.row}>
+      <div className={styles.date} style={valueStyle}>
+        {typeof value === "string" ? value.substring(0, 11) : value}
+      </div>
+      <div className={styles.time} style={valueStyle}>
+        {typeof value === "string" ? value.substring(10) : value}
+      </div>
+    </div>
+  );
+
+  const basic = (
+    <div className={styles.value} style={valueStyle}>
+      {value}
+    </div>
+  );
   return (
     <div>
-      <div className={styles.items}>
+      <div className={className != undefined ? className : styles.items}>
         <div className={styles.title}>{title}</div>
-        <div className={styles.value} style={valueStyle}>
-          {value}
-        </div>
+        {typeof value === "string" && value.includes("[") ? date : basic}
       </div>
     </div>
   );

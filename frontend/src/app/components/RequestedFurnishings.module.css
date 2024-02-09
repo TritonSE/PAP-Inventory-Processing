@@ -18,20 +18,27 @@
   padding-bottom: 20px;
 } */
 
-.box .details {
+.accordianTitle {
+  height: 48px;
+  border-bottom: 1px solid #d6d6d6;
+  height: 48px;
+}
+
+.details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: 15px;
 }
 
-.box .details > * {
-  margin-bottom: 32px;
-}
-
-.box .details .row {
+.row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.row:not(:last-child) {
+  padding-bottom: 32px;
 }
 
 .title {

@@ -33,7 +33,7 @@ export const Page = (/* implement later*/) => {
           </div>
           <div className={styles.actions}>
             <a href="REPLACE">
-              <div className={styles.button}>
+              <div id="edit" className={styles.button}>
                 <Image width={24} height={24} src="/ic_edit.svg" alt="edit" />
                 Edit Form
               </div>
@@ -60,9 +60,6 @@ export const Page = (/* implement later*/) => {
                 <RequestedFurnishings />
               </div>
               <div className={styles.finalActions}>
-                <div className={styles.request}>
-                  <a href="REPLACE">Request Submission</a>
-                </div>
                 <div className={styles.approve}>
                   <a href="REPLACE">Approve VSR</a>
                 </div>

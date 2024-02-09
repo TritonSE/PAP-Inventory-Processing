@@ -18,25 +18,28 @@
   padding-bottom: 20px;
 } */
 
-.box .details {
+.details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  margin-top: 20px;
+  margin-left: 6px;
+  margin-right: 6px;
+  margin-bottom: 14px;
 }
 
-.box .details > * {
-  margin-bottom: 32px;
-}
-
-.box .details .row {
+.row {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
 }
 
 .row > * {
   padding-right: 32px;
   width: 60%;
+}
+
+.row:not(:last-child) {
+  padding-bottom: 32px;
 }
 
 .title {
