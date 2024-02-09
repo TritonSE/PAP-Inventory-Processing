@@ -16,6 +16,7 @@ interface IFormInput {
   gender: string;
   age: number;
   ethnicity: string;
+  other_ethnicity: string;
   employment_status: string;
   income_level: string;
   size_of_home: string;
@@ -90,7 +91,7 @@ const VeteranServiceRequest: React.FC = () => {
       gender: data.gender,
       age: data.age,
       maritalStatus: data.marital_status,
-      ethnicity: data.ethnicity, // You'll need to add fields for these if they are required
+      ethnicity: data.ethnicity === "" ? data.ethnicity : data.other_ethnicity, // You'll need to add fields for these if they are required
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
@@ -207,48 +208,44 @@ const VeteranServiceRequest: React.FC = () => {
                   />
                 )}
               /> */}
-              <div>
-                <Controller
-                  name="ethnicity"
-                  control={control}
-                  rules={{ required: "Ethnicity is required" }}
-                  render={({ field }) => (
-                    <MultipleChoice
-                      label="Ethnicity"
-                      options={ethnicityOptions} // Make sure this array includes an "Other" option
-                      value={field.value}
-                      onChange={(newValue) => {
-                        field.onChange(newValue);
-                        // If "Other" is not selected and there was a value in the otherEthnicity state, clear it
-                        if (!newValue.includes("Other") && otherEthnicity) {
-                          setOtherEthnicity("");
-                          setValue("ethnicity", "", { shouldValidate: true });
-                        }
-                      }}
-                      required={true}
-                      error={!!errors.ethnicity}
-                      helperText={errors.ethnicity?.message}
-                    />
-                  )}
-                />
-                {/* {
-                  <TextField
-                    type="text"
-                    placeholder="Please specify"
-                    name="ethnicity"
-                    value={otherEthnicity}
-                    onChange={(e) => {
-                      const value = e.target.value;
-                      setOtherEthnicity(value);
-                    }}
-                    required={!selectedEthnicity || selectedEthnicity.length === 0}
-                    label={""}
-                    variant={"outlined"}
-                  />
-                } */}
 
-                {errors.ethnicity && <p>{errors.ethnicity.message}</p>}
-              </div>
+              <Controller
+                name="ethnicity"
+                control={control}
+                //rules={{ required: "Ethnicity is required" }}
+                render={({ field }) => (
+                  <MultipleChoice
+                    label="Ethnicity"
+                    options={ethnicityOptions} // Make sure this array includes an "Other" option
+                    value={field.value}
+                    onChange={(newValue) => {
+                      field.onChange(newValue);
+                      // If "Other" is not selected and there was a value in the otherEthnicity state, clear it
+                      setOtherEthnicity("");
+                      //setValue("ethnicity", "", { shouldValidate: true });
+                    }}
+                    required={false}
+                    error={!!errors.ethnicity}
+                    helperText={errors.ethnicity?.message}
+                  />
+                )}
+              />
+
+              <TextField
+                type="text"
+                placeholder="Please specify"
+                name="other_ethnicity"
+                value={otherEthnicity}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setOtherEthnicity(value);
+                }}
+                required={!selectedEthnicity || selectedEthnicity.length === 0}
+                label={""}
+                variant={"outlined"}
+              />
+
+              {errors.ethnicity && <p>{errors.ethnicity.message}</p>}
 
               <Controller
                 name="marital_status"
