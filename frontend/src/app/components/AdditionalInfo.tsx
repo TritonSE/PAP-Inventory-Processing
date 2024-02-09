@@ -4,11 +4,10 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { ListDetail, SingleDetail } from "@/app/components";
+import { ListDetail } from "@/app/components";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { getVSR, type VSR } from "@/api/VSRs";
-import { List } from "@mui/material";
 
 export const AdditionalInfo = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
