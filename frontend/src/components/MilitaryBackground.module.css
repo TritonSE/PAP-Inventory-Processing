@@ -10,14 +10,6 @@
   padding-bottom: 8px;
 }
 
-/* .accordianTitle {
-  height: 48px;
-  padding-left: 22px;
-  padding-right: 22px;
-  padding-top: 20px;
-  padding-bottom: 20px;
-} */
-
 .details {
   display: flex;
   flex-direction: column;

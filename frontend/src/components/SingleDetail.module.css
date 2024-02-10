@@ -41,5 +41,14 @@
 
 .email {
   color: #4274f4;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
   text-decoration: underline;
+}
+
+.noValue {
+  color: #818181;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: italic;
 }

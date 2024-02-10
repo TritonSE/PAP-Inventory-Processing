@@ -7,24 +7,17 @@ import Typography from "@mui/material/Typography";
 import { SingleDetail } from "@/components";
 import Image from "next/image";
 import { useParams } from "next/navigation";
-import { getVSR, type VSR } from "@/api/VSRs";
+import { type VSR } from "@/api/VSRs";
 
-export const ContactInfo = () => {
-  const [vsr, setVSR] = useState<VSR>({} as VSR);
-  const { id } = useParams();
+export interface ContactInfoProps {
+  vsr: VSR;
+}
+export const ContactInfo = ({ vsr }: ContactInfoProps) => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
-
-  useEffect(() => {
-    getVSR(id as string).then((result) => {
-      if (result.success) {
-        setVSR(result.data);
-      }
-    });
-  }, [id]);
   return (
     <div className={styles.box}>
       <Accordion

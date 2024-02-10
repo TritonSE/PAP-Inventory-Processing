@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   HeaderBar,
   UserTag,
@@ -11,16 +11,32 @@ import {
 } from "@/components";
 import styles from "src/components/Page.module.css";
 import Image from "next/image";
+import { type VSR, getVSR } from "@/api/VSRs";
+import { useParams } from "next/navigation";
 
-export interface PageProps {
-  // implement later
-}
+export const Page = () => {
+  const [vsr, setVSR] = useState<VSR>({} as VSR);
+  const { id } = useParams();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-export const Page = (/* implement later*/) => {
+  useEffect(() => {
+    getVSR(id as string)
+      .then((result) => {
+        if (result.success) {
+          setVSR(result.data);
+          setErrorMessage(null);
+        } else {
+          setErrorMessage("VSR not found.");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(`An error occurred: ${error.message}`);
+      });
+  }, [id]);
   return (
     <div className={styles.page}>
       <HeaderBar />
-      <a href="complete">
+      <a href="/staff/vsr">
         <div className={styles.toDashboard}>
           <Image src="/ic_arrowback.svg" width={24} height={24} alt="arrowback" />
           Dashboard
@@ -29,6 +45,8 @@ export const Page = (/* implement later*/) => {
       <div className={styles.allDetails}>
         <div className={styles.headerRow}>
           <div className={styles.name}>
+            {errorMessage && <div className={styles.error}>{errorMessage}</div>}
+
             <UserTag></UserTag>
           </div>
           <div className={styles.actions}>
@@ -47,17 +65,17 @@ export const Page = (/* implement later*/) => {
           </div>
         </div>
         <div className={styles.formDetails}>
-          <CaseDetails></CaseDetails>
+          <CaseDetails vsr={vsr}></CaseDetails>
           <div className={styles.otherDetails}>
             <div className={styles.personalInfo}>
-              <ContactInfo />
-              <PersonalInformation />
-              <MilitaryBackground />
-              <AdditionalInfo />
+              <ContactInfo vsr={vsr} />
+              <PersonalInformation vsr={vsr} />
+              <MilitaryBackground vsr={vsr} />
+              <AdditionalInfo vsr={vsr} />
             </div>
             <div>
               <div className={styles.furnishings}>
-                <RequestedFurnishings />
+                <RequestedFurnishings vsr={vsr} />
               </div>
               <div className={styles.finalActions}>
                 <div className={styles.approve}>
@@ -72,3 +90,6 @@ export const Page = (/* implement later*/) => {
     </div>
   );
 };
+function setErrorMessage(arg0: string) {
+  throw new Error("Function not implemented.");
+}

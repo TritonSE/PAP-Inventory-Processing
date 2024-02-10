@@ -35,6 +35,9 @@ export function SingleDetail({ title, value, valueFontSize, className }: SingleD
       {value}
     </div>
   );
+
+  const noValue = <div className={styles.noValue}>N/A</div>;
+
   return (
     <div>
       <div className={className != undefined ? className : styles.items}>
@@ -43,7 +46,9 @@ export function SingleDetail({ title, value, valueFontSize, className }: SingleD
           ? date
           : typeof value === "string" && value.includes("@")
             ? email
-            : basic}
+            : typeof value === "string" && value.includes("N/A")
+              ? noValue
+              : basic}
       </div>
     </div>
   );

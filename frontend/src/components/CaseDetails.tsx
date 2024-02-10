@@ -5,20 +5,12 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail, DropdownDetail } from "@/components";
-import { useParams } from "next/navigation";
-import { getVSR, type VSR } from "@/api/VSRs";
+import { type VSR } from "@/api/VSRs";
 
-export const CaseDetails = () => {
-  const [vsr, setVSR] = useState<VSR>({} as VSR);
-  const { id } = useParams();
-
-  useEffect(() => {
-    getVSR(id as string).then((result) => {
-      if (result.success) {
-        setVSR(result.data);
-      }
-    });
-  }, [id]);
+export interface CaseDetailsProp {
+  vsr: VSR;
+}
+export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
   const expanded = true;
   return (
     <div className={styles.box}>

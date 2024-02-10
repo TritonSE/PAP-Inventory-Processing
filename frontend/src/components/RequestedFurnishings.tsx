@@ -5,21 +5,13 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail, ListDetail } from "@/components";
-import { useParams } from "next/navigation";
-import { getVSR, type VSR } from "@/api/VSRs";
+import { type VSR } from "@/api/VSRs";
 
-export const RequestedFurnishings = () => {
-  const [vsr, setVSR] = useState<VSR>({} as VSR);
-  const { id } = useParams();
+export interface RequestedFurnishingsProps {
+  vsr: VSR;
+}
 
-  useEffect(() => {
-    getVSR(id as string).then((result) => {
-      if (result.success) {
-        setVSR(result.data);
-      }
-    });
-  }, [id]);
-
+export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
   const expanded = true;
 
   return (

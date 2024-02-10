@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import styles from "@/components/ContactInfo.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -6,25 +6,27 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail, ListDetail } from "@/components";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { getVSR, type VSR } from "@/api/VSRs";
+import { type VSR } from "@/api/VSRs";
 
-export const MilitaryBackground = () => {
-  const [vsr, setVSR] = useState<VSR>({} as VSR);
-  const { id } = useParams();
+export interface MilitaryBackgroundProps {
+  vsr: VSR;
+}
+
+export const MilitaryBackground = ({ vsr }: MilitaryBackgroundProps) => {
+  // const [vsr, setVSR] = useState<VSR>({} as VSR);
   const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  useEffect(() => {
-    getVSR(id as string).then((result) => {
-      if (result.success) {
-        setVSR(result.data);
-      }
-    });
-  }, [id]);
+  // useEffect(() => {
+  //   getVSR(id as string).then((result) => {
+  //     if (result.success) {
+  //       setVSR(result.data);
+  //     }
+  //   });
+  // }, [id]);
   return (
     <div className={styles.box}>
       <Accordion
@@ -55,24 +57,35 @@ export const MilitaryBackground = () => {
         <AccordionDetails>
           <div className={styles.details}>
             <div className={styles.row}>
-              <ListDetail title="Branch" values={vsr.branch != undefined ? vsr.branch : ["N/A"]} />
+              <ListDetail
+                title="Branch"
+                values={vsr.branch && vsr.branch.length > 0 ? vsr.branch : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Conflicts"
-                values={vsr.conflicts != undefined ? vsr.conflicts : ["N/A"]}
+                values={vsr.conflicts && vsr.conflicts.length > 0 ? vsr.conflicts : ["N/A"]}
               />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Discharge Status"
-                values={vsr.dischargeStatus != undefined ? [vsr.dischargeStatus] : ["N/A"]}
+                values={
+                  vsr.dischargeStatus && vsr.dischargeStatus.length > 0
+                    ? [vsr.dischargeStatus]
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>
               <ListDetail
                 title="Service Connected"
-                values={vsr.serviceConnected != undefined ? [vsr.serviceConnected] : ["N/A"]}
+                values={
+                  vsr.serviceConnected && vsr.serviceConnected.length
+                    ? [vsr.serviceConnected]
+                    : ["N/A"]
+                }
               />
             </div>
             <div className={styles.row}>

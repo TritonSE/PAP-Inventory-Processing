@@ -22,7 +22,6 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
           <Select
             className={styles.select}
             value={value}
-            // onChange={handleChange}
             displayEmpty
             sx={{
               boxShadow: "none",

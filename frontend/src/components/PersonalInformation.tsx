@@ -6,25 +6,18 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail, ListDetail } from "@/components";
 import Image from "next/image";
-import { useParams } from "next/navigation";
-import { getVSR, type VSR } from "@/api/VSRs";
+import { type VSR } from "@/api/VSRs";
 
-export const PersonalInformation = () => {
-  const [vsr, setVSR] = useState<VSR>({} as VSR);
-  const { id } = useParams();
+export interface PersonalInformationProps {
+  vsr: VSR;
+}
+export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
   };
 
-  useEffect(() => {
-    getVSR(id as string).then((result) => {
-      if (result.success) {
-        setVSR(result.data);
-      }
-    });
-  }, [id]);
   return (
     <div className={styles.box}>
       <Accordion
@@ -73,7 +66,7 @@ export const PersonalInformation = () => {
             <div className={styles.row}>
               <SingleDetail
                 title="Spouse's Name"
-                value={vsr.spouseName != undefined ? vsr.spouseName : "N/A"}
+                value={vsr.spouseName && vsr.spouseName.length > 0 ? vsr.spouseName : "N/A"}
               />
             </div>
             <div className={styles.row}>
@@ -81,7 +74,7 @@ export const PersonalInformation = () => {
               <SingleDetail
                 className={styles.second}
                 title="Age(s)"
-                value={vsr.agesOfBoys != undefined ? vsr.agesOfBoys : "N/A"}
+                value={vsr.agesOfBoys && vsr.agesOfBoys.length > 0 ? vsr.agesOfBoys : "N/A"}
               />
             </div>
             <div className={styles.row}>
@@ -89,7 +82,7 @@ export const PersonalInformation = () => {
               <SingleDetail
                 className={styles.second}
                 title="Age(s)"
-                value={vsr.agesOfGirls != undefined ? vsr.agesOfGirls : "N/A"}
+                value={vsr.agesOfGirls && vsr.agesOfGirls.length > 0 ? vsr.agesOfGirls : "N/A"}
               />
             </div>
             <div className={styles.row}>
