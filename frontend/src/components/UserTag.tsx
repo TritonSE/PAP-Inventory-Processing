@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import styles from "src/app/components/UserTag.module.css";
+import styles from "src/components/UserTag.module.css";
 import { getVSR, type VSR } from "@/api/VSRs";
 import { useParams } from "next/navigation";
 

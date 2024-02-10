@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
-import styles from "src/app/components/ContactInfo.module.css";
+import styles from "src/components/ContactInfo.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { ListDetail } from "@/app/components";
+import { SingleDetail } from "@/components";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { getVSR, type VSR } from "@/api/VSRs";
 
-export const AdditionalInfo = () => {
+export const ContactInfo = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const [expanded, setExpanded] = useState<string | false>(false);
@@ -45,23 +45,32 @@ export const AdditionalInfo = () => {
           id="panel2-header"
           sx={{
             ...(expanded === "panel" && {
-              borderBottom: "1px solid rgba(214, 214, 214)", // Custom line style
-              marginBottom: -1, // Adjust as needed
+              borderBottom: "1px solid rgba(214, 214, 214)",
+              marginBottom: -1,
             }),
           }}
         >
-          <Typography className={styles.title}>Additional Information</Typography>
+          <Typography className={styles.title}>Contact Information</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>
             <div className={styles.row}>
-              <ListDetail
-                title="Are you interested in a companionship animal (pet)?"
-                values={[vsr.petCompanion]}
-              />
+              <SingleDetail title="Phone Number" value={vsr.phoneNumber} />{" "}
             </div>
             <div className={styles.row}>
-              <ListDetail title="How did you hear about us?" values={[vsr.hearFrom]} />
+              <SingleDetail title="Email Address" value={vsr.email} />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Gender" value={vsr.gender} />
+              <SingleDetail className={styles.second} title="Age" value={vsr.age} />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Street Address" value={vsr.streetAddress} />
+              <SingleDetail className={styles.second} title="City" value={vsr.city} />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Zip Code" value={vsr.zipCode} />
+              <SingleDetail className={styles.second} title="State" value={vsr.state} />
             </div>
           </div>
         </AccordionDetails>

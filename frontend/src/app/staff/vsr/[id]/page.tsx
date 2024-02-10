@@ -1,5 +1,5 @@
 "use client";
-import { Page } from "@/app/components";
+import { Page } from "@/components";
 
 export default function Individual() {
   return (

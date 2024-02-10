@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/app/components/HeaderBar.module.css";
+import styles from "src/components/HeaderBar.module.css";
 import Image from "next/image";
 
 export const HeaderBar = () => {

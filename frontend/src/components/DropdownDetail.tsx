@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/app/components/DropdownDetail.module.css";
+import styles from "src/components/DropdownDetail.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";

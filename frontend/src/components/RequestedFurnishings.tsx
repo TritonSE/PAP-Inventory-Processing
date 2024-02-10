@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "src/app/components/RequestedFurnishings.module.css";
+import styles from "src/components/RequestedFurnishings.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { SingleDetail, ListDetail } from "@/app/components";
+import { SingleDetail, ListDetail } from "@/components";
 import { useParams } from "next/navigation";
 import { getVSR, type VSR } from "@/api/VSRs";
 

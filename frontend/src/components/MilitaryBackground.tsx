@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "@/app/components/ContactInfo.module.css";
+import styles from "@/components/ContactInfo.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { SingleDetail, ListDetail } from "@/app/components";
+import { SingleDetail, ListDetail } from "@/components";
 import Image from "next/image";
 import { useParams } from "next/navigation";
 import { getVSR, type VSR } from "@/api/VSRs";

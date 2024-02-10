@@ -8,8 +8,8 @@ import {
   MilitaryBackground,
   AdditionalInfo,
   RequestedFurnishings,
-} from "@/app/components";
-import styles from "src/app/components/Page.module.css";
+} from "@/components";
+import styles from "src/components/Page.module.css";
 import Image from "next/image";
 
 export interface PageProps {
