@@ -52,5 +52,9 @@
   },
   "_moduleAliases": {
     "src": "src"
-  }
+  },
+  "cacheDirectories": [
+    "node_modules/",
+    ".next/cache/"
+  ]
 }
