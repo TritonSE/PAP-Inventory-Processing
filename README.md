@@ -18,7 +18,20 @@ This project is built with MongoDB, Express.js, Node.js, React, TypeScript, Next
 
 Before running the project, you must configure environment variables for the frontend and backend. Environment variables contain information that may be different between different developers and development vs. production environments, and/or may be sensitive information we don't want to put in our public GitHub repos (e.g. Firebase keys, email account password).
 
-See the `.env.example` files in both the frontend and backend for a list of environment variables and example values. The real values (for sensitive variables, such as Firebase settings) can be found in our project's Google Drive (TSE Drive -> PAP -> Development -> Environment Variables). The `src/util/validateEnv.ts` files in both the frontend and backend list the expected types for each environment variable, and will throw an error if any environment variables are missing or of the wrong format when you run the project.
+See the `.env.example` files in both the frontend and backend for a list of environment variables and example values. The real values (for sensitive variables, such as Firebase settings) can be found in our project's Google Drive (TSE Drive -> PAP -> Development -> Environment Variables). Note that on Google Drive, the environment variable files are named `.env.backend.development` and `.env.frontend.development`, but you will need to rename them to just `.env` when you put them in the backend and frontend directories respectively. This is because by default, our code will look for a file named `.env` to get environment variables from.
+
+Once your environment variables are setup, your file structure for the project should look like:
+
+- PAP-Inventory-Processing
+  - backend/
+    - .env (renamed from `env.backend.development`)
+    - - [other directories & files]
+  - frontend/
+    - .env (renamed from `env.frontend.development`)
+    - - [other directories & files]
+  - [other directories & files]
+
+The `src/util/validateEnv.ts` files in both the frontend and backend list the expected types for each environment variable, and will throw an error if any environment variables are missing or of the wrong format when you run the project.
 
 ### Backend
 
