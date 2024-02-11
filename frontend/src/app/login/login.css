@@ -28,6 +28,8 @@ html {
 }
 
 .logo-container {
+  position: absolute;
+  top: -20%;
   display: inline-flex;
   padding: 15px;
   align-items: flex-start;
