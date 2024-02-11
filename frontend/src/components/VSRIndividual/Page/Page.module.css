@@ -59,6 +59,7 @@
   line-height: normal;
   text-align: center;
   color: white;
+  cursor: pointer;
 }
 
 #edit:hover {

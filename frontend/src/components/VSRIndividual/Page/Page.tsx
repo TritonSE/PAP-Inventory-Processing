@@ -51,16 +51,16 @@ export const Page = () => {
           </div>
           <div className={styles.actions}>
             <a href="REPLACE">
-              <div id="edit" className={styles.button}>
+              <button id="edit" className={styles.button}>
                 <Image width={24} height={24} src="/ic_edit.svg" alt="edit" />
                 Edit Form
-              </div>
+              </button>
             </a>
             <a href="REPLACE">
-              <div className={styles.button}>
+              <button className={styles.button}>
                 <Image width={24} height={24} src="/ic_upload.svg" alt="upload" />
                 Export
-              </div>
+              </button>
             </a>
           </div>
         </div>
