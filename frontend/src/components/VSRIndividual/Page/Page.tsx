@@ -90,6 +90,3 @@ export const Page = () => {
     </div>
   );
 };
-function setErrorMessage(arg0: string) {
-  throw new Error("Function not implemented.");
-}
