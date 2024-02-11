@@ -20,7 +20,6 @@ const Dropdown = ({
   required,
   error,
   helperText,
-  ...props
 }: DropDownProps) => {
   return (
     <div className={styles.wrapperClass}>
@@ -44,6 +43,7 @@ const Dropdown = ({
           ))}
         </Select>
       </FormControl>
+      <div className={styles.helperText}>{helperText}</div>
     </div>
   );
 };

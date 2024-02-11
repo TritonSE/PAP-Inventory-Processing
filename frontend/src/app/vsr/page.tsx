@@ -14,6 +14,7 @@ interface IFormInput {
   date: string;
   marital_status: string;
   gender: string;
+  spouse: string;
   age: number;
   ethnicity: string;
   employment_status: string;
@@ -33,7 +34,7 @@ const VeteranServiceRequest: React.FC = () => {
   const selectedEthnicity = watch("ethnicity");
   const [otherEthnicity, setOtherEthnicity] = useState("");
   console.log("selected", selectedEthnicity);
-  const maritalOptions = ["Married", "Single", "It's Complicated"];
+  const maritalOptions = ["Married", "Single", "Widow/Widower", "It's Complicated"];
   const genderOptions = ["", "Male", "Female", "Other"];
   const employmentOptions = [
     "Employed",
@@ -112,70 +113,73 @@ const VeteranServiceRequest: React.FC = () => {
 
   return (
     <div>
-      <HeaderBar />
-      <div className={styles.main}>
-        <h1>Veteran Service Request Form</h1>
-        <p className={styles.description}>
-          Welcome, Veterans, Active Duty, and Reservists. We invite you to schedule an appointment
-          to explore a selection of household furnishings and essential items available in our
-          warehouse.
-          <br></br>
-          <br></br>
-          Let us know your specific needs, and we'll provide the best assistance possible. Expect a
-          response within 48 business hours; remember to check your junk mail if needed.
-          <br></br>
-          <br></br>
-          If you're a Veteran or Active Military Reservist in search of our services, simply fill
-          out and submit the form below.
-        </p>
-
-        <div className={styles.footer}>
-          <p>
-            Fields marked with <span className={styles.asterisk}>*</span> are required.
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <HeaderBar />
+        <div className={styles.main}>
+          <h1>Veteran Service Request Form</h1>
+          <p className={styles.description}>
+            Welcome, Veterans, Active Duty, and Reservists. We invite you to schedule an appointment
+            to explore a selection of household furnishings and essential items available in our
+            warehouse.
+            <br></br>
+            <br></br>
+            Let us know your specific needs, and we'll provide the best assistance possible. Expect
+            a response within 48 business hours; remember to check your junk mail if needed.
+            <br></br>
+            <br></br>
+            If you're a Veteran or Active Military Reservist in search of our services, simply fill
+            out and submit the form below.
           </p>
-        </div>
 
-        <div className={styles.formContainer}>
-          <div className={styles.form}>
-            <form onSubmit={handleSubmit(onSubmit)}>
-              <TextField
-                label="Name"
-                variant="outlined"
-                {...register("name", { required: "Name is required" })}
-                onChange={(e) => console.log("Errors and watch", errors, watch())}
-                required={true}
-                error={!!errors.name}
-                helperText={errors.name?.message}
-              />
+          <div className={styles.fieldsMarked}>
+            <p>
+              Fields marked with <span className={styles.asterisk}>*</span> are required.
+            </p>
+          </div>
 
-              <div className={styles.formRow}>
-                <Controller
-                  defaultValue=""
-                  name="gender"
-                  control={control}
-                  rules={{ required: "Gender is required" }}
-                  render={({ field }) => (
-                    <Dropdown
-                      label="Gender"
-                      options={genderOptions}
-                      value={field.value}
-                      onChange={(e) => field.onChange(e)}
-                      required={true}
-                      error={!!errors.gender}
-                      helperText={errors.gender?.message}
-                    />
-                  )}
-                />
-
+          <div className={styles.formContainer}>
+            <div className={styles.form}>
+              <div className={styles.subSec}>
+                <h1 className={styles.personalInfo}>Personal Information</h1>
                 <TextField
-                  label="Age"
+                  label="Name"
                   variant="outlined"
-                  {...register("age", { required: "Age is required" })}
+                  {...register("name", { required: "Name is required" })}
                   onChange={(e) => console.log("Errors and watch", errors, watch())}
                   required={true}
-                  error={!!errors.age}
-                  helperText={errors.age?.message}
+                  error={!!errors.name}
+                  helperText={errors.name?.message}
                 />
+
+                <div className={styles.formRow}>
+                  <Controller
+                    defaultValue=""
+                    name="gender"
+                    control={control}
+                    rules={{ required: "Gender is required" }}
+                    render={({ field }) => (
+                      <Dropdown
+                        label="Gender"
+                        options={genderOptions}
+                        value={field.value}
+                        onChange={(e) => field.onChange(e)}
+                        required={true}
+                        error={!!errors.gender}
+                        helperText={errors.gender?.message}
+                      />
+                    )}
+                  />
+
+                  <TextField
+                    label="Age"
+                    variant="outlined"
+                    {...register("age", { required: "Age is required" })}
+                    onChange={(e) => console.log("Errors and watch", errors, watch())}
+                    required={true}
+                    error={!!errors.age}
+                    helperText={errors.age?.message}
+                  />
+                </div>
               </div>
 
               {/* <TextField
@@ -207,6 +211,35 @@ const VeteranServiceRequest: React.FC = () => {
                   />
                 )}
               /> */}
+
+              <div className={styles.subSec}>
+                <Controller
+                  name="marital_status"
+                  control={control}
+                  rules={{ required: "Marital status is required" }}
+                  render={({ field }) => (
+                    <MultipleChoice
+                      label="Marital Status"
+                      options={maritalOptions}
+                      value={field.value}
+                      onChange={(newValue) => field.onChange(newValue)}
+                      required={true}
+                      error={!!errors.marital_status}
+                      helperText={errors.marital_status?.message}
+                    />
+                  )}
+                />
+                <TextField
+                  label="Spouse's Name"
+                  variant="outlined"
+                  {...register("spouse", {})}
+                  onChange={(e) => console.log("Errors and watch", errors, watch())}
+                  required={false}
+                  error={!!errors.spouse}
+                  helperText={errors.spouse?.message}
+                />
+              </div>
+
               <div>
                 <Controller
                   name="ethnicity"
@@ -254,23 +287,6 @@ const VeteranServiceRequest: React.FC = () => {
 
                 {errors.ethnicity && <p>{errors.ethnicity.message}</p>}
               </div>
-
-              <Controller
-                name="marital_status"
-                control={control}
-                rules={{ required: "Marital status is required" }}
-                render={({ field }) => (
-                  <MultipleChoice
-                    label="Marital Status"
-                    options={maritalOptions}
-                    value={field.value}
-                    onChange={(newValue) => field.onChange(newValue)}
-                    required={true}
-                    error={!!errors.marital_status}
-                    helperText={errors.marital_status?.message}
-                  />
-                )}
-              />
 
               <Controller
                 name="employment_status"
@@ -327,12 +343,14 @@ const VeteranServiceRequest: React.FC = () => {
                 <br />
                 <br />
               </div>
-
-              <button type="submit">Submit</button>
-            </form>
+            </div>
           </div>
+
+          <button className={styles.submitButton} type="submit">
+            Submit
+          </button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };

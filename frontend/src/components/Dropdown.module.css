@@ -33,3 +33,8 @@
   color: var(--Secondary-2, #be2d46);
   text-align: left;
 }
+
+.helperText {
+  color: var(--Secondary-2, #be2d46);
+  font-size: 12px;
+}

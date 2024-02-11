@@ -18,9 +18,7 @@ const MultipleChoice = ({
   value,
   onChange,
   required,
-  error,
   helperText,
-  ...props
 }: MultipleChoiceProps) => {
   return (
     <div className={styles.wrapperClass}>
@@ -41,6 +39,7 @@ const MultipleChoice = ({
           />
         ))}
       </div>
+      <div className={styles.helperText}>{helperText}</div>
     </div>
   );
 };

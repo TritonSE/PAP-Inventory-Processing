@@ -10,7 +10,10 @@ export interface TextFieldProps extends MUITextFieldProps<"outlined"> {
 }
 
 const TextField = forwardRef(
-  ({ label, error, required, ...props }: TextFieldProps, ref: ForwardedRef<HTMLDivElement>) => {
+  (
+    { label, error, required, helperText, ...props }: TextFieldProps,
+    ref: ForwardedRef<HTMLDivElement>,
+  ) => {
     console.log(props);
     return (
       <div className={styles.wrapperClass}>
@@ -25,6 +28,7 @@ const TextField = forwardRef(
           error={error}
           {...props}
         />
+        <div className={styles.helperText}>{helperText}</div>
       </div>
     );
   },

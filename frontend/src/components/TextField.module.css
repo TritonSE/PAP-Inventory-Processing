@@ -27,3 +27,8 @@
   font-weight: 300;
   line-height: normal;
 }
+
+.helperText {
+  color: var(--Secondary-2, #be2d46);
+  font-size: 12px;
+}
