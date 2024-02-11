@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import {
   HeaderBar,
-  UserTag,
+  VeteranTag,
   ContactInfo,
   CaseDetails,
   PersonalInformation,
@@ -47,7 +47,7 @@ export const Page = () => {
           <div className={styles.name}>
             {errorMessage && <div className={styles.error}>{errorMessage}</div>}
 
-            <UserTag></UserTag>
+            <VeteranTag vsr={vsr}></VeteranTag>
           </div>
           <div className={styles.actions}>
             <a href="REPLACE">

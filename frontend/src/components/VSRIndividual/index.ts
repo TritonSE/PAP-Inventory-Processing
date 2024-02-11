@@ -1,6 +1,6 @@
 export { HeaderBar } from "./HeaderBar/HeaderBar";
 export { Page } from "./Page/Page";
-export { UserTag } from "./UserTag/UserTag";
+export { VeteranTag } from "./VeteranTag/VeteranTag";
 export { CaseDetails } from "./CaseDetails/CaseDetails";
 export { ContactInfo } from "./ContactInfo/ContactInfo";
 export { PersonalInformation } from "./PersonalInformation/PersonalInformation";
