@@ -1,6 +1,5 @@
 import React from "react";
 import Login from "@/app/login/login";
-import { initFirebase } from "@/firebase/firebase";
 
 export const metadata = {
   title: "Next.js",

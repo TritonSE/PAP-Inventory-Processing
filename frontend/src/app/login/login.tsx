@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import InputField from "@/components/InputField";
 import Image from "next/image";
 import "src/app/login/login.css";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
 
@@ -14,6 +14,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const { app, auth } = initFirebase();
+  console.log(app);
 
   const router = useRouter();
 
