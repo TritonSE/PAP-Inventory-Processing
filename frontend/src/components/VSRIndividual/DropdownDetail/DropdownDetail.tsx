@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "src/components/DropdownDetail.module.css";
+import React, { useState } from "react";
+import styles from "src/components/VSRIndividual/DropdownDetail/DropdownDetail.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
@@ -14,6 +14,13 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
   const DropdownIcon = () => (
     <Image src="/keyboard_arrow_down24.svg" width={24} height={24} alt="dropdown" />
   );
+
+  const [selectedValue, setSelectedValue] = useState(value);
+
+  const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+    setSelectedValue(event.target.value);
+  };
+
   return (
     <div>
       <div className={styles.items}>
@@ -21,7 +28,8 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
         <FormControl sx={{ minWidth: 120 }}>
           <Select
             className={styles.select}
-            value={value}
+            value={selectedValue}
+            onChange={handleChange}
             displayEmpty
             sx={{
               boxShadow: "none",
@@ -33,6 +41,9 @@ export function DropdownDetail({ title, value }: DropdownDetailProps) {
                 paddingBottom: "0px",
                 ":first-of-type": { paddingRight: "8px" },
               },
+            }}
+            MenuProps={{
+              disableScrollLock: true,
             }}
             IconComponent={DropdownIcon}
           >

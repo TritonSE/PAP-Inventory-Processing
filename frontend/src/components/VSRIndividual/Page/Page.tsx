@@ -8,8 +8,8 @@ import {
   MilitaryBackground,
   AdditionalInfo,
   RequestedFurnishings,
-} from "@/components";
-import styles from "src/components/Page.module.css";
+} from "@/components/VSRIndividual";
+import styles from "src/components/VSRIndividual/Page/Page.module.css";
 import Image from "next/image";
 import { type VSR, getVSR } from "@/api/VSRs";
 import { useParams } from "next/navigation";

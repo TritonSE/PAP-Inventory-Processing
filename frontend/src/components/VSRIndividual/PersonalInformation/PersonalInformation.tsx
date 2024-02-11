@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import styles from "src/components/ContactInfo.module.css";
+import React, { useState } from "react";
+import styles from "src/components/VSRIndividual/ContactInfo/ContactInfo.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { SingleDetail, ListDetail } from "@/components";
+import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import Image from "next/image";
 import { type VSR } from "@/api/VSRs";
 

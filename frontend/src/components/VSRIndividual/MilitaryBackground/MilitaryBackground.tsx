@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import styles from "src/components/ContactInfo.module.css";
+import React, { useState } from "react";
+import styles from "@/components/VSRIndividual/ContactInfo/ContactInfo.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { ListDetail } from "@/components";
+import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import Image from "next/image";
 import { type VSR } from "@/api/VSRs";
 
-export interface AdditionalInfoProps {
+export interface MilitaryBackgroundProps {
   vsr: VSR;
 }
 
-export const AdditionalInfo = ({ vsr }: AdditionalInfoProps) => {
+export const MilitaryBackground = ({ vsr }: MilitaryBackgroundProps) => {
   const [expanded, setExpanded] = useState<string | false>(false);
 
   const handleChange = (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
@@ -44,18 +44,49 @@ export const AdditionalInfo = ({ vsr }: AdditionalInfoProps) => {
             }),
           }}
         >
-          <Typography className={styles.title}>Additional Information</Typography>
+          <Typography className={styles.title}>Military Background</Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>
             <div className={styles.row}>
               <ListDetail
-                title="Are you interested in a companionship animal (pet)?"
-                values={[vsr.petCompanion]}
+                title="Branch"
+                values={vsr.branch && vsr.branch.length > 0 ? vsr.branch : ["N/A"]}
               />
             </div>
             <div className={styles.row}>
-              <ListDetail title="How did you hear about us?" values={[vsr.hearFrom]} />
+              <ListDetail
+                title="Conflicts"
+                values={vsr.conflicts && vsr.conflicts.length > 0 ? vsr.conflicts : ["N/A"]}
+              />
+            </div>
+            <div className={styles.row}>
+              <ListDetail
+                title="Discharge Status"
+                values={
+                  vsr.dischargeStatus && vsr.dischargeStatus.length > 0
+                    ? [vsr.dischargeStatus]
+                    : ["N/A"]
+                }
+              />
+            </div>
+            <div className={styles.row}>
+              <ListDetail
+                title="Service Connected"
+                values={
+                  vsr.serviceConnected && vsr.serviceConnected.length
+                    ? [vsr.serviceConnected]
+                    : ["N/A"]
+                }
+              />
+            </div>
+            <div className={styles.row}>
+              <SingleDetail title="Last Rank:" value={vsr.lastRank} />
+              <SingleDetail
+                className={styles.second}
+                title="Military ID Number"
+                value={vsr.militaryId}
+              />
             </div>
           </div>
         </AccordionDetails>

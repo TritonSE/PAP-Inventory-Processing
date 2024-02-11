@@ -1,5 +1,5 @@
 "use client";
-import { Page } from "@/components";
+import { Page } from "@/components/VSRIndividual";
 
 export default function Individual() {
   return (

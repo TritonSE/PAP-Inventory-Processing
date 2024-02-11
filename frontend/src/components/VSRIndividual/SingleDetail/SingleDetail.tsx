@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/components/SingleDetail.module.css";
+import styles from "src/components/VSRIndividual/SingleDetail/SingleDetail.module.css";
 
 export interface SingleDetailProps {
   title: string;
