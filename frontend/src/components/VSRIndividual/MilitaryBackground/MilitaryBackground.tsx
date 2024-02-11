@@ -35,8 +35,8 @@ export const MilitaryBackground = ({ vsr }: MilitaryBackgroundProps) => {
         <AccordionSummary
           className={styles.accordianTitle}
           expandIcon={<Image src="/dropdown.svg" width={16} height={12} alt="dropdown" />}
-          aria-controls="panel2-content"
-          id="panel2-header"
+          aria-controls="panel1-content"
+          id="military-background-header"
           sx={{
             ...(expanded === "panel" && {
               borderBottom: "1px solid rgba(214, 214, 214)", // Custom line style

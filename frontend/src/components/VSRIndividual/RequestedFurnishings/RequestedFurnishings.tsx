@@ -18,8 +18,8 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
       <Accordion className={styles.accordian} defaultExpanded expanded={expanded}>
         <AccordionSummary
           className={styles.accordianTitle}
-          aria-controls="panel2-content"
-          id="panel2-header"
+          aria-controls="panel1-content"
+          id="requested-furnishings-header"
         >
           <Typography className={styles.title}>Furnishing Requests</Typography>
         </AccordionSummary>

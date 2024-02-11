@@ -37,10 +37,10 @@ export const Page = () => {
     <div className={styles.page}>
       <HeaderBar />
       <a href="/staff/vsr">
-        <div className={styles.toDashboard}>
+        <button className={styles.toDashboard}>
           <Image src="/ic_arrowback.svg" width={24} height={24} alt="arrowback" />
           Dashboard
-        </div>
+        </button>
       </a>
       <div className={styles.allDetails}>
         <div className={styles.headerRow}>

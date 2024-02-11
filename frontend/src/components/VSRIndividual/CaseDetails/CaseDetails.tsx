@@ -16,8 +16,8 @@ export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
       <Accordion className={styles.accordian} defaultExpanded expanded={expanded}>
         <AccordionSummary
           className={styles.accordianTitle}
-          aria-controls="panel2-content"
-          id="panel2-header"
+          aria-controls="panel1-content"
+          id="case-details-header"
         >
           <Typography className={styles.title}>Case Details</Typography>
         </AccordionSummary>
