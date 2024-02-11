@@ -30,62 +30,32 @@
   border: none;
 }
 
-.received {
+.statusOption {
   font-family: var(--font-open-sans);
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
+  padding: 2px 8px;
   border-radius: 8px;
+}
+
+.received {
   background-color: #e6e6e6;
 }
 
 .scheduled {
-  font-family: var(--font-open-sans);
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 8px;
   background-color: #c5e1f6;
 }
 
 .approved {
-  font-family: var(--font-open-sans);
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 8px;
   background-color: #d7eebc;
 }
 
 .resubmit {
-  font-family: var(--font-open-sans);
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 8px;
   background-color: #fae69e;
 }
 
 .incomplete {
-  font-family: var(--font-open-sans);
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 8px;
   background-color: #f9cfc9;
 }
 
 .archived {
-  font-family: var(--font-open-sans);
-  padding-left: 8px;
-  padding-right: 8px;
-  padding-top: 2px;
-  padding-bottom: 2px;
-  border-radius: 8px;
   background-color: #e4cef1;
 }
