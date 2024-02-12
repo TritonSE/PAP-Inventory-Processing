@@ -9,18 +9,20 @@ import * as firebase from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
 import { InternalError } from "src/errors/internal";
 
-let serviceAccountKey = "";
+export const initFirebase = () => {
+  let serviceAccountKey = "";
 
-if (!process.env.SERVICE_ACCOUNT_KEY) {
-  throw InternalError.NO_SERVICE_ACCOUNT_KEY;
-} else {
-  serviceAccountKey = process.env.SERVICE_ACCOUNT_KEY;
-}
+  if (!process.env.SERVICE_ACCOUNT_KEY) {
+    throw InternalError.NO_SERVICE_ACCOUNT_KEY;
+  } else {
+    serviceAccountKey = process.env.SERVICE_ACCOUNT_KEY;
+  }
 
-firebase.initializeApp({
-  credential: firebase.cert(JSON.parse(serviceAccountKey)),
-});
+  firebase.initializeApp({
+    credential: firebase.cert(JSON.parse(serviceAccountKey)),
+  });
 
-const firebaseAuth = getAuth();
+  const firebaseAuth = getAuth();
 
-export { firebaseAuth };
+  return firebaseAuth;
+};
