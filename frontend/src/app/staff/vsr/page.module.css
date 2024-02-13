@@ -1,59 +1,79 @@
 .page {
   background-color: var(--color-background);
   padding-bottom: 67px;
+  /* display: flex;
+  flex-direction: column;
+  justify-content: center; */
 }
 
 .column {
   display: flex;
   flex-direction: column;
-  width: 100%;
-  /* align-items: center; */
+  justify-content: flex-start;
   margin-top: 105px;
-  padding-left: 120px;
-  padding-right: 120px;
+  margin-left: 95px;
+  margin-right: 95px;
+  padding: 0px;
   gap: 40px;
+  /* background-color: red; */
 }
 
 .flex {
   display: flex;
   flex-direction: row;
-  align-items: left;
+  align-items: flex-start;
 }
 
-.row {
+.title_row {
   display: flex;
   flex-direction: row;
-  align-items: left;
+  align-items: flex-start;
+  /* background-color: green; */
+  /* width: max-content; */
   /* width: 80%; */
-  gap: 200px;
+  /* gap: 200px; */
+}
+.button_row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  /* min-width: 80%; */
+  gap: 430px;
   /* background-color: red; */
-  /* align-items: center; */
-  /* padding-left: 120;
-  padding-right: 120; */
 }
 
-.row_half {
+/* .row_max {
+  display: flex;
+  flex-direction: row;
+  width: max-content;
+  align-items: center;
+} */
+
+.row_left {
   gap: 40px;
   display: flex;
   flex-direction: row;
-  /* align-items: left; */
+  align-items: flex-start;
+}
+.row_right {
+  gap: 40px;
+  display: flex;
+  flex-direction: row;
+  /* padding-left: 20px; */
+  align-items: flex-end;
 }
 
-/* make a row: display: flex; flex-direction: row; */
-
 .buttons {
-  /* margin-top: 58px; */
   display: flex;
   flex-direction: row;
   align-items: center;
   max-width: 137px;
-  /* height: 40px; */
   padding-left: 16px;
-  padding-top: 8px;
+  padding-top: 11px;
   padding-right: 16px;
-  padding-bottom: 8px;
+  padding-bottom: 11px;
   border-radius: 4px;
-  gap: 10px;
+  gap: 6px;
   justify-content: center;
   background-color: var(--color-tse-secondary-1);
 }

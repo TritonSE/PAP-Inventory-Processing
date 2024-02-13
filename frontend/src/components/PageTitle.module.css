@@ -6,4 +6,7 @@
   font-style: normal;
   font-weight: 700;
   line-height: 51.2px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }

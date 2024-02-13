@@ -23,11 +23,18 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
 // import { DataGrid } from '@mui/x-data-grid/DataGrid';
+import { GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-data-grid";
+
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import styles from "src/components/VSRTable.module.css";
 // import globals from "src/app/globals.css";
 
 const columns: GridColDef[] = [
+  {
+    ...GRID_CHECKBOX_SELECTION_COL_DEF,
+    width: 72,
+    headerClassName: "header",
+  },
   {
     field: "caseid",
     headerName: "Case ID",
@@ -166,8 +173,6 @@ export default function VSRTable() {
     <Box
       className={styles.container}
       sx={{
-        // height: 300,
-        // width: "80%",
         "& .header": {
           // backgroundColor: "rgba(16, 45, 95, 1)",
           color: "rgba(247, 247, 247, 1)",
@@ -180,13 +185,40 @@ export default function VSRTable() {
           border: "none",
         },
         border: 0,
-        borderColor: "primary.light",
-        // "& .MuiDataGrid-row:hover": {
-        //   ":hover" : {
+        "& .odd": {
+          backgroundColor: "var(--color-tse-neutral-gray-0)",
+          "&:hover": {
+            backgroundColor: "var(--color-tse-neutral-gray-0) !important",
+          },
+          "&.Mui-hovered": {
+            backgroundColor: "var(--color-tse-neutral-gray-0) !important",
+          },
 
-        //   }
-        //   // backgroundColor: "primary.main",
-        // },
+          "&.Mui-selected": {
+            backgroundColor: "var(--color-tse-neutral-gray-0) !important",
+
+            "&:hover": {
+              backgroundColor: "var(--color-tse-neutral-gray-0) !important",
+            },
+          },
+        },
+        "& .even": {
+          backgroundColor: "var(--color-tse-primary-light)",
+          "&:hover": {
+            backgroundColor: "var(--color-tse-primary-light) !important",
+          },
+          "&.Mui-hovered": {
+            backgroundColor: "var(--color-tse-primary-light) !important",
+          },
+
+          "&.Mui-selected": {
+            backgroundColor: "var(--color-tse-primary-light) !important",
+
+            "&:hover": {
+              backgroundColor: "var(--color-tse-primary-light) !important",
+            },
+          },
+        },
       }}
     >
       <DataGrid
@@ -198,8 +230,17 @@ export default function VSRTable() {
             paginationModel: { page: 0, pageSize: 50 },
           },
         }}
+        // getCellClassName={(params: GridRowParams<any, any, number>) => {
+        //   if (params.field === 'city' || params.value == null) {
+        //     return '';
+        //   }
+        //   return params.value %2 == 0 ? 'odd' : 'even';
+        // }}
+        getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd")}
+        // getRowClassName={(params) => "even"}
         pageSizeOptions={[50]}
         checkboxSelection
+        disableRowSelectionOnClick
       />
     </Box>
   );
