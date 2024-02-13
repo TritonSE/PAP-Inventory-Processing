@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import InputField from "@/components/InputField";
 import Image from "next/image";
-import "src/app/login/login.css";
+import "@/login/login.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
