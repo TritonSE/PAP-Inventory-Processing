@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect } from "react";
-import Login from "@/app/login/page";
+import { useEffect } from "react";
+// import Login from "@/app/login/page";
 import { useRouter } from "next/navigation";
 
 /*
