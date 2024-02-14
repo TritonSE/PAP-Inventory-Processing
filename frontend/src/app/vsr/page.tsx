@@ -102,11 +102,10 @@ const VeteranServiceRequest: React.FC = () => {
       maritalStatus: data.marital_status,
       spouseName: data.spouse,
       agesOfBoys: data.ages_of_boys,
-      ethnicity: data.ethnicity === "" ? data.other_ethnicity : data.ethnicity, // You'll need to add fields for these if they are required
+      ethnicity: data.ethnicity,
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
-      
     };
 
     try {
@@ -240,9 +239,10 @@ const VeteranServiceRequest: React.FC = () => {
                       {...register("num_boys", {
                         required: "Number of boys is required",
                         valueAsNumber: true, // Ensure the value is treated as a number
-                        setValueAs: (value) => { //Need to fix (make OnChange function?)? Issue: If I input 5 then 3 for num boys,
-                                                 //the data will make an array with 3 values then two null like:
-                                                 //[2, 4, 6, null, null] rather than just [2, 4, 6]
+                        setValueAs: (value) => {
+                          //Need to fix (make OnChange function?)? Issue: If I input 5 then 3 for num boys,
+                          //the data will make an array with 3 values then two null like:
+                          //[2, 4, 6, null, null] rather than just [2, 4, 6]
                           // Convert the input value to a number and check if it exceeds 20
                           const intValue = parseInt(value);
                           if (intValue > 20) {
