@@ -100,10 +100,11 @@ const VeteranServiceRequest: React.FC = () => {
       gender: data.gender,
       age: data.age,
       maritalStatus: data.marital_status,
-      ethnicity: data.ethnicity === "" ? data.other_ethnicity : data.ethnicity, // You'll need to add fields for these if they are required
+      ethnicity: data.ethnicity, // You'll need to add fields for these if they are required
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
+      agesOfBoys: data.ages_of_boys,
     };
 
     try {
@@ -253,7 +254,7 @@ const VeteranServiceRequest: React.FC = () => {
                   {Array.from({ length: numBoys }, (_, index) => (
                     <div key={index}>
                       <TextField
-                        label={`Child #${index + 1} Name`}
+                        label={`Child #${index + 1} Age`}
                         variant="outlined"
                         {...register(`ages_of_boys.${index}`, {
                           required: "This field is required",
