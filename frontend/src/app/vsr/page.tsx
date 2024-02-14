@@ -100,10 +100,13 @@ const VeteranServiceRequest: React.FC = () => {
       gender: data.gender,
       age: data.age,
       maritalStatus: data.marital_status,
+      spouseName: data.spouse,
+      agesOfBoys: data.ages_of_boys,
       ethnicity: data.ethnicity === "" ? data.other_ethnicity : data.ethnicity, // You'll need to add fields for these if they are required
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
+      
     };
 
     try {
@@ -150,44 +153,51 @@ const VeteranServiceRequest: React.FC = () => {
             <div className={styles.form}>
               <div className={styles.subSec}>
                 <h1 className={styles.personalInfo}>Personal Information</h1>
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  {...register("name", { required: "Name is required" })}
-                  onChange={(e) => console.log("Errors and watch", errors, watch())}
-                  required={true}
-                  error={!!errors.name}
-                  helperText={errors.name?.message}
-                />
-
-                <div className={styles.formRow}>
-                  <Controller
-                    defaultValue=""
-                    name="gender"
-                    control={control}
-                    rules={{ required: "Gender is required" }}
-                    render={({ field }) => (
-                      <Dropdown
-                        label="Gender"
-                        options={genderOptions}
-                        value={field.value}
-                        onChange={(e) => field.onChange(e)}
-                        required={true}
-                        error={!!errors.gender}
-                        helperText={errors.gender?.message}
-                      />
-                    )}
-                  />
-
+                <div className={styles.longText}>
                   <TextField
-                    label="Age"
+                    label="Name"
                     variant="outlined"
-                    {...register("age", { required: "Age is required" })}
+                    placeholder="e.g. Justin Timberlake"
+                    {...register("name", { required: "Name is required" })}
                     onChange={(e) => console.log("Errors and watch", errors, watch())}
                     required={true}
-                    error={!!errors.age}
-                    helperText={errors.age?.message}
+                    error={!!errors.name}
+                    helperText={errors.name?.message}
                   />
+                </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.longText}>
+                    <Controller
+                      defaultValue=""
+                      name="gender"
+                      control={control}
+                      rules={{ required: "Gender is required" }}
+                      render={({ field }) => (
+                        <Dropdown
+                          label="Gender"
+                          options={genderOptions}
+                          value={field.value}
+                          onChange={(e) => field.onChange(e)}
+                          required={true}
+                          error={!!errors.gender}
+                          helperText={errors.gender?.message}
+                        />
+                      )}
+                    />
+                  </div>
+                  <div className={styles.longText}>
+                    <TextField
+                      label="Age"
+                      variant="outlined"
+                      placeholder="Enter your age"
+                      {...register("age", { required: "Age is required" })}
+                      onChange={(e) => console.log("Errors and watch", errors, watch())}
+                      required={true}
+                      error={!!errors.age}
+                      helperText={errors.age?.message}
+                    />
+                  </div>
                 </div>
 
                 <div className={styles.subSec}>
@@ -207,53 +217,61 @@ const VeteranServiceRequest: React.FC = () => {
                       />
                     )}
                   />
-                  <TextField
-                    label="Spouse's Name"
-                    variant="outlined"
-                    {...register("spouse", {})}
-                    onChange={(e) => console.log("Errors and watch", errors, watch())}
-                    required={false}
-                    error={!!errors.spouse}
-                    helperText={errors.spouse?.message}
-                  />
+                  <div className={styles.longText}>
+                    <TextField
+                      label="Spouse's Name"
+                      variant="outlined"
+                      placeholder="e.g. Jane Timberlake"
+                      {...register("spouse", {})}
+                      onChange={(e) => console.log("Errors and watch", errors, watch())}
+                      required={false}
+                      error={!!errors.spouse}
+                      helperText={errors.spouse?.message}
+                    />
+                  </div>
                 </div>
 
                 <div className={styles.formRow}>
-                  <TextField
-                    label="Number of Boys"
-                    variant="outlined"
-                    {...register("num_boys", {
-                      required: "Number of boys is required",
-                      valueAsNumber: true, // Ensure the value is treated as a number
-                      setValueAs: (value) => {
-                        // Convert the input value to a number and check if it exceeds 20
-                        const intValue = parseInt(value);
-                        if (intValue > 20) {
-                          return 20; // Return 20 if the input value exceeds 20
+                  <div className={styles.longText}>
+                    <TextField
+                      label="Number of Boys"
+                      variant="outlined"
+                      placeholder="e.g. 2"
+                      {...register("num_boys", {
+                        required: "Number of boys is required",
+                        valueAsNumber: true, // Ensure the value is treated as a number
+                        setValueAs: (value) => { //Need to fix (make OnChange function?)? Issue: If I input 5 then 3 for num boys,
+                                                 //the data will make an array with 3 values then two null like:
+                                                 //[2, 4, 6, null, null] rather than just [2, 4, 6]
+                          // Convert the input value to a number and check if it exceeds 20
+                          const intValue = parseInt(value);
+                          if (intValue > 20) {
+                            return 20; // Return 20 if the input value exceeds 20
+                          }
+                          return intValue > 0 ? intValue : 0; // Ensure negative values are not accepted, return 0 as a fallback
+                        },
+                      })}
+                      {...register("num_boys", { required: "Number of boys is required" })}
+                      onChange={(e) => {
+                        console.log("Errors and watch", errors, watch());
+                        //if number is greater than 20, set it to 20, and set form value to 20
+                        if (parseInt(e.target.value) > 20) {
+                          setNumBoys(20);
+                        } else {
+                          setNumBoys(parseInt(e.target.value));
                         }
-                        return intValue > 0 ? intValue : 0; // Ensure negative values are not accepted, return 0 as a fallback
-                      },
-                    })}
-                    {...register("num_boys", { required: "Number of boys is required" })}
-                    onChange={(e) => {
-                      console.log("Errors and watch", errors, watch());
-                      //if number is greater than 20, set it to 20, and set form value to 20
-                      if (parseInt(e.target.value) > 20) {
-                        setNumBoys(20);
-                      } else {
-                        setNumBoys(parseInt(e.target.value));
-                      }
-                    }}
-                    required={true}
-                    error={!!errors.num_boys}
-                    helperText={errors.num_boys?.message}
-                  />
+                      }}
+                      required={true}
+                      error={!!errors.num_boys}
+                      helperText={errors.num_boys?.message}
+                    />
+                  </div>
                 </div>
-                <div className={styles.formRow}>
+                <div className={styles.numChildren}>
                   {Array.from({ length: numBoys }, (_, index) => (
                     <div key={index}>
                       <TextField
-                        label={`Child #${index + 1} Name`}
+                        label={`Child #${index + 1} Age`}
                         variant="outlined"
                         {...register(`ages_of_boys.${index}`, {
                           required: "This field is required",
@@ -266,8 +284,8 @@ const VeteranServiceRequest: React.FC = () => {
                     </div>
                   ))}
                 </div>
-                <div className={styles.formRow}></div>
-                <div className={styles.formRow}></div>
+                <div className={styles.numChildren}></div>
+                <div className={styles.numChildren}></div>
 
                 <Controller
                   name="ethnicity"
@@ -290,21 +308,21 @@ const VeteranServiceRequest: React.FC = () => {
                     />
                   )}
                 />
-
-                <TextField
-                  type="text"
-                  placeholder="Please specify"
-                  name="other_ethnicity"
-                  value={otherEthnicity}
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    setOtherEthnicity(value);
-                  }}
-                  required={!selectedEthnicity || selectedEthnicity.length === 0}
-                  label={""}
-                  variant={"outlined"}
-                />
-
+                <div className={styles.longText}>
+                  <TextField
+                    type="text"
+                    placeholder="Please specify"
+                    name="other_ethnicity"
+                    value={otherEthnicity}
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      setOtherEthnicity(value);
+                    }}
+                    required={!selectedEthnicity || selectedEthnicity.length === 0}
+                    label={""}
+                    variant={"outlined"}
+                  />
+                </div>
                 {errors.ethnicity && <p>{errors.ethnicity.message}</p>}
 
                 <Controller
@@ -357,17 +375,14 @@ const VeteranServiceRequest: React.FC = () => {
                     />
                   )}
                 />
-
-                <div>
-                  <br />
-                  <br />
-                </div>
               </div>
             </div>
           </div>
-          <button className={styles.submitButton} type="submit">
-            Submit
-          </button>
+          <div className={styles.submitButton}>
+            <button className={styles.submit} type="submit">
+              Submit
+            </button>
+          </div>
         </div>
       </form>
     </div>
