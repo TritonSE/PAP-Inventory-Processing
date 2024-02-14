@@ -17,6 +17,16 @@ jobs:
         run: |
           npm ci
           npm run test
+        env:
+          PORT: ${{ secrets.PORT }}
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+          FRONTEND_ORIGIN: ${{ secrets.FRONTEND_ORIGIN }}
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_APP_PASSWORD: ${{ secrets.EMAIL_APP_PASSWORD }}
+          EMAIL_NOTIFICATIONS_RECIPIENT: ${{ secrets.EMAIL_NOTIFICATIONS_RECIPIENT }}
+          BACKEND_FIREBASE_SETTINGS: ${{ secrets.BACKEND_FIREBASE_SETTINGS }}
+          SERVICE_ACCOUNT_KEY: ${{ secrets.SERVICE_ACCOUNT_KEY }}
+          
   frontend:
     name: Frontend tests
     runs-on: ubuntu-latest
