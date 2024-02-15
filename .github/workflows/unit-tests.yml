@@ -1,7 +1,7 @@
 name: Run frontend & backend unit tests
 on:
   pull_request:
-    branches: 
+    branches:
       - main
 jobs:
   backend:
@@ -12,12 +12,11 @@ jobs:
       - uses: actions/setup-node@v3
       - name: Run tests
         working-directory: backend
-        env:
-          CI: true
         run: |
           npm ci
           npm run test
         env:
+          CI: true
           PORT: ${{ secrets.PORT }}
           MONGODB_URI: ${{ secrets.MONGODB_URI }}
           FRONTEND_ORIGIN: ${{ secrets.FRONTEND_ORIGIN }}
@@ -35,11 +34,10 @@ jobs:
       - uses: actions/setup-node@v3
       - name: Run tests
         working-directory: frontend
-        env:
-          CI: true
         run: |
           npm ci
           npm run test
         env:
+          CI: true
           NEXT_PUBLIC_BACKEND_URL: ${{ secrets.NEXT_PUBLIC_BACKEND_URL }}
           NEXT_PUBLIC_FIREBASE_SETTINGS: ${{ secrets.NEXT_PUBLIC_FIREBASE_SETTINGS }}
