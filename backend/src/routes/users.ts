@@ -1,6 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
 import { ServiceError } from "src/errors/service";
-// import mongoose from "mongoose";
 import { User } from "src/models/users";
 import { verifyAuthToken } from "src/middleware/auth";
 

@@ -25,7 +25,6 @@ const Login = () => {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
-        // body: JSON.stringify({ token }),
       });
 
       if (response.ok) {
@@ -36,7 +35,7 @@ const Login = () => {
         console.error("Failed to get user info from JWT Token");
       }
     } catch (error) {
-      console.log("error sending JWT token to backend", error);
+      console.error("error sending JWT token to backend", error);
     }
   };
 
@@ -45,12 +44,12 @@ const Login = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const token = await userCredential.user?.getIdToken();
       if (!token) {
-        console.log("JWT token not retrieved.");
+        console.error("JWT token not retrieved.");
       } else {
         await sendTokenToBackend(token);
       }
     } catch (error) {
-      console.log("login failed: ", error);
+      console.error("login failed: ", error);
     }
   };
 
