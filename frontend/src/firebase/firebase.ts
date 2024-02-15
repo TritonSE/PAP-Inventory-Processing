@@ -9,7 +9,7 @@ export const initFirebase = () => {
 
   const firebaseConfig = env.NEXT_PUBLIC_FIREBASE_SETTINGS;
 
-  const app = initializeApp(JSON.parse(firebaseConfig));
+  const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
 
   return { app, auth };

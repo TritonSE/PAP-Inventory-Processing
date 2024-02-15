@@ -11,7 +11,7 @@ import { InternalError } from "src/errors/internal";
 import env from "src/util/validateEnv";
 
 export const initFirebase = () => {
-  let serviceAccountKey = "";
+  let serviceAccountKey: firebase.ServiceAccount;
 
   if (!env.SERVICE_ACCOUNT_KEY) {
     throw InternalError.NO_SERVICE_ACCOUNT_KEY;
@@ -20,7 +20,7 @@ export const initFirebase = () => {
   }
 
   firebase.initializeApp({
-    credential: firebase.cert(JSON.parse(serviceAccountKey)),
+    credential: firebase.cert(serviceAccountKey),
   });
 
   const firebaseAuth = getAuth();
