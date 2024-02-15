@@ -13,16 +13,16 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const { app, auth } = initFirebase();
-  console.log(app);
+  const { auth } = initFirebase();
 
   const router = useRouter();
 
   const sendTokenToBackend = async (token: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/whoami/${token}`, {
+      const response = await fetch(`http://localhost:3001/api/whoami`, {
         method: "GET",
         headers: {
+          Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
         // body: JSON.stringify({ token }),
@@ -52,22 +52,10 @@ const Login = () => {
     } catch (error) {
       console.log("login failed: ", error);
     }
-    /*
-    signInWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
-        console.log("signed in successfully!");
-        console.log(userCredential);
-      })
-      .catch((error) => {
-        console.log("did not sign in :(");
-        console.log(error);
-      });
-    */
   };
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("inside handleLogin function");
     login(email, password);
   };
 

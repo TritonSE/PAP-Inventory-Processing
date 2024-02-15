@@ -11,4 +11,14 @@ export class CustomError extends Error {
     this.message = message;
     this.context = [];
   }
+
+  public displayMessage(clientFacing: boolean) {
+    if (clientFacing) {
+      return `${this.message}`;
+    }
+
+    return `Error: Type ${this.constructor.name}, Code ${this.code}, Context: ${
+      this.context.length ? "\n" + this.context.join("\n\n") : null
+    }`;
+  }
 }
