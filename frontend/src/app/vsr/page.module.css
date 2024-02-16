@@ -57,14 +57,14 @@
   display: flex;
   flex-direction: column;
   gap: 64px;
-  align-self: stretch;
+  align-items: flex-start;
 }
 
 .subSec {
   display: flex;
   flex-direction: column;
   gap: 32px;
-  align-self: stretch;
+  align-self: flex-start;
 }
 
 .formRow {
@@ -74,11 +74,22 @@
   align-items: center;
 }
 
+.numChildren {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+}
+
 .asterisk {
   color: var(--Secondary-2, #be2d46);
 }
 
 .submitButton {
+  align-self: end;
+}
+
+.submit {
   width: 306px;
   height: 64px;
   background-color: #102d5f;
@@ -87,4 +98,9 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+}
+
+.longText {
+  width: 504px;
+  height: 56px;
 }

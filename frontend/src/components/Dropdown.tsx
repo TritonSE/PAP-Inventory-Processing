@@ -28,13 +28,13 @@ const Dropdown = ({
         {label}
       </p>
       <FormControl className={styles.form} size="small">
-        <InputLabel>{label}</InputLabel>
         <Select
           className={styles.Dropdown}
           value={value}
           onChange={onChange}
           error={error}
           displayEmpty
+          fullWidth={true}
         >
           {options.map((option) => (
             <MenuItem key={option} value={option}>
