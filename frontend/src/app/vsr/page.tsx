@@ -97,7 +97,9 @@ const VeteranServiceRequest: React.FC = () => {
       age: data.age,
       maritalStatus: data.marital_status,
       spouseName: data.spouse,
-      agesOfBoys: data.ages_of_boys.slice(0, data.num_boys),
+      agesOfBoys: data.ages_of_boys === undefined ? [] : data.ages_of_boys.slice(0, data.num_boys),
+      agesOfGirls:
+        data.ages_of_girls === undefined ? [] : data.ages_of_girls.slice(0, data.num_girls),
       ethnicity: finalEthnicity,
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
@@ -280,6 +282,63 @@ const VeteranServiceRequest: React.FC = () => {
                     </div>
                   ))}
                 </div>
+
+                <div className={styles.formRow}>
+                  <div className={styles.longText}>
+                    <TextField
+                      label="Number of Girls"
+                      variant="outlined"
+                      placeholder="e.g. 2"
+                      {...register("num_girls", {
+                        required: "Number of girls is required",
+                        valueAsNumber: true, // Ensure the value is treated as a number
+                        setValueAs: (value) => {
+                          //Need to fix (make OnChange function?)? Issue: If I input 5 then 3 for num boys,
+                          //the data will make an array with 3 values then two null like:
+                          //[2, 4, 6, null, null] rather than just [2, 4, 6]
+                          // Convert the input value to a number and check if it exceeds 20
+                          const intValue = parseInt(value);
+                          if (intValue > 20) {
+                            return 20; // Return 20 if the input value exceeds 20
+                          }
+                          return intValue > 0 ? intValue : 0; // Ensure negative values are not accepted, return 0 as a fallback
+                        },
+                      })}
+                      {...register("num_girls", { required: "Number of girls is required" })}
+                      onChange={(e) => {
+                        console.log("Errors and watch", errors, watch());
+                        //if number is greater than 20, set it to 20, and set form value to 20
+                        if (parseInt(e.target.value) > 20) {
+                          setNumGirls(20);
+                        } else {
+                          setNumGirls(parseInt(e.target.value));
+                        }
+                      }}
+                      required={true}
+                      error={!!errors.num_girls}
+                      helperText={errors.num_girls?.message}
+                    />
+                  </div>
+                </div>
+
+                <div className={styles.numChildren}>
+                  {Array.from({ length: numGirls }, (_, index) => (
+                    <div key={index}>
+                      <TextField
+                        label={`Child #${index + 1} Age`}
+                        variant="outlined"
+                        {...register(`ages_of_girls.${index}`, {
+                          required: "This field is required",
+                          valueAsNumber: true, // Ensures the value is treated as a number
+                        })}
+                        error={!!errors.ages_of_girls?.[index]}
+                        helperText={errors.ages_of_girls?.[index] ? "This field is required" : ""}
+                        required={true}
+                      />
+                    </div>
+                  ))}
+                </div>
+
                 <div className={styles.numChildren}></div>
                 <div className={styles.numChildren}></div>
 
