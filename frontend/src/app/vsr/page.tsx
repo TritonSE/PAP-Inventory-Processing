@@ -35,7 +35,6 @@ const VeteranServiceRequest: React.FC = () => {
     control,
     formState: { errors },
     watch,
-    setValue,
   } = useForm<IFormInput>();
   const [selectedEthnicity, setSelectedEthnicity] = useState("");
 
@@ -86,8 +85,6 @@ const VeteranServiceRequest: React.FC = () => {
     "Prefer not to say",
   ];
 
-  // Determine if the "Other" textbox should be shown
-  const showOtherTextbox = selectedEthnicity?.length === 0 || selectedEthnicity === undefined;
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
@@ -387,7 +384,6 @@ const VeteranServiceRequest: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.bottom}>
             <div className={styles.submitButton}>
             <button className={styles.submit} type="submit">
               Submit
@@ -396,7 +392,6 @@ const VeteranServiceRequest: React.FC = () => {
           <PageNumber
             pageNum={1}
           />
-          </div>
         </div>
       </form>
     </div>
