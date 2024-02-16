@@ -73,8 +73,16 @@ const Login = () => {
             left: "0",
             right: "0",
             bottom: "0",
-            filter: "brightness(10%)",
-            opacity: "0.5",
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            background: "#232220D9",
           }}
         />
         <div className="login-box">

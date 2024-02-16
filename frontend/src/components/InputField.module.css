@@ -19,6 +19,7 @@
   font-size: 16px;
   font-family: "Open Sans", sans-serif;
   color: #232220;
+  background: #fff;
 }
 
 .input::placeholder {
