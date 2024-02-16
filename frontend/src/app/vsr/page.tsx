@@ -36,8 +36,10 @@ const VeteranServiceRequest: React.FC = () => {
     watch,
     setValue,
   } = useForm<IFormInput>();
-  const selectedEthnicity = watch("ethnicity");
+  const [selectedEthnicity, setSelectedEthnicity] = useState("");
+
   const [otherEthnicity, setOtherEthnicity] = useState("");
+  const [finalEthnicity, setFinalEthnicity] = useState("");
 
   const [numBoys, setNumBoys] = useState(0);
   const [numGirls, setNumGirls] = useState(0);
@@ -84,11 +86,7 @@ const VeteranServiceRequest: React.FC = () => {
   ];
 
   // Determine if the "Other" textbox should be shown
-  const showOtherTextbox =
-    selectedEthnicity === "Other" ||
-    selectedEthnicity?.includes("Other") ||
-    selectedEthnicity?.length === 0 ||
-    selectedEthnicity === undefined;
+  const showOtherTextbox = selectedEthnicity?.length === 0 || selectedEthnicity === undefined;
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
@@ -100,7 +98,7 @@ const VeteranServiceRequest: React.FC = () => {
       gender: data.gender,
       age: data.age,
       maritalStatus: data.marital_status,
-      ethnicity: data.ethnicity, // You'll need to add fields for these if they are required
+      ethnicity: finalEthnicity, // You'll need to add fields for these if they are required
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
@@ -281,9 +279,14 @@ const VeteranServiceRequest: React.FC = () => {
                       value={field.value}
                       onChange={(newValue) => {
                         field.onChange(newValue);
-                        // If "Other" is not selected and there was a value in the otherEthnicity state, clear it
                         setOtherEthnicity("");
-                        //setValue("ethnicity", "", { shouldValidate: true });
+                        setSelectedEthnicity(newValue);
+
+                        if (newValue === "") {
+                          setFinalEthnicity(otherEthnicity);
+                        } else {
+                          setFinalEthnicity(newValue);
+                        }
                       }}
                       required={false}
                       error={!!errors.ethnicity}
@@ -300,6 +303,11 @@ const VeteranServiceRequest: React.FC = () => {
                   onChange={(e) => {
                     const value = e.target.value;
                     setOtherEthnicity(value);
+                    if (selectedEthnicity === "") {
+                      setFinalEthnicity(value);
+                    } else {
+                      setFinalEthnicity(selectedEthnicity);
+                    }
                   }}
                   required={!selectedEthnicity || selectedEthnicity.length === 0}
                   label={""}
