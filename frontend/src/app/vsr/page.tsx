@@ -99,7 +99,7 @@ const VeteranServiceRequest: React.FC = () => {
       age: data.age,
       maritalStatus: data.marital_status,
       spouseName: data.spouse,
-      agesOfBoys: data.ages_of_boys,
+      agesOfBoys: data.ages_of_boys.slice(0, data.num_boys),
       ethnicity: finalEthnicity,
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
