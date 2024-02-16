@@ -102,7 +102,7 @@ const VeteranServiceRequest: React.FC = () => {
       maritalStatus: data.marital_status,
       spouseName: data.spouse,
       agesOfBoys: data.ages_of_boys,
-      ethnicity: data.ethnicity,
+      ethnicity: selectedEthnicity === "" ? data.other_ethnicity : selectedEthnicity,
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
