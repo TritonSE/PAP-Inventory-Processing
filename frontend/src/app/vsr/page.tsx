@@ -6,6 +6,7 @@ import TextField from "@/components/TextField";
 import MultipleChoice from "@/components/MultipleChoice";
 import Dropdown from "@/components/Dropdown";
 import HeaderBar from "@/components/HeaderBar";
+import PageNumber from "@/components/PageNumber"
 import * as validators from "@/util/validateResponses";
 import { createVSR, CreateVSRRequest } from "@/api/VSRs";
 
@@ -445,10 +446,15 @@ const VeteranServiceRequest: React.FC = () => {
               </div>
             </div>
           </div>
-          <div className={styles.submitButton}>
+          <div className={styles.bottom}>
+            <div className={styles.submitButton}>
             <button className={styles.submit} type="submit">
               Submit
             </button>
+            </div>
+          <PageNumber
+            pageNum={1}
+          />
           </div>
         </div>
       </form>
