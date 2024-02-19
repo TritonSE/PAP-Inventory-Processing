@@ -7,6 +7,7 @@ import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
 import vsrRoutes from "../src/routes/vsr";
+import furnitureItemRoutes from "../src/routes/furnitureItem";
 
 const app = express();
 
@@ -51,5 +52,6 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use("/api/vsr", vsrRoutes);
+app.use("/api/furnitureItem", furnitureItemRoutes);
 
 export default app;
