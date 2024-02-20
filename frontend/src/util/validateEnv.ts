@@ -7,10 +7,16 @@ import { cleanEnv } from "envalid";
 import { json, str } from "envalid/dist/validators";
 
 /**
- * Note that in NextJS, environment variables' names must start with
- * "NEXT_PUBLIC" in order to be exposed to the frontend
+ * NextJS only allows the frontend to access environment variables if they start with
+ * "NEXT_PUBLIC", so we have to manually acccess attributes of process.env here.
  */
-export default cleanEnv(process.env, {
-  NEXT_PUBLIC_BACKEND_URL: str(), // URL of our backend
-  NEXT_PUBLIC_FIREBASE_SETTINGS: json(), // Firebase settings for frontend, stored as a JSON string
-});
+export default cleanEnv(
+  {
+    NEXT_PUBLIC_BACKEND_URL: process.env.NEXT_PUBLIC_BACKEND_URL,
+    NEXT_PUBLIC_FIREBASE_SETTINGS: process.env.NEXT_PUBLIC_FIREBASE_SETTINGS,
+  },
+  {
+    NEXT_PUBLIC_BACKEND_URL: str(), // URL of our backend
+    NEXT_PUBLIC_FIREBASE_SETTINGS: json(), // Firebase settings for frontend, stored as a JSON string
+  },
+);

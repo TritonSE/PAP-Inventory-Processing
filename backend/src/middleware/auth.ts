@@ -23,7 +23,6 @@ const verifyAuthToken = async (req: Request, res: Response, next: NextFunction) 
 
   if (userInfo) {
     req.body.uid = userInfo.uid;
-    // req.body.role = userInfo.role;
     return next();
   }
 
