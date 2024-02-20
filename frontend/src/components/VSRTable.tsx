@@ -27,6 +27,8 @@ import { GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-data-grid";
 
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
 import styles from "src/components/VSRTable.module.css";
+import { useEffect } from "react";
+import { ClassNames } from "@emotion/react";
 // import globals from "src/app/globals.css";
 
 const columns: GridColDef[] = [
@@ -168,13 +170,15 @@ const rows = [
 ];
 
 export default function VSRTable() {
-  // return (
+  useEffect(() => {
+    // This function will run when the component is first loaded
+    console.log("Page has been refreshed or loaded for the first time");
+  }, []);
   return (
     <Box
       className={styles.container}
       sx={{
         "& .header": {
-          // backgroundColor: "rgba(16, 45, 95, 1)",
           color: "rgba(247, 247, 247, 1)",
           backgroundColor: "var(--color-tse-accent-blue-1)",
         },
@@ -230,12 +234,6 @@ export default function VSRTable() {
             paginationModel: { page: 0, pageSize: 50 },
           },
         }}
-        // getCellClassName={(params: GridRowParams<any, any, number>) => {
-        //   if (params.field === 'city' || params.value == null) {
-        //     return '';
-        //   }
-        //   return params.value %2 == 0 ? 'odd' : 'even';
-        // }}
         getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd")}
         // getRowClassName={(params) => "even"}
         pageSizeOptions={[50]}
@@ -244,183 +242,4 @@ export default function VSRTable() {
       />
     </Box>
   );
-
-  // <div style={{ width: "80%" }}>
-  //   <DataGrid
-  //     rows={rows}
-  //     columns={columns}
-  //     initialState={{
-  //       pagination: {
-  //         paginationModel: { page: 0, pageSize: 50 },
-  //       },
-  //     }}
-  //     pageSizeOptions={[50]}
-  //     checkboxSelection
-  //   />
-  // </div>
-  // );
 }
-
-// export default function VSRTable() {
-//   const [order, setOrder] = React.useState<Order>("asc");
-//   const [orderBy, setOrderBy] = React.useState<keyof Data>("date");
-//   const [selected, setSelected] = React.useState<readonly number[]>([]);
-//   const [page, setPage] = React.useState(0);
-//   const [dense, setDense] = React.useState(false);
-//   const [rowsPerPage, setRowsPerPage] = React.useState(5);
-
-//   const handleRequestSort = (event: React.MouseEvent<unknown>, property: keyof Data) => {
-//     const isAsc = orderBy === property && order === "asc";
-//     setOrder(isAsc ? "desc" : "asc");
-//     setOrderBy(property);
-//   };
-
-//   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     if (event.target.checked) {
-//       const newSelected = rows.map((n) => n.caseid);
-//       setSelected(newSelected);
-//       return;
-//     }
-//     setSelected([]);
-//   };
-
-//   const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-//     const selectedIndex = selected.indexOf(id);
-//     let newSelected: readonly number[] = [];
-
-//     if (selectedIndex === -1) {
-//       newSelected = newSelected.concat(selected, id);
-//     } else if (selectedIndex === 0) {
-//       newSelected = newSelected.concat(selected.slice(1));
-//     } else if (selectedIndex === selected.length - 1) {
-//       newSelected = newSelected.concat(selected.slice(0, -1));
-//     } else if (selectedIndex > 0) {
-//       newSelected = newSelected.concat(
-//         selected.slice(0, selectedIndex),
-//         selected.slice(selectedIndex + 1),
-//       );
-//     }
-//     setSelected(newSelected);
-//   };
-
-//   const handleChangePage = (event: unknown, newPage: number) => {
-//     setPage(newPage);
-//   };
-
-//   const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setRowsPerPage(parseInt(event.target.value, 10));
-//     setPage(0);
-//   };
-
-//   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-//     setDense(event.target.checked);
-//   };
-
-//   const isSelected = (id: number) => selected.indexOf(id) !== -1;
-
-//   // Avoid a layout jump when reaching the last page with empty rows.
-//   const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-//   const visibleRows = React.useMemo(
-//     () =>
-//       stableSort(rows, getComparator(order, orderBy)).slice(
-//         page * rowsPerPage,
-//         page * rowsPerPage + rowsPerPage,
-//       ),
-//     [order, orderBy, page, rowsPerPage],
-//   );
-
-//   return (
-//     // <Box sx={{ width: "100%" }}>
-//     //   <Paper sx={{ width: "100%", mb: 2 }}>
-//     //     {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
-//     //     <TableContainer>
-//     //       <Table
-//     //         sx={{ minWidth: 750 }}
-//     //         aria-labelledby="tableTitle"
-//     //         size={dense ? "small" : "medium"}
-//     //       >
-//     //         <EnhancedTableHead
-//     //           numSelected={selected.length}
-//     //           order={order}
-//     //           orderBy={orderBy}
-//     //           onSelectAllClick={handleSelectAllClick}
-//     //           onRequestSort={handleRequestSort}
-//     //           rowCount={rows.length}
-//     //         />
-//     //         <TableBody>
-//     //           {visibleRows.map((row, index) => {
-//     //             const isItemSelected = isSelected(row.caseid);
-//     //             const labelId = `enhanced-table-checkbox-${index}`;
-
-//     //             return (
-//     //               <TableRow
-//     //                 hover
-//     //                 onClick={(event) => handleClick(event, row.caseid)}
-//     //                 role="checkbox"
-//     //                 aria-checked={isItemSelected}
-//     //                 tabIndex={-1}
-//     //                 key={row.caseid}
-//     //                 selected={isItemSelected}
-//     //                 sx={{ cursor: "pointer" }}
-//     //               >
-//     //                 <TableCell padding="checkbox">
-//     //                   <Checkbox
-//     //                     color="primary"
-//     //                     checked={isItemSelected}
-//     //                     inputProps={{
-//     //                       "aria-labelledby": labelId,
-//     //                     }}
-//     //                   />
-//     //                 </TableCell>
-//     //                 <TableCell component="th" id={labelId} scope="row" padding="none">
-//     //                   {row.name}
-//     //                 </TableCell>
-//     //                 <TableCell align="left">{row.caseid}</TableCell>
-//     //                 <TableCell align="left">{row.military}</TableCell>
-//     //                 <TableCell align="left">{row.name}</TableCell>
-//     //                 <TableCell align="left">{row.status}</TableCell>
-//     //                 <TableCell align="left">{row.date}</TableCell>
-//     //               </TableRow>
-//     //             );
-//     //           })}
-//     //           {emptyRows > 0 && (
-//     //             <TableRow
-//     //               style={{
-//     //                 height: (dense ? 33 : 53) * emptyRows,
-//     //               }}
-//     //             >
-//     //               <TableCell colSpan={6} />
-//     //             </TableRow>
-//     //           )}
-//     //         </TableBody>
-//     //       </Table>
-//     //     </TableContainer>
-//     //     <TablePagination
-//     //       rowsPerPageOptions={[5, 10, 25]}
-//     //       component="div"
-//     //       count={rows.length}
-//     //       rowsPerPage={rowsPerPage}
-//     //       page={page}
-//     //       onPageChange={handleChangePage}
-//     //       onRowsPerPageChange={handleChangeRowsPerPage}
-//     //     />
-//     //   </Paper>
-//     //   <FormControlLabel
-//     //     control={<Switch checked={dense} onChange={handleChangeDense} />}
-//     //     label="Dense padding"
-//     //   />
-//     // </Box>
-//     <DataGrid
-//     rows={rows}
-//     columns={columns}
-//     initialState={{
-//       pagination: {
-//         paginationModel: { page: 0, pageSize: 5 },
-//       },
-//     }}
-//     pageSizeOptions={[5, 10]}
-//     checkboxSelection
-//   />
-//   );
-// }

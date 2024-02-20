@@ -6,7 +6,7 @@ import styles from "src/app/staff/vsr/page.module.css";
 import StatusDropdown from "@/components/StatusDropdown";
 import SearchKeyword from "@/components/SearchKeyword";
 import PageTitle from "@/components/PageTitle";
-import { HeaderBar } from "@/components/HeaderBar";
+import HeaderBar from "@/components/HeaderBar";
 import TableButton from "@/components/TableButton";
 
 export default function VSRTableView() {
@@ -17,7 +17,7 @@ export default function VSRTableView() {
         <div className={styles.title_row}>
           <PageTitle></PageTitle>
         </div>
-        <div className={styles.button_row}>
+        {/* <div className={styles.button_row}>
           <div className={styles.row_left}>
             <SearchKeyword></SearchKeyword>
             <StatusDropdown></StatusDropdown>
@@ -32,7 +32,7 @@ export default function VSRTableView() {
               <text className={styles.buttontext}>Export</text>
             </div>
           </div>
-        </div>
+        </div> */}
         <div className={styles.table}>
           <VSRTable></VSRTable>
         </div>

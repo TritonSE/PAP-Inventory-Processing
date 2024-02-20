@@ -1,0 +1,90 @@
+.main {
+  padding: 64px;
+  padding-top: 128px;
+  background-color: #d8d8d8;
+  display: flex;
+  flex-direction: column;
+  color: var(--Accent-Blue-1, #102d5f);
+  text-align: left;
+  gap: 64px;
+  /* Desktop/H1 */
+  font-family: Lora;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.description {
+  color: #000;
+  /* Desktop/Body 1 */
+  font-family: "Open Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.personalInfo {
+  color: var(--Accent-Blue-1, #102d5f);
+  /* Desktop/H2 */
+  font-family: Lora;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.fieldsMarked {
+  color: #000;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.formContainer {
+  display: flex;
+  background-color: white;
+  border-radius: 20px;
+  padding: 64px;
+  gap: 10px;
+  align-items: flex-start;
+  width: 100%;
+  height: 100%;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  align-self: stretch;
+}
+
+.subSec {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-self: stretch;
+}
+
+.formRow {
+  display: flex;
+  flex-direction: row;
+  gap: 64px;
+  align-items: center;
+}
+
+.asterisk {
+  color: var(--Secondary-2, #be2d46);
+}
+
+.submitButton {
+  width: 306px;
+  height: 64px;
+  background-color: #102d5f;
+  font-family: Lora;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
