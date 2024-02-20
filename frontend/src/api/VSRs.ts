@@ -105,7 +105,7 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
   }
 }
 
-export async function getAllVSRs(): Promise<APIResult<VSR>[]> {
+export async function getAllVSRs(): Promise<APIResult<VSR>> {
   try {
     const response = await get("/api/vsr");
     const json = (await response.json()) as VSRJson;

@@ -128,7 +128,8 @@ export const createVSR: RequestHandler = async (req, res, next) => {
 export async function getAllVSRS(): Promise<VSR[]> {
   try {
     const vsrs: VSR[] = await VSRModel.find().lean().exec();
-    // console.log(vsrs[0].name);
+    // console.log(vsrs[0].name);ystal
+
     return vsrs;
   } catch (error: any) {
     throw new Error(`Error retrieving VSRs: ${error.message}`);
