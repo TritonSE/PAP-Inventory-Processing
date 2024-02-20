@@ -2,7 +2,7 @@ name: Lint, style, and compilation checks
 
 on:
   pull_request:
-    branches: 
+    branches:
       - main
 
 jobs:

@@ -1,7 +1,7 @@
 name: Run frontend & backend unit tests
 on:
   pull_request:
-    branches: 
+    branches:
       - main
 jobs:
   backend:
