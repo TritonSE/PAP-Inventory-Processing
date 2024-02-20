@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import Chip from "@mui/material/Chip";
 import styles from "@/components/MultipleChoice.module.css";
 

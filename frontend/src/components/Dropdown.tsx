@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "src/components/Dropdown.module.css";
-import { FormControl, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { FormControl, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
 export interface DropDownProps {
   label: string;

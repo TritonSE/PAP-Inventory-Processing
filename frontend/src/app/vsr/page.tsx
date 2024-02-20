@@ -6,8 +6,7 @@ import TextField from "@/components/TextField";
 import MultipleChoice from "@/components/MultipleChoice";
 import Dropdown from "@/components/Dropdown";
 import HeaderBar from "@/components/HeaderBar";
-import PageNumber from "@/components/PageNumber"
-import * as validators from "@/util/validateResponses";
+import PageNumber from "@/components/PageNumber";
 import { createVSR, CreateVSRRequest } from "@/api/VSRs";
 
 interface IFormInput {
@@ -35,7 +34,6 @@ const VeteranServiceRequest: React.FC = () => {
     control,
     formState: { errors },
     watch,
-    setValue,
   } = useForm<IFormInput>();
   const [selectedEthnicity, setSelectedEthnicity] = useState("");
 
@@ -87,7 +85,7 @@ const VeteranServiceRequest: React.FC = () => {
   ];
 
   // Determine if the "Other" textbox should be shown
-  const showOtherTextbox = selectedEthnicity?.length === 0 || selectedEthnicity === undefined;
+  //const showOtherTextbox = selectedEthnicity?.length === 0 || selectedEthnicity === undefined;
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log(data);
@@ -100,9 +98,8 @@ const VeteranServiceRequest: React.FC = () => {
       age: data.age,
       maritalStatus: data.marital_status,
       spouseName: data.spouse,
-      agesOfBoys: data.ages_of_boys === undefined ? [] : data.ages_of_boys.slice(0, data.num_boys),
-      agesOfGirls:
-        data.ages_of_girls === undefined ? [] : data.ages_of_girls.slice(0, data.num_girls),
+      agesOfBoys: data.ages_of_boys.slice(0, numBoys),
+      agesOfGirls: data.ages_of_girls.slice(0, numGirls),
       ethnicity: finalEthnicity,
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
@@ -135,12 +132,12 @@ const VeteranServiceRequest: React.FC = () => {
             warehouse.
             <br></br>
             <br></br>
-            Let us know your specific needs, and we'll provide the best assistance possible. Expect
-            a response within 48 business hours; remember to check your junk mail if needed.
+            Let us know your specific needs, and we&apos;ll provide the best assistance possible.
+            Expect a response within 48 business hours; remember to check your junk mail if needed.
             <br></br>
             <br></br>
-            If you're a Veteran or Active Military Reservist in search of our services, simply fill
-            out and submit the form below.
+            If you&apos;re a Veteran or Active Military Reservist in search of our services, simply
+            fill out and submit the form below.
           </p>
 
           <div className={styles.fieldsMarked}>
@@ -448,13 +445,11 @@ const VeteranServiceRequest: React.FC = () => {
           </div>
           <div className={styles.bottom}>
             <div className={styles.submitButton}>
-            <button className={styles.submit} type="submit">
-              Submit
-            </button>
+              <button className={styles.submit} type="submit">
+                Submit
+              </button>
             </div>
-          <PageNumber
-            pageNum={1}
-          />
+            <PageNumber pageNum={1} />
           </div>
         </div>
       </form>
