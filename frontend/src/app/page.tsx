@@ -1,15 +1,14 @@
-import Image from "next/image";
-import styles from "@/app/page.module.css";
-import TextField from "@mui/material/TextField";
+"use client";
 
-export default function Home() {
-  return (
-    <main style={{ backgroundColor: "white" }}>
-      <div>
-        <TextField label="Name" variant="outlined" />
-        <TextField label="Name" variant="outlined" />
-        <TextField label="Name" variant="outlined" />
-      </div>
-    </main>
-  );
-}
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+const Home = () => {
+  const router = useRouter();
+  useEffect(() => {
+    router.push("/login");
+  });
+  return null;
+};
+
+export default Home;

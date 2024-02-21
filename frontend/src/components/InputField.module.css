@@ -1,0 +1,32 @@
+.inputField {
+  margin-bottom: 20px;
+}
+
+.label {
+  font-size: 16px;
+  font-family: "Open Sans", sans-serif;
+  color: #818181;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.input {
+  border: 1px solid #d8d8d8;
+  border-radius: 4px;
+  padding: 8px;
+  width: 100%;
+  font-size: 16px;
+  font-family: "Open Sans", sans-serif;
+  color: #232220;
+  background: #fff;
+}
+
+.input::placeholder {
+  font-style: italic;
+  font-family: "Open Sans", sans-serif;
+  font-size: 16px;
+  color: #484848;
+  font-weight: 300;
+  line-height: normal;
+}
