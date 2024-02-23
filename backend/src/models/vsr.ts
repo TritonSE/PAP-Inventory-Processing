@@ -10,7 +10,7 @@ const vsrSchema = new Schema({
   numOfGirls: { type: Number, required: true },
   agesOfBoys: { type: [Number] },
   agesOfGirls: { type: [Number] },
-  ethnicity: { type: String, require: true },
+  ethnicity: { type: [String], require: true },
   employmentStatus: { type: String, require: true },
   incomeLevel: { type: String, require: true },
   sizeOfHome: { type: String, require: true },

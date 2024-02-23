@@ -1,19 +1,5 @@
 import { APIResult, handleAPIError, post, get } from "@/api/requests";
 
-/*
-
- name: { type: String, required: true },
-  date: { type: Date, required: true },
-  gender: { type: String, require: true },
-  age: { type: Number, require: true },
-  maritalStatus: { type: String, required: true },
-  spouseName: { type: String },
-  agesOfBoys: { type: [Number] },
-  agesOfGirls: { type: [Number] },
-  ethnicity: { type: String, require: true },
-  employmentStatus: { type: String, require: true },
-  incomeLevel: { type: String, require: true },
-  sizeOfHome: { type: String, require: true },*/
 export interface VSRJson {
   _id: string;
   name: string;
@@ -22,9 +8,9 @@ export interface VSRJson {
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
@@ -62,9 +48,9 @@ export interface VSR {
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
@@ -96,14 +82,13 @@ export interface VSR {
 
 export interface CreateVSRRequest {
   name: string;
-  date: string;
   gender: string;
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;

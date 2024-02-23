@@ -1,4 +1,6 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
+import env from "@/util/validateEnv";
+
+const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
 type Method = "GET" | "POST" | "PUT";
 
 /**
