@@ -22,7 +22,7 @@ const MultipleChoice = ({
   return (
     <div className={styles.wrapperClass}>
       <p>
-        {required && <span className={styles.requiredAsterisk}>* </span>}
+        {required ? <span className={styles.requiredAsterisk}>* </span> : null}
         {label}
       </p>
       <div className={styles.chipContainer}>
@@ -44,7 +44,7 @@ const MultipleChoice = ({
           />
         ))}
       </div>
-      <div className={styles.helperText}>{helperText}</div>
+      {helperText ? <div className={styles.helperText}>{helperText}</div> : null}
     </div>
   );
 };

@@ -10,6 +10,7 @@ export interface DropDownProps {
   required: boolean;
   error?: boolean;
   helperText?: string;
+  placeholder?: string;
 }
 
 const Dropdown = ({
@@ -20,11 +21,12 @@ const Dropdown = ({
   required,
   error,
   helperText,
+  placeholder,
 }: DropDownProps) => {
   return (
     <div className={styles.wrapperClass}>
       <p>
-        {required && <span className={styles.requiredAsterisk}>* </span>}
+        {required ? <span className={styles.requiredAsterisk}>* </span> : null}
         {label}
       </p>
       <FormControl className={styles.form} size="small">
@@ -35,7 +37,13 @@ const Dropdown = ({
           error={error}
           displayEmpty
           fullWidth={true}
+          renderValue={(value) =>
+            value === "" ? <p className={styles.placeholder}> {placeholder}</p> : value
+          }
         >
+          <MenuItem value="">
+            <p className={styles.placeholder}>{placeholder}</p>
+          </MenuItem>
           {options.map((option) => (
             <MenuItem key={option} value={option}>
               {option}
@@ -43,7 +51,7 @@ const Dropdown = ({
           ))}
         </Select>
       </FormControl>
-      <div className={styles.helperText}>{helperText}</div>
+      {helperText ? <div className={styles.helperText}>{helperText}</div> : null}
     </div>
   );
 };

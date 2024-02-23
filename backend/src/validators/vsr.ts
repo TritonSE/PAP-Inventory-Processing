@@ -1,33 +1,11 @@
 import { body } from "express-validator";
 
-// name: {type: String, required: true },
-//     date: {type: Date, required: true},
-//     gender: {type: String, require: true},
-//     age: {type: Number, require: true},
-//     martialStatus: {type: String, required: true },
-//     spouseName: {type: String},
-//     numOfBoys: {type: Number},
-//     numOfGirls: {type: Number},
-//     agesOfBoys: {type: [Number] },
-//     agesOfGirls: {type: [Number] },
-//     ethnicity: {type: String, require: true},
-//     employmentStatus: {type: String, require: true},
-//     incomeLevel: {type: String, require: true},
-//     sizeOfHome: {type: String, require: true}
-
 const makeNameValidator = () =>
   body("name")
     .exists({ checkFalsy: true })
     .withMessage("Name is required")
     .isString()
     .withMessage("Name must be a string");
-
-const makeDateValidator = () =>
-  body("date")
-    .exists({ checkFalsy: true })
-    .withMessage("Date is required")
-    .isISO8601()
-    .withMessage("Date must be in ISO 8601 format");
 
 const makeGenderValidator = () =>
   body("gender")
@@ -56,14 +34,17 @@ const makeSpouseNameValidator = () =>
     .isString()
     .withMessage("Spouse Name must be a string");
 
-const makeNumOfBoysValidator = () =>
-  body("numOfBoys")
-    .optional({ checkFalsy: true })
-    .isInt({ min: 0 })
-    .withMessage("Number of Boys must be a positive integer");
+const makeAgesOfBoysValidator = () =>
+  body("agesOfBoys")
+    .exists({ checkFalsy: true })
+    .isArray()
+    .withMessage("Ages of Boys must be an array of numbers")
+    .custom((ages: number[]) => ages.every((age) => Number.isInteger(age) && age >= 0))
+    .withMessage("Each age in Ages of Boys must be a positive integer");
+
 const makeAgesOfGirlsValidator = () =>
   body("agesOfGirls")
-    .optional({ checkFalsy: true })
+    .exists({ checkFalsy: true })
     .isArray()
     .withMessage("Ages of Girls must be an array of numbers")
     .custom((ages: number[]) => ages.every((age) => Number.isInteger(age) && age >= 0))
@@ -99,12 +80,11 @@ const makeSizeOfHomeValidator = () =>
 
 export const createVSR = [
   makeNameValidator(),
-  makeDateValidator(),
   makeGenderValidator(),
   makeAgeValidator(),
   makeMaritalStatusValidator(),
   makeSpouseNameValidator(),
-  makeNumOfBoysValidator(),
+  makeAgesOfBoysValidator(),
   makeAgesOfGirlsValidator(),
   makeEthnicityValidator(),
   makeEmploymentStatusValidator(),
