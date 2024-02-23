@@ -22,7 +22,7 @@ const TextField = forwardRef(
         </p>
         <MUITextField
           ref={ref}
-          fullWidth={true}
+          fullWidth
           size="small"
           className={styles.inputClass}
           error={error}

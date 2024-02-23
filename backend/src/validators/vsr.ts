@@ -54,8 +54,12 @@ const makeEthnicityValidator = () =>
   body("ethnicity")
     .exists({ checkFalsy: true })
     .withMessage("Ethnicity is required")
-    .isString()
-    .withMessage("Ethnicity must be a string");
+    .isArray()
+    .withMessage("Ethnicity must be an array")
+    .custom((ethnicities: string[]) =>
+      ethnicities.every((ethnicity) => typeof ethnicity === "string"),
+    )
+    .withMessage("Each ethnicity in Ethnicities must be a positive integer");
 
 const makeEmploymentStatusValidator = () =>
   body("employmentStatus")

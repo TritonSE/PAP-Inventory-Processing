@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-//import createHttpError from "http-errors";
 import { validationResult } from "express-validator";
 import VSRModel from "src/models/vsr";
 import validationErrorParser from "src/util/validationErrorParser";

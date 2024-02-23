@@ -8,9 +8,9 @@ export interface VSRJson {
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
@@ -24,9 +24,9 @@ export interface VSR {
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
@@ -38,9 +38,9 @@ export interface CreateVSRRequest {
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;

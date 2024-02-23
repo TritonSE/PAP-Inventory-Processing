@@ -34,7 +34,7 @@ const VeteranServiceRequest: React.FC = () => {
     formState: { errors },
     watch,
   } = useForm<IFormInput>();
-  const [selectedEthnicity, setSelectedEthnicity] = useState("");
+  const [selectedEthnicities, setSelectedEthnicities] = useState<string[]>([]);
   const [otherEthnicity, setOtherEthnicity] = useState("");
 
   const numBoys = watch("num_boys");
@@ -89,7 +89,7 @@ const VeteranServiceRequest: React.FC = () => {
       spouseName: data.spouse,
       agesOfBoys: data.ages_of_boys?.slice(0, data.num_boys) ?? [],
       agesOfGirls: data.ages_of_girls?.slice(0, data.num_girls) ?? [],
-      ethnicity: selectedEthnicity === "" ? otherEthnicity : selectedEthnicity,
+      ethnicity: selectedEthnicities.concat(otherEthnicity === "" ? [] : [otherEthnicity]),
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
@@ -129,7 +129,7 @@ const VeteranServiceRequest: React.FC = () => {
                 message: "This field must be a number no greater than 100",
               },
             })}
-            required={true}
+            required
             error={!!errors[`num_${gender}s`]}
             helperText={errors[`num_${gender}s`]?.message}
           />
@@ -151,7 +151,7 @@ const VeteranServiceRequest: React.FC = () => {
                 })}
                 error={!!errors[`ages_of_${gender}s`]?.[index]}
                 helperText={errors[`ages_of_${gender}s`]?.[index]?.message}
-                required={true}
+                required
               />
             </div>
           ))}
@@ -198,7 +198,7 @@ const VeteranServiceRequest: React.FC = () => {
                       variant="outlined"
                       placeholder="e.g. Justin Timberlake"
                       {...register("name", { required: "Name is required" })}
-                      required={true}
+                      required
                       error={!!errors.name}
                       helperText={errors.name?.message}
                     />
@@ -220,7 +220,7 @@ const VeteranServiceRequest: React.FC = () => {
                           options={genderOptions}
                           value={field.value}
                           onChange={(e) => field.onChange(e)}
-                          required={true}
+                          required
                           error={!!errors.gender}
                           helperText={errors.gender?.message}
                           placeholder="Select your gender"
@@ -234,7 +234,7 @@ const VeteranServiceRequest: React.FC = () => {
                       variant="outlined"
                       placeholder="Enter your age"
                       {...register("age", { required: "Age is required" })}
-                      required={true}
+                      required
                       error={!!errors.age}
                       helperText={errors.age?.message}
                     />
@@ -253,7 +253,7 @@ const VeteranServiceRequest: React.FC = () => {
                       options={maritalOptions}
                       value={field.value}
                       onChange={(newValue) => field.onChange(newValue)}
-                      required={true}
+                      required
                       error={!!errors.marital_status}
                       helperText={errors.marital_status?.message}
                     />
@@ -265,7 +265,11 @@ const VeteranServiceRequest: React.FC = () => {
                       label="Spouse's Name"
                       variant="outlined"
                       placeholder="e.g. Jane Timberlake"
-                      {...register("spouse", {})}
+                      {...register("spouse", {
+                        required:
+                          ["Married", "Widowed/Widower"].includes(watch().marital_status) &&
+                          "Spouse's Name is required",
+                      })}
                       required={["Married", "Widowed/Widower"].includes(watch().marital_status)}
                       error={!!errors.spouse}
                       helperText={errors.spouse?.message}
@@ -290,14 +294,18 @@ const VeteranServiceRequest: React.FC = () => {
                     <MultipleChoice
                       label="Ethnicity"
                       options={ethnicityOptions}
-                      value={field.value}
+                      value={selectedEthnicities}
                       onChange={(newValue) => {
-                        field.onChange(newValue);
-                        setSelectedEthnicity(newValue);
+                        const valueToSet = ((newValue as string[]) ?? [])[0] ?? "";
+                        if (valueToSet !== "" || otherEthnicity === "") {
+                          field.onChange(valueToSet);
+                        }
+                        setSelectedEthnicities(newValue as string[]);
                       }}
-                      required={true}
+                      required
                       error={!!errors.ethnicity}
                       helperText={errors.ethnicity?.message}
+                      allowMultiple
                     />
                     <div style={{ marginTop: -50 }}>
                       <TextField
@@ -308,7 +316,9 @@ const VeteranServiceRequest: React.FC = () => {
                         value={otherEthnicity}
                         onChange={(e) => {
                           const value = e.target.value;
-                          field.onChange(value);
+                          if (value !== "" || selectedEthnicities.length === 0) {
+                            field.onChange(value);
+                          }
                           setOtherEthnicity(value);
                         }}
                         variant={"outlined"}
@@ -329,7 +339,7 @@ const VeteranServiceRequest: React.FC = () => {
                     options={employmentOptions}
                     value={field.value}
                     onChange={(newValue) => field.onChange(newValue)}
-                    required={true}
+                    required
                     error={!!errors.employment_status}
                     helperText={errors.employment_status?.message}
                   />
@@ -346,7 +356,7 @@ const VeteranServiceRequest: React.FC = () => {
                     options={incomeOptions}
                     value={field.value}
                     onChange={(newValue) => field.onChange(newValue)}
-                    required={true}
+                    required
                     error={!!errors.income_level}
                     helperText={errors.income_level?.message}
                   />
@@ -363,7 +373,7 @@ const VeteranServiceRequest: React.FC = () => {
                     options={homeOptions}
                     value={field.value}
                     onChange={(newValue) => field.onChange(newValue)}
-                    required={true}
+                    required
                     error={!!errors.size_of_home}
                     helperText={errors.size_of_home?.message}
                   />

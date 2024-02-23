@@ -36,7 +36,7 @@ const Dropdown = ({
           onChange={onChange}
           error={error}
           displayEmpty
-          fullWidth={true}
+          fullWidth
           renderValue={(value) =>
             value === "" ? <p className={styles.placeholder}> {placeholder}</p> : value
           }
