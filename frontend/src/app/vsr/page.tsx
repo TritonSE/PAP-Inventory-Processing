@@ -87,8 +87,14 @@ const VeteranServiceRequest: React.FC = () => {
       age: data.age,
       maritalStatus: data.marital_status,
       spouseName: data.spouse,
-      agesOfBoys: data.ages_of_boys?.slice(0, data.num_boys) ?? [],
-      agesOfGirls: data.ages_of_girls?.slice(0, data.num_girls) ?? [],
+      agesOfBoys:
+        data.ages_of_boys
+          ?.slice(0, data.num_boys)
+          .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
+      agesOfGirls:
+        data.ages_of_girls
+          ?.slice(0, data.num_girls)
+          .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
       ethnicity: selectedEthnicities.concat(otherEthnicity === "" ? [] : [otherEthnicity]),
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
@@ -147,6 +153,10 @@ const VeteranServiceRequest: React.FC = () => {
                   pattern: {
                     value: /^[0-9]+$/,
                     message: "This field must be a number",
+                  },
+                  max: {
+                    value: 17,
+                    message: "Only enter children under 18",
                   },
                 })}
                 error={!!errors[`ages_of_${gender}s`]?.[index]}
@@ -278,6 +288,8 @@ const VeteranServiceRequest: React.FC = () => {
                   {/* Add an empty div here with flex: 1 to take up the right half of the row */}
                   <div style={{ flex: 1 }} />
                 </div>
+
+                <p className={styles.sectionHeader}>Children (under 18)</p>
 
                 <div className={styles.formRow}>
                   {renderChildInput("boy")}
