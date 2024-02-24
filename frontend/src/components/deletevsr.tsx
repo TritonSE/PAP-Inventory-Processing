@@ -2,20 +2,27 @@
 
 import React from "react";
 import "src/components/deletevsr.css";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
+import { getAuth } from "firebase/auth";
 
 const deleteVSR = () => {
   const router = useRouter();
+  const params = useSearchParams();
+  const ids = params.getAll("id");
 
-  const deleteForms = async (ids: [string]) => {
+  const auth = getAuth();
+  const user = auth.currentUser;
+
+  const deleteForms = async (ids: string[]) => {
     try {
       let count = 0;
       for (const id of ids) {
-        const response = await fetch(`http://localhost/api/vsr/${id}`, {
+        console.log("id: ", id);
+        console.log("route:, ", `http://localhost:3001/api/vsr/${id}`);
+        const response = await fetch(`http://localhost:3001/api/vsr/${id}`, {
           method: "DELETE",
           headers: {
-            // Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            Authorization: `Bearer ${user?.getIdToken()}`,
           },
         });
 
@@ -37,6 +44,7 @@ const deleteVSR = () => {
 
   const handleDelete = (e: React.FormEvent) => {
     e.preventDefault();
+    deleteForms(ids);
   };
 
   return (
