@@ -277,10 +277,9 @@ const VeteranServiceRequest: React.FC = () => {
                       placeholder="e.g. Jane Timberlake"
                       {...register("spouse", {
                         required:
-                          ["Married", "Widowed/Widower"].includes(watch().marital_status) &&
-                          "Spouse's Name is required",
+                          watch().marital_status === "Married" && "Spouse's Name is required",
                       })}
-                      required={["Married", "Widowed/Widower"].includes(watch().marital_status)}
+                      required={watch().marital_status === "Married"}
                       error={!!errors.spouse}
                       helperText={errors.spouse?.message}
                     />
