@@ -142,7 +142,8 @@ const VeteranServiceRequest: React.FC = () => {
         </div>
 
         <div className={styles.numChildren}>
-          {Array.from({ length: numChildrenThisGender }, (_, index) => (
+          {/* Cap it at 100 children per gender to avoid freezing web browser */}
+          {Array.from({ length: Math.min(numChildrenThisGender, 100) }, (_, index) => (
             <div key={index} className={styles.childInputWrapper}>
               <TextField
                 label={`Age`}
@@ -241,13 +242,15 @@ const VeteranServiceRequest: React.FC = () => {
                   <div className={styles.longText}>
                     <TextField
                       label="Age"
+                      type="number"
                       variant="outlined"
                       placeholder="Enter your age"
                       {...register("age", {
                         required: "Age is required",
-                        min: {
-                          value: 0,
-                          message: "This field must be positive",
+                        pattern: {
+                          // Only allow up to 2 digits
+                          value: /^[0-9]+$/,
+                          message: "This field must be a number",
                         },
                       })}
                       required
