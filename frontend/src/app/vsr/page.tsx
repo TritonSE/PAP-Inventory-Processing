@@ -243,7 +243,13 @@ const VeteranServiceRequest: React.FC = () => {
                       label="Age"
                       variant="outlined"
                       placeholder="Enter your age"
-                      {...register("age", { required: "Age is required" })}
+                      {...register("age", {
+                        required: "Age is required",
+                        min: {
+                          value: 0,
+                          message: "This field must be positive",
+                        },
+                      })}
                       required
                       error={!!errors.age}
                       helperText={errors.age?.message}
