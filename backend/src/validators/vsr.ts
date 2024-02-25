@@ -95,3 +95,17 @@ export const createVSR = [
   makeIncomeLevelValidator(),
   makeSizeOfHomeValidator(),
 ];
+
+export const updateVSR = [
+  makeNameValidator(),
+  makeGenderValidator(),
+  makeAgeValidator(),
+  makeMaritalStatusValidator(),
+  makeSpouseNameValidator(),
+  makeAgesOfBoysValidator(),
+  makeAgesOfGirlsValidator(),
+  makeEthnicityValidator(),
+  makeEmploymentStatusValidator(),
+  makeIncomeLevelValidator(),
+  makeSizeOfHomeValidator(),
+];
