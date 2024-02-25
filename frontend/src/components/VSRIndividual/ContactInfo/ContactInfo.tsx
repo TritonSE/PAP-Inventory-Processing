@@ -20,7 +20,7 @@ export const ContactInfo = ({ vsr }: ContactInfoProps) => {
   return (
     <div className={styles.box}>
       <Accordion
-        className={styles.accordian}
+        className={styles.accordion}
         expanded={expanded === "panel"}
         onChange={handleChange("panel")}
         sx={{
@@ -31,7 +31,7 @@ export const ContactInfo = ({ vsr }: ContactInfoProps) => {
         }}
       >
         <AccordionSummary
-          className={styles.accordianTitle}
+          className={styles.accordionTitle}
           expandIcon={<Image src="/dropdown.svg" width={16} height={12} alt="dropdown" />}
           aria-controls="panel1-content"
           id="contact-info-header"

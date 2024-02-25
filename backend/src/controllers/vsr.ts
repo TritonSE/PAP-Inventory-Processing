@@ -8,7 +8,7 @@ export const getVSR: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const vsr = await VSRModel.findById(id).populate("name");
+    const vsr = await VSRModel.findById(id);
 
     if (vsr === null) {
       throw createHttpError(404, "VSR not found at id " + id);

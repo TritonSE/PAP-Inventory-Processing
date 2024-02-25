@@ -1,8 +1,8 @@
-.accordian {
+.accordion {
   display: inline-block;
   background-color: #fff;
   width: calc(100vw * 89 / 288);
-  border-radius: 6px 6px 6px 6px;
+  border-radius: 6px;
   box-shadow: none;
   padding-bottom: 8px;
   transition: padding 0.3s ease;

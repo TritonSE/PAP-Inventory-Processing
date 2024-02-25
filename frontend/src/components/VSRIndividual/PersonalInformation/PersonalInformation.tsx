@@ -21,7 +21,7 @@ export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
   return (
     <div className={styles.box}>
       <Accordion
-        className={styles.accordian}
+        className={styles.accordion}
         expanded={expanded === "panel"}
         onChange={handleChange("panel")}
         sx={{
@@ -32,7 +32,7 @@ export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
         }}
       >
         <AccordionSummary
-          className={styles.accordianTitle}
+          className={styles.accordionTitle}
           expandIcon={<Image src="/dropdown.svg" width={16} height={12} alt="dropdown" />}
           aria-controls="panel1-content"
           id="personal-info-header"

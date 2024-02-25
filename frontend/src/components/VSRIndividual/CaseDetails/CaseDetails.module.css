@@ -1,8 +1,8 @@
-.accordian {
+.accordion {
   display: inline-block;
   background-color: #fff;
   width: calc(100vw * 5 / 6);
-  border-radius: 6px 6px 6px 6px;
+  border-radius: 6px;
   box-shadow: none;
 }
 
@@ -16,10 +16,9 @@
   margin-left: 6px;
 }
 
-.accordianTitle {
+.accordionTitle {
   height: 48px;
   border-bottom: 1px solid #d6d6d6;
-  height: 48px;
 }
 
 .details {

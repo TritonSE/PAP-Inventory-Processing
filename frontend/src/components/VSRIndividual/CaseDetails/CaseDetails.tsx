@@ -24,9 +24,9 @@ export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
 
   return (
     <div className={styles.box}>
-      <Accordion className={styles.accordian} defaultExpanded expanded={expanded}>
+      <Accordion className={styles.accordion} defaultExpanded expanded={expanded}>
         <AccordionSummary
-          className={styles.accordianTitle}
+          className={styles.accordionTitle}
           aria-controls="panel1-content"
           id="case-details-header"
         >

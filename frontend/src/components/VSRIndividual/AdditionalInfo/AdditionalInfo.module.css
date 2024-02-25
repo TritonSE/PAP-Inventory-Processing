@@ -1,13 +1,10 @@
-.accordian {
+.accordion {
   display: inline-block;
   background-color: #fff;
   width: calc(100vw * 89 / 288);
-  border-radius: 6px 6px 6px 6px;
+  border-radius: 6px;
   box-shadow: none;
-  padding-left: 6px;
-  padding-right: 6px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 6px;
 }
 
 .details {

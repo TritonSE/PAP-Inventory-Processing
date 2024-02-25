@@ -46,10 +46,7 @@
   border: 1px solid var(--color-tse-accent-blue-1);
   background-color: var(--color-tse-accent-blue-1);
   height: 46px;
-  padding-left: 16px;
-  padding-right: 16px;
-  padding-top: 8px;
-  padding-bottom: 8px;
+  padding: 8px 16px;
   font-family: var(--font-open-sans);
   font-size: 16px;
   font-style: normal;
@@ -78,9 +75,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-
-.allDetails > * {
 }
 
 .otherDetails {
@@ -124,10 +118,7 @@
   line-height: normal;
   background: rgba(255, 255, 255, 0);
   align-items: end;
-  padding-left: 24px;
-  padding-right: 24px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+  padding: 12px 24px;
   margin-right: 32px;
 }
 
@@ -144,10 +135,7 @@
   line-height: normal;
   background: var(--color-tse-secondary-1);
   align-items: end;
-  padding-left: 24px;
-  padding-right: 24px;
-  padding-top: 20px;
-  padding-bottom: 20px;
+  padding: 20px 24px;
 }
 
 .footer {
