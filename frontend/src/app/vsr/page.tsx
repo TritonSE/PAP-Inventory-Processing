@@ -87,8 +87,14 @@ const VeteranServiceRequest: React.FC = () => {
       age: data.age,
       maritalStatus: data.marital_status,
       spouseName: data.spouse,
-      agesOfBoys: data.ages_of_boys?.slice(0, data.num_boys) ?? [],
-      agesOfGirls: data.ages_of_girls?.slice(0, data.num_girls) ?? [],
+      agesOfBoys:
+        data.ages_of_boys
+          ?.slice(0, data.num_boys)
+          .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
+      agesOfGirls:
+        data.ages_of_girls
+          ?.slice(0, data.num_girls)
+          .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
       ethnicity: selectedEthnicities.concat(otherEthnicity === "" ? [] : [otherEthnicity]),
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
@@ -126,7 +132,7 @@ const VeteranServiceRequest: React.FC = () => {
               pattern: {
                 // Only allow up to 2 digits
                 value: /^[0-9][0-9]?$/,
-                message: "This field must be a number no greater than 100",
+                message: "This field must be a number less than 100",
               },
             })}
             required
@@ -136,7 +142,8 @@ const VeteranServiceRequest: React.FC = () => {
         </div>
 
         <div className={styles.numChildren}>
-          {Array.from({ length: numChildrenThisGender }, (_, index) => (
+          {/* Cap it at 99 children per gender to avoid freezing web browser */}
+          {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
             <div key={index} className={styles.childInputWrapper}>
               <TextField
                 label={`Age`}
@@ -147,6 +154,10 @@ const VeteranServiceRequest: React.FC = () => {
                   pattern: {
                     value: /^[0-9]+$/,
                     message: "This field must be a number",
+                  },
+                  max: {
+                    value: 17,
+                    message: "Only enter children under 18",
                   },
                 })}
                 error={!!errors[`ages_of_${gender}s`]?.[index]}
@@ -231,9 +242,17 @@ const VeteranServiceRequest: React.FC = () => {
                   <div className={styles.longText}>
                     <TextField
                       label="Age"
+                      type="number"
                       variant="outlined"
                       placeholder="Enter your age"
-                      {...register("age", { required: "Age is required" })}
+                      {...register("age", {
+                        required: "Age is required",
+                        pattern: {
+                          // Only allow up to 2 digits
+                          value: /^[0-9]+$/,
+                          message: "This field must be a number",
+                        },
+                      })}
                       required
                       error={!!errors.age}
                       helperText={errors.age?.message}
@@ -259,26 +278,28 @@ const VeteranServiceRequest: React.FC = () => {
                     />
                   )}
                 />
-                <div className={styles.formRow}>
-                  <div className={styles.longText}>
-                    <TextField
-                      label="Spouse's Name"
-                      variant="outlined"
-                      placeholder="e.g. Jane Timberlake"
-                      {...register("spouse", {
-                        required:
-                          ["Married", "Widowed/Widower"].includes(watch().marital_status) &&
-                          "Spouse's Name is required",
-                      })}
-                      required={["Married", "Widowed/Widower"].includes(watch().marital_status)}
-                      error={!!errors.spouse}
-                      helperText={errors.spouse?.message}
-                    />
+                {watch().marital_status === "Married" ? (
+                  <div className={styles.formRow}>
+                    <div className={styles.longText}>
+                      <TextField
+                        label="Spouse's Name"
+                        variant="outlined"
+                        placeholder="e.g. Jane Timberlake"
+                        {...register("spouse", {
+                          required: "Spouse's Name is required",
+                        })}
+                        required
+                        error={!!errors.spouse}
+                        helperText={errors.spouse?.message}
+                      />
+                    </div>
+                    {/* Add an empty div here with flex: 1 to take up the right half of the row */}
+                    <div style={{ flex: 1 }} />
                   </div>
-                  {/* Add an empty div here with flex: 1 to take up the right half of the row */}
-                  <div style={{ flex: 1 }} />
-                </div>
+                ) : null}
 
+                <p className={styles.sectionHeader}>Children (under 18)</p>
+                
                 <div className={styles.formRow}>
                   {renderChildInput("boy")}
                   {renderChildInput("girl")}

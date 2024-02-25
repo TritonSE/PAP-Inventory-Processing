@@ -6,8 +6,6 @@ const vsrSchema = new Schema({
   age: { type: Number, require: true },
   maritalStatus: { type: String, required: true },
   spouseName: { type: String },
-  numOfBoys: { type: Number, required: true },
-  numOfGirls: { type: Number, required: true },
   agesOfBoys: { type: [Number] },
   agesOfGirls: { type: [Number] },
   ethnicity: { type: [String], require: true },
