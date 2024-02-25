@@ -51,7 +51,7 @@ export const AdditionalInfo = ({ vsr }: AdditionalInfoProps) => {
             <div className={styles.row}>
               <ListDetail
                 title="Are you interested in a companionship animal (pet)?"
-                values={[vsr.petCompanion]}
+                values={[vsr.petCompanion ? "Yes" : "No"]}
               />
             </div>
             <div className={styles.row}>

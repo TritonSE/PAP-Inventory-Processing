@@ -70,7 +70,7 @@ export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
               />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Number of boy(s)" value="2" />
+              <SingleDetail title="Number of boy(s)" value={vsr.agesOfBoys?.length ?? 0} />
               <SingleDetail
                 className={styles.second}
                 title="Age(s)"
@@ -78,7 +78,7 @@ export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
               />
             </div>
             <div className={styles.row}>
-              <SingleDetail title="Number of girl(s)" value="2" />
+              <SingleDetail title="Number of girl(s)" value={vsr.agesOfGirls?.length ?? 0} />
               <SingleDetail
                 className={styles.second}
                 title="Age(s)"
@@ -86,7 +86,10 @@ export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
               />
             </div>
             <div className={styles.row}>
-              <ListDetail title="Ethnicity" values={[vsr.ethnicity]} />
+              <ListDetail
+                title="Ethnicity"
+                values={vsr.ethnicity && vsr.ethnicity.length > 0 ? vsr.ethnicity : ["N/A"]}
+              />
             </div>
             <div className={styles.row}>
               <ListDetail title="Employment Status" values={[vsr.employmentStatus]} />

@@ -41,11 +41,10 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     validationErrorParser(errors);
 
     // Get the current date as a timestamp for when VSR was submitted
-    const date = new Date();
+    const currentDate = new Date();
 
     const vsr = await VSRModel.create({
       name,
-      date,
       gender,
       age,
       maritalStatus,
@@ -56,6 +55,10 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       employmentStatus,
       incomeLevel,
       sizeOfHome,
+
+      // Use current date as timestamp for received & updated
+      dateReceived: currentDate,
+      lastUpdated: currentDate,
     });
 
     // 201 means a new resource has been created successfully

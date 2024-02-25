@@ -73,11 +73,7 @@ export const MilitaryBackground = ({ vsr }: MilitaryBackgroundProps) => {
             <div className={styles.row}>
               <ListDetail
                 title="Service Connected"
-                values={
-                  vsr.serviceConnected && vsr.serviceConnected.length
-                    ? [vsr.serviceConnected]
-                    : ["N/A"]
-                }
+                values={[vsr.serviceConnected ? "Yes" : "No"]}
               />
             </div>
             <div className={styles.row}>

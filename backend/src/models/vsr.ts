@@ -32,10 +32,8 @@ const vsrSchema = new Schema({
   livingRoomFurnishing: { type: [String], required: true },
   diningRoomFurnishing: { type: [String], required: true },
   otherFurnishing: { type: [String], required: true },
-  date: { type: String, required: true },
-  caseId: { type: String, required: true },
-  dateReceived: { type: String, required: true },
-  lastUpdated: { type: String, required: true },
+  dateReceived: { type: Date, required: true },
+  lastUpdated: { type: Date, required: true },
   status: { type: String, required: true },
 });
 
