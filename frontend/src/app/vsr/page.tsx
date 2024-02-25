@@ -132,7 +132,7 @@ const VeteranServiceRequest: React.FC = () => {
               pattern: {
                 // Only allow up to 2 digits
                 value: /^[0-9][0-9]?$/,
-                message: "This field must be a number no greater than 100",
+                message: "This field must be a number less than 100",
               },
             })}
             required
@@ -142,8 +142,8 @@ const VeteranServiceRequest: React.FC = () => {
         </div>
 
         <div className={styles.numChildren}>
-          {/* Cap it at 100 children per gender to avoid freezing web browser */}
-          {Array.from({ length: Math.min(numChildrenThisGender, 100) }, (_, index) => (
+          {/* Cap it at 99 children per gender to avoid freezing web browser */}
+          {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
             <div key={index} className={styles.childInputWrapper}>
               <TextField
                 label={`Age`}
@@ -278,24 +278,25 @@ const VeteranServiceRequest: React.FC = () => {
                     />
                   )}
                 />
-                <div className={styles.formRow}>
-                  <div className={styles.longText}>
-                    <TextField
-                      label="Spouse's Name"
-                      variant="outlined"
-                      placeholder="e.g. Jane Timberlake"
-                      {...register("spouse", {
-                        required:
-                          watch().marital_status === "Married" && "Spouse's Name is required",
-                      })}
-                      required={watch().marital_status === "Married"}
-                      error={!!errors.spouse}
-                      helperText={errors.spouse?.message}
-                    />
+                {watch().marital_status === "Married" ? (
+                  <div className={styles.formRow}>
+                    <div className={styles.longText}>
+                      <TextField
+                        label="Spouse's Name"
+                        variant="outlined"
+                        placeholder="e.g. Jane Timberlake"
+                        {...register("spouse", {
+                          required: "Spouse's Name is required",
+                        })}
+                        required
+                        error={!!errors.spouse}
+                        helperText={errors.spouse?.message}
+                      />
+                    </div>
+                    {/* Add an empty div here with flex: 1 to take up the right half of the row */}
+                    <div style={{ flex: 1 }} />
                   </div>
-                  {/* Add an empty div here with flex: 1 to take up the right half of the row */}
-                  <div style={{ flex: 1 }} />
-                </div>
+                ) : null}
 
                 <p className={styles.sectionHeader}>Children (under 18)</p>
 
