@@ -8,6 +8,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
 import { userRouter } from "src/routes/users";
 import env from "src/util/validateEnv";
+import { vsrRouter } from "src/routes/vsr";
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use(
 
 // Put routes here (e.g. app.use("/api/example", exampleRoutes); )
 app.use(userRouter);
+app.use(vsrRouter);
 
 /**
  * Error handler; all errors thrown by server are handled here.

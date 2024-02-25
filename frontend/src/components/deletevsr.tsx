@@ -11,24 +11,25 @@ const deleteVSR = () => {
   const ids = params.getAll("id");
 
   const auth = getAuth();
-  const user = auth.currentUser;
 
   const deleteForms = async (ids: string[]) => {
     try {
       let count = 0;
       for (const id of ids) {
-        console.log("id: ", id);
-        console.log("route:, ", `http://localhost:3001/api/vsr/${id}`);
+        const token = await auth.currentUser?.getIdToken();
         const response = await fetch(`http://localhost:3001/api/vsr/${id}`, {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${user?.getIdToken()}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 
         if (!response.ok) {
           console.error("Failed to delete VSR");
           break;
+        } else {
+          const info = await response.json();
+          console.log(info.message);
         }
         count = count + 1;
       }

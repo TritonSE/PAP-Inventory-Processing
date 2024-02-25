@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import { AuthError } from "src/errors/auth";
 import { ServiceError } from "src/errors/service";
 import { verifyAuthToken } from "src/middleware/auth";
-import { User } from "src/models/user";
+import { User } from "src/models/users";
 import VSRModel from "src/models/vsr";
 
 const router = express.Router();
