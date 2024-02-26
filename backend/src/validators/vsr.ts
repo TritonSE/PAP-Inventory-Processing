@@ -82,6 +82,108 @@ const makeSizeOfHomeValidator = () =>
     .isString()
     .withMessage("Size of Home must be a string");
 
+const makeAddressValidator = () =>
+  body("address")
+    .exists({ checkFalsy: true })
+    .withMessage("Address is required")
+    .isString()
+    .withMessage("Address must be a string");
+
+const makeCityValidator = () =>
+  body("city")
+    .exists({ checkFalsy: true })
+    .withMessage("City is required")
+    .isString()
+    .withMessage("City must be a string");
+
+const makeStateValidator = () =>
+  body("state")
+    .exists({ checkFalsy: true })
+    .withMessage("State is required")
+    .isString()
+    .withMessage("State must be a string");
+
+const makeZipCodeValidator = () =>
+  body("zipCode")
+    .exists({ checkFalsy: true })
+    .withMessage("Zip Code is required")
+    .isInt({ min: 10000 })
+    .withMessage("Zip Code must be a 5 digit integer");
+
+const makePhoneNumberValidator = () =>
+  body("phoneNumber")
+    .exists({ checkFalsy: true })
+    .withMessage("Phone Number is required")
+    .isInt({ min: 1000000000 })
+    .withMessage("Phone number must be a 10 digit integer");
+
+const makeEmailValidator = () =>
+  body("email")
+    .exists({ checkFalsy: true })
+    .withMessage("Email is required")
+    .isString()
+    .withMessage("Email must be a string");
+
+const makeMilitaryBranchValidator = () =>
+  body("militaryBranch")
+    .exists({ checkFalsy: true })
+    .withMessage("Military Branch is required")
+    .isString()
+    .withMessage("Military Branch must be a string");
+
+const makeConflictValidator = () =>
+  body("militaryConflicts")
+    .exists({ checkFalsy: true })
+    .withMessage("Military Conflict(s) is required")
+    .isArray()
+    .withMessage("Military Conflict(s) must be an array")
+    .custom((ethnicities: string[]) =>
+      ethnicities.every((ethnicity) => typeof ethnicity === "string"),
+    )
+    .withMessage("Each conflict must be a string");
+
+const makeDischargeStatusValidator = () =>
+  body("dischargeStatus")
+    .exists({ checkFalsy: true })
+    .withMessage("Discharge Status is required")
+    .isString()
+    .withMessage("Discharge Status must be a string");
+
+const makeServiceConnectedValidator = () =>
+  body("serviceConnected")
+    .exists({ checkFalsy: true })
+    .withMessage("Service Connected is required")
+    .isBoolean()
+    .withMessage("Service Connected must be a boolean");
+
+const makeLastRankValidator = () =>
+  body("lastRank")
+    .exists({ checkFalsy: true })
+    .withMessage("Last rank is required")
+    .isString()
+    .withMessage("Last rank must be a string");
+
+const makeMilitaryIDValidator = () =>
+  body("militaryID")
+    .exists({ checkFalsy: true })
+    .withMessage("Military ID is required")
+    .isInt()
+    .withMessage("Military ID must be an integer");
+
+const makePetInterestValidator = () =>
+  body("petInterest")
+    .exists({ checkFalsy: true })
+    .withMessage("Pet interest is required")
+    .isBoolean()
+    .withMessage("Pet interest must be a boolean");
+
+const makeReferralSourceValidator = () =>
+  body("referralSource")
+    .exists({ checkFalsy: true })
+    .withMessage("Referral source is required")
+    .isString()
+    .withMessage("Referral source must be a string");
+
 export const createVSR = [
   makeNameValidator(),
   makeGenderValidator(),
@@ -94,4 +196,18 @@ export const createVSR = [
   makeEmploymentStatusValidator(),
   makeIncomeLevelValidator(),
   makeSizeOfHomeValidator(),
+  makeAddressValidator(),
+  makeCityValidator(),
+  makeStateValidator(),
+  makeZipCodeValidator(),
+  makePhoneNumberValidator(),
+  makeEmailValidator(),
+  makeMilitaryBranchValidator(),
+  makeConflictValidator(),
+  makeDischargeStatusValidator(),
+  makeServiceConnectedValidator(),
+  makeLastRankValidator(),
+  makeMilitaryIDValidator(),
+  makePetInterestValidator(),
+  makeReferralSourceValidator(),
 ];

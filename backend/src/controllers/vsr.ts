@@ -18,6 +18,20 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     employmentStatus,
     incomeLevel,
     sizeOfHome,
+    address,
+    city,
+    state,
+    zipCode,
+    phoneNumber,
+    email,
+    militaryBranch,
+    militaryConflicts,
+    dischargeStatus,
+    serviceConnected,
+    lastRank,
+    militaryID,
+    petInterest,
+    referralSource,
   } = req.body;
 
   try {
@@ -40,6 +54,20 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       employmentStatus,
       incomeLevel,
       sizeOfHome,
+      address,
+      city,
+      state,
+      zipCode,
+      phoneNumber,
+      email,
+      militaryBranch,
+      militaryConflicts,
+      dischargeStatus,
+      serviceConnected,
+      lastRank,
+      militaryID,
+      petInterest,
+      referralSource,
     });
 
     // 201 means a new resource has been created successfully
