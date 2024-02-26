@@ -13,6 +13,7 @@ const vsrSchema = new Schema({
   employmentStatus: { type: String, require: true },
   incomeLevel: { type: String, require: true },
   sizeOfHome: { type: String, require: true },
+  status: { type: String },
 });
 
 type VSR = InferSchemaType<typeof vsrSchema>;

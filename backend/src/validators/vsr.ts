@@ -82,6 +82,13 @@ const makeSizeOfHomeValidator = () =>
     .isString()
     .withMessage("Size of Home must be a string");
 
+const updateStatusValidator = () =>
+  body("status")
+    .exists({ checkFalsy: true })
+    .withMessage("Status is required")
+    .isString()
+    .withMessage("Status must be a string");
+
 export const createVSR = [
   makeNameValidator(),
   makeGenderValidator(),
@@ -95,3 +102,6 @@ export const createVSR = [
   makeIncomeLevelValidator(),
   makeSizeOfHomeValidator(),
 ];
+
+export const updateStatus = [updateStatusValidator()];
+

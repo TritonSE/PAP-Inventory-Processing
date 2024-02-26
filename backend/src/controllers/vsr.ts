@@ -49,3 +49,16 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const updateStatus: RequestHandler = async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    const { id } = req.params;
+
+    const vsr = await VSRModel.findByIdAndUpdate(id, { status }, { new: true });
+    res.status(200).json(vsr);
+    
+  } catch (error) {
+    next(error);
+  }
+}
