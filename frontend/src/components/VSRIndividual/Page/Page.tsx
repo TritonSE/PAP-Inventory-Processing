@@ -64,7 +64,7 @@ export const Page = () => {
             </a>
           </div>
         </div>
-        <div className={styles.formDetails}>
+        <div className={styles.bodyDetails}>
           <CaseDetails vsr={vsr}></CaseDetails>
           <div className={styles.otherDetails}>
             <div className={styles.personalInfo}>
@@ -73,10 +73,8 @@ export const Page = () => {
               <MilitaryBackground vsr={vsr} />
               <AdditionalInfo vsr={vsr} />
             </div>
-            <div>
-              <div className={styles.furnishings}>
-                <RequestedFurnishings vsr={vsr} />
-              </div>
+            <div className={styles.rightColumn}>
+              <RequestedFurnishings vsr={vsr} />
               <div className={styles.finalActions}>
                 <div className={styles.approve}>
                   <a href="REPLACE">Approve VSR</a>

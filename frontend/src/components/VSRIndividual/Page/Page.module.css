@@ -28,8 +28,8 @@
 .headerRow {
   display: flex;
   flex-direction: row;
-  width: calc(100% * 5 / 6);
   justify-content: space-between;
+  width: 100%;
 }
 
 .actions {
@@ -75,27 +75,33 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: calc(100% * 5 / 6);
+  margin: 0 auto;
+}
+
+.bodyDetails {
+  width: 100%;
 }
 
 .otherDetails {
   margin-top: 32px;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  gap: 42px;
 }
 
 .personalInfo {
   display: flex;
   flex-direction: column;
-  width: calc(100vw * 49 / 144);
+  flex: 38%;
 }
 
 .personalInfo > * {
   margin-bottom: 32px;
 }
 
-.furnishings {
-  width: calc(100vw * 713 / 1440);
+.rightColumn {
+  flex: 62%;
 }
 
 .finalActions {

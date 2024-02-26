@@ -1,22 +1,3 @@
-.accordion {
-  display: inline-block;
-  background-color: #fff;
-  width: calc(100vw * 89 / 288);
-  border-radius: 6px;
-  box-shadow: none;
-  padding-bottom: 8px;
-  transition: padding 0.3s ease;
-}
-
-.details {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  margin-top: 20px;
-  padding-left: 6px;
-  padding-right: 6px;
-}
-
 .row {
   display: flex;
   flex-direction: row;
@@ -35,14 +16,4 @@
   position: absolute;
   left: 50%;
   transform: translateX(16px);
-}
-
-.title {
-  font-family: var(--font-title);
-  color: var(--Primary-Background-Dark, #232220);
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  padding-left: 6px;
 }
