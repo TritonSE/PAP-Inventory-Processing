@@ -37,7 +37,7 @@ export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
         <SingleDetail
           className={styles.second}
           title="Age(s)"
-          value={vsr.agesOfBoys && vsr.agesOfBoys.length > 0 ? vsr.agesOfBoys : "N/A"}
+          value={vsr.agesOfBoys && vsr.agesOfBoys.length > 0 ? vsr.agesOfBoys.join(", ") : "N/A"}
         />
       </div>
       <div className={styles.row}>
@@ -45,7 +45,7 @@ export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
         <SingleDetail
           className={styles.second}
           title="Age(s)"
-          value={vsr.agesOfGirls && vsr.agesOfGirls.length > 0 ? vsr.agesOfGirls : "N/A"}
+          value={vsr.agesOfGirls && vsr.agesOfGirls.length > 0 ? vsr.agesOfGirls.join(", ") : "N/A"}
         />
       </div>
       <div className={styles.row}>
