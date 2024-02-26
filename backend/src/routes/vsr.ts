@@ -1,11 +1,10 @@
-import express, { Request, Response, NextFunction } from "express";
-import { AuthError } from "src/errors/auth";
-import { ServiceError } from "src/errors/service";
-import { verifyAuthToken } from "src/middleware/auth";
-import { User } from "src/models/users";
-import VSRModel from "src/models/vsr";
+import express from "express";
+import * as VSRController from "src/controllers/vsr";
+import * as VSRValidator from "src/validators/vsr";
 
 const router = express.Router();
+
+router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 
 router.delete(
   "/api/vsr/:id",
@@ -34,4 +33,4 @@ router.delete(
   },
 );
 
-export { router as vsrRouter };
+export default router;
