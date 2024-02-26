@@ -44,6 +44,7 @@ export interface CreateVSRRequest {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+  status: string;
 }
 
 function parseVSR(vsr: VSRJson) {
