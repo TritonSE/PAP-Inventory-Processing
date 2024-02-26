@@ -19,14 +19,12 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
-import DeleteIcon from "@mui/icons-material/Delete";
-import FilterListIcon from "@mui/icons-material/FilterList";
+// import DeleteIcon from "@mui/icons-material/Delete";
+// import FilterListIcon from "@mui/icons-material/FilterList";
 import { visuallyHidden } from "@mui/utils";
-// import { DataGrid } from '@mui/x-data-grid/DataGrid';
 import { GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-data-grid";
 
 import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
-import styles from "src/components/VSRTable.module.css";
 import { useEffect } from "react";
 import { ClassNames } from "@emotion/react";
 // import globals from "src/app/globals.css";
@@ -176,7 +174,6 @@ export default function VSRTable() {
   }, []);
   return (
     <Box
-      className={styles.container}
       sx={{
         "& .header": {
           color: "rgba(247, 247, 247, 1)",
@@ -226,7 +223,6 @@ export default function VSRTable() {
       }}
     >
       <DataGrid
-        className={styles.table}
         rows={rows}
         columns={columns}
         initialState={{
@@ -235,7 +231,6 @@ export default function VSRTable() {
           },
         }}
         getRowClassName={(params) => (params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd")}
-        // getRowClassName={(params) => "even"}
         pageSizeOptions={[50]}
         checkboxSelection
         disableRowSelectionOnClick
