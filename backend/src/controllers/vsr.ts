@@ -1,8 +1,24 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
+import createHttpError from "http-errors";
 import VSRModel from "src/models/vsr";
 import validationErrorParser from "src/util/validationErrorParser";
-import CustomError from "src/errors/errors";
+import { CustomError } from "src/errors/errors";
+
+export const getVSR: RequestHandler = async (req, res, next) => {
+  const { id } = req.params;
+
+  try {
+    const vsr = await VSRModel.findById(id);
+
+    if (vsr === null) {
+      throw createHttpError(404, "VSR not found at id " + id);
+    }
+    res.status(200).json(vsr);
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const createVSR: RequestHandler = async (req, res, next) => {
   // extract any errors that were found by the validator
@@ -26,11 +42,10 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     validationErrorParser(errors);
 
     // Get the current date as a timestamp for when VSR was submitted
-    const date = new Date();
+    const currentDate = new Date();
 
     const vsr = await VSRModel.create({
       name,
-      date,
       gender,
       age,
       maritalStatus,
@@ -41,6 +56,10 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       employmentStatus,
       incomeLevel,
       sizeOfHome,
+
+      // Use current date as timestamp for received & updated
+      dateReceived: currentDate,
+      lastUpdated: currentDate,
     });
 
     // 201 means a new resource has been created successfully
@@ -70,8 +89,22 @@ export const updateVSR: RequestHandler = async (req, res, next) => {
 
   try {
     validationErrorParser(errors);
-    const updatedVSR = await VSRModel.findByIdAndUpdate(req.body._id, req.body);
+    const updatedVSR = await VSRModel.findByIdAndUpdate(req.body._id, {
+      name,
+      date,
+      gender,
+      age,
+      maritalStatus,
+      spouseName,
+      agesOfBoys,
+      agesOfGirls,
+      ethnicity,
+      employmentStatus,
+      incomeLevel,
+      sizeOfHome,
+    });
     if (updatedVSR === null) {
+      //404 not found if ID invalid
       throw new CustomError(0, 404, "Could not find id");
     }
     const vsr = await VSRModel.findById(req.body._id);

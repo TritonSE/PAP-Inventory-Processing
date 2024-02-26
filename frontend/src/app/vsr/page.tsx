@@ -9,7 +9,7 @@ import HeaderBar from "@/components/HeaderBar";
 import PageNumber from "@/components/PageNumber";
 import { createVSR, CreateVSRRequest } from "@/api/VSRs";
 
-interface IFormInput {
+export interface IFormInput {
   name: string;
   marital_status: string;
   gender: string;
@@ -26,7 +26,7 @@ interface IFormInput {
   ages_of_girls: number[];
 }
 
-const VeteranServiceRequest: React.FC = () => {
+export const VeteranServiceRequest: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -413,5 +413,4 @@ const VeteranServiceRequest: React.FC = () => {
     </div>
   );
 };
-
 export default VeteranServiceRequest;
