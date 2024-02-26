@@ -1,7 +1,7 @@
-import styles from "src/components/VSRIndividual/RequestedFurnishings/RequestedFurnishings.module.css";
+import styles from "src/components/VSRIndividual/RequestedFurnishings/styles.module.css";
 import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
-import { VSRIndividualAccordion } from "../VSRIndividualAccordion/VSRIndividualAccordion";
+import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
 
 export interface RequestedFurnishingsProps {
   vsr: VSR;

@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "@/components/VSRIndividual/ContactInfo/ContactInfo.module.css";
+import styles from "@/components/VSRIndividual/ContactInfo/styles.module.css";
 import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
-import { VSRIndividualAccordion } from "../VSRIndividualAccordion/VSRIndividualAccordion";
+import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
 
 export interface MilitaryBackgroundProps {
   vsr: VSR;

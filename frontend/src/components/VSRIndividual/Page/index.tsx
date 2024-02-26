@@ -9,7 +9,7 @@ import {
   AdditionalInfo,
   RequestedFurnishings,
 } from "@/components/VSRIndividual";
-import styles from "src/components/VSRIndividual/Page/Page.module.css";
+import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
 import { type VSR, getVSR } from "@/api/VSRs";
 import { useParams } from "next/navigation";

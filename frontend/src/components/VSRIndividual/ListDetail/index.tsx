@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/components/VSRIndividual/ListDetail/ListDetail.module.css";
+import styles from "src/components/VSRIndividual/ListDetail/styles.module.css";
 
 export interface ListDetailProps {
   title: string;

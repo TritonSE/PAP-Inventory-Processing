@@ -1,8 +1,8 @@
-import styles from "src/components/VSRIndividual/CaseDetails/CaseDetails.module.css";
+import styles from "src/components/VSRIndividual/CaseDetails/styles.module.css";
 import { SingleDetail, DropdownDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import moment from "moment";
-import { VSRIndividualAccordion } from "../VSRIndividualAccordion/VSRIndividualAccordion";
+import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
 
 export interface CaseDetailsProp {
   vsr: VSR;

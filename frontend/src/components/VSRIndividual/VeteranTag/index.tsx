@@ -1,4 +1,4 @@
-import styles from "src/components/VSRIndividual/VeteranTag/VeteranTag.module.css";
+import styles from "src/components/VSRIndividual/VeteranTag/styles.module.css";
 import { type VSR } from "@/api/VSRs";
 
 export interface AdditionalInfoProps {

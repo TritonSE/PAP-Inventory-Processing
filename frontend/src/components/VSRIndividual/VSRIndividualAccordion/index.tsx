@@ -1,5 +1,5 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import styles from "@/components/VSRIndividual/VSRIndividualAccordion/VSRIndividualAccordion.module.css";
+import styles from "@/components/VSRIndividual/VSRIndividualAccordion/styles.module.css";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
