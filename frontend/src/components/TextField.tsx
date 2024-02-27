@@ -14,21 +14,26 @@ const TextField = forwardRef(
     { label, error, required, helperText, ...props }: TextFieldProps,
     ref: ForwardedRef<HTMLDivElement>,
   ) => {
-    console.log(props);
     return (
       <div className={styles.wrapperClass}>
         <p>
-          {required && <span className={styles.requiredAsterisk}>* </span>}
+          {required ? <span className={styles.requiredAsterisk}>* </span> : null}
           {label}
         </p>
         <MUITextField
           ref={ref}
+          fullWidth
           size="small"
           className={styles.inputClass}
           error={error}
+          InputProps={{
+            classes: {
+              input: styles.input,
+            },
+          }}
           {...props}
         />
-        <div className={styles.helperText}>{helperText}</div>
+        {helperText ? <div className={styles.helperText}>{helperText}</div> : null}
       </div>
     );
   },

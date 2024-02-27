@@ -1,19 +1,13 @@
 import { RequestHandler } from "express";
-//import createHttpError from "http-errors";
 import { validationResult } from "express-validator";
-import VSRModel, { VSR } from "../models/vsr";
-import validationErrorParser from "../util/validationErrorParser";
-import mongoose from "mongoose";
-
-// start the database
-mongoose.connect("mongodb://localhost:27017/pap", {});
+import VSRModel from "src/models/vsr";
+import validationErrorParser from "src/util/validationErrorParser";
 
 export const createVSR: RequestHandler = async (req, res, next) => {
   // extract any errors that were found by the validator
   const errors = validationResult(req);
   const {
     name,
-    date,
     gender,
     age,
     maritalStatus,
@@ -26,11 +20,12 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     sizeOfHome,
   } = req.body;
 
-  console.log(req.body);
-
   try {
     // if there are errors, then this function throws an exception
     validationErrorParser(errors);
+
+    // Get the current date as a timestamp for when VSR was submitted
+    const date = new Date();
 
     const vsr = await VSRModel.create({
       name,
@@ -48,28 +43,19 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     });
 
     // 201 means a new resource has been created successfully
-    // the newly created task is sent back to the user
+    // the newly created VSR is sent back to the user
     res.status(201).json(vsr);
   } catch (error) {
     next(error);
   }
 };
 
-export async function getAllVSRS(): Promise<VSR[]> {
+export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
-    const vsrs: VSR[] = await VSRModel.find().lean().exec();
-    // console.log(vsrs[0].name);ystal
+    const vsrs = await VSRModel.find();
 
-    return vsrs;
-  } catch (error: any) {
-    throw new Error(`Error retrieving VSRs: ${error.message}`);
+    res.status(200).json({ vsrs });
+  } catch (error) {
+    next(error);
   }
-}
-
-// getAllVSRS()
-//   .then((vsrs) => {
-//     console.log("All VSRs:", vsrs);
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//   });
+};

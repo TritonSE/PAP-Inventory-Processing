@@ -1,12 +1,12 @@
 .main {
   padding: 64px;
   padding-top: 128px;
-  background-color: #d8d8d8;
+  background-color: #eceff3;
   display: flex;
   flex-direction: column;
   color: var(--Accent-Blue-1, #102d5f);
   text-align: left;
-  gap: 64px;
+  gap: 32px;
   /* Desktop/H1 */
   font-family: Lora;
   font-size: 20px;
@@ -47,6 +47,7 @@
   background-color: white;
   border-radius: 20px;
   padding: 64px;
+  margin-top: 32px;
   gap: 10px;
   align-items: flex-start;
   width: 100%;
@@ -57,21 +58,32 @@
   display: flex;
   flex-direction: column;
   gap: 64px;
-  align-self: stretch;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .subSec {
   display: flex;
+  width: 100%;
   flex-direction: column;
   gap: 32px;
-  align-self: stretch;
+  align-self: flex-start;
 }
 
 .formRow {
+  width: 100%;
   display: flex;
   flex-direction: row;
   gap: 64px;
+  align-items: start;
+}
+
+.numChildren {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
   align-items: center;
+  flex: 1;
 }
 
 .asterisk {
@@ -79,12 +91,39 @@
 }
 
 .submitButton {
+  align-self: end;
+}
+
+.submit {
   width: 306px;
   height: 64px;
   background-color: #102d5f;
+  color: white;
+  cursor: pointer;
   font-family: Lora;
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  border: none;
+  border-radius: 4px;
+}
+
+.sectionHeader {
+  gap: 4px;
+  font-size: 16px;
+  color: black;
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 16px 0 -8px;
+}
+
+.longText {
+  flex: 1;
+}
+
+.childInputWrapper {
+  width: 100%;
 }
