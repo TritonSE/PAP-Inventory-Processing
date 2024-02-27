@@ -1,0 +1,9 @@
+.pageNumber {
+  color: var(--Primary-Background-Dark, #232220);
+  text-align: center;
+  font-family: "OpenSans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}

@@ -12,9 +12,11 @@
   line-height: normal;
 }
 
+.sectionLabel {
+  padding-bottom: 16px;
+}
+
 .chip {
-  display: flex;
-  flex-direction: row;
   white-space: nowrap;
   border-width: 1px;
   border-style: solid;
@@ -28,18 +30,36 @@
   border: 1px solid var(--Secondary-1, #102d5f);
 }
 
+.chipContent {
+  display: flex;
+  flex-direction: row;
+  padding: 9px 16px;
+  align-items: center;
+}
+
+.chipTitle {
+  padding-right: 8px;
+}
+
+.chip:hover {
+  cursor: pointer;
+  background: #c7def1;
+}
+
 .chipSelected {
   color: white;
   background: #102d5f;
 }
 
 .chipSelected:hover {
+  cursor: pointer;
   background: #102d5f;
 }
 
 .chipContainer {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   gap: 16px;
 }
 
@@ -61,4 +81,10 @@
 .helperText {
   color: var(--Secondary-2, #be2d46);
   font-size: 12px;
+}
+
+.math {
+  background-color: #fff;
+  border-color: #fff;
+  all: unset;
 }

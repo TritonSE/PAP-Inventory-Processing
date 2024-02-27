@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 // import { MultipleChoice, TextField } from "@/components/VeteranForm";
 import { HeaderBar } from "@/components/VSRIndividual";
 import SelectAll from "@/components/VeteranForm/SelectAll";
+import TextField from "@/components/VeteranForm/TextField";
+import PageNumber from "@/components/VeteranForm/PageNumber";
 import styles from "src/app/vsr/page.module.css";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 
@@ -72,6 +74,25 @@ export default function Page() {
           <div className={styles.section}>
             <SelectAll label="Other" options={otherFurnishings} />
           </div>
+          <div className={styles.section}>
+            <TextField
+              label="Identify other necessary items"
+              helperText="**We do not offer cleaning supplies"
+              required={false}
+              variant={"outlined"}
+            ></TextField>
+          </div>
+        </div>
+      </div>
+      <div className={styles.actions}>
+        <div className={styles.backButton}>
+          <button className={styles.back}>Back</button>
+        </div>
+        <PageNumber pageNum={3} />
+        <div className={styles.submitButton}>
+          <button className={styles.submit} type="submit">
+            Submit
+          </button>
         </div>
       </div>
       <div className={styles.footer}></div>

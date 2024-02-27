@@ -1,4 +1,4 @@
-import styles from "src/components/TextField.module.css";
+import styles from "src/components/VeteranForm/TextField.module.css";
 import MUITextField, { TextFieldProps as MUITextFieldProps } from "@mui/material/TextField";
 import { ForwardedRef, forwardRef } from "react";
 
@@ -28,6 +28,7 @@ const TextField = forwardRef(
           className={styles.inputClass}
           error={error}
           {...props}
+          defaultValue="Please list"
         />
         <div className={styles.helperText}>{helperText}</div>
       </div>

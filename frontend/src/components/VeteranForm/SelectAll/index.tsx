@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import Chip from "@mui/material/Chip";
+import React, { useEffect, useState } from "react";
 import styles from "@/components/VeteranForm/SelectAll/styles.module.css";
 import { FurnitureItem } from "@/api/FurnitureItems";
 
@@ -8,54 +7,124 @@ export interface SelectAllProps {
   options: FurnitureItem[];
 }
 
-// Define a type for the counts state with an index signature
-type CountsState = {
-  [optionName: string]: number;
-};
+interface CountMap {
+  [key: string]: number;
+}
+
+interface ClickState {
+  [key: string]: boolean;
+}
 
 const SelectAll = ({ label, options }: SelectAllProps) => {
-  // Initialize counts state with all items starting at 0, with the correct type
-  const [counts, setCounts] = useState<CountsState>(() => {
-    const initialCounts: CountsState = {};
-    options.forEach((option) => {
-      initialCounts[option.name] = 0;
-    });
-    return initialCounts;
-  });
+  const [counts, setCounts] = useState<CountMap>({});
+  const [clickedStates, setClickedStates] = useState<ClickState>({});
 
-  const incrementCount = (optionName: string) => {
+  useEffect(() => {
+    const initialCounts = options.reduce<CountMap>((acc, option) => {
+      acc[option.name] = 0;
+      return acc;
+    }, {});
+    setCounts(initialCounts);
+
+    const initialClickedStates = options.reduce<ClickState>((acc, option) => {
+      acc[option.name] = false;
+      return acc;
+    }, {});
+    setClickedStates(initialClickedStates);
+  }, [options]);
+
+  const incrementCount = (itemName: string) => {
+    if (counts[itemName] == 0) {
+      setClickedStates((prevStates) => ({
+        ...prevStates,
+        [itemName]: true,
+      }));
+    }
     setCounts((prevCounts) => ({
       ...prevCounts,
-      [optionName]: (prevCounts[optionName] || 0) + 1, // Fallback to 0 if undefined
+      [itemName]: (prevCounts[itemName] || 0) + 1,
     }));
   };
 
-  const decrementCount = (optionName: string) => {
+  const decrementCount = (itemName: string) => {
+    if (counts[itemName] == 1) {
+      setClickedStates((prevStates) => ({
+        ...prevStates,
+        [itemName]: false,
+      }));
+    }
     setCounts((prevCounts) => ({
       ...prevCounts,
-      [optionName]: Math.max(0, (prevCounts[optionName] || 0) - 1), // Fallback to 0 if undefined, prevents negative counts
+      [itemName]: Math.max(0, (prevCounts[itemName] || 0) - 1),
     }));
+  };
+
+  const toggleClickState = (itemName: string) => {
+    if (counts[itemName] == 0 && !clickedStates[itemName]) {
+      incrementCount(itemName);
+      setClickedStates((prevStates) => ({
+        ...prevStates,
+        [itemName]: true,
+      }));
+    } else if (clickedStates[itemName]) {
+      setCounts((prevCounts) => ({
+        ...prevCounts,
+        [itemName]: 0,
+      }));
+      setClickedStates((prevStates) => ({
+        ...prevStates,
+        [itemName]: false,
+      }));
+    }
   };
 
   return (
     <div className={styles.wrapperClass}>
-      <p>{label}</p>
+      <p className={styles.sectionLabel}>{label}</p>
       <div className={styles.chipContainer}>
         {options.map((option) =>
           option.allowMultiple ? (
-            <div key={option.name} className={styles.chip}>
-              <span>{option.name}</span>
-              <button onClick={() => decrementCount(option.name)} className={styles.button}>
-                -
-              </button>
-              <div>{counts[option.name]}</div>
-              <button onClick={() => incrementCount(option.name)} className={styles.button}>
-                +
-              </button>
+            <div
+              key={option.name}
+              className={`${styles.chip} ${
+                clickedStates[option.name] ? styles.chipSelected : styles.chipUnselected
+              }`}
+              onClick={() => toggleClickState(option.name)}
+            >
+              <div className={styles.chipContent}>
+                <span className={styles.chipTitle}>{option.name}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    decrementCount(option.name);
+                  }}
+                  className={styles.math}
+                >
+                  -
+                </button>
+                <span>{counts[option.name]}</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    incrementCount(option.name);
+                  }}
+                  className={styles.math}
+                >
+                  +
+                </button>
+              </div>
             </div>
           ) : (
-            <div key={option.name} className={styles.chip}>
-              {option.name}
+            <div
+              key={option.name}
+              className={`${styles.chip} ${
+                clickedStates[option.name] ? styles.chipSelected : styles.chipUnselected
+              }`}
+              onClick={() => toggleClickState(option.name)}
+            >
+              <div className={styles.chipContent}>
+                <span className={styles.chipTitle}>{option.name}</span>
+              </div>
             </div>
           ),
         )}

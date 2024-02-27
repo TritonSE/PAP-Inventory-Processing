@@ -1,11 +1,14 @@
 .page {
+  margin: 0;
+  box-sizing: border-box;
   background-color: var(--color-tse-primary-light);
 }
 .canvas {
   border-radius: 20px;
   background-color: #fff;
-  margin: 128px 120px;
-  height: auto;
+  width: calc(100vw * 5 / 6);
+  margin: auto;
+  margin-top: 128px;
   padding: 64px;
 }
 .title {
@@ -21,4 +24,46 @@
 }
 .section:not(:last-child) {
   padding-bottom: 64px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: calc(100vw * 5 / 6);
+  margin: auto;
+  align-items: baseline;
+  padding-top: 64px;
+  padding-bottom: 128px;
+}
+
+.submit {
+  width: 306px;
+  height: 64px;
+  background-color: #102d5f;
+  color: white;
+  cursor: pointer;
+  font-family: "Lora";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border: none;
+  border-radius: 4px;
+}
+
+.back {
+  width: 306px;
+  height: 64px;
+  background-color: var(--color-tse-primary-light);
+  color: #102d5f;
+  cursor: pointer;
+  font-family: "Lora";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-radius: 4px;
+  border: 1px solid var(--Secondary-1, #102d5f);
+  background: rgba(255, 255, 255, 0);
 }
