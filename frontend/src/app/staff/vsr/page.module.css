@@ -1,21 +1,16 @@
 .page {
   background-color: var(--color-background);
   padding-bottom: 67px;
-  /* display: flex;
-  flex-direction: column;
-  justify-content: center; */
 }
 
 .column {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 105px;
-  margin-left: 95px;
-  margin-right: 95px;
+  margin: 105px auto 0;
   padding: 0px;
   gap: 40px;
-  /* background-color: red; */
+  max-width: 1200px;
 }
 
 .flex {
@@ -24,30 +19,13 @@
   align-items: center;
 }
 
-.title_row {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  /* background-color: green; */
-  /* width: max-content; */
-  /* width: 80%; */
-  /* gap: 200px; */
-}
 .button_row {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  /* min-width: 80%; */
+  justify-content: space-between;
   gap: 430px;
-  /* background-color: red; */
 }
-
-/* .row_max {
-  display: flex;
-  flex-direction: row;
-  width: max-content;
-  align-items: center;
-} */
 
 .row_left {
   gap: 40px;
@@ -92,7 +70,6 @@
 .table {
   display: flex;
   flex-direction: column;
-  /* padding: 6px 0px; */
   align-items: center;
-  /* align-self: stretch; */
+  width: 100%;
 }

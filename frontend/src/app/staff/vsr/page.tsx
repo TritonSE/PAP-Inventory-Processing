@@ -12,9 +12,7 @@ export default function VSRTableView() {
     <div className={styles.page}>
       <HeaderBar></HeaderBar>
       <div className={styles.column}>
-        <div className={styles.title_row}>
-          <PageTitle></PageTitle>
-        </div>
+        <PageTitle></PageTitle>
         <div className={styles.button_row}>
           <div className={styles.row_left}>
             <SearchKeyword></SearchKeyword>

@@ -6,7 +6,7 @@ export default function SearchKeyword() {
   return (
     <div className={styles.search}>
       {/* image */}
-      <Image src="/search.svg" alt="Search" className={styles.icons} />
+      <Image width={24} height={24} src="/search.svg" alt="Search" className={styles.icons} />
       <input className={styles.searchInput} placeholder="Search Keyword..." />
     </div>
   );

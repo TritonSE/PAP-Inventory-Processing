@@ -6,6 +6,7 @@ import { GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-data-grid";
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect } from "react";
+import { VSR, getAllVSRs } from "@/api/VSRs";
 
 const columns: GridColDef[] = [
   {
@@ -14,10 +15,10 @@ const columns: GridColDef[] = [
     headerClassName: "header",
   },
   {
-    field: "caseid",
+    field: "_id",
     headerName: "Case ID",
     type: "string",
-    width: 147,
+    flex: 1,
     headerAlign: "left",
     headerClassName: "header",
     disableColumnMenu: true,
@@ -27,7 +28,7 @@ const columns: GridColDef[] = [
     field: "military",
     headerName: "Military ID (Last 4)",
     type: "string",
-    width: 206,
+    flex: 1,
     headerClassName: "header",
     disableColumnMenu: true,
     hideSortIcons: true,
@@ -35,7 +36,7 @@ const columns: GridColDef[] = [
   {
     field: "name",
     headerName: "Name",
-    width: 233,
+    flex: 1,
     headerClassName: "header",
     disableColumnMenu: true,
     hideSortIcons: true,
@@ -46,7 +47,7 @@ const columns: GridColDef[] = [
     headerName: "Date Received",
     type: "date",
     sortable: true,
-    width: 160,
+    flex: 1,
     headerClassName: "header",
     disableColumnMenu: true,
     hideSortIcons: true,
@@ -55,110 +56,50 @@ const columns: GridColDef[] = [
     field: "status",
     headerName: "Status",
     type: "string",
-    width: 210,
+    flex: 1,
     headerClassName: "header",
     disableColumnMenu: true,
     hideSortIcons: true,
   },
 ];
 
-const rows = [
-  {
-    id: 1,
-    caseid: "0001",
-    military: 1234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 2,
-    caseid: "0002",
-    military: 2234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 3,
-    caseid: "0003",
-    military: 3234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 4,
-    caseid: "0004",
-    military: 4234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 5,
-    caseid: "0005",
-    military: 5234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 6,
-    caseid: "0006",
-    military: 6234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 7,
-    caseid: "0007",
-    military: 7234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 8,
-    caseid: "0008",
-    military: 8234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 9,
-    caseid: "0009",
-    military: 9234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-  {
-    id: 10,
-    caseid: "00010",
-    military: 10234,
-    name: "Justin Timberlake",
-    date: new Date("2024-12-18"),
-    status: "Received",
-  },
-];
-
 export default function VSRTable() {
+  const [vsrs, setVsrs] = React.useState<VSR[]>();
+
   useEffect(() => {
-    // This function will run when the component is first loaded
-    console.log("Page has been refreshed or loaded for the first time");
+    getAllVSRs().then((result) => {
+      if (result.success) {
+        setVsrs(result.data);
+      } else {
+        // TODO better error handling
+        alert(`Could not fetch VSRs: ${result.error}`);
+      }
+    });
   }, []);
+
   return (
     <Box
+      style={{ width: "100%" }}
       sx={{
         "& .header": {
           color: "rgba(247, 247, 247, 1)",
           backgroundColor: "var(--color-tse-accent-blue-1)",
+          // Customize color of checkboxes in header
+          ".MuiCheckbox-root": {
+            color: "white !important",
+          },
+          // Customize styles of text in header
+          ".MuiDataGrid-columnHeaderTitle": {
+            fontSize: "1.125rem",
+            fontWeight: 600,
+          },
         },
+        // Hide the default white bar column separators
         ".MuiDataGrid-columnSeparator": {
-          display: "none",
+          display: "none !important",
+        },
+        ".MuiDataGrid-cellContent": {
+          fontSize: "1rem",
         },
         "&.MuiDataGrid-root": {
           border: "none",
@@ -198,10 +139,20 @@ export default function VSRTable() {
             },
           },
         },
+        // Customize color of checkboxes
+        "& .MuiCheckbox-root": {
+          color: "#0C2B35 !important",
+        },
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={
+          // Each row needs a unique "id" property; we can use the MongoDB "_id" for this
+          vsrs?.map((vsr) => ({
+            ...vsr,
+            id: vsr._id,
+          })) ?? []
+        }
         columns={columns}
         initialState={{
           pagination: {

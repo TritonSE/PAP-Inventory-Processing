@@ -1,7 +1,6 @@
 .search {
   display: flex;
   flex-direction: row;
-  /* background-color: var(--color-tse-primary-light); */
   gap: 8px;
   padding: 8px;
   padding-right: 30px;
@@ -31,12 +30,3 @@
   font-weight: 400;
   line-height: normal;
 }
-
-.icons {
-  width: 24px;
-  height: 24px;
-}
-
-/* ::placeholder {
-  color: 909090;
-} */
