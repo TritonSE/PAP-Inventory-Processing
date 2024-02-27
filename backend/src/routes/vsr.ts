@@ -5,6 +5,7 @@ import * as VSRValidator from "src/validators/vsr";
 
 const router = express.Router();
 
+router.get("/:id", VSRController.getVSR);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 
 router.patch("/api/vsr/{id}/status", VSRValidator.updateStatus, VSRController.updateStatus);
