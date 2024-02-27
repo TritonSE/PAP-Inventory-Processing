@@ -1,6 +1,7 @@
 import { InferSchemaType, Schema, model } from "mongoose";
 
 const furnitureItemSchema = new Schema({
+  _id: { type: String, required: true },
   category: { type: String, required: true },
   name: { type: String, required: true },
   isGasElectric: { type: Boolean, required: true },
@@ -8,6 +9,6 @@ const furnitureItemSchema = new Schema({
   categoryIndex: { type: Number, required: true },
 });
 
-type furnitureItem = InferSchemaType<typeof furnitureItemSchema>;
+type FurnitureItem = InferSchemaType<typeof furnitureItemSchema>;
 
-export default model<furnitureItem>("FurnitureItem", furnitureItemSchema);
+export default model<FurnitureItem>("FurnitureItem", furnitureItemSchema);

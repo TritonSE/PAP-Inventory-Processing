@@ -52,6 +52,6 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
 });
 
 app.use("/api/vsr", vsrRoutes);
-app.use("/api/furnitureItem", furnitureItemRoutes);
+app.use("/api/furnitureItems", furnitureItemRoutes);
 
 export default app;

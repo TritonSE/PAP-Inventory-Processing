@@ -1,6 +1,6 @@
 import express from "express";
-import * as FurnitureItemValidator from "src/validators/furnitureItem";
-import * as FurnitureItemControllers from "src/controllers/furnitureItem";
+import * as FurnitureItemController from "src/controllers/furnitureItem";
+// import * as VSRValidator from "src/validators/furnitureItem";
 
 const router = express.Router();
 
@@ -11,10 +11,7 @@ const router = express.Router();
  * TaskValidator.createTask processes the request and determines whether the
  * request should be sent through or an error should be thrown.
  */
-router.post(
-  "/",
-  FurnitureItemValidator.createFurnitureItem,
-  FurnitureItemControllers.createFurnitureItem,
-);
+router.get("/", FurnitureItemController.getFurnitureItems);
+// router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 
 export default router;

@@ -3,7 +3,6 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import VSRModel from "src/models/vsr";
-import FurnitureItemModel from "src/models/furnitureItem";
 import validationErrorParser from "src/util/validationErrorParser";
 
 export const getVSR: RequestHandler = async (req, res, next) => {
@@ -18,17 +17,6 @@ export const getVSR: RequestHandler = async (req, res, next) => {
     res.status(200).json(vsr);
   } catch (error) {
     next(error);
-  }
-};
-
-const fetchFurnitureItemIds = async () => {
-  try {
-    const furnitureItems = await FurnitureItemModel.find({}).select("_id");
-    const ids = furnitureItems.map((item) => item.id);
-    return ids;
-  } catch (error) {
-    console.error("Error fetching furniture item IDs:", error);
-    throw error;
   }
 };
 
@@ -56,7 +44,6 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     // if there are errors, then this function throws an exception
     validationErrorParser(errors);
 
-    const furnitureItemIds = await fetchFurnitureItemIds();
     const vsr = await VSRModel.create({
       name,
       date,
@@ -70,7 +57,6 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       employmentStatus,
       incomeLevel,
       sizeOfHome,
-      furnitureItemIds,
     });
 
     // 201 means a new resource has been created successfully

@@ -1,31 +1,17 @@
 import { RequestHandler } from "express";
 //import createHttpError from "http-errors";
-import { validationResult } from "express-validator";
-import FurnitureItemodel from "src/models/furnitureItem";
-import validationErrorParser from "src/util/validationErrorParser";
+import createHttpError from "http-errors";
+import FurnitureItemModel from "src/models/furnitureItem";
 
-export const createFurnitureItem: RequestHandler = async (req, res, next) => {
-  // extract any errors that were found by the validator
-  const errors = validationResult(req);
-  const { category, name, isGasElectric, allowMultiple, categoryIndex } = req.body;
-
-  console.log(req.body);
-
+export const getFurnitureItems: RequestHandler = async (req, res, next) => {
   try {
-    // if there are errors, then this function throws an exception
-    validationErrorParser(errors);
+    console.log("getting Furniture Items");
+    const furnitureItems = await FurnitureItemModel.find();
 
-    const vsr = await FurnitureItemodel.create({
-      category,
-      name,
-      isGasElectric,
-      allowMultiple,
-      categoryIndex,
-    });
-
-    // 201 means a new resource has been created successfully
-    // the newly created task is sent back to the user
-    res.status(201).json(vsr);
+    if (furnitureItems === null) {
+      throw createHttpError(404, "Furniture items not found");
+    }
+    res.status(200).json(furnitureItems);
   } catch (error) {
     next(error);
   }
