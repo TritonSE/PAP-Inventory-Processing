@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "@/components/VeteranForm/SelectAll/styles.module.css";
 import { FurnitureItem } from "@/api/FurnitureItems";
+import Image from "next/image";
 
 export interface SelectAllProps {
   label: string;
@@ -100,7 +101,20 @@ const SelectAll = ({ label, options }: SelectAllProps) => {
                   }}
                   className={styles.math}
                 >
-                  -
+                  <Image
+                    className={`${styles.dec} ${
+                      clickedStates[option.name] ? styles.decSelected : styles.decUnselected
+                    }`}
+                    src="/icon_minus.svg"
+                    width={22}
+                    height={22}
+                    alt="dropdown"
+                    style={{
+                      // We need these styles in order to make our custom IconComponent clickable.
+                      // See https://stackoverflow.com/a/73038614
+                      pointerEvents: "none",
+                    }}
+                  />
                 </button>
                 <span>{counts[option.name]}</span>
                 <button
@@ -110,7 +124,20 @@ const SelectAll = ({ label, options }: SelectAllProps) => {
                   }}
                   className={styles.math}
                 >
-                  +
+                  <Image
+                    className={`${styles.inc} ${
+                      clickedStates[option.name] ? styles.incSelected : styles.incUnselected
+                    }`}
+                    src="/icon_plus.svg"
+                    width={22}
+                    height={22}
+                    alt="dropdown"
+                    style={{
+                      // We need these styles in order to make our custom IconComponent clickable.
+                      // See https://stackoverflow.com/a/73038614
+                      pointerEvents: "none",
+                    }}
+                  />
                 </button>
               </div>
             </div>
