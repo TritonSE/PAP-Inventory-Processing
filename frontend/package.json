@@ -20,6 +20,7 @@
     "@mui/icons-material": "^5.15.5",
     "@mui/material": "^5.15.6",
     "@mui/styled-engine-sc": "^6.0.0-alpha.13",
+    "@mui/x-data-grid": "^6.19.5",
     "@testing-library/jest-dom": "^6.1.4",
     "@testing-library/react": "^14.1.2",
     "envalid": "^8.0.0",
