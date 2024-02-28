@@ -14,6 +14,20 @@ export interface VSRJson {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  militaryBranch: string;
+  militaryConflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: boolean;
+  lastRank: string;
+  militaryID: number;
+  petInterest: boolean;
+  referralSource: string;
 }
 
 export interface VSR {
@@ -30,6 +44,20 @@ export interface VSR {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  militaryBranch: string;
+  militaryConflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: boolean;
+  lastRank: string;
+  militaryID: number;
+  petInterest: boolean;
+  referralSource: string;
 }
 
 export interface CreateVSRRequest {
@@ -44,6 +72,20 @@ export interface CreateVSRRequest {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  militaryBranch: string;
+  militaryConflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: boolean;
+  lastRank: string;
+  militaryID: number;
+  petInterest: boolean;
+  referralSource: string;
 }
 
 function parseVSR(vsr: VSRJson) {
@@ -61,6 +103,20 @@ function parseVSR(vsr: VSRJson) {
     employmentStatus: vsr.employmentStatus,
     incomeLevel: vsr.incomeLevel,
     sizeOfHome: vsr.sizeOfHome,
+    address: vsr.address,
+    city: vsr.city,
+    state: vsr.state,
+    zipCode: vsr.zipCode,
+    phoneNumber: vsr.phoneNumber,
+    email: vsr.email,
+    militaryBranch: vsr.militaryBranch,
+    militaryConflicts: vsr.militaryConflicts,
+    dischargeStatus: vsr.dischargeStatus,
+    serviceConnected: vsr.serviceConnected,
+    lastRank: vsr.lastRank,
+    militaryID: vsr.militaryID,
+    petInterest: vsr.petInterest,
+    referralSource: vsr.referralSource,
   };
 }
 

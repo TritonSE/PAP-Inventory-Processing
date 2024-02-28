@@ -114,8 +114,8 @@ const makePhoneNumberValidator = () =>
   body("phoneNumber")
     .exists({ checkFalsy: true })
     .withMessage("Phone Number is required")
-    .isInt({ min: 1000000000 })
-    .withMessage("Phone number must be a 10 digit integer");
+    .isString()
+    .withMessage("Phone number must be a string");
 
 const makeEmailValidator = () =>
   body("email")

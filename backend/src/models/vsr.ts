@@ -17,7 +17,7 @@ const vsrSchema = new Schema({
   city: { type: String, require: true },
   state: { type: String, require: true },
   zipCode: { type: Number, require: true },
-  phoneNumber: { type: Number, require: true },
+  phoneNumber: { type: String, require: true },
   email: { type: String, require: true },
   militaryBranch: { type: String, require: true },
   militaryConflicts: { type: [String], require: true },
