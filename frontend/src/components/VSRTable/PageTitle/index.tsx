@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "@/components/VSRForm/PageTitle/styles.module.css";
+import styles from "@/components/VSRTable/PageTitle/styles.module.css";
 
 export default function PageTitle() {
   return (

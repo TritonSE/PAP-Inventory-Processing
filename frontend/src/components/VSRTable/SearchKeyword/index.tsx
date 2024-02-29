@@ -1,4 +1,4 @@
-import styles from "@/components/VSRForm/SearchKeyword/styles.module.css";
+import styles from "@/components/VSRTable/SearchKeyword/styles.module.css";
 import Image from "next/image";
 import * as React from "react";
 
