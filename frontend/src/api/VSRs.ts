@@ -101,7 +101,7 @@ export interface CreateVSRRequest {
   lastRank: string;
   militaryID: number;
   petCompanion: boolean;
-  referralSource: string;
+  hearFrom: string;
 
   // Comment-out page 3 fields for now because they're not implemented on the form yet
   // bedroomFurnishing: string[];

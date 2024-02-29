@@ -82,8 +82,8 @@ const makeSizeOfHomeValidator = () =>
     .isString()
     .withMessage("Size of Home must be a string");
 
-const makeAddressValidator = () =>
-  body("address")
+const makeStreetAddressValidator = () =>
+  body("streetAddress")
     .exists({ checkFalsy: true })
     .withMessage("Address is required")
     .isString()
@@ -124,22 +124,22 @@ const makeEmailValidator = () =>
     .isString()
     .withMessage("Email must be a string");
 
-const makeMilitaryBranchValidator = () =>
-  body("militaryBranch")
+const makeBranchValidator = () =>
+  body("Branch")
     .exists({ checkFalsy: true })
-    .withMessage("Military Branch is required")
-    .isString()
-    .withMessage("Military Branch must be a string");
-
-const makeConflictValidator = () =>
-  body("militaryConflicts")
-    .exists({ checkFalsy: true })
-    .withMessage("Military Conflict(s) is required")
+    .withMessage("Branch is required")
     .isArray()
-    .withMessage("Military Conflict(s) must be an array")
-    .custom((ethnicities: string[]) =>
-      ethnicities.every((ethnicity) => typeof ethnicity === "string"),
-    )
+    .withMessage("Branch must be an array")
+    .custom((branches: string[]) => branches.every((branch) => typeof branch == "string"))
+    .withMessage("Each branch must be a string");
+
+const makeConflictsValidator = () =>
+  body("Conflicts")
+    .exists({ checkFalsy: true })
+    .withMessage("Conflict(s) is required")
+    .isArray()
+    .withMessage("Conflict(s) must be an array")
+    .custom((conflicts: string[]) => conflicts.every((conflict) => typeof conflict === "string"))
     .withMessage("Each conflict must be a string");
 
 const makeDischargeStatusValidator = () =>
@@ -170,15 +170,15 @@ const makeMilitaryIDValidator = () =>
     .isInt()
     .withMessage("Military ID must be an integer");
 
-const makePetInterestValidator = () =>
-  body("petInterest")
+const makePetCompanionValidator = () =>
+  body("petCompanion")
     .exists({ checkFalsy: true })
     .withMessage("Pet interest is required")
     .isBoolean()
     .withMessage("Pet interest must be a boolean");
 
-const makeReferralSourceValidator = () =>
-  body("referralSource")
+const makeHearFromValidator = () =>
+  body("hearFrom")
     .exists({ checkFalsy: true })
     .withMessage("Referral source is required")
     .isString()
@@ -196,18 +196,18 @@ export const createVSR = [
   makeEmploymentStatusValidator(),
   makeIncomeLevelValidator(),
   makeSizeOfHomeValidator(),
-  makeAddressValidator(),
+  makeStreetAddressValidator(),
   makeCityValidator(),
   makeStateValidator(),
   makeZipCodeValidator(),
   makePhoneNumberValidator(),
   makeEmailValidator(),
-  makeMilitaryBranchValidator(),
-  makeConflictValidator(),
+  makeBranchValidator(),
+  makeConflictsValidator(),
   makeDischargeStatusValidator(),
   makeServiceConnectedValidator(),
   makeLastRankValidator(),
   makeMilitaryIDValidator(),
-  makePetInterestValidator(),
-  makeReferralSourceValidator(),
+  makePetCompanionValidator(),
+  makeHearFromValidator(),
 ];

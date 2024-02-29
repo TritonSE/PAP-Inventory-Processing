@@ -24,20 +24,20 @@ interface IFormInput {
   num_girls: number;
   ages_of_boys: number[];
   ages_of_girls: number[];
-  address: string;
+  streetAddress: string;
   city: string;
   state: string;
   zipCode: number;
   phoneNumber: string;
   email: string;
-  militaryBranch: string;
-  militaryConflicts: string[];
+  branch: string[];
+  conflicts: string[];
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
   militaryID: number;
-  petInterest: boolean;
-  referralSource: string;
+  petCompanion: boolean;
+  hearFrom: string;
 }
 
 const VeteranServiceRequest: React.FC = () => {
@@ -53,6 +53,17 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [selectedConflicts, setSelectedConflicts] = useState<string[]>([]);
   const [otherConflict, setOtherConflict] = useState("");
+
+  const [selectedBranch, setSelectedBranch] = useState<string[]>([]);
+
+  const [selectedServiceConnected, setSelectedServiceConnected] = useState<boolean>(true);
+  const [serviceConnectedString, setServiceConnectedString] = useState("");
+
+  const [selectedPetCompanion, setSelectedPetCompanion] = useState<boolean>(true);
+  const [petCompanionString, setPetCompanionString] = useState("");
+
+  const [selectedHearFrom, setSelectedHearFrom] = useState("");
+  const [otherHearFrom, setOtherHearFrom] = useState("");
 
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -98,7 +109,7 @@ const VeteranServiceRequest: React.FC = () => {
     "Prefer not to say",
   ];
 
-  const militaryBranchOptions = [
+  const branchOptions = [
     "Air Force",
     "Air Force Reserve",
     "Air National Guard",
@@ -111,7 +122,7 @@ const VeteranServiceRequest: React.FC = () => {
     "Navy Reserve",
   ];
 
-  const militaryConflictsOptions = [
+  const conflictsOptions = [
     "WWII",
     "Korea",
     "Vietnam",
@@ -146,13 +157,7 @@ const VeteranServiceRequest: React.FC = () => {
     "Not Given",
   ];
 
-  const referralSourceOptions = [
-    "Colleague",
-    "Social Worker",
-    "Friend",
-    "Internet",
-    "Social Media",
-  ];
+  const hearFromOptions = ["Colleague", "Social Worker", "Friend", "Internet", "Social Media"];
 
   const stateOptions = [
     "AL",
@@ -227,20 +232,20 @@ const VeteranServiceRequest: React.FC = () => {
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
-      address: data.address,
+      streetAddress: data.streetAddress,
       city: data.city,
       state: data.state,
       zipCode: data.zipCode,
       phoneNumber: data.phoneNumber,
       email: data.email,
-      militaryBranch: data.militaryBranch,
-      militaryConflicts: selectedConflicts.concat(otherConflict === "" ? [] : [otherConflict]),
+      branch: data.branch,
+      conflicts: selectedConflicts.concat(otherConflict === "" ? [] : [otherConflict]),
       dischargeStatus: data.dischargeStatus,
       serviceConnected: data.serviceConnected,
       lastRank: data.lastRank,
       militaryID: data.militaryID,
-      petInterest: data.petInterest,
-      referralSource: data.referralSource,
+      petCompanion: data.petCompanion,
+      hearFrom: data.hearFrom,
     };
 
     try {
@@ -261,6 +266,11 @@ const VeteranServiceRequest: React.FC = () => {
   const incrementPageNumber = (e: React.FormEvent) => {
     e.preventDefault();
     setPageNumber(pageNumber + 1);
+  };
+
+  const decrementPageNumber = (e: React.FormEvent) => {
+    e.preventDefault();
+    setPageNumber(pageNumber - 1);
   };
 
   const renderChildInput = (gender: "boy" | "girl") => {
@@ -553,7 +563,7 @@ const VeteranServiceRequest: React.FC = () => {
             </div>
             <div className={styles.submitButton}>
               <button className={styles.submit} type="submit">
-                Submit
+                Next
               </button>
             </div>
             <PageNumber pageNum={1} />
@@ -578,10 +588,10 @@ const VeteranServiceRequest: React.FC = () => {
                         label="Street Address"
                         variant="outlined"
                         placeholder="e.g. 1234 Baker Street"
-                        {...register("address", { required: "Address is required" })}
+                        {...register("streetAddress", { required: "Street address is required" })}
                         required
-                        error={!!errors.address}
-                        helperText={errors.address?.message}
+                        error={!!errors.streetAddress}
+                        helperText={errors.streetAddress?.message}
                       />
                     </div>
 
@@ -674,31 +684,38 @@ const VeteranServiceRequest: React.FC = () => {
                   <h1 className={styles.personalInfo}>Military Background</h1>
 
                   <Controller
-                    name="militaryBranch"
+                    name="branch"
                     control={control}
                     rules={{ required: "Military Branch is required" }}
                     render={({ field }) => (
                       <MultipleChoice
                         label="Branch"
-                        options={militaryBranchOptions}
-                        value={field.value}
-                        onChange={(newValue) => field.onChange(newValue)}
+                        options={branchOptions}
+                        value={selectedBranch}
+                        onChange={(newValue) => {
+                          const valueToSet = ((newValue as string[]) ?? [])[0] ?? "";
+                          if (valueToSet !== "") {
+                            field.onChange(valueToSet);
+                          }
+                          setSelectedBranch(newValue as string[]);
+                        }}
                         required
-                        error={!!errors.militaryBranch}
-                        helperText={errors.militaryBranch?.message}
+                        error={!!errors.branch}
+                        helperText={errors.branch?.message}
+                        allowMultiple
                       />
                     )}
                   />
 
                   <Controller
-                    name="militaryConflicts"
+                    name="conflicts"
                     control={control}
                     rules={{ required: "Military Conflicts is required" }}
                     render={({ field }) => (
                       <>
                         <MultipleChoice
                           label="Conflicts"
-                          options={militaryConflictsOptions}
+                          options={conflictsOptions}
                           value={selectedConflicts}
                           onChange={(newValue) => {
                             const valueToSet = ((newValue as string[]) ?? [])[0] ?? "";
@@ -708,8 +725,8 @@ const VeteranServiceRequest: React.FC = () => {
                             setSelectedConflicts(newValue as string[]);
                           }}
                           required
-                          error={!!errors.militaryConflicts}
-                          helperText={errors.militaryConflicts?.message}
+                          error={!!errors.conflicts}
+                          helperText={errors.conflicts?.message}
                           allowMultiple
                         />
                         <div style={{ marginTop: -16 }}>
@@ -750,7 +767,154 @@ const VeteranServiceRequest: React.FC = () => {
                       />
                     )}
                   />
+
+                  <Controller
+                    name="serviceConnected"
+                    control={control}
+                    rules={{ required: "Service connected is required" }}
+                    render={({ field }) => (
+                      <MultipleChoice
+                        label="Service Connected"
+                        options={["Yes", "No"]}
+                        value={serviceConnectedString}
+                        onChange={(newValue) => {
+                          if (newValue == "Yes") {
+                            setSelectedServiceConnected(true);
+                            field.onChange(newValue);
+                          } else {
+                            setSelectedServiceConnected(false);
+                            field.onChange(newValue);
+                          }
+                        }}
+                        required
+                        error={!!errors.serviceConnected}
+                        helperText={errors.serviceConnected?.message}
+                      />
+                    )}
+                  />
+
+                  <div className={styles.formRow}>
+                    <div className={styles.longText}>
+                      <TextField
+                        label="Last Rank"
+                        variant="outlined"
+                        placeholder="Enter"
+                        {...register("lastRank", { required: "Last rank is required" })}
+                        required
+                        error={!!errors.lastRank}
+                        helperText={errors.lastRank?.message}
+                      />
+                    </div>
+
+                    <div className={styles.longText}>
+                      <TextField
+                        label="Military ID Number (Last 4)"
+                        variant="outlined"
+                        placeholder="Enter"
+                        {...register("militaryID", {
+                          required: "Last rank is required",
+                          pattern: {
+                            value: /^\d{4}$/,
+                            message: "This field must be a 4 digit number",
+                          },
+                        })}
+                        required
+                        error={!!errors.militaryID}
+                        helperText={errors.militaryID?.message}
+                      />
+                    </div>
+                  </div>
                 </div>
+              </div>
+            </div>
+
+            <div className={styles.formContainer}>
+              <div className={styles.form}>
+                <div className={styles.subSec}>
+                  <h1 className={styles.personalInfo}>Additional Information</h1>
+
+                  <Controller
+                    name="petCompanion"
+                    control={control}
+                    rules={{ required: "Pet Companion is required" }}
+                    render={({ field }) => (
+                      <MultipleChoice
+                        label="Are you interested in a companionship animal (pet)?"
+                        options={["Yes", "No"]}
+                        value={petCompanionString}
+                        onChange={(newValue) => {
+                          if (newValue == "Yes") {
+                            setSelectedPetCompanion(true);
+                            field.onChange(newValue);
+                          } else {
+                            setSelectedPetCompanion(false);
+                            field.onChange(newValue);
+                          }
+                        }}
+                        required
+                        error={!!errors.petCompanion}
+                        helperText={errors.petCompanion?.message}
+                      />
+                    )}
+                  />
+
+                  <Controller
+                    name="hearFrom"
+                    control={control}
+                    rules={{ required: "Referral source is required" }}
+                    render={({ field }) => (
+                      <>
+                        <MultipleChoice
+                          label="How did you hear about us?"
+                          options={hearFromOptions}
+                          value={selectedHearFrom}
+                          onChange={(newValue) => {
+                            const valueToSet = newValue;
+                            if (valueToSet !== "" || otherHearFrom === "") {
+                              field.onChange(valueToSet);
+                            }
+                            setSelectedHearFrom((newValue as string[])[0]);
+                          }}
+                          required
+                          error={!!errors.hearFrom}
+                          helperText={errors.hearFrom?.message}
+                        />
+                        <div style={{ marginTop: -16 }}>
+                          <TextField
+                            label="Other"
+                            type="text"
+                            placeholder="Enter"
+                            name="otherSource"
+                            value={otherHearFrom}
+                            onChange={(e) => {
+                              const value = e.target.value;
+                              if (value !== "") {
+                                field.onChange(value);
+                              }
+                              setOtherConflict(value);
+                              setSelectedHearFrom("");
+                            }}
+                            variant={"outlined"}
+                            required={false}
+                          />
+                        </div>
+                      </>
+                    )}
+                  />
+                </div>
+              </div>
+            </div>
+            <div className={styles.buttonContainer}>
+              <div className={styles.backButton}>
+                <button className={styles.back} onSubmit={decrementPageNumber}>
+                  Back
+                </button>
+              </div>
+              <PageNumber pageNum={2} />
+              <div className={styles.submitButton}>
+                <button className={styles.submit} type="submit">
+                  Submit
+                </button>
               </div>
             </div>
           </div>
