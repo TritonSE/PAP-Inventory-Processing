@@ -9,8 +9,8 @@ import { useEffect } from "react";
 import { VSR, getAllVSRs } from "@/api/VSRs";
 import moment from "moment";
 import { useRouter } from "next/navigation";
-import { StatusChip } from "@/components/StatusChip";
-import { STATUS_OPTIONS } from "@/components/VSRIndividual/DropdownDetail";
+import { StatusChip } from "@/components/shared/StatusChip";
+import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 
 const formatDateReceived = (dateReceived: Date) => {
   // Return the empty string on a falsy date received, instead of defaulting to today's date

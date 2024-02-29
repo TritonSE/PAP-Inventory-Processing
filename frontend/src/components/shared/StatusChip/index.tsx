@@ -1,5 +1,5 @@
-import { StatusOption } from "@/components/VSRIndividual/DropdownDetail";
-import styles from "@/components/StatusChip.module.css";
+import { StatusOption } from "@/components/shared/StatusDropdown";
+import styles from "@/components/shared/StatusChip/styles.module.css";
 
 interface StatusChipProps {
   status: StatusOption;

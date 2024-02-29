@@ -1,10 +1,10 @@
 "use client";
 
 import styles from "@/app/staff/vsr/page.module.css";
-import VSRTable from "@/components/VSRTable";
-import SearchKeyword from "@/components/SearchKeyword";
-import PageTitle from "@/components/PageTitle";
-import HeaderBar from "@/components/HeaderBar";
+import VSRTable from "@/components/VSRTable/VSRTable";
+import SearchKeyword from "@/components/VSRTable/SearchKeyword";
+import PageTitle from "@/components/VSRTable/PageTitle";
+import HeaderBar from "@/components/VSRForm/HeaderBar";
 import Image from "next/image";
 import React from "react";
 import { DropdownDetail } from "@/components/VSRIndividual";

@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import styles from "src/components/VSRIndividual/DropdownDetail/styles.module.css";
+import styles from "@/components/shared/StatusDropdown/styles.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import Image from "next/image";
-import { StatusChip } from "@/components/StatusChip";
+import { StatusChip } from "@/components/shared/StatusChip";
 
 export interface StatusOption {
   value: string;

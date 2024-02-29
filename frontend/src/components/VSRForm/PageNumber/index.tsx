@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/components/PageNumber.module.css";
+import styles from "@/components/VSRForm/PageNumber/styles.module.css";
 
 export interface PageNumberProps {
   pageNum: number;
