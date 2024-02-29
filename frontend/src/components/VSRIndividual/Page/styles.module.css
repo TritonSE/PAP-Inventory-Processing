@@ -1,0 +1,157 @@
+.page {
+  background-color: var(--color-background);
+}
+
+.toDashboard {
+  display: flex;
+  color: var(--color-tse-accent-blue-1);
+  margin-top: 35px;
+  max-width: 137px;
+  width: 100%;
+  height: 40px;
+  padding-left: 10px;
+  padding-top: 8px;
+  margin-left: calc(100vw * 1 / 12);
+  border-radius: 4px;
+  border: 1px solid var(--Secondary-Accent1, #102d5f);
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.toDashboard > * {
+  vertical-align: middle;
+}
+
+.headerRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.actions {
+  margin-top: 29px;
+  margin-bottom: 32px;
+  gap: 32px;
+  align-self: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.button {
+  border-radius: 4px;
+  border: 1px solid var(--color-tse-accent-blue-1);
+  background-color: var(--color-tse-accent-blue-1);
+  height: 46px;
+  padding: 8px 16px;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+}
+
+#edit:hover {
+  background-color: #c7def1;
+}
+
+.button > * {
+  padding-right: 6px;
+  vertical-align: middle;
+}
+
+.name {
+  margin-top: 29px;
+  margin-bottom: 32px;
+}
+
+.allDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: calc(100% * 5 / 6);
+  margin: 0 auto;
+}
+
+.bodyDetails {
+  width: 100%;
+}
+
+.otherDetails {
+  margin-top: 32px;
+  display: flex;
+  flex-direction: row;
+  gap: 42px;
+}
+
+.personalInfo {
+  display: flex;
+  flex-direction: column;
+  flex: 38%;
+}
+
+.personalInfo > * {
+  margin-bottom: 32px;
+}
+
+.rightColumn {
+  flex: 62%;
+}
+
+.finalActions {
+  display: flex;
+  flex-direction: row;
+  margin-top: 48px;
+  justify-content: flex-end;
+}
+
+.request {
+  width: calc(100% * 239 / 713);
+  border-radius: 4px;
+  border: 1px solid var(--color-tse-accent-blue-1);
+  color: var(--color-tse-accent-blue-1);
+  text-align: center;
+  font-family: "Lora";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+  background: rgba(255, 255, 255, 0);
+  align-items: end;
+  padding: 12px 24px;
+  margin-right: 32px;
+}
+
+.approve {
+  width: calc(100% * 207 / 713);
+  border-radius: 4px;
+  border: 1px solid var(--color-tse-secondary-1);
+  color: white;
+  text-align: center;
+  font-family: "Lora";
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  background: var(--color-tse-secondary-1);
+  align-items: end;
+  padding: 20px 24px;
+}
+
+.footer {
+  height: 64px;
+}
+
+.error {
+  color: red;
+  font-family: var(--font-open-sans);
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 40px;
+}

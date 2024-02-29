@@ -1,0 +1,55 @@
+.items {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.title {
+  color: rgba(35, 34, 32, 0.55);
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 10px;
+  white-space: nowrap;
+}
+
+.value {
+  color: #222;
+  font-family: var(--font-open-sans);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding-bottom: 6px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  color: #222;
+  font-family: var(--font-open-sans);
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  flex-wrap: wrap;
+}
+
+.time {
+  color: #818181;
+  white-space: pre;
+}
+
+.email {
+  color: #4274f4;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+.noValue {
+  color: #818181;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: italic;
+}
