@@ -7,6 +7,15 @@ import { GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-data-grid";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect } from "react";
 import { VSR, getAllVSRs } from "@/api/VSRs";
+import moment from "moment";
+import { useRouter } from "next/navigation";
+import { StatusChip } from "@/components/StatusChip";
+import { STATUS_OPTIONS } from "@/components/VSRIndividual/DropdownDetail";
+
+const formatDateReceived = (dateReceived: Date) => {
+  // Return the empty string on a falsy date received, instead of defaulting to today's date
+  return dateReceived ? moment(dateReceived).format("MMMM D, YYYY") : "";
+};
 
 const columns: GridColDef[] = [
   {
@@ -25,7 +34,7 @@ const columns: GridColDef[] = [
     hideSortIcons: true,
   },
   {
-    field: "military",
+    field: "militaryId",
     headerName: "Military ID (Last 4)",
     type: "string",
     flex: 1,
@@ -43,7 +52,7 @@ const columns: GridColDef[] = [
   },
 
   {
-    field: "date",
+    field: "dateReceived",
     headerName: "Date Received",
     type: "date",
     sortable: true,
@@ -51,6 +60,7 @@ const columns: GridColDef[] = [
     headerClassName: "header",
     disableColumnMenu: true,
     hideSortIcons: true,
+    valueFormatter: (params) => formatDateReceived(params?.value),
   },
   {
     field: "status",
@@ -60,11 +70,20 @@ const columns: GridColDef[] = [
     headerClassName: "header",
     disableColumnMenu: true,
     hideSortIcons: true,
+    renderCell: (params) => (
+      <StatusChip
+        status={
+          STATUS_OPTIONS.find((statusOption) => statusOption.value === params.value) ??
+          STATUS_OPTIONS[0]
+        }
+      />
+    ),
   },
 ];
 
 export default function VSRTable() {
   const [vsrs, setVsrs] = React.useState<VSR[]>();
+  const router = useRouter();
 
   useEffect(() => {
     getAllVSRs().then((result) => {
@@ -97,6 +116,9 @@ export default function VSRTable() {
         // Hide the default white bar column separators
         ".MuiDataGrid-columnSeparator": {
           display: "none !important",
+        },
+        ".MuiDataGrid-cell": {
+          cursor: "pointer",
         },
         ".MuiDataGrid-cellContent": {
           fontSize: "1rem",
@@ -163,6 +185,18 @@ export default function VSRTable() {
         pageSizeOptions={[50]}
         checkboxSelection
         disableRowSelectionOnClick
+        // Callback fired when user clicks on a cell
+        onCellClick={(params, event, _details) => {
+          // Ignore if they click the column with the checkboxes
+          if (params.field === "__check__") {
+            return;
+          }
+          // Otherwise, take them to the page for this row's VSR
+          event.stopPropagation();
+          if (params.id) {
+            router.push(`/staff/vsr/${params.id}`);
+          }
+        }}
       />
     </Box>
   );

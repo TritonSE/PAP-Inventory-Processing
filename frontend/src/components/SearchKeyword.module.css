@@ -3,10 +3,8 @@
   flex-direction: row;
   gap: 8px;
   padding: 8px;
-  padding-right: 30px;
 
   align-items: center;
-  gap: 8px;
   align-self: stretch;
 
   border-radius: 4px;
