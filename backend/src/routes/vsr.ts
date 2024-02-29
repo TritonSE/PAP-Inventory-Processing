@@ -5,6 +5,8 @@ import * as VSRValidator from "src/validators/vsr";
 
 const router = express.Router();
 
+router.get("/", VSRController.getAllVSRS);
+router.get("/:id", VSRController.getVSR);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 router.delete("/:id", [verifyAuthToken], VSRController.deleteVSR);
 
