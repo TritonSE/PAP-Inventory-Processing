@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styles from "@/components/shared/StatusDropdown/styles.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Image from "next/image";
 import { StatusChip } from "@/components/shared/StatusChip";
 
@@ -40,14 +40,16 @@ export const STATUS_OPTIONS: StatusOption[] = [
 
 export interface StatusDropdownProps {
   value: string;
+  onChanged?: (value: string) => void;
 }
 
-export function StatusDropdown({ value }: StatusDropdownProps) {
+export function StatusDropdown({ value, onChanged }: StatusDropdownProps) {
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleChange = (event: { target: { value: React.SetStateAction<string> } }) => {
+  const handleChange = (event: SelectChangeEvent<string>) => {
     setSelectedValue(event.target.value);
+    onChanged?.(event.target.value);
   };
 
   const DropdownIcon = () => (
