@@ -1,0 +1,97 @@
+.page {
+  background-color: var(--color-background);
+  padding-bottom: 67px;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 105px auto 0;
+  padding: 0px;
+  gap: 40px;
+  max-width: 1200px;
+}
+
+.flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.button_row {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.row_left {
+  gap: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.statusContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  padding: 8px 16px;
+  align-items: center;
+  align-self: stretch;
+  border-radius: 4px;
+  border: 1px solid var(--Neutral-Gray2, #d8d8d8);
+  background: #fff;
+}
+
+.statusLabel {
+  color: #909090;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.statusWrapper {
+  min-width: 240px;
+}
+
+.row_right {
+  gap: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  max-width: 137px;
+  padding: 11px 16px;
+  border-radius: 4px;
+  gap: 6px;
+  justify-content: center;
+  background-color: var(--color-tse-secondary-1);
+  cursor: pointer;
+  border: none !important;
+}
+
+.buttontext {
+  color: var(--Primary-Background-Light, #f7f7f7);
+  text-align: center;
+
+  /* Desktop/Body 2 */
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}

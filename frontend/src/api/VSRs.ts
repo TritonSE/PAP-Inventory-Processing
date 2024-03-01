@@ -38,6 +38,10 @@ export interface VSRJson {
   hearFrom: string;
 }
 
+export interface VSRListJson {
+  vsrs: VSRJson[];
+}
+
 export interface VSR {
   _id: string;
   name: string;
@@ -159,6 +163,16 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
     const response = await post("/api/vsr", vsr);
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
+  try {
+    const response = await get("/api/vsr");
+    const json = (await response.json()) as VSRListJson;
+    return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
     return handleAPIError(error);
   }

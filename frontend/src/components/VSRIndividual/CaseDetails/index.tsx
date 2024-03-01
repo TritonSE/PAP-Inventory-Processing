@@ -31,7 +31,11 @@ export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
           value={formatDate(vsr.lastUpdated)}
           valueFontSize="20px"
         />
-        <DropdownDetail title="Status:" value={vsr.status != undefined ? vsr.status : "Received"} />
+
+        <SingleDetail
+          title="Status:"
+          value={<DropdownDetail value={vsr.status != undefined ? vsr.status : "Received"} />}
+        />
       </div>
     </VSRIndividualAccordion>
   );

@@ -104,4 +104,3 @@ export const createVSR = [
 ];
 
 export const updateStatus = [updateStatusValidator()];
-

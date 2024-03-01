@@ -1,9 +1,9 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import styles from "src/components/VSRIndividual/SingleDetail/styles.module.css";
 
 export interface SingleDetailProps {
   title: string;
-  value: string | number | number[];
+  value: string | number | number[] | ReactNode;
   valueFontSize?: string;
   className?: string;
 }
@@ -19,17 +19,6 @@ export function SingleDetail({ title, value, valueFontSize, className }: SingleD
     </a>
   );
 
-  const date = (
-    <div className={styles.row}>
-      <div className={styles.date} style={valueStyle}>
-        {typeof value === "string" ? value.substring(0, 11) : value}
-      </div>
-      <div className={styles.time} style={valueStyle}>
-        {typeof value === "string" ? value.substring(10) : value}
-      </div>
-    </div>
-  );
-
   const basic = (
     <div className={styles.value} style={valueStyle}>
       {value}
@@ -42,13 +31,11 @@ export function SingleDetail({ title, value, valueFontSize, className }: SingleD
     <div>
       <div className={className != undefined ? className : styles.items}>
         <div className={styles.title}>{title}</div>
-        {typeof value === "string" && value.includes("[")
-          ? date
-          : typeof value === "string" && value.includes("@")
-            ? email
-            : typeof value === "string" && value.includes("N/A")
-              ? noValue
-              : basic}
+        {typeof value === "string" && value.includes("@")
+          ? email
+          : typeof value === "string" && value.includes("N/A")
+            ? noValue
+            : basic}
       </div>
     </div>
   );

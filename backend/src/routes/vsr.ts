@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/:id", VSRController.getVSR);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
+router.get("/", VSRController.getAllVSRS);
 
 router.patch("/api/vsr/{id}/status", VSRValidator.updateStatus, VSRController.updateStatus);
 
