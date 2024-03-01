@@ -1,5 +1,5 @@
 import styles from "src/components/VSRIndividual/CaseDetails/styles.module.css";
-import { SingleDetail, DropdownDetail } from "@/components/VSRIndividual";
+import { SingleDetail, StatusDropdown } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import moment from "moment";
 import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
@@ -34,7 +34,7 @@ export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
 
         <SingleDetail
           title="Status:"
-          value={<DropdownDetail value={vsr.status != undefined ? vsr.status : "Received"} />}
+          value={<StatusDropdown value={vsr.status != undefined ? vsr.status : "Received"} />}
         />
       </div>
     </VSRIndividualAccordion>

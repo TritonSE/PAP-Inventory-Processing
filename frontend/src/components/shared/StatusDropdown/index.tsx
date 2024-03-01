@@ -38,11 +38,11 @@ export const STATUS_OPTIONS: StatusOption[] = [
   },
 ];
 
-export interface DropdownDetailProps {
+export interface StatusDropdownProps {
   value: string;
 }
 
-export function DropdownDetail({ value }: DropdownDetailProps) {
+export function StatusDropdown({ value }: StatusDropdownProps) {
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
 
