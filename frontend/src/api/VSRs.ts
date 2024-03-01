@@ -1,5 +1,4 @@
 import { APIResult, handleAPIError, post, get, patch } from "@/api/requests";
-import { patchFetch } from "next/dist/server/app-render/entry-base";
 
 export interface VSRJson {
   _id: string;
