@@ -73,13 +73,14 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
   try {
     const { status } = req.body;
     const { id } = req.params;
-
+    console.log("changed status to " + status + " for id " + id);
     const vsr = await VSRModel.findByIdAndUpdate(id, { status }, { new: true });
     res.status(200).json(vsr);
   } catch (error) {
     next(error);
   }
 };
+
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
     const vsrs = await VSRModel.find();

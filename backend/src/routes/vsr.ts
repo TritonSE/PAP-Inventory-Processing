@@ -9,6 +9,6 @@ router.get("/:id", VSRController.getVSR);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 router.get("/", VSRController.getAllVSRS);
 
-router.patch("/api/vsr/{id}/status", VSRValidator.updateStatus, VSRController.updateStatus);
+router.patch("/:id/status", VSRValidator.updateStatus, VSRController.updateStatus);
 
 export default router;

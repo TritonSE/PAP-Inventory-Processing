@@ -11,7 +11,7 @@ import {
 } from "@/components/VSRIndividual";
 import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
-import { type VSR, getVSR } from "@/api/VSRs";
+import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
 
 export const Page = () => {
@@ -76,9 +76,15 @@ export const Page = () => {
             <div className={styles.rightColumn}>
               <RequestedFurnishings vsr={vsr} />
               <div className={styles.finalActions}>
-                <div className={styles.approve}>
-                  <a href="REPLACE">Approve VSR</a>
-                </div>
+                <button
+                  className={styles.approve}
+                  onClick={() => {
+                    updateVSRStatus(vsr._id, "Approved");
+                    //window.location.reload();
+                  }}
+                >
+                  Approve VSR
+                </button>
               </div>
             </div>
           </div>
