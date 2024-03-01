@@ -3,6 +3,23 @@ import { SingleDetail, StatusDropdown } from "@/components/VSRIndividual";
 import { updateVSRStatus, type VSR } from "@/api/VSRs";
 import moment from "moment";
 import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
+import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
+import { StatusChip } from "@/components/shared/StatusChip";
+
+function StatusComponent({ status, id }: { status: any; id: any }) {
+  console.log(status);
+  if (status === "Received" || status === undefined) {
+    return <StatusChip status={STATUS_OPTIONS[0]} />;
+  }
+  return (
+    <StatusDropdown
+      onChanged={(status) => {
+        updateVSRStatus(id, status);
+      }}
+      value={status != undefined ? status : "Received"}
+    />
+  );
+}
 
 export interface CaseDetailsProp {
   vsr: VSR;
@@ -34,14 +51,7 @@ export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
 
         <SingleDetail
           title="Status:"
-          value={
-            <StatusDropdown
-              onChanged={(status) => {
-                updateVSRStatus(vsr._id, status);
-              }}
-              value={vsr.status != undefined ? vsr.status : "Received"}
-            />
-          }
+          value={<StatusComponent status={vsr.status} id={vsr._id} />}
         />
       </div>
     </VSRIndividualAccordion>

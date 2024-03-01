@@ -13,6 +13,24 @@ import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
 import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
+import { STATUS_OPTIONS, StatusDropdown } from "@/components/shared/StatusDropdown";
+import { StatusChip } from "@/components/shared/StatusChip";
+
+function CanApprove({ status, id }: { status: string; id: any }) {
+  if (status == "Received" || status === undefined) {
+    return (
+      <button
+        className={styles.approve}
+        onClick={() => {
+          updateVSRStatus(id, "Approved");
+          //window.location.reload();
+        }}
+      >
+        Approve VSR
+      </button>
+    );
+  }
+}
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
@@ -76,15 +94,7 @@ export const Page = () => {
             <div className={styles.rightColumn}>
               <RequestedFurnishings vsr={vsr} />
               <div className={styles.finalActions}>
-                <button
-                  className={styles.approve}
-                  onClick={() => {
-                    updateVSRStatus(vsr._id, "Approved");
-                    //window.location.reload();
-                  }}
-                >
-                  Approve VSR
-                </button>
+                <CanApprove status={vsr.status} id={vsr._id}></CanApprove>
               </div>
             </div>
           </div>
