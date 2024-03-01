@@ -20,6 +20,7 @@
   font-weight: 400;
   line-height: normal;
   cursor: pointer;
+  background-color: transparent;
 }
 
 .toDashboard > * {
