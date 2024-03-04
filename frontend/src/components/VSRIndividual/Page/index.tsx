@@ -13,29 +13,33 @@ import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
 import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
-import { STATUS_OPTIONS, StatusDropdown } from "@/components/shared/StatusDropdown";
-import { StatusChip } from "@/components/shared/StatusChip";
-
-function CanApprove({ status, id }: { status: string; id: any }) {
-  if (status == "Received" || status === undefined) {
-    return (
-      <button
-        className={styles.approve}
-        onClick={() => {
-          updateVSRStatus(id, "Approved");
-          //window.location.reload();
-        }}
-      >
-        Approve VSR
-      </button>
-    );
-  }
-}
+// import { STATUS_OPTIONS, StatusDropdown } from "@/components/shared/StatusDropdown";
+// import { StatusChip } from "@/components/shared/StatusChip";
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  function CanApprove({ status, id }: { status: string; id: string }) {
+    if (status == "Received" || status === undefined) {
+      return (
+        <button
+          className={styles.approve}
+          onClick={async () => {
+            const res = await updateVSRStatus(id, "Approved");
+            const newVsr = res.success ? res.data : vsr;
+            //fetch status info
+
+            setVSR(newVsr);
+            //window.location.reload();
+          }}
+        >
+          Approve VSR
+        </button>
+      );
+    }
+  }
 
   useEffect(() => {
     getVSR(id as string)

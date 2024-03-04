@@ -2,37 +2,42 @@ import styles from "src/components/VSRIndividual/CaseDetails/styles.module.css";
 import { SingleDetail, StatusDropdown } from "@/components/VSRIndividual";
 import { updateVSRStatus, type VSR } from "@/api/VSRs";
 import moment from "moment";
-import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
+import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 import { StatusChip } from "@/components/shared/StatusChip";
-
-function StatusComponent({ status, id }: { status: any; id: any }) {
-  console.log(status);
-  if (status === "Received" || status === undefined) {
-    return <StatusChip status={STATUS_OPTIONS[0]} />;
-  }
-  return (
-    <StatusDropdown
-      onChanged={(status) => {
-        updateVSRStatus(id, status);
-      }}
-      value={status != undefined ? status : "Received"}
-    />
-  );
-}
+import { useState } from "react";
 
 export interface CaseDetailsProp {
   vsr: VSR;
 }
+
+/**
+ * Formats a Date object as a string in our desired format, using Moment.js library
+ */
+const formatDate = (date: Date) => {
+  const dateMoment = moment(date);
+  // We need to do 2 separate format() calls because Moment treats brackets ("[]") as escape chars
+  return `${dateMoment.format("MM-DD-YYYY")} [${dateMoment.format("hh:mm A")}]`;
+};
+
 export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
-  /**
-   * Formats a Date object as a string in our desired format, using Moment.js library
-   */
-  const formatDate = (date: Date) => {
-    const dateMoment = moment(date);
-    // We need to do 2 separate format() calls because Moment treats brackets ("[]") as escape chars
-    return `${dateMoment.format("MM-DD-YYYY")} [${dateMoment.format("hh:mm A")}]`;
-  };
+  const [myVsr, setVSR] = useState<VSR>(vsr as VSR);
+
+  function StatusComponent({ status, id }: { status: string; id: string }) {
+    console.log(status);
+    if (status === "Received" || status === undefined) {
+      return <StatusChip status={STATUS_OPTIONS[0]} />;
+    }
+    return (
+      <StatusDropdown
+        onChanged={async (status) => {
+          updateVSRStatus(id, status);
+          setVSR({ ...myVsr, status: status });
+        }}
+        value={status != undefined ? status : "Received"}
+      />
+    );
+  }
 
   return (
     <VSRIndividualAccordion permanentlyExpanded title="Case Details">
