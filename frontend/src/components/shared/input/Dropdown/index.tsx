@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "src/components/Dropdown.module.css";
+import styles from "@/components/shared/input/Dropdown/styles.module.css";
 import { FormControl, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 
 export interface DropDownProps {

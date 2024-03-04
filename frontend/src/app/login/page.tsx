@@ -2,7 +2,7 @@
 "use client";
 
 import React, { useState } from "react";
-import InputField from "@/components/InputField";
+import InputField from "@/components/shared/input/InputField";
 import Image from "next/image";
 import "@/app/login/login.css";
 import { signInWithEmailAndPassword } from "firebase/auth";

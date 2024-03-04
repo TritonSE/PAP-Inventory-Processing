@@ -68,3 +68,13 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getAllVSRS: RequestHandler = async (req, res, next) => {
+  try {
+    const vsrs = await VSRModel.find();
+
+    res.status(200).json({ vsrs });
+  } catch (error) {
+    next(error);
+  }
+};

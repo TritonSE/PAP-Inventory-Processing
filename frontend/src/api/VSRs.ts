@@ -1,4 +1,4 @@
-import { APIResult, handleAPIError, post, get } from "@/api/requests";
+import { APIResult, get, handleAPIError, post } from "@/api/requests";
 
 export interface VSRJson {
   _id: string;
@@ -36,6 +36,10 @@ export interface VSRJson {
   lastUpdated: string;
   status: string;
   hearFrom: string;
+}
+
+export interface VSRListJson {
+  vsrs: VSRJson[];
 }
 
 export interface VSR {
@@ -158,6 +162,16 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
     const response = await post("/api/vsr", vsr);
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
+  try {
+    const response = await get("/api/vsr");
+    const json = (await response.json()) as VSRListJson;
+    return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
     return handleAPIError(error);
   }

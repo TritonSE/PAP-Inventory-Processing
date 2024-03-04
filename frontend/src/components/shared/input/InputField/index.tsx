@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import styles from "src/components/InputField.module.css"; // Create a CSS module for styling
+import styles from "@/components/shared/input/InputField/styles.module.css";
 
 interface InputFieldProps {
   label: string;

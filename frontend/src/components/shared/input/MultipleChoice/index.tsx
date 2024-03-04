@@ -1,5 +1,5 @@
 import Chip from "@mui/material/Chip";
-import styles from "@/components/MultipleChoice.module.css";
+import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
 
 export interface MultipleChoiceProps {
   label: string;
