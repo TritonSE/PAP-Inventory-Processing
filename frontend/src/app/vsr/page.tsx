@@ -8,6 +8,7 @@ import Dropdown from "@/components/Dropdown";
 import HeaderBar from "@/components/HeaderBar";
 import PageNumber from "@/components/PageNumber";
 import { createVSR, CreateVSRRequest } from "@/api/VSRs";
+import BinaryChoice from "@/components/BinaryChoice";
 
 interface IFormInput {
   name: string;
@@ -55,12 +56,6 @@ const VeteranServiceRequest: React.FC = () => {
   const [otherConflict, setOtherConflict] = useState("");
 
   const [selectedBranch, setSelectedBranch] = useState<string[]>([]);
-
-  const [selectedServiceConnected, setSelectedServiceConnected] = useState<boolean>(true);
-  const [serviceConnectedString, setServiceConnectedString] = useState("");
-
-  const [selectedPetCompanion, setSelectedPetCompanion] = useState<boolean>(true);
-  const [petCompanionString, setPetCompanionString] = useState("");
 
   const [selectedHearFrom, setSelectedHearFrom] = useState("");
   const [otherHearFrom, setOtherHearFrom] = useState("");
@@ -773,19 +768,10 @@ const VeteranServiceRequest: React.FC = () => {
                     control={control}
                     rules={{ required: "Service connected is required" }}
                     render={({ field }) => (
-                      <MultipleChoice
+                      <BinaryChoice
                         label="Service Connected"
-                        options={["Yes", "No"]}
-                        value={serviceConnectedString}
-                        onChange={(newValue) => {
-                          if (newValue == "Yes") {
-                            setSelectedServiceConnected(true);
-                            field.onChange(newValue);
-                          } else {
-                            setSelectedServiceConnected(false);
-                            field.onChange(newValue);
-                          }
-                        }}
+                        value={field.value}
+                        onChange={(newValue) => field.onChange(newValue)}
                         required
                         error={!!errors.serviceConnected}
                         helperText={errors.serviceConnected?.message}
@@ -838,19 +824,10 @@ const VeteranServiceRequest: React.FC = () => {
                     control={control}
                     rules={{ required: "Pet Companion is required" }}
                     render={({ field }) => (
-                      <MultipleChoice
+                      <BinaryChoice
                         label="Are you interested in a companionship animal (pet)?"
-                        options={["Yes", "No"]}
-                        value={petCompanionString}
-                        onChange={(newValue) => {
-                          if (newValue == "Yes") {
-                            setSelectedPetCompanion(true);
-                            field.onChange(newValue);
-                          } else {
-                            setSelectedPetCompanion(false);
-                            field.onChange(newValue);
-                          }
-                        }}
+                        value={field.value}
+                        onChange={(newValue) => field.onChange(newValue)}
                         required
                         error={!!errors.petCompanion}
                         helperText={errors.petCompanion?.message}
@@ -906,7 +883,7 @@ const VeteranServiceRequest: React.FC = () => {
             </div>
             <div className={styles.buttonContainer}>
               <div className={styles.backButton}>
-                <button className={styles.back} onSubmit={decrementPageNumber}>
+                <button className={styles.back} onClick={decrementPageNumber}>
                   Back
                 </button>
               </div>
