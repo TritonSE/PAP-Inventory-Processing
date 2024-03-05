@@ -32,7 +32,6 @@ export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
       <StatusDropdown
         onChanged={async (status) => {
           updateVSRStatus(id, status);
-          setVSR({ ...myVsr, status: status });
         }}
         value={status != undefined ? status : "Received"}
       />

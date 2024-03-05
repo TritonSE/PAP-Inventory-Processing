@@ -27,11 +27,8 @@ export const Page = () => {
         <button
           className={styles.approve}
           onClick={async () => {
-            const res = await updateVSRStatus(id, "Approved");
-            const newVsr = res.success ? res.data : vsr;
-            //fetch status info
+            updateVSRStatus(id, "Approved");
 
-            setVSR(newVsr);
             //window.location.reload();
           }}
         >
