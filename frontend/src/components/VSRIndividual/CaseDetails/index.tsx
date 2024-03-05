@@ -5,7 +5,6 @@ import moment from "moment";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 import { StatusChip } from "@/components/shared/StatusChip";
-import { useState } from "react";
 
 export interface CaseDetailsProp {
   vsr: VSR;
