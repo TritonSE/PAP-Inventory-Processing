@@ -6,6 +6,7 @@ import Image from "next/image";
 export interface SelectAllProps {
   label: string;
   options: FurnitureItem[];
+  onChildDataChange: (arg0: CountMap, arg1: string) => void;
 }
 
 interface CountMap {
@@ -16,9 +17,14 @@ interface ClickState {
   [key: string]: boolean;
 }
 
-const SelectAll = ({ label, options }: SelectAllProps) => {
+const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
   const [counts, setCounts] = useState<CountMap>({});
   const [clickedStates, setClickedStates] = useState<ClickState>({});
+
+  const sendDataToParent = (counts: CountMap) => {
+    // Call the function passed as a prop by the parent
+    onChildDataChange(counts, label);
+  };
 
   useEffect(() => {
     const initialCounts = options.reduce<CountMap>((acc, option) => {
@@ -45,6 +51,7 @@ const SelectAll = ({ label, options }: SelectAllProps) => {
       ...prevCounts,
       [itemName]: (prevCounts[itemName] || 0) + 1,
     }));
+    sendDataToParent(counts);
   };
 
   const decrementCount = (itemName: string) => {
@@ -58,6 +65,7 @@ const SelectAll = ({ label, options }: SelectAllProps) => {
       ...prevCounts,
       [itemName]: Math.max(0, (prevCounts[itemName] || 0) - 1),
     }));
+    sendDataToParent(counts);
   };
 
   const toggleClickState = (itemName: string) => {
@@ -100,6 +108,7 @@ const SelectAll = ({ label, options }: SelectAllProps) => {
                     decrementCount(option.name);
                   }}
                   className={styles.math}
+                  type="button"
                 >
                   <Image
                     className={`${styles.dec} ${
@@ -123,6 +132,7 @@ const SelectAll = ({ label, options }: SelectAllProps) => {
                     incrementCount(option.name);
                   }}
                   className={styles.math}
+                  type="button"
                 >
                   <Image
                     className={`${styles.inc} ${

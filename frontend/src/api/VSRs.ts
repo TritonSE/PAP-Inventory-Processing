@@ -120,12 +120,12 @@ export interface CreateVSRRequest {
   lastRank: string;
   militaryId: number;
   petCompanion: string;
-  bedroomFurnishing: string[];
-  bathroomFurnishing: string[];
-  kitchenFurnishing: string[];
-  livingRoomFurnishing: string[];
-  diningRoomFurnishing: string[];
-  otherFurnishing: string[];
+  bedroomFurnishing: object[];
+  bathroomFurnishing: object[];
+  kitchenFurnishing: object[];
+  livingRoomFurnishing: object[];
+  diningRoomFurnishing: object[];
+  otherFurnishing: object[];
   caseId: string;
   dateReceived: string;
   lastUpdated: string;

@@ -7,6 +7,8 @@ import TextField from "@/components/VeteranForm/TextField";
 import PageNumber from "@/components/VeteranForm/PageNumber";
 import styles from "src/app/vsr/page.module.css";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { CreateVSRRequest, createVSR } from "@/api/VSRs";
 
 export default function Page() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -17,6 +19,27 @@ export default function Page() {
   const [livingRoomFurnishings, setLivingRoomFurnishings] = useState<FurnitureItem[]>([]);
   const [diningRoomFurnishings, setDiningRoomFurnishings] = useState<FurnitureItem[]>([]);
   const [otherFurnishings, setOtherFurnishings] = useState<FurnitureItem[]>([]);
+
+  interface FurnitureInputs {
+    _id: string;
+    quantity: number;
+    isGasElectric: boolean;
+  }
+
+  interface CountMap {
+    [key: string]: number;
+  }
+
+  type FurnitureSelection = Record<string, FurnitureInputs[]>;
+
+  const selectionByCategory: FurnitureSelection = {
+    Bedroom: [],
+    Bathroom: [],
+    Kitchen: [],
+    "Living Room": [],
+    "Drining Room": [],
+    Other: [],
+  };
 
   useEffect(() => {
     getFurnitureItems()
@@ -49,52 +72,150 @@ export default function Page() {
     setOtherFurnishings(otherItems);
   }, [allItems]);
 
+  const { handleSubmit } = useForm<FurnitureInputs>();
+
+  const onSubmit: SubmitHandler<FurnitureInputs> = async (data) => {
+    const createVSRRequest: CreateVSRRequest = {
+      name: "Sophia Yu",
+      gender: "Female",
+      age: 20,
+      maritalStatus: "Single",
+      spouseName: "N/A",
+      agesOfBoys: [0],
+      agesOfGirls: [0],
+      ethnicity: "Asian",
+      employmentStatus: "N/A",
+      incomeLevel: "N/A",
+      sizeOfHome: "Apartment",
+      date: "2020-05-18T14:10:30.000+00:00",
+      streetAddress: "address",
+      city: "San Diego",
+      state: "CA",
+      zipCode: 92122,
+      phoneNumber: "phone number",
+      email: "email",
+      branch: [],
+      conflicts: [],
+      dischargeStatus: "",
+      serviceConnected: "",
+      lastRank: "",
+      militaryId: 0,
+      petCompanion: "",
+      bedroomFurnishing: selectionByCategory["Bedroom"],
+      bathroomFurnishing: selectionByCategory["Bathroom"],
+      kitchenFurnishing: selectionByCategory["Kitchen"],
+      livingRoomFurnishing: selectionByCategory["Living Room"],
+      diningRoomFurnishing: selectionByCategory["Dining Room"],
+      otherFurnishing: selectionByCategory["Other"],
+      caseId: "",
+      dateReceived: "",
+      lastUpdated: "",
+      status: "",
+      hearFrom: "",
+    };
+
+    try {
+      const response = await createVSR(createVSRRequest);
+
+      if (!response.success) {
+        // TODO: better way of displaying error
+        throw new Error(`HTTP error! status: ${response.error}`);
+      }
+
+      // TODO: better way of displaying successful submission (popup/modal)
+      alert("VSR submitted successfully!");
+    } catch (error) {
+      console.error("There was a problem with the fetch operation:", error);
+    }
+  };
+
+  const handleSelectionChange = (data: CountMap, category: string) => {
+    console.log("HANDLING CHANGE for: ", category);
+    selectionByCategory[category] = [];
+    Object.entries(data).forEach(([furnitureItem, count]) => {
+      const item = allItems.find((item) => item.name === furnitureItem);
+      const vsrItem: FurnitureInputs = {
+        _id: item ? item._id : "",
+        quantity: count,
+        isGasElectric: item ? item.isGasElectric : false, // This is optional
+      };
+      selectionByCategory[category].push(vsrItem);
+    });
+    console.log(selectionByCategory[category]);
+  };
+
   return (
     <div className={styles.page}>
-      <HeaderBar />
-      <div className={styles.canvas}>
-        <div className={styles.title}>Furnishings</div>
-        {/* Example of rendering items for a specific category */}
-        <div className={styles.sections}>
-          <div className={styles.section}>
-            <SelectAll label="Bedroom" options={bedroomFurnishings} />
-          </div>
-          <div className={styles.section}>
-            <SelectAll label="Bathroom" options={bathroomFurnishings} />
-          </div>
-          <div className={styles.section}>
-            <SelectAll label="Kitchen" options={kitchenFurnishings} />
-          </div>
-          <div className={styles.section}>
-            <SelectAll label="Living Room" options={livingRoomFurnishings} />
-          </div>
-          <div className={styles.section}>
-            <SelectAll label="Dining Room" options={diningRoomFurnishings} />
-          </div>
-          <div className={styles.section}>
-            <SelectAll label="Other" options={otherFurnishings} />
-          </div>
-          <div className={styles.section}>
-            <TextField
-              label="Identify other necessary items"
-              helperText="**We do not offer cleaning supplies"
-              required={false}
-              variant={"outlined"}
-            ></TextField>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <HeaderBar />
+        <div className={styles.canvas}>
+          <div className={styles.title}>Furnishings</div>
+          {/* Example of rendering items for a specific category */}
+          <div className={styles.sections}>
+            <div className={styles.section}>
+              <SelectAll
+                label="Bedroom"
+                options={bedroomFurnishings}
+                onChildDataChange={handleSelectionChange}
+              />
+            </div>
+            <div className={styles.section}>
+              <SelectAll
+                label="Bathroom"
+                options={bathroomFurnishings}
+                onChildDataChange={handleSelectionChange}
+              />
+            </div>
+            <div className={styles.section}>
+              <SelectAll
+                label="Kitchen"
+                options={kitchenFurnishings}
+                onChildDataChange={handleSelectionChange}
+              />
+            </div>
+            <div className={styles.section}>
+              <SelectAll
+                label="Living Room"
+                options={livingRoomFurnishings}
+                onChildDataChange={handleSelectionChange}
+              />
+            </div>
+            <div className={styles.section}>
+              <SelectAll
+                label="Dining Room"
+                options={diningRoomFurnishings}
+                onChildDataChange={handleSelectionChange}
+              />
+            </div>
+            <div className={styles.section}>
+              <SelectAll
+                label="Other"
+                options={otherFurnishings}
+                onChildDataChange={handleSelectionChange}
+              />
+            </div>
+            <div className={styles.section}>
+              <TextField
+                label="Identify other necessary items"
+                helperText="**We do not offer cleaning supplies"
+                required={false}
+                variant={"outlined"}
+              ></TextField>
+            </div>
           </div>
         </div>
-      </div>
-      <div className={styles.actions}>
-        <div className={styles.backButton}>
-          <button className={styles.back}>Back</button>
+        <div className={styles.actions}>
+          <div className={styles.backButton}>
+            <button className={styles.back}>Back</button>
+          </div>
+          <PageNumber pageNum={3} />
+          <div className={styles.submitButton}>
+            <button className={styles.submit} type="submit">
+              Submit
+            </button>
+          </div>
         </div>
-        <PageNumber pageNum={3} />
-        <div className={styles.submitButton}>
-          <button className={styles.submit} type="submit">
-            Submit
-          </button>
-        </div>
-      </div>
+      </form>
       <div className={styles.footer}></div>
     </div>
   );
