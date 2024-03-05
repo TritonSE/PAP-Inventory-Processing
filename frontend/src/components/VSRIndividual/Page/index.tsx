@@ -27,8 +27,11 @@ export const Page = () => {
         <button
           className={styles.approve}
           onClick={async () => {
-            updateVSRStatus(id, "Approved");
+            const res = await updateVSRStatus(id, "Approved");
+            const newVsr = res.success ? res.data : vsr;
+            //fetch status info
 
+            setVSR(newVsr);
             //window.location.reload();
           }}
         >
@@ -84,7 +87,12 @@ export const Page = () => {
           </div>
         </div>
         <div className={styles.bodyDetails}>
-          <CaseDetails vsr={vsr}></CaseDetails>
+          <CaseDetails
+            vsr={vsr}
+            setPageStatus={(vsr) => {
+              setVSR(vsr);
+            }}
+          ></CaseDetails>
           <div className={styles.otherDetails}>
             <div className={styles.personalInfo}>
               <ContactInfo vsr={vsr} />

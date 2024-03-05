@@ -9,6 +9,7 @@ import { useState } from "react";
 
 export interface CaseDetailsProp {
   vsr: VSR;
+  setPageStatus: (status: VSR) => void;
 }
 
 /**
@@ -20,9 +21,7 @@ const formatDate = (date: Date) => {
   return `${dateMoment.format("MM-DD-YYYY")} [${dateMoment.format("hh:mm A")}]`;
 };
 
-export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
-  const [myVsr, setVSR] = useState<VSR>(vsr as VSR);
-
+export const CaseDetails = ({ vsr, setPageStatus }: CaseDetailsProp) => {
   function StatusComponent({ status, id }: { status: string; id: string }) {
     console.log(status);
     if (status === "Received" || status === undefined) {
@@ -31,7 +30,8 @@ export const CaseDetails = ({ vsr }: CaseDetailsProp) => {
     return (
       <StatusDropdown
         onChanged={async (status) => {
-          updateVSRStatus(id, status);
+          const res = await updateVSRStatus(id, status);
+          setPageStatus(res.success ? res.data : vsr);
         }}
         value={status != undefined ? status : "Received"}
       />
