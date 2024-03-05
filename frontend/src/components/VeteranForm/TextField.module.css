@@ -23,12 +23,13 @@
   align-items: flex-start;
   gap: 10px;
   align-self: stretch;
-  color: var(--Dark-Gray, #484848);
+  color: #484848;
   font-family: "OpenSans";
   font-weight: 300;
   line-height: normal;
   padding-top: 16px;
   width: 504px;
+  font-style: italic;
 }
 
 .helperText {
