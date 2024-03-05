@@ -1,17 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 import React, { useState } from "react";
 import styles from "src/components/EditVSR/editPage.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import TextField from "@/components/TextField";
-import MultipleChoice from "@/components/MultipleChoice";
-import Dropdown from "@/components/Dropdown";
-import HeaderBar from "@/components/HeaderBar";
-import PageNumber from "@/components/PageNumber";
-import Image from "next/image";
 import { type VSR, getVSR, updateVSR, UpdateVSRRequest } from "@/api/VSRs";
 import { useParams } from "next/navigation";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
+import VeteranServiceRequest from "@/app/vsr/page";
+import { Page } from "@/components/VSRIndividual/Page/Page";
 
 interface IFormInput {
   name: string;
@@ -30,11 +27,12 @@ interface IFormInput {
   ages_of_girls: number[];
 }
 
-export const EditPage = () => {
+const EditPage = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const router = useRouter();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
   const {
     register,
     handleSubmit,
@@ -120,6 +118,9 @@ export const EditPage = () => {
   const numGirls = watch("num_girls");
   //populate form with vsr data
 
+  const HandleEdit = () => {
+    setIsEditing(!isEditing);
+  };
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
     const updateVSRRequest: UpdateVSRRequest = {
@@ -158,58 +159,68 @@ export const EditPage = () => {
     }
   };
 
-  const renderChildInput = (gender: "boy" | "girl") => {
-    const numChildrenThisGender = gender === "boy" ? numBoys : numGirls;
-
+  const EditButton = () => {
     return (
-      <>
-        <div className={styles.longText}>
-          <TextField
-            label={`Number of ${gender}(s)`}
-            variant="outlined"
-            placeholder="e.g. 2"
-            type="number"
-            {...register(`num_${gender}s`, {
-              required: `Number of ${gender}s is required`,
-              pattern: {
-                // Only allow up to 2 digits
-                value: /^[0-9][0-9]?$/,
-                message: "This field must be a number less than 100",
-              },
-            })}
-            required
-            error={!!errors[`num_${gender}s`]}
-            helperText={errors[`num_${gender}s`]?.message}
-          />
-        </div>
-
-        <div className={styles.numChildren}>
-          {/* Cap it at 99 children per gender to avoid freezing web browser */}
-          {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
-            <div key={index} className={styles.childInputWrapper}>
-              <TextField
-                label={`Age`}
-                type="number"
-                variant="outlined"
-                {...register(`ages_of_${gender}s.${index}`, {
-                  required: "This field is required",
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "This field must be a number",
-                  },
-                  max: {
-                    value: 17,
-                    message: "Only enter children under 18",
-                  },
-                })}
-                error={!!errors[`ages_of_${gender}s`]?.[index]}
-                helperText={errors[`ages_of_${gender}s`]?.[index]?.message}
-                required
-              />
-            </div>
-          ))}
-        </div>
-      </>
+      <div>
+        <button onClick={HandleEdit}>{isEditing ? "Discard Changes" : "Edit"}</button>
+        {isEditing ? <VeteranServiceRequest /> : <Page />}
+      </div>
     );
   };
 };
+
+//   const renderChildInput = (gender: "boy" | "girl") => {
+//     const numChildrenThisGender = gender === "boy" ? numBoys : numGirls;
+
+// //     return (
+//       <>
+//         <div className={styles.longText}>
+//           <TextField
+//             label={`Number of ${gender}(s)`}
+//             variant="outlined"
+//             placeholder="e.g. 2"
+//             type="number"
+//             {...register(`num_${gender}s`, {
+//               required: `Number of ${gender}s is required`,
+//               pattern: {
+//                 // Only allow up to 2 digits
+//                 value: /^[0-9][0-9]?$/,
+//                 message: "This field must be a number less than 100",
+//               },
+//             })}
+//             required
+//             error={!!errors[`num_${gender}s`]}
+//             helperText={errors[`num_${gender}s`]?.message}
+//           />
+//         </div>
+
+//         <div className={styles.numChildren}>
+//           {/* Cap it at 99 children per gender to avoid freezing web browser */}
+//           {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
+//             <div key={index} className={styles.childInputWrapper}>
+//               <TextField
+//                 label={`Age`}
+//                 type="number"
+//                 variant="outlined"
+//                 {...register(`ages_of_${gender}s.${index}`, {
+//                   required: "This field is required",
+//                   pattern: {
+//                     value: /^[0-9]+$/,
+//                     message: "This field must be a number",
+//                   },
+//                   max: {
+//                     value: 17,
+//                     message: "Only enter children under 18",
+//                   },
+//                 })}
+//                 error={!!errors[`ages_of_${gender}s`]?.[index]}
+//                 helperText={errors[`ages_of_${gender}s`]?.[index]?.message}
+//                 required
+//               />
+//             </div>
+//           ))}
+//         </div>
+//       </>
+//     );
+//   };
+// };
