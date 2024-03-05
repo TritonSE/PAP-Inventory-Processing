@@ -112,17 +112,12 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
                 >
                   <Image
                     className={`${styles.dec} ${
-                      clickedStates[option.name] ? styles.decSelected : styles.decUnselected
+                      clickedStates[option.name] ? styles.decSelected : styles.dec
                     }`}
                     src="/icon_minus.svg"
                     width={22}
                     height={22}
                     alt="dropdown"
-                    style={{
-                      // We need these styles in order to make our custom IconComponent clickable.
-                      // See https://stackoverflow.com/a/73038614
-                      pointerEvents: "none",
-                    }}
                   />
                 </button>
                 <span>{counts[option.name]}</span>
@@ -136,17 +131,12 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
                 >
                   <Image
                     className={`${styles.inc} ${
-                      clickedStates[option.name] ? styles.incSelected : styles.incUnselected
+                      clickedStates[option.name] ? styles.incSelected : styles.inc
                     }`}
                     src="/icon_plus.svg"
                     width={22}
                     height={22}
                     alt="dropdown"
-                    style={{
-                      // We need these styles in order to make our custom IconComponent clickable.
-                      // See https://stackoverflow.com/a/73038614
-                      pointerEvents: "none",
-                    }}
                   />
                 </button>
               </div>
@@ -157,7 +147,12 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
               className={`${styles.chip} ${
                 clickedStates[option.name] ? styles.chipSelected : styles.chipUnselected
               }`}
-              onClick={() => toggleClickState(option.name)}
+              onClick={() => {
+                clickedStates[option.name]
+                  ? incrementCount(option.name)
+                  : decrementCount(option.name);
+                toggleClickState(option.name);
+              }}
             >
               <div className={styles.chipContent}>
                 <span className={styles.chipTitle}>{option.name}</span>

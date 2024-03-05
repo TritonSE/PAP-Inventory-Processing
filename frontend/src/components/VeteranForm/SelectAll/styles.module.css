@@ -34,7 +34,7 @@
   display: flex;
   flex-direction: row;
   padding: 9px 16px;
-  align-items: center;
+  align-content: baseline;
 }
 
 .chipTitle {
@@ -85,24 +85,27 @@
 
 .math {
   flex-direction: row;
-  align-items: center;
-  background-color: #fff;
-  border-color: #fff;
   all: unset;
+  width: 20px;
+  height: 20px;
+}
+
+.dec {
+  filter: brightness(0) saturate(100%) invert(92%) sepia(3%) saturate(3443%) hue-rotate(178deg)
+    brightness(97%) contrast(94%);
 }
 
 .decSelected {
-  stroke: #fff;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(36deg)
+    brightness(103%) contrast(103%);
 }
 
-.decUnselected {
-  stroke: #102d5f;
+.inc {
+  filter: brightness(0) saturate(100%) invert(10%) sepia(70%) saturate(2513%) hue-rotate(208deg)
+    brightness(95%) contrast(92%);
 }
 
 .incSelected {
-  stroke: #fff;
-}
-
-.incUnselected {
-  stroke: #102d5f;
+  filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(36deg)
+    brightness(103%) contrast(103%);
 }
