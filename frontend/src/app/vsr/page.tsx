@@ -846,12 +846,12 @@ const VeteranServiceRequest: React.FC = () => {
                           options={hearFromOptions}
                           value={selectedHearFrom}
                           onChange={(newValue) => {
-                            const valueToSet = newValue;
+                            const valueToSet = Array.isArray(newValue) ? newValue[0] : newValue;
                             if (valueToSet !== "" || otherHearFrom === "") {
                               field.onChange(valueToSet);
                             }
-                            setSelectedHearFrom((newValue as string[])[0]);
-                          }}
+                            setSelectedHearFrom(valueToSet);
+                          }}                          
                           required
                           error={!!errors.hearFrom}
                           helperText={errors.hearFrom?.message}
