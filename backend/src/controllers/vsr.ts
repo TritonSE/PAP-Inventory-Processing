@@ -73,7 +73,13 @@ export const createVSR: RequestHandler = async (req, res, next) => {
 
 export const updateStatus: RequestHandler = async (req, res, next) => {
   try {
+    // extract any errors that were found by the validator
+    const errors = validationResult(req);
     const { status } = req.body;
+
+    // if there are errors, then this function throws an exception
+    validationErrorParser(errors);
+
     const { id } = req.params;
     const vsr = await VSRModel.findByIdAndUpdate(id, { status }, { new: true });
     res.status(200).json(vsr);

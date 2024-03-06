@@ -13,8 +13,6 @@ import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
 import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
-// import { STATUS_OPTIONS, StatusDropdown } from "@/components/shared/StatusDropdown";
-// import { StatusChip } from "@/components/shared/StatusChip";
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
