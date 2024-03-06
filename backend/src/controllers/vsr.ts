@@ -59,6 +59,8 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       // Use current date as timestamp for received & updated
       dateReceived: currentDate,
       lastUpdated: currentDate,
+
+      status: "Received",
     });
 
     // 201 means a new resource has been created successfully
@@ -73,7 +75,6 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
   try {
     const { status } = req.body;
     const { id } = req.params;
-    console.log("changed status to " + status + " for id " + id);
     const vsr = await VSRModel.findByIdAndUpdate(id, { status }, { new: true });
     res.status(200).json(vsr);
   } catch (error) {

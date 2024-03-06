@@ -92,7 +92,6 @@ export interface CreateVSRRequest {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
-  status: string;
 
   // Comment-out page 2 & 3 fields for now because they're not implemented on the form yet
   // streetAddress: string;

@@ -8,7 +8,7 @@ import { StatusChip } from "@/components/shared/StatusChip";
 
 export interface CaseDetailsProp {
   vsr: VSR;
-  setPageStatus: (status: VSR) => void;
+  onUpdateVSR: (status: VSR) => void;
 }
 
 /**
@@ -20,22 +20,28 @@ const formatDate = (date: Date) => {
   return `${dateMoment.format("MM-DD-YYYY")} [${dateMoment.format("hh:mm A")}]`;
 };
 
-export const CaseDetails = ({ vsr, setPageStatus }: CaseDetailsProp) => {
-  function StatusComponent({ status, id }: { status: string; id: string }) {
-    console.log(status);
-    if (status === "Received" || status === undefined) {
-      return <StatusChip status={STATUS_OPTIONS[0]} />;
+export const CaseDetails = ({ vsr, onUpdateVSR }: CaseDetailsProp) => {
+  const renderStatus = () => {
+    if (vsr.status === "Received" || vsr.status === undefined) {
+      return (
+        <StatusChip
+          status={STATUS_OPTIONS.find((statusOption) => statusOption.value === "Received")!}
+        />
+      );
     }
     return (
       <StatusDropdown
         onChanged={async (status) => {
-          const res = await updateVSRStatus(id, status);
-          setPageStatus(res.success ? res.data : vsr);
+          const res = await updateVSRStatus(vsr._id, status);
+
+          // TODO: error handling
+
+          onUpdateVSR(res.success ? res.data : vsr);
         }}
-        value={status != undefined ? status : "Received"}
+        value={vsr.status != undefined ? vsr.status : "Received"}
       />
     );
-  }
+  };
 
   return (
     <VSRIndividualAccordion permanentlyExpanded title="Case Details">
@@ -52,10 +58,7 @@ export const CaseDetails = ({ vsr, setPageStatus }: CaseDetailsProp) => {
           valueFontSize="20px"
         />
 
-        <SingleDetail
-          title="Status:"
-          value={<StatusComponent status={vsr.status} id={vsr._id} />}
-        />
+        <SingleDetail title="Status:" value={renderStatus()} />
       </div>
     </VSRIndividualAccordion>
   );

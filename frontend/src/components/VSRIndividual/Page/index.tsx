@@ -21,25 +21,22 @@ export const Page = () => {
   const { id } = useParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  function CanApprove({ status, id }: { status: string; id: string }) {
-    if (status == "Received" || status === undefined) {
-      return (
-        <button
-          className={styles.approve}
-          onClick={async () => {
-            const res = await updateVSRStatus(id, "Approved");
-            const newVsr = res.success ? res.data : vsr;
-            //fetch status info
+  const renderApproveButton = () => (
+    <button
+      className={styles.approveButton}
+      onClick={async () => {
+        const res = await updateVSRStatus(vsr._id, "Approved");
 
-            setVSR(newVsr);
-            //window.location.reload();
-          }}
-        >
-          Approve VSR
-        </button>
-      );
-    }
-  }
+        // TODO: error handling
+
+        const newVsr = res.success ? res.data : vsr;
+
+        setVSR(newVsr);
+      }}
+    >
+      Approve VSR
+    </button>
+  );
 
   useEffect(() => {
     getVSR(id as string)
@@ -87,12 +84,7 @@ export const Page = () => {
           </div>
         </div>
         <div className={styles.bodyDetails}>
-          <CaseDetails
-            vsr={vsr}
-            setPageStatus={(vsr) => {
-              setVSR(vsr);
-            }}
-          ></CaseDetails>
+          <CaseDetails vsr={vsr} onUpdateVSR={setVSR}></CaseDetails>
           <div className={styles.otherDetails}>
             <div className={styles.personalInfo}>
               <ContactInfo vsr={vsr} />
@@ -103,7 +95,9 @@ export const Page = () => {
             <div className={styles.rightColumn}>
               <RequestedFurnishings vsr={vsr} />
               <div className={styles.finalActions}>
-                <CanApprove status={vsr.status} id={vsr._id}></CanApprove>
+                {vsr.status == "Received" || vsr.status === undefined
+                  ? renderApproveButton()
+                  : null}
               </div>
             </div>
           </div>

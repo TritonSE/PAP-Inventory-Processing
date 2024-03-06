@@ -99,7 +99,6 @@ const VeteranServiceRequest: React.FC = () => {
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
-      status: "Received",
     };
 
     try {
