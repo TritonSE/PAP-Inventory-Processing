@@ -11,7 +11,7 @@
   --color-tse-light-gray: #818181;
   --color-tse-dark-gray: #484848;
   --color-tse-secondary-light-blue: #c7def1;
-  --font-title: "Lora";
+  --font-title: "Lora", serif;
   --font-open-sans: "OpenSans", sans-serif;
   --font-inter: "Inter", sans-serif;
 }

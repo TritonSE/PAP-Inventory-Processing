@@ -1,0 +1,6 @@
+.statusChip {
+  font-family: var(--font-open-sans);
+  padding: 2px 8px;
+  border-radius: 8px;
+  width: max-content;
+}

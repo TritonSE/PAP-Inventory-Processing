@@ -2,11 +2,11 @@
 import React, { useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import TextField from "@/components/TextField";
-import MultipleChoice from "@/components/MultipleChoice";
-import Dropdown from "@/components/Dropdown";
-import HeaderBar from "@/components/HeaderBar";
-import PageNumber from "@/components/PageNumber";
+import TextField from "@/components/shared/input/TextField";
+import MultipleChoice from "@/components/shared/input/MultipleChoice";
+import Dropdown from "@/components/shared/input/Dropdown";
+import HeaderBar from "@/components/shared/HeaderBar";
+import PageNumber from "@/components/VSRForm/PageNumber";
 import { createVSR, CreateVSRRequest } from "@/api/VSRs";
 import BinaryChoice from "@/components/BinaryChoice";
 

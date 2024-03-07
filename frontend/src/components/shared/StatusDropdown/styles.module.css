@@ -29,33 +29,3 @@
   padding-left: 0px;
   border: none;
 }
-
-.statusOption {
-  font-family: var(--font-open-sans);
-  padding: 2px 8px;
-  border-radius: 8px;
-}
-
-.received {
-  background-color: #e6e6e6;
-}
-
-.scheduled {
-  background-color: #c5e1f6;
-}
-
-.approved {
-  background-color: #d7eebc;
-}
-
-.resubmit {
-  background-color: #fae69e;
-}
-
-.incomplete {
-  background-color: #f9cfc9;
-}
-
-.archived {
-  background-color: #e4cef1;
-}
