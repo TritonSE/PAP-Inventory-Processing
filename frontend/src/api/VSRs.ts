@@ -116,10 +116,10 @@ export interface CreateVSRRequest {
   branch: string[];
   conflicts: string[];
   dischargeStatus: string;
-  serviceConnected: string;
+  serviceConnected: boolean;
   lastRank: string;
   militaryId: number;
-  petCompanion: string;
+  petCompanion: boolean;
   bedroomFurnishing: object[];
   bathroomFurnishing: object[];
   kitchenFurnishing: object[];
