@@ -125,7 +125,7 @@ const makeEmailValidator = () =>
     .withMessage("Email must be a string");
 
 const makeBranchValidator = () =>
-  body("Branch")
+  body("branch")
     .exists({ checkFalsy: true })
     .withMessage("Branch is required")
     .isArray()
@@ -134,7 +134,7 @@ const makeBranchValidator = () =>
     .withMessage("Each branch must be a string");
 
 const makeConflictsValidator = () =>
-  body("Conflicts")
+  body("conflicts")
     .exists({ checkFalsy: true })
     .withMessage("Conflict(s) is required")
     .isArray()

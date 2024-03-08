@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import Chip from "@mui/material/Chip";
-import styles from "@/components/MultipleChoice.module.css";
+import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
 
 export interface BinaryChoiceProps {
   label: string;
@@ -14,12 +14,14 @@ export interface BinaryChoiceProps {
 const BinaryChoice = ({ label, value, onChange, required, helperText }: BinaryChoiceProps) => {
   const [selectedOption, setSelectedOption] = useState<boolean | null>(value);
 
+  /*
   useEffect(() => {
     setSelectedOption(value);
   }, [value]);
+  */
 
   const handleOptionClick = (newOption: boolean | null) => {
-    console.log('Current value:', newOption);
+    console.log("Current value:", newOption);
     setSelectedOption(newOption);
     onChange(newOption);
   };
@@ -34,13 +36,17 @@ const BinaryChoice = ({ label, value, onChange, required, helperText }: BinaryCh
         <Chip
           label="Yes"
           onClick={() => handleOptionClick(true)}
-          className={`${styles.chip} ${selectedOption === true ? styles.chipSelected : styles.chipUnselected}`}
+          className={`${styles.chip} ${
+            selectedOption === true ? styles.chipSelected : styles.chipUnselected
+          }`}
           clickable
         />
         <Chip
           label="No"
           onClick={() => handleOptionClick(false)}
-          className={`${styles.chip} ${selectedOption === false ? styles.chipSelected : styles.chipUnselected}`}
+          className={`${styles.chip} ${
+            selectedOption === false ? styles.chipSelected : styles.chipUnselected
+          }`}
           clickable
         />
       </div>

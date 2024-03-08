@@ -233,7 +233,7 @@ const VeteranServiceRequest: React.FC = () => {
       zipCode: data.zipCode,
       phoneNumber: data.phoneNumber,
       email: data.email,
-      branch: data.branch,
+      branch: selectedBranch,
       conflicts: selectedConflicts.concat(otherConflict === "" ? [] : [otherConflict]),
       dischargeStatus: data.dischargeStatus,
       serviceConnected: data.serviceConnected,
@@ -766,7 +766,9 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="serviceConnected"
                     control={control}
-                    rules={{ required: "Service connected is required" }}
+                    rules={{
+                      validate: (value) => value !== null || "Service connected is required",
+                    }}
                     render={({ field }) => (
                       <BinaryChoice
                         label="Service Connected"
@@ -822,7 +824,9 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="petCompanion"
                     control={control}
-                    rules={{ required: "Pet Companion is required" }}
+                    rules={{
+                      validate: (value) => value !== null || "Service connected is required",
+                    }}
                     render={({ field }) => (
                       <BinaryChoice
                         label="Are you interested in a companionship animal (pet)?"
@@ -851,7 +855,7 @@ const VeteranServiceRequest: React.FC = () => {
                               field.onChange(valueToSet);
                             }
                             setSelectedHearFrom(valueToSet);
-                          }}                          
+                          }}
                           required
                           error={!!errors.hearFrom}
                           helperText={errors.hearFrom?.message}
@@ -868,7 +872,7 @@ const VeteranServiceRequest: React.FC = () => {
                               if (value !== "") {
                                 field.onChange(value);
                               }
-                              setOtherConflict(value);
+                              setOtherHearFrom(value);
                               setSelectedHearFrom("");
                             }}
                             variant={"outlined"}
