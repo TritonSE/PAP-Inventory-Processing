@@ -178,6 +178,9 @@ function parseVSR(vsr: VSRJson) {
 export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> {
   try {
     const response = await post("/api/vsr", vsr);
+
+    console.log("THIS");
+    console.log(response);
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {
