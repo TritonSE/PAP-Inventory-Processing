@@ -22,6 +22,8 @@ export interface VSRJson {
   age: number;
   maritalStatus: string;
   spouseName?: string;
+  numOfBoys: number;
+  numOfGirls: number;
   agesOfBoys?: number[];
   agesOfGirls?: number[];
   ethnicity: string;
@@ -62,6 +64,8 @@ export interface VSR {
   age: number;
   maritalStatus: string;
   spouseName?: string;
+  numOfBoys: number;
+  numOfGirls: number;
   agesOfBoys?: number[];
   agesOfGirls?: number[];
   ethnicity: string;
@@ -101,6 +105,8 @@ export interface CreateVSRRequest {
   age: number;
   maritalStatus: string;
   spouseName?: string;
+  numOfBoys: number;
+  numOfGirls: number;
   agesOfBoys?: number[];
   agesOfGirls?: number[];
   ethnicity: string;
@@ -142,6 +148,8 @@ function parseVSR(vsr: VSRJson) {
     age: vsr.age,
     maritalStatus: vsr.maritalStatus,
     spouseName: vsr.spouseName,
+    numOfBoys: vsr.numOfBoys,
+    numOfGirls: vsr.numOfGirls,
     agesOfBoys: vsr.agesOfBoys,
     agesOfGirls: vsr.agesOfGirls,
     ethnicity: vsr.ethnicity,

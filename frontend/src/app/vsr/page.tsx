@@ -230,12 +230,14 @@ const VeteranServiceRequest: React.FC = () => {
 
   type FurnitureSelection = Record<string, FurnitureInputs[]>;
 
+  const [userSelections, setUserSelections] = useState<FurnitureSelection>({});
+
   const selectionByCategory: FurnitureSelection = {
     Bedroom: [],
     Bathroom: [],
     Kitchen: [],
     "Living Room": [],
-    "Drining Room": [],
+    "Dining Room": [],
     Other: [],
   };
 
@@ -275,24 +277,29 @@ const VeteranServiceRequest: React.FC = () => {
     selectionByCategory[category] = [];
     Object.entries(data).forEach(([furnitureItem, count]) => {
       const item = allItems.find((item) => item.name === furnitureItem);
-      const vsrItem: FurnitureInputs = {
-        _id: item ? item._id : "",
-        quantity: count,
-        isGasElectric: item ? item.isGasElectric : false, // This is optional
-      };
-      selectionByCategory[category].push(vsrItem);
+      if (count > 0) {
+        const vsrItem: FurnitureInputs = {
+          _id: item ? item._id : "",
+          quantity: count,
+          isGasElectric: item ? item.isGasElectric : false, // This is optional
+        };
+        selectionByCategory[category].push(vsrItem);
+      }
     });
     console.log(selectionByCategory[category]);
   };
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
+    console.log("LOGGIN\n", selectionByCategory["Other"]);
     const createVSRRequest: CreateVSRRequest = {
       name: "Sophia Yu",
       gender: "Female",
       age: 20,
       maritalStatus: "Signel",
       spouseName: "N/A",
+      numOfBoys: 0,
+      numOfGirls: 0,
       agesOfBoys:
         data.ages_of_boys
           ?.slice(0, data.num_boys)
@@ -340,6 +347,7 @@ const VeteranServiceRequest: React.FC = () => {
         throw new Error(`HTTP error! status: ${response.error}`);
       }
 
+      console.log(response);
       // TODO: better way of displaying successful submission (popup/modal)
       alert("VSR submitted successfully!");
     } catch (error) {
