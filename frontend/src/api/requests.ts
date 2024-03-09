@@ -25,12 +25,13 @@ async function fetchRequest(
     newHeaders["Content-Type"] = "application/json";
   }
 
+  console.log("BODY");
+  console.log(body);
   const response = await fetch(url, {
     method,
     headers: newHeaders,
     body: hasBody ? JSON.stringify(body) : undefined,
   });
-
   return response;
 }
 

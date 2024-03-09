@@ -5,7 +5,6 @@ import FurnitureItemModel from "src/models/furnitureItem";
 
 export const getFurnitureItems: RequestHandler = async (req, res, next) => {
   try {
-    console.log("getting Furniture Items");
     const furnitureItems = await FurnitureItemModel.find();
 
     if (furnitureItems === null) {

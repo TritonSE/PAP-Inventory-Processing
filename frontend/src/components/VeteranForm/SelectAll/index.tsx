@@ -51,8 +51,11 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
       ...prevCounts,
       [itemName]: (prevCounts[itemName] || 0) + 1,
     }));
-    sendDataToParent(counts);
   };
+
+  useEffect(() => {
+    sendDataToParent(counts);
+  }, [counts]);
 
   const decrementCount = (itemName: string) => {
     if (counts[itemName] == 1) {

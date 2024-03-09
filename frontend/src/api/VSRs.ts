@@ -14,6 +14,7 @@ import { APIResult, handleAPIError, post, get } from "@/api/requests";
   employmentStatus: { type: String, require: true },
   incomeLevel: { type: String, require: true },
   sizeOfHome: { type: String, require: true },*/
+
 export interface VSRJson {
   _id: string;
   name: string;
@@ -43,12 +44,12 @@ export interface VSRJson {
   lastRank: string;
   militaryId: number;
   petCompanion: string;
-  bedroomFurnishing: string[];
-  bathroomFurnishing: string[];
-  kitchenFurnishing: string[];
-  livingRoomFurnishing: string[];
-  diningRoomFurnishing: string[];
-  otherFurnishing: string[];
+  bedroomFurnishing: object[];
+  bathroomFurnishing: object[];
+  kitchenFurnishing: object[];
+  livingRoomFurnishing: object[];
+  diningRoomFurnishing: object[];
+  otherFurnishing: object[];
   caseId: string;
   dateReceived: string;
   lastUpdated: string;
@@ -85,12 +86,12 @@ export interface VSR {
   lastRank: string;
   militaryId: number;
   petCompanion: string;
-  bedroomFurnishing: string[];
-  bathroomFurnishing: string[];
-  kitchenFurnishing: string[];
-  livingRoomFurnishing: string[];
-  diningRoomFurnishing: string[];
-  otherFurnishing: string[];
+  bedroomFurnishing: object[];
+  bathroomFurnishing: object[];
+  kitchenFurnishing: object[];
+  livingRoomFurnishing: object[];
+  diningRoomFurnishing: object[];
+  otherFurnishing: object[];
   caseId: string;
   dateReceived: string;
   lastUpdated: string;
@@ -187,9 +188,10 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
   try {
     const response = await post("/api/vsr", vsr);
 
-    console.log("THIS");
-    console.log(response);
     const json = (await response.json()) as VSRJson;
+
+    console.log("THIS");
+    console.log(json);
     return { success: true, data: parseVSR(json) };
   } catch (error) {
     return handleAPIError(error);

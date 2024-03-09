@@ -230,8 +230,6 @@ const VeteranServiceRequest: React.FC = () => {
 
   type FurnitureSelection = Record<string, FurnitureInputs[]>;
 
-  const [userSelections, setUserSelections] = useState<FurnitureSelection>({});
-
   const selectionByCategory: FurnitureSelection = {
     Bedroom: [],
     Bathroom: [],
@@ -273,7 +271,6 @@ const VeteranServiceRequest: React.FC = () => {
   }, [allItems]);
 
   const handleSelectionChange = (data: CountMap, category: string) => {
-    console.log("HANDLING CHANGE for: ", category);
     selectionByCategory[category] = [];
     Object.entries(data).forEach(([furnitureItem, count]) => {
       const item = allItems.find((item) => item.name === furnitureItem);
@@ -291,7 +288,6 @@ const VeteranServiceRequest: React.FC = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
-    console.log("LOGGIN\n", selectionByCategory["Other"]);
     const createVSRRequest: CreateVSRRequest = {
       name: "Sophia Yu",
       gender: "Female",
@@ -338,6 +334,7 @@ const VeteranServiceRequest: React.FC = () => {
       lastUpdated: "2020-05-18T14:10:30.000+00:00",
       status: "Received",
     };
+    console.log("LOGGIN\n", selectionByCategory["Other"]);
 
     try {
       const response = await createVSR(createVSRRequest);
