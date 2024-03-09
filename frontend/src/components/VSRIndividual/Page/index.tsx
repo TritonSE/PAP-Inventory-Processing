@@ -11,13 +11,30 @@ import {
 } from "@/components/VSRIndividual";
 import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
-import { type VSR, getVSR } from "@/api/VSRs";
+import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const renderApproveButton = () => (
+    <button
+      className={styles.approveButton}
+      onClick={async () => {
+        const res = await updateVSRStatus(vsr._id, "Approved");
+
+        // TODO: error handling
+
+        const newVsr = res.success ? res.data : vsr;
+
+        setVSR(newVsr);
+      }}
+    >
+      Approve VSR
+    </button>
+  );
 
   useEffect(() => {
     getVSR(id as string)
@@ -65,7 +82,7 @@ export const Page = () => {
           </div>
         </div>
         <div className={styles.bodyDetails}>
-          <CaseDetails vsr={vsr}></CaseDetails>
+          <CaseDetails vsr={vsr} onUpdateVSR={setVSR}></CaseDetails>
           <div className={styles.otherDetails}>
             <div className={styles.personalInfo}>
               <ContactInfo vsr={vsr} />
@@ -76,9 +93,9 @@ export const Page = () => {
             <div className={styles.rightColumn}>
               <RequestedFurnishings vsr={vsr} />
               <div className={styles.finalActions}>
-                <div className={styles.approve}>
-                  <a href="REPLACE">Approve VSR</a>
-                </div>
+                {vsr.status == "Received" || vsr.status === undefined
+                  ? renderApproveButton()
+                  : null}
               </div>
             </div>
           </div>

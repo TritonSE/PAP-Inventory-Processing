@@ -1,7 +1,7 @@
 import env from "@/util/validateEnv";
 
 const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
-type Method = "GET" | "POST" | "PUT";
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 /**
  * A wrapper around the built-in `fetch()` function that abstracts away some of
@@ -110,6 +110,24 @@ export async function put(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("PUT", API_BASE_URL + url, body, headers);
+  assertOk(response);
+  return response;
+}
+
+/**
+ * Sends a PATCH request to the provided API URL.
+ *
+ * @param url The URL to request
+ * @param body The body of the request, or undefined if there is none
+ * @param headers The headers of the request (optional)
+ * @returns The Response object returned by `fetch()`
+ */
+export async function patch(
+  url: string,
+  body: unknown,
+  headers: Record<string, string> = {},
+): Promise<Response> {
+  const response = await fetchRequest("PATCH", API_BASE_URL + url, body, headers);
   assertOk(response);
   return response;
 }
