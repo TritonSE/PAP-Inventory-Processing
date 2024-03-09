@@ -82,6 +82,24 @@ const makeSizeOfHomeValidator = () =>
     .isString()
     .withMessage("Size of Home must be a string");
 
+const ALLOWED_STATUSES = [
+  "Received",
+  "Appointment Scheduled",
+  "Approved",
+  "Resubmit",
+  "No-show / Incomplete",
+  "Archived",
+];
+
+const updateStatusValidator = () =>
+  body("status")
+    .exists({ checkFalsy: true })
+    .withMessage("Status is required")
+    .isString()
+    .withMessage("Status must be a string")
+    .isIn(ALLOWED_STATUSES)
+    .withMessage("Status must be one of the allowed options");
+
 export const createVSR = [
   makeNameValidator(),
   makeGenderValidator(),
@@ -95,3 +113,5 @@ export const createVSR = [
   makeIncomeLevelValidator(),
   makeSizeOfHomeValidator(),
 ];
+
+export const updateStatus = [updateStatusValidator()];
