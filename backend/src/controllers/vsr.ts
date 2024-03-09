@@ -1,8 +1,21 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
+import { AuthError } from "src/errors/auth";
+import { ServiceError } from "src/errors/service";
+import UserModel from "src/models/user";
 import createHttpError from "http-errors";
 import VSRModel from "src/models/vsr";
 import validationErrorParser from "src/util/validationErrorParser";
+
+export const getAllVSRS: RequestHandler = async (req, res, next) => {
+  try {
+    const vsrs = await VSRModel.find();
+
+    res.status(200).json({ vsrs });
+  } catch (error) {
+    next(error);
+  }
+};
 
 export const getVSR: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
@@ -88,12 +101,25 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
   }
 };
 
-export const getAllVSRS: RequestHandler = async (req, res, next) => {
+export const deleteVSR: RequestHandler = async (req, res, next) => {
   try {
-    const vsrs = await VSRModel.find();
+    const uid = req.body.uid;
+    const user = await UserModel.findOne({ uid: uid });
+    if (!user) {
+      throw ServiceError.USER_NOT_FOUND;
+    }
 
-    res.status(200).json({ vsrs });
-  } catch (error) {
-    next(error);
+    const { role } = user;
+    if (role != "admin") {
+      throw AuthError.NOT_ADMIN;
+    }
+
+    const vsrId = req.params.id;
+    await VSRModel.findByIdAndDelete(vsrId);
+    return res.status(200).json({
+      message: `successfully deleted vsr ${vsrId}`,
+    });
+  } catch (e) {
+    next();
   }
 };

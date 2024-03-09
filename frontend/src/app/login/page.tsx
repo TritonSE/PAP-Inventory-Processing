@@ -19,7 +19,7 @@ const Login = () => {
 
   const sendTokenToBackend = async (token: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/whoami`, {
+      const response = await fetch(`http://localhost:3001/api/user/whoami`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
