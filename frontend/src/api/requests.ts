@@ -1,5 +1,7 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-type Method = "GET" | "POST" | "PUT";
+import env from "@/util/validateEnv";
+
+const API_BASE_URL = env.NEXT_PUBLIC_BACKEND_URL;
+type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 /**
  * A wrapper around the built-in `fetch()` function that abstracts away some of
@@ -20,20 +22,18 @@ async function fetchRequest(
   headers: Record<string, string>,
 ): Promise<Response> {
   const hasBody = body !== undefined;
+
   const newHeaders = { ...headers };
   if (hasBody) {
     newHeaders["Content-Type"] = "application/json";
   }
 
-  console.log("BODY");
-  console.log(body);
   const response = await fetch(url, {
     method,
     headers: newHeaders,
     body: hasBody ? JSON.stringify(body) : undefined,
   });
-  console.log("RESPONSE after FETCH");
-  console.log(body);
+
   return response;
 }
 
@@ -56,13 +56,12 @@ async function assertOk(response: Response): Promise<void> {
     const text = await response.text();
     if (text) {
       message += ": " + text;
-      console.log(message);
     }
   } catch (e) {
     // skip errors
   }
 
-  // throw new Error(message);
+  throw new Error(message);
 }
 
 /**
@@ -111,6 +110,24 @@ export async function put(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("PUT", API_BASE_URL + url, body, headers);
+  assertOk(response);
+  return response;
+}
+
+/**
+ * Sends a PATCH request to the provided API URL.
+ *
+ * @param url The URL to request
+ * @param body The body of the request, or undefined if there is none
+ * @param headers The headers of the request (optional)
+ * @returns The Response object returned by `fetch()`
+ */
+export async function patch(
+  url: string,
+  body: unknown,
+  headers: Record<string, string> = {},
+): Promise<Response> {
+  const response = await fetchRequest("PATCH", API_BASE_URL + url, body, headers);
   assertOk(response);
   return response;
 }

@@ -1,33 +1,15 @@
-import { APIResult, handleAPIError, post, get } from "@/api/requests";
-
-/*
-
- name: { type: String, required: true },
-  date: { type: Date, required: true },
-  gender: { type: String, require: true },
-  age: { type: Number, require: true },
-  maritalStatus: { type: String, required: true },
-  spouseName: { type: String },
-  agesOfBoys: { type: [Number] },
-  agesOfGirls: { type: [Number] },
-  ethnicity: { type: String, require: true },
-  employmentStatus: { type: String, require: true },
-  incomeLevel: { type: String, require: true },
-  sizeOfHome: { type: String, require: true },*/
+import { APIResult, get, handleAPIError, patch, post } from "@/api/requests";
 
 export interface VSRJson {
   _id: string;
   name: string;
-  date: string;
   gender: string;
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  numOfBoys: number;
-  numOfGirls: number;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
@@ -40,10 +22,10 @@ export interface VSRJson {
   branch: string[];
   conflicts: string[];
   dischargeStatus: string;
-  serviceConnected: string;
+  serviceConnected: boolean;
   lastRank: string;
   militaryId: number;
-  petCompanion: string;
+  petCompanion: boolean;
   bedroomFurnishing: object[];
   bathroomFurnishing: object[];
   kitchenFurnishing: object[];
@@ -51,26 +33,27 @@ export interface VSRJson {
   diningRoomFurnishing: object[];
   otherFurnishing: object[];
   additionalItems: string;
-  caseId: string;
   dateReceived: string;
   lastUpdated: string;
   status: string;
   hearFrom: string;
 }
 
+
+export interface VSRListJson {
+  vsrs: VSRJson[];
+}
+
 export interface VSR {
   _id: string;
   name: string;
-  date: string;
   gender: string;
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  numOfBoys: number;
-  numOfGirls: number;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
@@ -83,10 +66,10 @@ export interface VSR {
   branch: string[];
   conflicts: string[];
   dischargeStatus: string;
-  serviceConnected: string;
+  serviceConnected: boolean;
   lastRank: string;
   militaryId: number;
-  petCompanion: string;
+  petCompanion: boolean;
   bedroomFurnishing: object[];
   bathroomFurnishing: object[];
   kitchenFurnishing: object[];
@@ -95,24 +78,21 @@ export interface VSR {
   otherFurnishing: object[];
   additionalItems: string;
   caseId: string;
-  dateReceived: string;
-  lastUpdated: string;
+  dateReceived: Date;
+  lastUpdated: Date;
   status: string;
   hearFrom: string;
 }
 
 export interface CreateVSRRequest {
   name: string;
-  date: string;
   gender: string;
   age: number;
   maritalStatus: string;
   spouseName?: string;
-  numOfBoys: number;
-  numOfGirls: number;
-  agesOfBoys?: number[];
-  agesOfGirls?: number[];
-  ethnicity: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
@@ -147,13 +127,10 @@ function parseVSR(vsr: VSRJson) {
   return {
     _id: vsr._id,
     name: vsr.name,
-    date: new Date(vsr.date).toISOString(),
     gender: vsr.gender,
     age: vsr.age,
     maritalStatus: vsr.maritalStatus,
     spouseName: vsr.spouseName,
-    numOfBoys: vsr.numOfBoys,
-    numOfGirls: vsr.numOfGirls,
     agesOfBoys: vsr.agesOfBoys,
     agesOfGirls: vsr.agesOfGirls,
     ethnicity: vsr.ethnicity,
@@ -180,9 +157,8 @@ function parseVSR(vsr: VSRJson) {
     diningRoomFurnishing: vsr.diningRoomFurnishing,
     otherFurnishing: vsr.otherFurnishing,
     additionalItems: vsr.additionalItems,
-    caseId: vsr.caseId,
-    dateReceived: vsr.dateReceived,
-    lastUpdated: vsr.lastUpdated,
+    dateReceived: new Date(vsr.dateReceived),
+    lastUpdated: new Date(vsr.lastUpdated),
     status: vsr.status,
     hearFrom: vsr.hearFrom,
   };
@@ -190,12 +166,19 @@ function parseVSR(vsr: VSRJson) {
 
 export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> {
   try {
-    console.log("REPONSE: ", vsr);
     const response = await post("/api/vsr", vsr);
-
     const json = (await response.json()) as VSRJson;
-
     return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
+  try {
+    const response = await get("/api/vsr");
+    const json = (await response.json()) as VSRListJson;
+    return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
     return handleAPIError(error);
   }
@@ -204,6 +187,16 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
 export async function getVSR(id: string): Promise<APIResult<VSR>> {
   try {
     const response = await get(`/api/vsr/${id}`);
+    const json = (await response.json()) as VSRJson;
+    return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function updateVSRStatus(id: string, status: string): Promise<APIResult<VSR>> {
+  try {
+    const response = await patch(`/api/vsr/${id}/status`, { status });
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {

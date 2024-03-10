@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-//import createHttpError from "http-errors";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import VSRModel from "src/models/vsr";
@@ -9,7 +8,7 @@ export const getVSR: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
 
   try {
-    const vsr = await VSRModel.findById(id).populate("name");
+    const vsr = await VSRModel.findById(id);
 
     if (vsr === null) {
       throw createHttpError(404, "VSR not found at id " + id);
@@ -25,7 +24,6 @@ export const createVSR: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
   const {
     name,
-    date,
     gender,
     age,
     maritalStatus,
@@ -63,15 +61,16 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     additionalItems,
   } = req.body;
 
-  console.log(req.body);
-
   try {
     // if there are errors, then this function throws an exception
     validationErrorParser(errors);
 
+=======
+    // Get the current date as a timestamp for when VSR was submitted
+    const currentDate = new Date();
+
     const vsr = await VSRModel.create({
       name,
-      date,
       gender,
       age,
       maritalStatus,
@@ -82,9 +81,13 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       employmentStatus,
       incomeLevel,
       sizeOfHome,
-      status,
-      lastUpdated,
-      dateReceived,
+      
+      // Use current date as timestamp for received & updated
+      dateReceived: currentDate,
+      lastUpdated: currentDate,
+
+      status: "Received",
+      
       caseId,
       hearFrom,
       petCompanion,
@@ -111,6 +114,33 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     // 201 means a new resource has been created successfully
     // the newly created task is sent back to the user
     res.status(201).json(vsr);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateStatus: RequestHandler = async (req, res, next) => {
+  try {
+    // extract any errors that were found by the validator
+    const errors = validationResult(req);
+    const { status } = req.body;
+
+    // if there are errors, then this function throws an exception
+    validationErrorParser(errors);
+
+    const { id } = req.params;
+    const vsr = await VSRModel.findByIdAndUpdate(id, { status }, { new: true });
+    res.status(200).json(vsr);
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getAllVSRS: RequestHandler = async (req, res, next) => {
+  try {
+    const vsrs = await VSRModel.find();
+
+    res.status(200).json({ vsrs });
   } catch (error) {
     next(error);
   }
