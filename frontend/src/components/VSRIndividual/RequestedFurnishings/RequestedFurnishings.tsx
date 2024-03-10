@@ -62,7 +62,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
     userBedroomItems.forEach((item) => {
       const id = furnitureItemMap.get(item._id);
       if (id != undefined) {
-        selectedBedroomItemNames.push(id);
+        selectedBedroomItemNames.push(id + ": " + item.quantity);
       }
     });
   }
@@ -71,7 +71,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
     userBathroomItems.forEach((item) => {
       const id = furnitureItemMap.get(item._id);
       if (id != undefined) {
-        selectedBathroomItemNames.push(id);
+        selectedBathroomItemNames.push(id + ": " + item.quantity);
       }
     });
   }
@@ -80,7 +80,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
     userKitchenItems.forEach((item) => {
       const id = furnitureItemMap.get(item._id);
       if (id != undefined) {
-        selectedKitchenItemNames.push(id);
+        selectedKitchenItemNames.push(id + ": " + item.quantity);
       }
     });
   }
@@ -89,7 +89,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
     userLivingRoomItems.forEach((item) => {
       const id = furnitureItemMap.get(item._id);
       if (id != undefined) {
-        selectedLivingRoomItemNames.push(id);
+        selectedLivingRoomItemNames.push(id + ": " + item.quantity);
       }
     });
   }
@@ -98,7 +98,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
     userDiningRoomItems.forEach((item) => {
       const id = furnitureItemMap.get(item._id);
       if (id != undefined) {
-        selectedDiningRoomItemNames.push(id);
+        selectedDiningRoomItemNames.push(id + ": " + item.quantity);
       }
     });
   }
@@ -107,7 +107,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
     userOtherItems.forEach((item) => {
       const id = furnitureItemMap.get(item._id);
       if (id != undefined) {
-        selectedOtherItemNames.push(id);
+        selectedOtherItemNames.push(id + ": " + item.quantity);
       }
     });
   }
