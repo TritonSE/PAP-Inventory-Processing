@@ -1,0 +1,12 @@
+.items {
+  display: inline-block;
+  color: var(--color-tse-secondary-1);
+  font-family: var(--font-title);
+  font-size: 40px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 51.2px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}

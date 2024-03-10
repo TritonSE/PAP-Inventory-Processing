@@ -1,4 +1,4 @@
-import { APIResult, handleAPIError, post, put, get } from "@/api/requests";
+import { APIResult, handleAPIError, post } from "@/api/requests";
 
 export interface VSRJson {
   _id: string;
@@ -127,6 +127,29 @@ export interface UpdateVSRRequest {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
+
+  // Comment-out page 2 & 3 fields for now because they're not implemented on the form yet
+  // streetAddress: string;
+  // city: string;
+  // state: string;
+  // zipCode: number;
+  // phoneNumber: string;
+  // email: string;
+  // branch: string[];
+  // conflicts: string[];
+  // dischargeStatus: string;
+  // serviceConnected: boolean;
+  // lastRank: string;
+  // militaryId: number;
+  // petCompanion: boolean;
+  // bedroomFurnishing: string[];
+  // bathroomFurnishing: string[];
+  // kitchenFurnishing: string[];
+  // livingRoomFurnishing: string[];
+  // diningRoomFurnishing: string[];
+  // otherFurnishing: string[];
+  // status: string;
+  // hearFrom: string;
 }
 
 function parseVSR(vsr: VSRJson) {
@@ -172,25 +195,6 @@ function parseVSR(vsr: VSRJson) {
 export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> {
   try {
     const response = await post("/api/vsr", vsr);
-    const json = (await response.json()) as VSRJson;
-    return { success: true, data: parseVSR(json) };
-  } catch (error) {
-    return handleAPIError(error);
-  }
-}
-
-export async function getVSR(id: string): Promise<APIResult<VSR>> {
-  try {
-    const response = await get(`/api/vsr/${id}`);
-    const json = (await response.json()) as VSRJson;
-    return { success: true, data: parseVSR(json) };
-  } catch (error) {
-    return handleAPIError(error);
-  }
-}
-export async function updateVSR(vsr: UpdateVSRRequest): Promise<APIResult<VSR>> {
-  try {
-    const response = await put("/api/vsr/", vsr);
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {
