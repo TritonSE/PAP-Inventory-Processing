@@ -201,3 +201,23 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
     return handleAPIError(error);
   }
 }
+
+export async function updateVSR(vsr: UpdateVSRRequest): Promise<APIResult<VSR>> {
+  try {
+    const response = await post("/api/vsr/update", vsr);
+    const json = (await response.json()) as VSRJson;
+    return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function getVSR(id: string): Promise<APIResult<VSR>> {
+  try {
+    const response = await fetch(`/api/vsr/${id}`);
+    const json = (await response.json()) as VSRJson;
+    return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}

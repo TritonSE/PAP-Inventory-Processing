@@ -21,7 +21,6 @@ export const getVSR: RequestHandler = async (req, res, next) => {
   }
 };
 
-
 export const createVSR: RequestHandler = async (req, res, next) => {
   // extract any errors that were found by the validator
   const errors = validationResult(req);
@@ -85,6 +84,20 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
 
     const { id } = req.params;
     const vsr = await VSRModel.findByIdAndUpdate(id, { status }, { new: true });
+    res.status(200).json(vsr);
+  } catch (error) {
+    next(error);
+  }
+};
+export const updateVSR: RequestHandler = async (req, res, next) => {
+  const errors = validationResult(req);
+  try {
+    validationErrorParser(errors);
+    const updatedVSR = await VSRModel.findByIdAndUpdate(req.body._id, req.body);
+    if (updatedVSR === null) {
+      throw new CustomError(0, 404, "Could not find id");
+    }
+    const vsr = await VSRModel.findById(req.body._id);
     res.status(200).json(vsr);
   } catch (error) {
     next(error);

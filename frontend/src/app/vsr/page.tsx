@@ -81,6 +81,7 @@ export const VeteranServiceRequest: React.FC = () => {
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
+
     const createVSRRequest: CreateVSRRequest = {
       name: data.name,
       gender: data.gender,
