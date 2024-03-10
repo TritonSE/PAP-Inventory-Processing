@@ -1,4 +1,4 @@
-import { APIResult, handleAPIError, post } from "@/api/requests";
+import { APIResult, handleAPIError, post, patch, get } from "@/api/requests";
 
 export interface VSRJson {
   _id: string;
@@ -36,6 +36,10 @@ export interface VSRJson {
   lastUpdated: string;
   status: string;
   hearFrom: string;
+}
+
+export interface VSRListJson {
+  vsrs: VSRJson[];
 }
 
 export interface VSR {
@@ -202,11 +206,11 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
   }
 }
 
-export async function updateVSR(vsr: UpdateVSRRequest): Promise<APIResult<VSR>> {
+export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
   try {
-    const response = await post("/api/vsr/update", vsr);
-    const json = (await response.json()) as VSRJson;
-    return { success: true, data: parseVSR(json) };
+    const response = await get("/api/vsr");
+    const json = (await response.json()) as VSRListJson;
+    return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
     return handleAPIError(error);
   }
@@ -215,6 +219,26 @@ export async function updateVSR(vsr: UpdateVSRRequest): Promise<APIResult<VSR>> 
 export async function getVSR(id: string): Promise<APIResult<VSR>> {
   try {
     const response = await fetch(`/api/vsr/${id}`);
+    const json = (await response.json()) as VSRJson;
+    return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function updateVSRStatus(id: string, status: string): Promise<APIResult<VSR>> {
+  try {
+    const response = await patch(`/api/vsr/${id}/status`, { status });
+    const json = (await response.json()) as VSRJson;
+    return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function updateVSR(vsr: UpdateVSRRequest): Promise<APIResult<VSR>> {
+  try {
+    const response = await post("/api/vsr/update", vsr);
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {
