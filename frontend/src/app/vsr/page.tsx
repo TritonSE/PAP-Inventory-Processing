@@ -116,18 +116,22 @@ const VeteranServiceRequest: React.FC = () => {
 
   let additionalFurnishings: string;
 
+  // Format of objects in mongodb
   interface FurnitureInputs {
     _id: string;
     quantity: number;
     isGasElectric: boolean;
   }
 
+  // Format of storing counts for each furniture item
   interface CountMap {
     [key: string]: number;
   }
 
+  // Type for each furniture category
   type FurnitureSelection = Record<string, FurnitureInputs[]>;
 
+  // Create for storing
   const selectionByCategory: FurnitureSelection = {
     Bedroom: [],
     Bathroom: [],
@@ -137,6 +141,7 @@ const VeteranServiceRequest: React.FC = () => {
     Other: [],
   };
 
+  // Fetch all available furniture items from database
   useEffect(() => {
     getFurnitureItems()
       .then((result) => {
@@ -152,6 +157,7 @@ const VeteranServiceRequest: React.FC = () => {
       });
   }, []);
 
+  // Categorize fetched furniture
   useEffect(() => {
     const bedroomItems = allItems.filter((item) => item.category === "bedroom");
     const bathroomItems = allItems.filter((item) => item.category === "bathroom");
@@ -168,6 +174,7 @@ const VeteranServiceRequest: React.FC = () => {
     setOtherFurnishings(otherItems);
   }, [allItems]);
 
+  // Handle furniture item count whenever a change is made
   const handleSelectionChange = (data: CountMap, category: string) => {
     selectionByCategory[category] = [];
     Object.entries(data).forEach(([furnitureItem, count]) => {
@@ -184,14 +191,15 @@ const VeteranServiceRequest: React.FC = () => {
     console.log(selectionByCategory[category]);
   };
 
+  // Handle whenever a change is made to the additional info textbox
   const handleTextInputChange = (data: string) => {
     additionalFurnishings = data;
     console.log(additionalFurnishings);
   };
 
+  // Execute when submit button is pressed
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
-    console.log("ADDITIONAL ITEMS: ", additionalFurnishings);
     const createVSRRequest: CreateVSRRequest = {
       name: "Sophia Yu",
       gender: "Female",
@@ -241,7 +249,6 @@ const VeteranServiceRequest: React.FC = () => {
     };
 
     try {
-      console.log("CREATED VSR REQUEST: ", createVSRRequest);
       const response = await createVSR(createVSRRequest);
 
       if (!response.success) {
@@ -249,7 +256,6 @@ const VeteranServiceRequest: React.FC = () => {
         throw new Error(`HTTP error! status: ${response.error}`);
       }
 
-      console.log(response);
       // TODO: better way of displaying successful submission (popup/modal)
       alert("VSR submitted successfully!");
     } catch (error) {

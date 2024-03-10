@@ -9,10 +9,12 @@ export interface SelectAllProps {
   onChildDataChange: (arg0: CountMap, arg1: string) => void;
 }
 
+// Format of storing counts for each furniture item
 interface CountMap {
   [key: string]: number;
 }
 
+// Format for storing click state of each furniture item button
 interface ClickState {
   [key: string]: boolean;
 }
@@ -26,6 +28,7 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
     onChildDataChange(counts, label);
   };
 
+  // Initialize all counts
   useEffect(() => {
     const initialCounts = options.reduce<CountMap>((acc, option) => {
       acc[option.name] = 0;
@@ -40,6 +43,7 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
     setClickedStates(initialClickedStates);
   }, [options]);
 
+  // Handle for incrementing count
   const incrementCount = (itemName: string) => {
     if (counts[itemName] == 0) {
       setClickedStates((prevStates) => ({
@@ -53,10 +57,12 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
     }));
   };
 
+  // Send data to parent when counts change
   useEffect(() => {
     sendDataToParent(counts);
   }, [counts]);
 
+  // Handle for decrementing count
   const decrementCount = (itemName: string) => {
     if (counts[itemName] == 1) {
       setClickedStates((prevStates) => ({
@@ -71,6 +77,7 @@ const SelectAll = ({ label, options, onChildDataChange }: SelectAllProps) => {
     sendDataToParent(counts);
   };
 
+  // Handle for when furniture item buttons are toggled
   const toggleClickState = (itemName: string) => {
     if (counts[itemName] == 0 && !clickedStates[itemName]) {
       incrementCount(itemName);

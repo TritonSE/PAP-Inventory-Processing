@@ -12,18 +12,15 @@ export interface RequestedFurnishingsProps {
   vsr: VSR;
 }
 
+// Format of objects in mongodb
 interface FurnitureInputs {
   _id: string;
   quantity: number;
   isGasElectric: boolean;
 }
 
-interface itemMapping {
-  id: string;
-  name: string;
-}
-// let furnitureItemMap: itemMapping[]; // mapping of each furniture item to its name
-const furnitureItemMap = new Map<string, string>();
+const furnitureItemMap = new Map<string, string>(); // contains all furniture items (id, name)
+
 let selectedBedroomItemNames: string[];
 let selectedBathroomItemNames: string[];
 let selectedKitchenItemNames: string[];
@@ -41,7 +38,6 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
           result.data.forEach((item) => {
             furnitureItemMap.set(item._id, item.name);
           });
-          console.log("ALL FETCHED FURNITURE ITEMS: ", furnitureItemMap);
         } else {
           setErrorMessage("Furniture items not found.");
         }
@@ -52,6 +48,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
   }, []);
   const expanded = true;
 
+  // Turn mongodb furnishing objects into a workable structure
   const userBedroomItems: FurnitureInputs[] = vsr.bedroomFurnishing as FurnitureInputs[];
   const userBathroomItems: FurnitureInputs[] = vsr.bathroomFurnishing as FurnitureInputs[];
   const userKitchenItems: FurnitureInputs[] = vsr.kitchenFurnishing as FurnitureInputs[];
@@ -59,6 +56,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
   const userDiningRoomItems: FurnitureInputs[] = vsr.diningRoomFurnishing as FurnitureInputs[];
   const userOtherItems: FurnitureInputs[] = vsr.otherFurnishing as FurnitureInputs[];
 
+  // Store the veteran's requested furnishing into respective arrays for display
   if (userBedroomItems != undefined) {
     selectedBedroomItemNames = [];
     userBedroomItems.forEach((item) => {
