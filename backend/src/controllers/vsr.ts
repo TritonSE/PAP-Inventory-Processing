@@ -60,6 +60,7 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     livingRoomFurnishing,
     diningRoomFurnishing,
     otherFurnishing,
+    additionalItems,
   } = req.body;
 
   console.log(req.body);
@@ -105,6 +106,7 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       livingRoomFurnishing,
       diningRoomFurnishing,
       otherFurnishing,
+      additionalItems,
     });
     // 201 means a new resource has been created successfully
     // the newly created task is sent back to the user

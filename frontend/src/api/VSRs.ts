@@ -50,6 +50,7 @@ export interface VSRJson {
   livingRoomFurnishing: object[];
   diningRoomFurnishing: object[];
   otherFurnishing: object[];
+  additionalItems: string;
   caseId: string;
   dateReceived: string;
   lastUpdated: string;
@@ -92,6 +93,7 @@ export interface VSR {
   livingRoomFurnishing: object[];
   diningRoomFurnishing: object[];
   otherFurnishing: object[];
+  additionalItems: string;
   caseId: string;
   dateReceived: string;
   lastUpdated: string;
@@ -133,6 +135,7 @@ export interface CreateVSRRequest {
   livingRoomFurnishing: object[];
   diningRoomFurnishing: object[];
   otherFurnishing: object[];
+  additionalItems: string;
   caseId: string;
   dateReceived: string;
   lastUpdated: string;
@@ -176,6 +179,7 @@ function parseVSR(vsr: VSRJson) {
     livingRoomFurnishing: vsr.livingRoomFurnishing,
     diningRoomFurnishing: vsr.diningRoomFurnishing,
     otherFurnishing: vsr.otherFurnishing,
+    additionalItems: vsr.additionalItems,
     caseId: vsr.caseId,
     dateReceived: vsr.dateReceived,
     lastUpdated: vsr.lastUpdated,
@@ -186,12 +190,11 @@ function parseVSR(vsr: VSRJson) {
 
 export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> {
   try {
+    console.log("REPONSE: ", vsr);
     const response = await post("/api/vsr", vsr);
 
     const json = (await response.json()) as VSRJson;
 
-    console.log("THIS");
-    console.log(json);
     return { success: true, data: parseVSR(json) };
   } catch (error) {
     return handleAPIError(error);

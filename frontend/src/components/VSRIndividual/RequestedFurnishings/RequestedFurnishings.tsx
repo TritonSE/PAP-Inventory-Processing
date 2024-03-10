@@ -5,13 +5,114 @@ import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
+import { useEffect, useState } from "react";
+import { getFurnitureItems } from "@/api/FurnitureItems";
 
 export interface RequestedFurnishingsProps {
   vsr: VSR;
 }
 
+interface FurnitureInputs {
+  _id: string;
+  quantity: number;
+  isGasElectric: boolean;
+}
+
+interface itemMapping {
+  id: string;
+  name: string;
+}
+// let furnitureItemMap: itemMapping[]; // mapping of each furniture item to its name
+const furnitureItemMap = new Map<string, string>();
+let selectedBedroomItemNames: string[];
+let selectedBathroomItemNames: string[];
+let selectedKitchenItemNames: string[];
+let selectedLivingRoomItemNames: string[];
+let selectedDiningRoomItemNames: string[];
+let selectedOtherItemNames: string[];
+
 export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useEffect(() => {
+    getFurnitureItems()
+      .then((result) => {
+        if (result.success) {
+          result.data.forEach((item) => {
+            furnitureItemMap.set(item._id, item.name);
+          });
+          console.log("ALL FETCHED FURNITURE ITEMS: ", furnitureItemMap);
+        } else {
+          setErrorMessage("Furniture items not found.");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(`An error occurred: ${error.message}`);
+      });
+  }, []);
   const expanded = true;
+
+  const userBedroomItems: FurnitureInputs[] = vsr.bedroomFurnishing as FurnitureInputs[];
+  const userBathroomItems: FurnitureInputs[] = vsr.bathroomFurnishing as FurnitureInputs[];
+  const userKitchenItems: FurnitureInputs[] = vsr.kitchenFurnishing as FurnitureInputs[];
+  const userLivingRoomItems: FurnitureInputs[] = vsr.livingRoomFurnishing as FurnitureInputs[];
+  const userDiningRoomItems: FurnitureInputs[] = vsr.diningRoomFurnishing as FurnitureInputs[];
+  const userOtherItems: FurnitureInputs[] = vsr.otherFurnishing as FurnitureInputs[];
+
+  if (userBedroomItems != undefined) {
+    selectedBedroomItemNames = [];
+    userBedroomItems.forEach((item) => {
+      const id = furnitureItemMap.get(item._id);
+      if (id != undefined) {
+        selectedBedroomItemNames.push(id);
+      }
+    });
+  }
+  if (userBathroomItems != undefined) {
+    selectedBathroomItemNames = [];
+    userBathroomItems.forEach((item) => {
+      const id = furnitureItemMap.get(item._id);
+      if (id != undefined) {
+        selectedBathroomItemNames.push(id);
+      }
+    });
+  }
+  if (userKitchenItems != undefined) {
+    selectedKitchenItemNames = [];
+    userKitchenItems.forEach((item) => {
+      const id = furnitureItemMap.get(item._id);
+      if (id != undefined) {
+        selectedKitchenItemNames.push(id);
+      }
+    });
+  }
+  if (userLivingRoomItems != undefined) {
+    selectedLivingRoomItemNames = [];
+    userLivingRoomItems.forEach((item) => {
+      const id = furnitureItemMap.get(item._id);
+      if (id != undefined) {
+        selectedLivingRoomItemNames.push(id);
+      }
+    });
+  }
+  if (userDiningRoomItems != undefined) {
+    selectedDiningRoomItemNames = [];
+    userDiningRoomItems.forEach((item) => {
+      const id = furnitureItemMap.get(item._id);
+      if (id != undefined) {
+        selectedDiningRoomItemNames.push(id);
+      }
+    });
+  }
+  if (userOtherItems != undefined) {
+    selectedOtherItemNames = [];
+    userOtherItems.forEach((item) => {
+      const id = furnitureItemMap.get(item._id);
+      if (id != undefined) {
+        selectedOtherItemNames.push(id);
+      }
+    });
+  }
 
   return (
     <div className={styles.box}>
@@ -31,7 +132,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
                 values={
                   vsr.bedroomFurnishing != undefined &&
                   Object.keys(vsr.bedroomFurnishing).length > 0
-                    ? vsr.bedroomFurnishing
+                    ? selectedBedroomItemNames
                     : ["N/A"]
                 }
               />
@@ -42,7 +143,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
                 values={
                   vsr.bathroomFurnishing != undefined &&
                   Object.keys(vsr.bathroomFurnishing).length > 0
-                    ? vsr.bathroomFurnishing
+                    ? selectedBathroomItemNames
                     : ["N/A"]
                 }
               />
@@ -53,7 +154,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
                 values={
                   vsr.kitchenFurnishing != undefined &&
                   Object.keys(vsr.kitchenFurnishing).length > 0
-                    ? vsr.kitchenFurnishing
+                    ? selectedKitchenItemNames
                     : ["N/A"]
                 }
               />
@@ -64,7 +165,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
                 values={
                   vsr.livingRoomFurnishing != undefined &&
                   Object.keys(vsr.livingRoomFurnishing).length > 0
-                    ? vsr.livingRoomFurnishing
+                    ? selectedLivingRoomItemNames
                     : ["N/A"]
                 }
               />
@@ -75,7 +176,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
                 values={
                   vsr.diningRoomFurnishing != undefined &&
                   Object.keys(vsr.diningRoomFurnishing).length > 0
-                    ? vsr.diningRoomFurnishing
+                    ? selectedDiningRoomItemNames
                     : ["N/A"]
                 }
               />
@@ -85,7 +186,7 @@ export const RequestedFurnishings = ({ vsr }: RequestedFurnishingsProps) => {
                 title="Other:"
                 values={
                   vsr.otherFurnishing != undefined && Object.keys(vsr.otherFurnishing).length > 0
-                    ? vsr.otherFurnishing
+                    ? selectedOtherItemNames
                     : ["N/A"]
                 }
               />

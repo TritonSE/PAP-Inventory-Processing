@@ -34,6 +34,7 @@ const vsrSchema = new Schema({
   livingRoomFurnishing: { type: [Object], required: true },
   diningRoomFurnishing: { type: [Object], required: true },
   otherFurnishing: { type: [Object], required: true },
+  additionalItems: { type: String, required: false },
   date: { type: String, required: true },
   caseId: { type: String, required: true },
   dateReceived: { type: String, required: true },

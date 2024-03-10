@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState } from "react";
-// import { MultipleChoice, TextField } from "@/components/VeteranForm";
 import { HeaderBar } from "@/components/VSRIndividual";
 import SelectAll from "@/components/VeteranForm/SelectAll";
 import TextField from "@/components/VeteranForm/TextField";
@@ -106,109 +105,6 @@ const VeteranServiceRequest: React.FC = () => {
     "Prefer not to say",
   ];
 
-  const branchOptions = [
-    "Air Force",
-    "Air Force Reserve",
-    "Air National Guard",
-    "Army",
-    "Army Air Corps",
-    "Army Reserve",
-    "Coast Guard",
-    "Marine Corps",
-    "Navy",
-    "Navy Reserve",
-  ];
-
-  const conflictsOptions = [
-    "WWII",
-    "Korea",
-    "Vietnam",
-    "Persian Gulf",
-    "Bosnia",
-    "Kosovo",
-    "Panama",
-    "Kuwait",
-    "Iraq",
-    "Somalia",
-    "Desert Shield/Storm",
-    "Operation Enduring Freedom (OEF)",
-    "Afghanistan",
-    "Irani Crisis",
-    "Granada",
-    "Lebanon",
-    "Beirut",
-    "Special Ops",
-    "Peactime",
-  ];
-
-  const dischargeStatusOptions = [
-    "Honorable Discharge",
-    "General Under Honorable",
-    "Other Than Honorable",
-    "Bad Conduct",
-    "Entry Level",
-    "Dishonorable",
-    "Still Serving",
-    "Civilian",
-    "Medical",
-    "Not Given",
-  ];
-
-  const hearFromOptions = ["Colleague", "Social Worker", "Friend", "Internet", "Social Media"];
-
-  const stateOptions = [
-    "AL",
-    "AK",
-    "AZ",
-    "AR",
-    "CA",
-    "CO",
-    "CT",
-    "DE",
-    "FL",
-    "GA",
-    "HI",
-    "ID",
-    "IL",
-    "IN",
-    "IA",
-    "KS",
-    "KY",
-    "LA",
-    "ME",
-    "MD",
-    "MA",
-    "MI",
-    "MN",
-    "MS",
-    "MO",
-    "MT",
-    "NE",
-    "NV",
-    "NH",
-    "NJ",
-    "NM",
-    "NY",
-    "NC",
-    "ND",
-    "OH",
-    "OK",
-    "OR",
-    "PA",
-    "RI",
-    "SC",
-    "SD",
-    "TN",
-    "TX",
-    "UT",
-    "VT",
-    "VA",
-    "WA",
-    "WV",
-    "WI",
-    "WY",
-  ];
-
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [allItems, setAllItems] = useState<FurnitureItem[]>([]);
   const [bedroomFurnishings, setBedroomFurnishings] = useState<FurnitureItem[]>([]);
@@ -217,6 +113,8 @@ const VeteranServiceRequest: React.FC = () => {
   const [livingRoomFurnishings, setLivingRoomFurnishings] = useState<FurnitureItem[]>([]);
   const [diningRoomFurnishings, setDiningRoomFurnishings] = useState<FurnitureItem[]>([]);
   const [otherFurnishings, setOtherFurnishings] = useState<FurnitureItem[]>([]);
+
+  let additionalFurnishings: string;
 
   interface FurnitureInputs {
     _id: string;
@@ -286,13 +184,19 @@ const VeteranServiceRequest: React.FC = () => {
     console.log(selectionByCategory[category]);
   };
 
+  const handleTextInputChange = (data: string) => {
+    additionalFurnishings = data;
+    console.log(additionalFurnishings);
+  };
+
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
+    console.log("ADDITIONAL ITEMS: ", additionalFurnishings);
     const createVSRRequest: CreateVSRRequest = {
       name: "Sophia Yu",
       gender: "Female",
       age: 20,
-      maritalStatus: "Signel",
+      maritalStatus: "Single",
       spouseName: "N/A",
       numOfBoys: 0,
       numOfGirls: 0,
@@ -329,14 +233,15 @@ const VeteranServiceRequest: React.FC = () => {
       livingRoomFurnishing: selectionByCategory["Living Room"],
       diningRoomFurnishing: selectionByCategory["Dining Room"],
       otherFurnishing: selectionByCategory["Other"],
+      additionalItems: additionalFurnishings,
       caseId: "0000",
       dateReceived: "2020-05-18T14:10:30.000+00:00",
       lastUpdated: "2020-05-18T14:10:30.000+00:00",
       status: "Received",
     };
-    console.log("LOGGIN\n", selectionByCategory["Other"]);
 
     try {
+      console.log("CREATED VSR REQUEST: ", createVSRRequest);
       const response = await createVSR(createVSRRequest);
 
       if (!response.success) {
@@ -716,6 +621,7 @@ const VeteranServiceRequest: React.FC = () => {
                   helperText="**We do not offer cleaning supplies"
                   required={false}
                   variant={"outlined"}
+                  onTextInputChange={handleTextInputChange}
                 ></TextField>
               </div>
             </div>

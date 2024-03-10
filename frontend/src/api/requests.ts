@@ -32,6 +32,8 @@ async function fetchRequest(
     headers: newHeaders,
     body: hasBody ? JSON.stringify(body) : undefined,
   });
+  console.log("RESPONSE after FETCH");
+  console.log(body);
   return response;
 }
 
