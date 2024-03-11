@@ -24,6 +24,8 @@ export interface IFormInput {
   num_girls: number;
   ages_of_boys: number[];
   ages_of_girls: number[];
+
+  phone_number: string;
 }
 
 export const VeteranServiceRequest: React.FC = () => {

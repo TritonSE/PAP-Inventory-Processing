@@ -1,5 +1,6 @@
 import React, { ReactNode } from "react";
 import styles from "src/components/VSRIndividual/SingleDetail/styles.module.css";
+import { FieldDetail } from "../FieldDetail";
 
 export interface SingleDetailProps {
   title: string;
@@ -28,15 +29,12 @@ export function SingleDetail({ title, value, valueFontSize, className }: SingleD
   const noValue = <div className={styles.noValue}>N/A</div>;
 
   return (
-    <div>
-      <div className={className != undefined ? className : styles.items}>
-        <div className={styles.title}>{title}</div>
-        {typeof value === "string" && value.includes("@")
-          ? email
-          : typeof value === "string" && value.includes("N/A")
-            ? noValue
-            : basic}
-      </div>
-    </div>
+    <FieldDetail className={className} title={title}>
+      {typeof value === "string" && value.includes("@")
+        ? email
+        : typeof value === "string" && value.includes("N/A")
+          ? noValue
+          : basic}
+    </FieldDetail>
   );
 }

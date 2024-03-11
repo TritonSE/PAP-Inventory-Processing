@@ -218,7 +218,7 @@ export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
 
 export async function getVSR(id: string): Promise<APIResult<VSR>> {
   try {
-    const response = await fetch(`/api/vsr/${id}`);
+    const response = await get(`/api/vsr/${id}`);
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {
