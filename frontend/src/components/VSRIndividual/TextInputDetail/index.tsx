@@ -28,6 +28,7 @@ export const TextInputDetail = ({
             name={name}
             placeholder={placeholder}
             value={field.value}
+            onChange={field.onChange}
             required
             error={!!(formProps.formState.errors as any)[name]}
             helperText={(formProps.formState.errors as any)[name]?.message as string}
