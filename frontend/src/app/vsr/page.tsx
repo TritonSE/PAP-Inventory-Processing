@@ -258,8 +258,7 @@ const VeteranServiceRequest: React.FC = () => {
     }
   };
 
-  const incrementPageNumber = (e: React.FormEvent) => {
-    e.preventDefault();
+  const incrementPage: SubmitHandler<IFormInput> = () => {
     setPageNumber(pageNumber + 1);
   };
 
@@ -326,7 +325,7 @@ const VeteranServiceRequest: React.FC = () => {
   if (pageNumber == 1) {
     return (
       <div>
-        <form onSubmit={incrementPageNumber}>
+        <form onSubmit={handleSubmit(incrementPage)}>
           <HeaderBar />
           <div className={styles.main}>
             <h1>Veteran Service Request Form</h1>
