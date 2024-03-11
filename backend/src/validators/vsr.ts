@@ -208,7 +208,6 @@ export const createVSR = [
   makeStateValidator(),
   makeCityValidator(),
   makeStreetAddressValidator(),
-  makeNumOfGirlsValidator(),
 ];
 
 export const updateStatus = [updateStatusValidator()];
