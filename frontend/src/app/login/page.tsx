@@ -30,7 +30,7 @@ const Login = () => {
       if (response.ok) {
         const userInfo = await response.json();
         console.log(userInfo);
-        router.push("/dummyPage");
+        router.push("/staff/vsr");
       } else {
         console.error("Failed to get user info from JWT Token");
       }
