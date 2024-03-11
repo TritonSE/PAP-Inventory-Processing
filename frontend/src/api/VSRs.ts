@@ -1,5 +1,10 @@
 import { APIResult, get, handleAPIError, patch, post } from "@/api/requests";
 
+export interface FurnitureInput {
+  furnitureItemId: string;
+  quantity: number;
+}
+
 export interface VSRJson {
   _id: string;
   name: string;
@@ -26,19 +31,13 @@ export interface VSRJson {
   lastRank: string;
   militaryId: number;
   petCompanion: boolean;
-  bedroomFurnishing: object[];
-  bathroomFurnishing: object[];
-  kitchenFurnishing: object[];
-  livingRoomFurnishing: object[];
-  diningRoomFurnishing: object[];
-  otherFurnishing: object[];
+  selectedFurnitureItems: FurnitureInput[];
   additionalItems: string;
   dateReceived: string;
   lastUpdated: string;
   status: string;
   hearFrom: string;
 }
-
 
 export interface VSRListJson {
   vsrs: VSRJson[];
@@ -70,14 +69,8 @@ export interface VSR {
   lastRank: string;
   militaryId: number;
   petCompanion: boolean;
-  bedroomFurnishing: object[];
-  bathroomFurnishing: object[];
-  kitchenFurnishing: object[];
-  livingRoomFurnishing: object[];
-  diningRoomFurnishing: object[];
-  otherFurnishing: object[];
+  selectedFurnitureItems: FurnitureInput[];
   additionalItems: string;
-  caseId: string;
   dateReceived: Date;
   lastUpdated: Date;
   status: string;
@@ -109,17 +102,8 @@ export interface CreateVSRRequest {
   lastRank: string;
   militaryId: number;
   petCompanion: boolean;
-  bedroomFurnishing: object[];
-  bathroomFurnishing: object[];
-  kitchenFurnishing: object[];
-  livingRoomFurnishing: object[];
-  diningRoomFurnishing: object[];
-  otherFurnishing: object[];
+  selectedFurnitureItems: FurnitureInput[];
   additionalItems: string;
-  caseId: string;
-  dateReceived: string;
-  lastUpdated: string;
-  status: string;
   hearFrom: string;
 }
 
@@ -150,12 +134,7 @@ function parseVSR(vsr: VSRJson) {
     lastRank: vsr.lastRank,
     militaryId: vsr.militaryId,
     petCompanion: vsr.petCompanion,
-    bedroomFurnishing: vsr.bedroomFurnishing,
-    bathroomFurnishing: vsr.bathroomFurnishing,
-    kitchenFurnishing: vsr.kitchenFurnishing,
-    livingRoomFurnishing: vsr.livingRoomFurnishing,
-    diningRoomFurnishing: vsr.diningRoomFurnishing,
-    otherFurnishing: vsr.otherFurnishing,
+    selectedFurnitureItems: vsr.selectedFurnitureItems,
     additionalItems: vsr.additionalItems,
     dateReceived: new Date(vsr.dateReceived),
     lastUpdated: new Date(vsr.lastUpdated),

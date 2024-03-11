@@ -1,282 +1,248 @@
 [
   {
     "category": "bedroom",
-    "name": "Matching Box Spring(s)",
-    "isGasElectric": false,
+    "name": "Twin mat.",
     "allowMultiple": true,
     "categoryIndex": 1
   },
   {
     "category": "bedroom",
-    "name": "Matching Box Frame(s)",
-    "isGasElectric": false,
+    "name": "Full Mat.",
     "allowMultiple": true,
     "categoryIndex": 2
   },
   {
     "category": "bedroom",
-    "name": "Night Stand(s)",
-    "isGasElectric": false,
+    "name": "Queen Mat.",
     "allowMultiple": true,
     "categoryIndex": 3
   },
   {
     "category": "bedroom",
-    "name": "Sheet Set(s)",
-    "isGasElectric": false,
+    "name": "King Mat.",
     "allowMultiple": true,
     "categoryIndex": 4
   },
   {
     "category": "bedroom",
-    "name": "Blankets",
-    "isGasElectric": false,
+    "name": "Matching Box Spring(s)",
     "allowMultiple": true,
     "categoryIndex": 5
   },
   {
     "category": "bedroom",
-    "name": "Twin mat.",
-    "isGasElectric": false,
+    "name": "Matching Bed Frame(s)",
     "allowMultiple": true,
     "categoryIndex": 6
   },
   {
     "category": "bedroom",
-    "name": "Full Mat.",
-    "isGasElectric": false,
-    "allowMultiple": false,
+    "name": "Night Stand(s)",
+    "allowMultiple": true,
     "categoryIndex": 7
   },
   {
     "category": "bedroom",
-    "name": "Queen Mat.",
-    "isGasElectric": false,
-    "allowMultiple": false,
+    "name": "Sheet Set(s)",
+    "allowMultiple": true,
     "categoryIndex": 8
   },
   {
     "category": "bedroom",
-    "name": "King Mat.",
-    "isGasElectric": false,
-    "allowMultiple": false,
+    "name": "Blankets",
+    "allowMultiple": true,
     "categoryIndex": 9
   },
   {
     "category": "bedroom",
     "name": "Dresser",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 10
   },
   {
     "category": "bathroom",
     "name": "Bath Rug(s)",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 1
   },
   {
     "category": "bathroom",
     "name": "Towel(s)",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 2
   },
   {
     "category": "bathroom",
     "name": "Wash Cloth(s)",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 3
   },
   {
     "category": "kitchen",
     "name": "Dish Set(s)",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 1
   },
   {
     "category": "kitchen",
     "name": "Glasses",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 2
   },
   {
     "category": "kitchen",
-    "name": "Stove (Gas / Electric)",
-    "isGasElectric": true,
+    "name": "Stove (Gas)",
     "allowMultiple": false,
     "categoryIndex": 3
   },
   {
     "category": "kitchen",
-    "name": "Cups",
-    "isGasElectric": false,
+    "name": "Stove (Electric)",
     "allowMultiple": false,
     "categoryIndex": 4
   },
   {
     "category": "kitchen",
-    "name": "Silverware",
-    "isGasElectric": false,
+    "name": "Cups",
     "allowMultiple": false,
     "categoryIndex": 5
   },
   {
     "category": "kitchen",
-    "name": "Pots and Pans",
-    "isGasElectric": false,
+    "name": "Silverware",
     "allowMultiple": false,
     "categoryIndex": 6
   },
   {
     "category": "kitchen",
-    "name": "Cooking Utensils",
-    "isGasElectric": false,
+    "name": "Pots and Pans",
     "allowMultiple": false,
     "categoryIndex": 7
   },
   {
     "category": "kitchen",
-    "name": "Can Opener",
-    "isGasElectric": false,
+    "name": "Cooking Utensils",
     "allowMultiple": false,
     "categoryIndex": 8
   },
   {
     "category": "kitchen",
-    "name": "Refrigerator",
-    "isGasElectric": false,
+    "name": "Can Opener",
     "allowMultiple": false,
     "categoryIndex": 9
   },
   {
     "category": "kitchen",
-    "name": "Microwave",
-    "isGasElectric": false,
+    "name": "Refrigerator",
     "allowMultiple": false,
     "categoryIndex": 10
   },
   {
     "category": "kitchen",
-    "name": "Toaster",
-    "isGasElectric": false,
+    "name": "Microwave",
     "allowMultiple": false,
     "categoryIndex": 11
   },
   {
     "category": "kitchen",
-    "name": "Coffee Pot",
-    "isGasElectric": false,
+    "name": "Toaster",
     "allowMultiple": false,
     "categoryIndex": 12
   },
   {
+    "category": "kitchen",
+    "name": "Coffee Pot",
+    "allowMultiple": false,
+    "categoryIndex": 13
+  },
+  {
     "category": "living room",
     "name": "Desk Lamp(s)",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 1
   },
   {
     "category": "living room",
     "name": "Floor Lamp(s)",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 2
   },
   {
     "category": "living room",
     "name": "End Table(s)",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 3
   },
   {
     "category": "living room",
     "name": "Couch",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 4
   },
   {
     "category": "living room",
     "name": "Chair",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 5
   },
   {
     "category": "living room",
     "name": "Coffee Table",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 6
   },
   {
     "category": "living room",
     "name": "TV",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 7
   },
   {
     "category": "living room",
     "name": "TV Stand",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 8
   },
   {
     "category": "living room",
     "name": "TV/Stereo Wall Unit",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 9
   },
   {
     "category": "living room",
     "name": "Desk",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 10
   },
   {
     "category": "dining room",
     "name": "Chairs",
-    "isGasElectric": false,
     "allowMultiple": true,
     "categoryIndex": 1
   },
   {
-    "category": "living room",
-    "name": "Couch",
-    "isGasElectric": false,
-    "allowMultiple": false,
-    "categoryIndex": 2
-  },
-  {
-    "category": "living room",
+    "category": "dining room",
     "name": "China Cabinet/Buffet",
-    "isGasElectric": false,
     "allowMultiple": false,
     "categoryIndex": 3
   },
   {
     "category": "other",
-    "name": "Dryer (Gas / Electric)",
-    "isGasElectric": true,
+    "name": "Dryer (Gas)",
     "allowMultiple": false,
     "categoryIndex": 1
   },
   {
     "category": "other",
-    "name": "Washer",
-    "isGasElectric": false,
+    "name": "Dryer (Electric)",
     "allowMultiple": false,
     "categoryIndex": 2
+  },
+  {
+    "category": "other",
+    "name": "Washer",
+    "allowMultiple": false,
+    "categoryIndex": 3
   }
 ]

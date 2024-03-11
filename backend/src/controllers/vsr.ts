@@ -34,10 +34,6 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     employmentStatus,
     incomeLevel,
     sizeOfHome,
-    status,
-    lastUpdated,
-    dateReceived,
-    caseId,
     hearFrom,
     petCompanion,
     militaryId,
@@ -52,12 +48,7 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     streetAddress,
     numOfBoys,
     numOfGirls,
-    bedroomFurnishing,
-    bathroomFurnishing,
-    kitchenFurnishing,
-    livingRoomFurnishing,
-    diningRoomFurnishing,
-    otherFurnishing,
+    selectedFurnitureItems,
     additionalItems,
   } = req.body;
 
@@ -65,7 +56,6 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     // if there are errors, then this function throws an exception
     validationErrorParser(errors);
 
-=======
     // Get the current date as a timestamp for when VSR was submitted
     const currentDate = new Date();
 
@@ -81,14 +71,13 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       employmentStatus,
       incomeLevel,
       sizeOfHome,
-      
+
       // Use current date as timestamp for received & updated
       dateReceived: currentDate,
       lastUpdated: currentDate,
 
       status: "Received",
-      
-      caseId,
+
       hearFrom,
       petCompanion,
       militaryId,
@@ -103,12 +92,7 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       streetAddress,
       numOfBoys,
       numOfGirls,
-      bedroomFurnishing,
-      bathroomFurnishing,
-      kitchenFurnishing,
-      livingRoomFurnishing,
-      diningRoomFurnishing,
-      otherFurnishing,
+      selectedFurnitureItems,
       additionalItems,
     });
     // 201 means a new resource has been created successfully

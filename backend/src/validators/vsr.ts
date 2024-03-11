@@ -1,6 +1,5 @@
 import { body } from "express-validator";
 
-
 const makeNameValidator = () =>
   body("name")
     .exists({ checkFalsy: true })
@@ -100,20 +99,6 @@ const updateStatusValidator = () =>
     .withMessage("Status must be a string")
     .isIn(ALLOWED_STATUSES)
     .withMessage("Status must be one of the allowed options");
-
-const makeLastUpdatedValidator = () =>
-  body("lastUpdated")
-    .exists({ checkFalsy: true })
-    .withMessage("Date is required")
-    .isISO8601()
-    .withMessage("Date must be in ISO 8601 format");
-
-const makeCaseIdValidator = () =>
-  body("caseId")
-    .exists({ checkFalsy: true })
-    .withMessage("Case Id is required")
-    .isString()
-    .withMessage("Case Id must be a string");
 
 const makeHearFromValidator = () =>
   body("hearFrom")
@@ -217,9 +202,6 @@ export const createVSR = [
   makeEmploymentStatusValidator(),
   makeIncomeLevelValidator(),
   makeSizeOfHomeValidator(),
-  makeStatusValidator(),
-  makeLastUpdatedValidator(),
-  makeCaseIdValidator(),
   makeHearFromValidator(),
   makePetCompanionValidator(),
   makeMilitaryIdValidator(),
@@ -232,7 +214,6 @@ export const createVSR = [
   makeStateValidator(),
   makeCityValidator(),
   makeStreetAddressValidator(),
-  makeNumOfBoysValidator(),
   makeNumOfGirlsValidator(),
 ];
 

@@ -4,7 +4,6 @@ const furnitureItemSchema = new Schema({
   _id: { type: String, required: true },
   category: { type: String, required: true },
   name: { type: String, required: true },
-  isGasElectric: { type: Boolean, required: true },
   allowMultiple: { type: Boolean, required: true },
   categoryIndex: { type: Number, required: true },
 });

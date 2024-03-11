@@ -1,5 +1,10 @@
 import { InferSchemaType, Schema, model } from "mongoose";
 
+const furntitureInputSchema = new Schema({
+  furnitureItemId: { type: String, required: true },
+  quantity: { type: Number, required: true },
+});
+
 const vsrSchema = new Schema({
   name: { type: String, required: true },
   gender: { type: String, require: true },
@@ -26,12 +31,7 @@ const vsrSchema = new Schema({
   militaryId: { type: Number, required: true },
   petCompanion: { type: String, required: true },
   hearFrom: { type: String, required: true },
-  bedroomFurnishing: { type: [Object], required: true },
-  bathroomFurnishing: { type: [Object], required: true },
-  kitchenFurnishing: { type: [Object], required: true },
-  livingRoomFurnishing: { type: [Object], required: true },
-  diningRoomFurnishing: { type: [Object], required: true },
-  otherFurnishing: { type: [Object], required: true },
+  selectedFurnitureItems: { type: [furntitureInputSchema], required: true },
   additionalItems: { type: String, required: false },
   dateReceived: { type: Date, required: true },
   lastUpdated: { type: Date, required: true },

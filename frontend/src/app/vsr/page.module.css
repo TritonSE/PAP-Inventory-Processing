@@ -156,6 +156,34 @@
   padding-bottom: 64px;
 }
 
+.furnitureItemsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1 0 0;
+  font-size: 16px;
+  color: var(--Light-Gray, #818181);
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 64px;
+}
+
+.furnitureItemsSectionLabel {
+  padding-bottom: 16px;
+  /* Capitalize names of furniture categories */
+  text-transform: capitalize;
+}
+
+.chipContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
 .actions {
   display: flex;
   flex-direction: row;
