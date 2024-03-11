@@ -1,5 +1,4 @@
 import { RequestHandler } from "express";
-//import createHttpError from "http-errors";
 import createHttpError from "http-errors";
 import FurnitureItemModel from "src/models/furnitureItem";
 

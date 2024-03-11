@@ -46,8 +46,6 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     state,
     city,
     streetAddress,
-    numOfBoys,
-    numOfGirls,
     selectedFurnitureItems,
     additionalItems,
   } = req.body;
@@ -90,8 +88,6 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       state,
       city,
       streetAddress,
-      numOfBoys,
-      numOfGirls,
       selectedFurnitureItems,
       additionalItems,
     });

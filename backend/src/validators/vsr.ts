@@ -184,12 +184,6 @@ const makeStreetAddressValidator = () =>
     .isString()
     .withMessage("Street address must be a string");
 
-const makeNumOfGirlsValidator = () =>
-  body("numOfGirls")
-    .optional({ checkFalsy: true })
-    .isInt({ min: 0 })
-    .withMessage("Number of Girls must be a positive integer");
-
 export const createVSR = [
   makeNameValidator(),
   makeGenderValidator(),
