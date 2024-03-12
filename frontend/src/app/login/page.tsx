@@ -8,6 +8,7 @@ import "@/app/login/login.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
+import { max } from "moment";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -65,15 +66,18 @@ const Login = () => {
           src="/Images/login_bg.png"
           alt=""
           layout="fill"
+          objectFit="cover"
+          // objectPosition="35% 10%"
           priority
           /* Inline styling due to using Image Component*/
           style={{
             position: "absolute",
             top: "0",
             left: "0",
-            right: "0",
+            right: "30",
             bottom: "0",
           }}
+          className="background-image"
         />
         <div
           style={{
@@ -88,7 +92,7 @@ const Login = () => {
         <div className="login-box">
           <div className="logo-container">
             <div className="logo-image">
-              <Image src="/Images/LoginImage.png" alt="Logo" width={190} height={90} />
+              <img src="/Images/LoginImage.png" alt="Logo" className="image" />
             </div>
           </div>
           <div className="welcome-text">Welcome!</div>

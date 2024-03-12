@@ -44,6 +44,10 @@ html {
   width: 190px;
   height: 90px;
 }
+.image {
+  width: 190px;
+  height: 90px;
+}
 
 .welcome-text {
   color: #000;
@@ -57,18 +61,19 @@ html {
 }
 
 .login-form {
-  width: 100%;
+  width: 80%;
   margin-top: 22px; /* Gap between Name and Password */
 }
 
 .input-group {
-  margin-bottom: 22px; /* Gap between Password and Forgot Password */
+  margin-bottom: 32px; /* Gap between Password and Forgot Password */
 }
 
 label {
   display: block;
   margin-bottom: 5px;
   color: gray;
+  font-size: 16px;
 }
 
 input {
@@ -79,7 +84,12 @@ input {
 }
 
 .forgot-password {
-  color: blue;
+  color: #4274f4;
+
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
   text-align: center;
   margin-bottom: 48px; /* Gap between Forgot password and Log In */
 }
@@ -98,4 +108,90 @@ input {
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  margin-bottom: 49px;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .background-image {
+    object-fit: cover;
+    object-position: 35% 10%;
+  }
+  .login-box {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .login-form {
+    width: 80%;
+    margin-top: 22px; /* Gap between Name and Password */
+  }
+
+  .input-group {
+    margin-bottom: 32px; /* Gap between Password and Forgot Password */
+  }
+
+  .forgot-password {
+    color: #4274f4;
+    font-size: 12px;
+    margin-bottom: 38px; /* Gap between Forgot password and Log In */
+  }
+
+  .login-button {
+    font-size: 18px;
+    font-weight: 600;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .background-image {
+    object-fit: cover;
+    object-position: 35% 10%;
+  }
+  .login-box {
+    width: 90%;
+    max-width: 500px;
+  }
+
+  .logo-container {
+    top: -15%;
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .logo-image {
+    width: 130px;
+    height: 60px;
+  }
+  .image {
+    width: 130px;
+    height: 60px;
+  }
+
+  .welcome-text {
+    font-size: 28px;
+    margin-top: 32px; /* Gap between Welcome and Name field */
+  }
+
+  .login-form {
+    width: 100%;
+    margin-top: 16px; /* Gap between Name and Password */
+  }
+
+  .input-group {
+    margin-bottom: 32px; /* Gap between Password and Forgot Password */
+  }
+
+  .forgot-password {
+    color: #4274f4;
+    font-size: 12px;
+    margin-bottom: 32px; /* Gap between Forgot password and Log In */
+  }
+
+  .login-button {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 17px;
+  }
 }
