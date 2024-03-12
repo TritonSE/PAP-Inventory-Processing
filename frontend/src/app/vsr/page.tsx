@@ -175,7 +175,10 @@ const VeteranServiceRequest: React.FC = () => {
       militaryId: 2932,
       petCompanion: true,
       hearFrom: "Social Media",
-      selectedFurnitureItems: Object.values(selectedFurnitureItems),
+      // Only submit items that the user selected at least 1 of
+      selectedFurnitureItems: Object.values(selectedFurnitureItems).filter(
+        (selectedItem) => selectedItem.quantity > 0,
+      ),
       additionalItems,
     };
 
