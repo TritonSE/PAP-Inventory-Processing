@@ -8,7 +8,7 @@ import "@/app/login/login.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
-import { max } from "moment";
+import { useMediaQuery } from "@mui/material";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -17,6 +17,8 @@ const Login = () => {
   const { auth } = initFirebase();
 
   const router = useRouter();
+
+  const isMobile = useMediaQuery("@media screen and (max-width: 550px)");
 
   const sendTokenToBackend = async (token: string) => {
     try {
@@ -67,7 +69,6 @@ const Login = () => {
           alt=""
           layout="fill"
           objectFit="cover"
-          // objectPosition="35% 10%"
           priority
           /* Inline styling due to using Image Component*/
           style={{
@@ -92,7 +93,13 @@ const Login = () => {
         <div className="login-box">
           <div className="logo-container">
             <div className="logo-image">
-              <img src="/Images/LoginImage.png" alt="Logo" className="image" />
+              <Image
+                src="/Images/LoginImage.png"
+                alt="Logo"
+                className="image"
+                width={isMobile ? 130 : 190}
+                height={isMobile ? 60 : 90}
+              />
             </div>
           </div>
           <div className="welcome-text">Welcome!</div>

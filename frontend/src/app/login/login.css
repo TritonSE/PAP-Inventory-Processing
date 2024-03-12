@@ -24,12 +24,12 @@ html {
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   width: 70%;
-  max-width: 500px;
+  max-width: 580px;
 }
 
 .logo-container {
   position: absolute;
-  top: -20%;
+  top: -65px;
   display: inline-flex;
   padding: 15px;
   align-items: flex-start;
@@ -57,16 +57,17 @@ html {
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  margin-top: 50px; /* Gap between Welcome and Name field */
+  margin-top: 65px; /* Gap between Welcome and Name field */
 }
 
 .login-form {
   width: 80%;
-  margin-top: 22px; /* Gap between Name and Password */
+  margin-top: 54px; /* Gap between Name and Password */
 }
 
 .input-group {
-  margin-bottom: 32px; /* Gap between Password and Forgot Password */
+  margin-bottom: 16px; /* Gap between Password and Forgot Password */
+  padding-top: 6px;
 }
 
 label {
@@ -91,6 +92,7 @@ input {
   font-weight: 400;
   line-height: normal;
   text-align: center;
+  padding-top: 30px;
   margin-bottom: 48px; /* Gap between Forgot password and Log In */
 }
 
@@ -124,11 +126,7 @@ input {
 
   .login-form {
     width: 80%;
-    margin-top: 22px; /* Gap between Name and Password */
-  }
-
-  .input-group {
-    margin-bottom: 32px; /* Gap between Password and Forgot Password */
+    margin-top: 32px; /* Gap between Name and Password */
   }
 
   .forgot-password {
@@ -155,7 +153,7 @@ input {
   }
 
   .logo-container {
-    top: -15%;
+    top: -65px;
     padding: 10px;
     gap: 10px;
   }
@@ -171,21 +169,22 @@ input {
 
   .welcome-text {
     font-size: 28px;
-    margin-top: 32px; /* Gap between Welcome and Name field */
+    margin-top: 17px; /* Gap between Welcome and Name field */
   }
 
   .login-form {
     width: 100%;
-    margin-top: 16px; /* Gap between Name and Password */
+    margin-top: 32px; /* Gap between Name and Password */
   }
 
   .input-group {
-    margin-bottom: 32px; /* Gap between Password and Forgot Password */
+    padding-top: 0;
   }
 
   .forgot-password {
     color: #4274f4;
     font-size: 12px;
+    padding-top: 16px;
     margin-bottom: 32px; /* Gap between Forgot password and Log In */
   }
 
