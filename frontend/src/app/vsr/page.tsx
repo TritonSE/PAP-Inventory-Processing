@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
@@ -46,11 +46,12 @@ const VeteranServiceRequest: React.FC = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     watch,
   } = useForm<IFormInput>();
   const [selectedEthnicities, setSelectedEthnicities] = useState<string[]>([]);
   const [otherEthnicity, setOtherEthnicity] = useState("");
+
 
   const [selectedConflicts, setSelectedConflicts] = useState<string[]>([]);
   const [otherConflict, setOtherConflict] = useState("");
@@ -59,6 +60,7 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [selectedHearFrom, setSelectedHearFrom] = useState("");
   const [otherHearFrom, setOtherHearFrom] = useState("");
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -136,7 +138,7 @@ const VeteranServiceRequest: React.FC = () => {
     "Lebanon",
     "Beirut",
     "Special Ops",
-    "Peactime",
+    "Peacetime",
   ];
 
   const dischargeStatusOptions = [
@@ -208,6 +210,7 @@ const VeteranServiceRequest: React.FC = () => {
   ];
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  
     // Construct the request object
     const createVSRRequest: CreateVSRRequest = {
       name: data.name,
@@ -257,6 +260,10 @@ const VeteranServiceRequest: React.FC = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
+
+  useEffect(() => {
+    setIsFormValid(isValid);
+  }, [isValid]);
 
   const incrementPage: SubmitHandler<IFormInput> = () => {
     setPageNumber(pageNumber + 1);
@@ -892,7 +899,9 @@ const VeteranServiceRequest: React.FC = () => {
               </div>
               <PageNumber pageNum={2} />
               <div className={styles.submitButton}>
-                <button className={styles.submit} type="submit">
+                <button className={`${styles.submit} ${isFormValid ? styles.enabled : styles.disabled}`} 
+                type="submit" 
+                disabled={!isFormValid}>
                   Submit
                 </button>
               </div>
