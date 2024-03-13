@@ -52,7 +52,6 @@ const VeteranServiceRequest: React.FC = () => {
   const [selectedEthnicities, setSelectedEthnicities] = useState<string[]>([]);
   const [otherEthnicity, setOtherEthnicity] = useState("");
 
-
   const [selectedConflicts, setSelectedConflicts] = useState<string[]>([]);
   const [otherConflict, setOtherConflict] = useState("");
 
@@ -210,7 +209,6 @@ const VeteranServiceRequest: React.FC = () => {
   ];
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-  
     // Construct the request object
     const createVSRRequest: CreateVSRRequest = {
       name: data.name,
@@ -899,9 +897,11 @@ const VeteranServiceRequest: React.FC = () => {
               </div>
               <PageNumber pageNum={2} />
               <div className={styles.submitButton}>
-                <button className={`${styles.submit} ${isFormValid ? styles.enabled : styles.disabled}`} 
-                type="submit" 
-                disabled={!isFormValid}>
+                <button
+                  className={`${styles.submit} ${isFormValid ? styles.enabled : styles.disabled}`}
+                  type="submit"
+                  disabled={!isFormValid}
+                >
                   Submit
                 </button>
               </div>

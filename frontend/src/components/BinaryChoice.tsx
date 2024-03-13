@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Chip from "@mui/material/Chip";
 import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
 
