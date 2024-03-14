@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
@@ -7,7 +7,9 @@ import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import Dropdown from "@/components/shared/input/Dropdown";
 import HeaderBar from "@/components/shared/HeaderBar";
 import PageNumber from "@/components/VSRForm/PageNumber";
-import { createVSR, CreateVSRRequest } from "@/api/VSRs";
+import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
+import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
+import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
 
 interface IFormInput {
   name: string;
@@ -24,6 +26,20 @@ interface IFormInput {
   num_girls: number;
   ages_of_boys: number[];
   ages_of_girls: number[];
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  branch: string[];
+  conflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: boolean;
+  lastRank: string;
+  militaryID: number;
+  petCompanion: boolean;
+  hearFrom: string;
 }
 
 const VeteranServiceRequest: React.FC = () => {
@@ -36,6 +52,8 @@ const VeteranServiceRequest: React.FC = () => {
   } = useForm<IFormInput>();
   const [selectedEthnicities, setSelectedEthnicities] = useState<string[]>([]);
   const [otherEthnicity, setOtherEthnicity] = useState("");
+
+  const [pageNumber, setPageNumber] = useState(1);
 
   const numBoys = watch("num_boys");
   const numGirls = watch("num_girls");
@@ -79,6 +97,50 @@ const VeteranServiceRequest: React.FC = () => {
     "Prefer not to say",
   ];
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [furnitureCategoriesToItems, setFurnitureCategoriesToItems] =
+    useState<Record<string, FurnitureItem[]>>();
+  // Map furniture item IDs to selections for those items
+  const [selectedFurnitureItems, setSelectedFurnitureItems] = useState<
+    Record<string, FurnitureInput>
+  >({});
+
+  const [additionalItems, setAdditionalItems] = useState("");
+
+  // Fetch all available furniture items from database
+  useEffect(() => {
+    getFurnitureItems()
+      .then((result) => {
+        if (result.success) {
+          setFurnitureCategoriesToItems(
+            result.data.reduce(
+              (prevMap: Record<string, FurnitureItem[]>, curItem) => ({
+                ...prevMap,
+                [curItem.category]: [...(prevMap[curItem.category] ?? []), curItem],
+              }),
+              {},
+            ),
+          );
+          setErrorMessage(null);
+        } else {
+          setErrorMessage("Furniture items not found.");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(`An error occurred: ${error.message}`);
+      });
+  }, []);
+
+  // Handle furniture item count whenever a change is made
+  const handleSelectionChange = (newSelection: FurnitureInput) => {
+    setSelectedFurnitureItems((prevItems) => ({
+      ...prevItems,
+      [newSelection.furnitureItemId]: newSelection,
+    }));
+  };
+
+  // Execute when submit button is pressed
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
     const createVSRRequest: CreateVSRRequest = {
@@ -99,6 +161,25 @@ const VeteranServiceRequest: React.FC = () => {
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
+      streetAddress: "1111 TSE Lane",
+      city: "San Diego",
+      state: "CA",
+      zipCode: 92122,
+      phoneNumber: "123-456-7890",
+      email: "tsepapdev@gmail.com",
+      branch: ["Navy", "Air Force"],
+      conflicts: [],
+      dischargeStatus: "Still Serving",
+      serviceConnected: true,
+      lastRank: "Officer",
+      militaryId: 2932,
+      petCompanion: true,
+      hearFrom: "Social Media",
+      // Only submit items that the user selected at least 1 of
+      selectedFurnitureItems: Object.values(selectedFurnitureItems).filter(
+        (selectedItem) => selectedItem.quantity > 0,
+      ),
+      additionalItems,
     };
 
     try {
@@ -114,6 +195,14 @@ const VeteranServiceRequest: React.FC = () => {
     } catch (error) {
       console.error("There was a problem with the fetch operation:", error);
     }
+  };
+
+  const incrementPageNumber = () => {
+    setPageNumber(pageNumber + 1);
+  };
+
+  const decrementPageNumber = () => {
+    setPageNumber(pageNumber - 1);
   };
 
   const renderChildInput = (gender: "boy" | "girl") => {
@@ -171,247 +260,308 @@ const VeteranServiceRequest: React.FC = () => {
     );
   };
 
-  return (
-    <div>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <HeaderBar />
-        <div className={styles.main}>
-          <h1>Veteran Service Request Form</h1>
-          <p className={styles.description}>
-            Welcome, Veterans, Active Duty, and Reservists. We invite you to schedule an appointment
-            to explore a selection of household furnishings and essential items available in our
-            warehouse.
-            <br></br>
-            <br></br>
-            Let us know your specific needs, and we&apos;ll provide the best assistance possible.
-            Expect a response within 48 business hours; remember to check your junk mail if needed.
-            <br></br>
-            <br></br>
-            If you&apos;re a Veteran or Active Military Reservist in search of our services, simply
-            fill out and submit the form below.
-          </p>
-
-          <div className={styles.fieldsMarked}>
-            <p>
-              Fields marked with <span className={styles.asterisk}>*</span> are required.
+  if (pageNumber == 1) {
+    return (
+      <div>
+        <form onSubmit={handleSubmit(incrementPageNumber)}>
+          <HeaderBar />
+          <div className={styles.main}>
+            <h1>Veteran Service Request Form</h1>
+            <p className={styles.description}>
+              Welcome, Veterans, Active Duty, and Reservists. We invite you to schedule an
+              appointment to explore a selection of household furnishings and essential items
+              available in our warehouse.
+              <br></br>
+              <br></br>
+              Let us know your specific needs, and we&apos;ll provide the best assistance possible.
+              Expect a response within 48 business hours; remember to check your junk mail if
+              needed.
+              <br></br>
+              <br></br>
+              If you&apos;re a Veteran or Active Military Reservist in search of our services,
+              simply fill out and submit the form below.
             </p>
-          </div>
 
-          <div className={styles.formContainer}>
-            <div className={styles.form}>
-              <div className={styles.subSec}>
-                <h1 className={styles.personalInfo}>Personal Information</h1>
+            <div className={styles.fieldsMarked}>
+              <p>
+                Fields marked with <span className={styles.asterisk}>*</span> are required.
+              </p>
+            </div>
 
-                <div className={styles.formRow}>
-                  <div className={styles.longText}>
-                    <TextField
-                      label="Name"
-                      variant="outlined"
-                      placeholder="e.g. Justin Timberlake"
-                      {...register("name", { required: "Name is required" })}
-                      required
-                      error={!!errors.name}
-                      helperText={errors.name?.message}
-                    />
-                  </div>
-                  {/* Add an empty div here with flex: 1 to take up the right half of the row */}
-                  <div style={{ flex: 1 }} />
-                </div>
+            <div className={styles.formContainer}>
+              <div className={styles.form}>
+                <div className={styles.subSec}>
+                  <h1 className={styles.personalInfo}>Personal Information</h1>
 
-                <div className={styles.formRow}>
-                  <div className={styles.longText}>
-                    <Controller
-                      defaultValue=""
-                      name="gender"
-                      control={control}
-                      rules={{ required: "Gender is required" }}
-                      render={({ field }) => (
-                        <Dropdown
-                          label="Gender"
-                          options={genderOptions}
-                          value={field.value}
-                          onChange={(e) => field.onChange(e)}
-                          required
-                          error={!!errors.gender}
-                          helperText={errors.gender?.message}
-                          placeholder="Select your gender"
-                        />
-                      )}
-                    />
-                  </div>
-                  <div className={styles.longText}>
-                    <TextField
-                      label="Age"
-                      type="number"
-                      variant="outlined"
-                      placeholder="Enter your age"
-                      {...register("age", {
-                        required: "Age is required",
-                        pattern: {
-                          // Only allow up to 2 digits
-                          value: /^[0-9]+$/,
-                          message: "This field must be a number",
-                        },
-                      })}
-                      required
-                      error={!!errors.age}
-                      helperText={errors.age?.message}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className={styles.subSec}>
-                <Controller
-                  name="marital_status"
-                  control={control}
-                  rules={{ required: "Marital status is required" }}
-                  render={({ field }) => (
-                    <MultipleChoice
-                      label="Marital Status"
-                      options={maritalOptions}
-                      value={field.value}
-                      onChange={(newValue) => field.onChange(newValue)}
-                      required
-                      error={!!errors.marital_status}
-                      helperText={errors.marital_status?.message}
-                    />
-                  )}
-                />
-                {watch().marital_status === "Married" ? (
                   <div className={styles.formRow}>
                     <div className={styles.longText}>
                       <TextField
-                        label="Spouse's Name"
+                        label="Name"
                         variant="outlined"
-                        placeholder="e.g. Jane Timberlake"
-                        {...register("spouse", {
-                          required: "Spouse's Name is required",
-                        })}
+                        placeholder="e.g. Justin Timberlake"
+                        {...register("name", { required: "Name is required" })}
                         required
-                        error={!!errors.spouse}
-                        helperText={errors.spouse?.message}
+                        error={!!errors.name}
+                        helperText={errors.name?.message}
                       />
                     </div>
                     {/* Add an empty div here with flex: 1 to take up the right half of the row */}
                     <div style={{ flex: 1 }} />
                   </div>
-                ) : null}
 
-                <p className={styles.sectionHeader}>Children (under 18)</p>
-
-                <div className={styles.formRow}>
-                  {renderChildInput("boy")}
-                  {renderChildInput("girl")}
-                </div>
-              </div>
-
-              <Controller
-                name="ethnicity"
-                control={control}
-                rules={{ required: "Ethnicity is required" }}
-                render={({ field }) => (
-                  <>
-                    <MultipleChoice
-                      label="Ethnicity"
-                      options={ethnicityOptions}
-                      value={selectedEthnicities}
-                      onChange={(newValue) => {
-                        const valueToSet = ((newValue as string[]) ?? [])[0] ?? "";
-                        if (valueToSet !== "" || otherEthnicity === "") {
-                          field.onChange(valueToSet);
-                        }
-                        setSelectedEthnicities(newValue as string[]);
-                      }}
-                      required
-                      error={!!errors.ethnicity}
-                      helperText={errors.ethnicity?.message}
-                      allowMultiple
-                    />
-                    <div style={{ marginTop: -50 }}>
-                      <TextField
-                        label="Other"
-                        type="text"
-                        placeholder="Please specify"
-                        name="other_ethnicity"
-                        value={otherEthnicity}
-                        onChange={(e) => {
-                          const value = e.target.value;
-                          if (value !== "" || selectedEthnicities.length === 0) {
-                            field.onChange(value);
-                          }
-                          setOtherEthnicity(value);
-                        }}
-                        variant={"outlined"}
-                        required={false}
+                  <div className={styles.formRow}>
+                    <div className={styles.longText}>
+                      <Controller
+                        defaultValue=""
+                        name="gender"
+                        control={control}
+                        rules={{ required: "Gender is required" }}
+                        render={({ field }) => (
+                          <Dropdown
+                            label="Gender"
+                            options={genderOptions}
+                            value={field.value}
+                            onChange={(e) => field.onChange(e)}
+                            required
+                            error={!!errors.gender}
+                            helperText={errors.gender?.message}
+                            placeholder="Select your gender"
+                          />
+                        )}
                       />
                     </div>
-                  </>
-                )}
-              />
+                    <div className={styles.longText}>
+                      <TextField
+                        label="Age"
+                        type="number"
+                        variant="outlined"
+                        placeholder="Enter your age"
+                        {...register("age", {
+                          required: "Age is required",
+                          pattern: {
+                            // Only allow up to 2 digits
+                            value: /^[0-9]+$/,
+                            message: "This field must be a number",
+                          },
+                        })}
+                        required
+                        error={!!errors.age}
+                        helperText={errors.age?.message}
+                      />
+                    </div>
+                  </div>
+                </div>
 
-              <Controller
-                name="employment_status"
-                control={control}
-                rules={{ required: "Employment status is required" }}
-                render={({ field }) => (
-                  <MultipleChoice
-                    label="Employment Status"
-                    options={employmentOptions}
-                    value={field.value}
-                    onChange={(newValue) => field.onChange(newValue)}
-                    required
-                    error={!!errors.employment_status}
-                    helperText={errors.employment_status?.message}
+                <div className={styles.subSec}>
+                  <Controller
+                    name="marital_status"
+                    control={control}
+                    rules={{ required: "Marital status is required" }}
+                    render={({ field }) => (
+                      <MultipleChoice
+                        label="Marital Status"
+                        options={maritalOptions}
+                        value={field.value}
+                        onChange={(newValue) => field.onChange(newValue)}
+                        required
+                        error={!!errors.marital_status}
+                        helperText={errors.marital_status?.message}
+                      />
+                    )}
                   />
-                )}
-              />
+                  {watch().marital_status === "Married" ? (
+                    <div className={styles.formRow}>
+                      <div className={styles.longText}>
+                        <TextField
+                          label="Spouse's Name"
+                          variant="outlined"
+                          placeholder="e.g. Jane Timberlake"
+                          {...register("spouse", {
+                            required: "Spouse's Name is required",
+                          })}
+                          required
+                          error={!!errors.spouse}
+                          helperText={errors.spouse?.message}
+                        />
+                      </div>
+                      {/* Add an empty div here with flex: 1 to take up the right half of the row */}
+                      <div style={{ flex: 1 }} />
+                    </div>
+                  ) : null}
 
-              <Controller
-                name="income_level"
-                control={control}
-                rules={{ required: "Income level is required" }}
-                render={({ field }) => (
-                  <MultipleChoice
-                    label="Income Level"
-                    options={incomeOptions}
-                    value={field.value}
-                    onChange={(newValue) => field.onChange(newValue)}
-                    required
-                    error={!!errors.income_level}
-                    helperText={errors.income_level?.message}
-                  />
-                )}
-              />
+                  <p className={styles.sectionHeader}>Children (under 18)</p>
 
-              <Controller
-                name="size_of_home"
-                control={control}
-                rules={{ required: "Size of home is required" }}
-                render={({ field }) => (
-                  <MultipleChoice
-                    label="Size of Home"
-                    options={homeOptions}
-                    value={field.value}
-                    onChange={(newValue) => field.onChange(newValue)}
-                    required
-                    error={!!errors.size_of_home}
-                    helperText={errors.size_of_home?.message}
-                  />
-                )}
-              />
+                  <div className={styles.formRow}>
+                    {renderChildInput("boy")}
+                    {renderChildInput("girl")}
+                  </div>
+                </div>
+
+                <Controller
+                  name="ethnicity"
+                  control={control}
+                  rules={{ required: "Ethnicity is required" }}
+                  render={({ field }) => (
+                    <>
+                      <MultipleChoice
+                        label="Ethnicity"
+                        options={ethnicityOptions}
+                        value={selectedEthnicities}
+                        onChange={(newValue) => {
+                          const valueToSet = ((newValue as string[]) ?? [])[0] ?? "";
+                          if (valueToSet !== "" || otherEthnicity === "") {
+                            field.onChange(valueToSet);
+                          }
+                          setSelectedEthnicities(newValue as string[]);
+                        }}
+                        required
+                        error={!!errors.ethnicity}
+                        helperText={errors.ethnicity?.message}
+                        allowMultiple
+                      />
+                      <div style={{ marginTop: -50 }}>
+                        <TextField
+                          label="Other"
+                          type="text"
+                          placeholder="Please specify"
+                          name="other_ethnicity"
+                          value={otherEthnicity}
+                          onChange={(e) => {
+                            const value = e.target.value;
+                            if (value !== "" || selectedEthnicities.length === 0) {
+                              field.onChange(value);
+                            }
+                            setOtherEthnicity(value);
+                          }}
+                          variant={"outlined"}
+                          required={false}
+                        />
+                      </div>
+                    </>
+                  )}
+                />
+
+                <Controller
+                  name="employment_status"
+                  control={control}
+                  rules={{ required: "Employment status is required" }}
+                  render={({ field }) => (
+                    <MultipleChoice
+                      label="Employment Status"
+                      options={employmentOptions}
+                      value={field.value}
+                      onChange={(newValue) => field.onChange(newValue)}
+                      required
+                      error={!!errors.employment_status}
+                      helperText={errors.employment_status?.message}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="income_level"
+                  control={control}
+                  rules={{ required: "Income level is required" }}
+                  render={({ field }) => (
+                    <MultipleChoice
+                      label="Income Level"
+                      options={incomeOptions}
+                      value={field.value}
+                      onChange={(newValue) => field.onChange(newValue)}
+                      required
+                      error={!!errors.income_level}
+                      helperText={errors.income_level?.message}
+                    />
+                  )}
+                />
+
+                <Controller
+                  name="size_of_home"
+                  control={control}
+                  rules={{ required: "Size of home is required" }}
+                  render={({ field }) => (
+                    <MultipleChoice
+                      label="Size of Home"
+                      options={homeOptions}
+                      value={field.value}
+                      onChange={(newValue) => field.onChange(newValue)}
+                      required
+                      error={!!errors.size_of_home}
+                      helperText={errors.size_of_home?.message}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+            <div className={styles.submitButton}>
+              <button className={styles.submit} type="submit">
+                Next
+              </button>
+            </div>
+            <PageNumber pageNum={1} />
+          </div>
+        </form>
+      </div>
+    );
+  } else {
+    return (
+      <div className={styles.page}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <HeaderBar />
+          <div className={styles.canvas}>
+            <div className={styles.title}>Furnishings</div>
+            <div className={styles.sections}>
+              {Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
+                <div className={styles.furnitureItemsSection} key={category}>
+                  <p className={styles.furnitureItemsSectionLabel}>{category}</p>
+                  <div className={styles.chipContainer}>
+                    {(items ?? []).map((furnitureItem) => (
+                      <FurnitureItemSelection
+                        key={furnitureItem._id}
+                        furnitureItem={furnitureItem}
+                        selection={
+                          selectedFurnitureItems[furnitureItem._id] ?? {
+                            furnitureItemId: furnitureItem._id,
+                            quantity: 0,
+                          }
+                        }
+                        onChangeSelection={(newSelection) => handleSelectionChange(newSelection)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <div className={styles.section}>
+                <TextField
+                  label="Identify other necessary items"
+                  helperText="**We do not offer cleaning supplies"
+                  required={false}
+                  variant={"outlined"}
+                  onChange={(e) => setAdditionalItems(e.target.value)}
+                ></TextField>
+              </div>
             </div>
           </div>
-          <div className={styles.submitButton}>
-            <button className={styles.submit} type="submit">
-              Submit
-            </button>
+          <div className={styles.actions}>
+            <div className={styles.backButton}>
+              <button className={styles.back} onClick={decrementPageNumber}>
+                Back
+              </button>
+            </div>
+            <PageNumber pageNum={3} />
+            <div className={styles.submitButton}>
+              <button className={styles.submit} type="submit">
+                Submit
+              </button>
+            </div>
           </div>
-          <PageNumber pageNum={1} />
-        </div>
-      </form>
-    </div>
-  );
+        </form>
+        <div className={styles.footer}></div>
+        {/* TODO: better error handling */}
+        {errorMessage}
+      </div>
+    );
+  }
 };
 
 export default VeteranServiceRequest;

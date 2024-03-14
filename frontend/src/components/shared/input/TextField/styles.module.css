@@ -29,8 +29,12 @@
 }
 
 .helperText {
-  color: var(--Secondary-2, #be2d46);
+  color: var(--Neutral-Gray6, #484848);
   font-size: 12px;
+}
+
+.errorText {
+  color: var(--Secondary-2, #be2d46);
 }
 
 .input::placeholder {
