@@ -9,7 +9,7 @@ import HeaderBar from "@/components/shared/HeaderBar";
 import PageNumber from "@/components/VSRForm/PageNumber";
 import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
-import BinaryChoice from "@/components/BinaryChoice";
+import BinaryChoice from "@/components/shared/input/BinaryChoice";
 import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
 
 interface IFormInput {

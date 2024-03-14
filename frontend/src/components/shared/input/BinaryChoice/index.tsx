@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Chip from "@mui/material/Chip";
-import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
+import styles from "@/components/shared/input/BinaryChoice/styles.module.css";
 
 export interface BinaryChoiceProps {
   label: string;

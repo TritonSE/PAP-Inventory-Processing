@@ -1,0 +1,64 @@
+/* BinaryChoice.module.css */
+
+.wrapperClass {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  flex: 1 0 0;
+  font-size: 16px;
+  color: var(--Light-Gray, #818181);
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.chip {
+  border-width: 1px;
+  border-style: solid;
+  text-align: center;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 64px;
+  border: 1px solid var(--Secondary-1, #102d5f);
+}
+
+.chipSelected {
+  color: white;
+  background: #102d5f;
+}
+
+.chipSelected:hover {
+  background: #102d5f;
+}
+
+.chipContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.chipUnselected {
+  color: var(--Accent-Blue-1, #102d5f);
+  background: rgba(255, 255, 255, 0);
+}
+
+/*Need exact color for this*/
+.chipUnselected:hover {
+  background: rgb(213, 232, 239);
+}
+
+.requiredAsterisk {
+  color: var(--Secondary-2, #be2d46);
+  text-align: left;
+}
+
+.helperText {
+  color: var(--Secondary-2, #be2d46);
+  font-size: 12px;
+}
