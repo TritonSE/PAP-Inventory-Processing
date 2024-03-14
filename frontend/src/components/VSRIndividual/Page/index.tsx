@@ -13,11 +13,13 @@ import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
 import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
+import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
 
   const renderApproveButton = () => (
     <button
@@ -50,6 +52,24 @@ export const Page = () => {
         setErrorMessage(`An error occurred: ${error.message}`);
       });
   }, [id]);
+
+  // Fetch all available furniture items from database
+  useEffect(() => {
+    getFurnitureItems()
+      .then((result) => {
+        if (result.success) {
+          setFurnitureItems(result.data);
+
+          setErrorMessage(null);
+        } else {
+          setErrorMessage("Furniture items not found.");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(`An error occurred: ${error.message}`);
+      });
+  }, []);
+
   return (
     <div className={styles.page}>
       <HeaderBar />
@@ -91,7 +111,7 @@ export const Page = () => {
               <AdditionalInfo vsr={vsr} />
             </div>
             <div className={styles.rightColumn}>
-              <RequestedFurnishings vsr={vsr} />
+              <RequestedFurnishings vsr={vsr} furnitureItems={furnitureItems ?? []} />
               <div className={styles.finalActions}>
                 {vsr.status == "Received" || vsr.status === undefined
                   ? renderApproveButton()

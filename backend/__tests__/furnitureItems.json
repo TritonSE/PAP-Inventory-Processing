@@ -1,0 +1,266 @@
+[
+  {
+    "category": "bedroom",
+    "name": "Twin mat.",
+    "allowMultiple": true,
+    "categoryIndex": 1
+  },
+  {
+    "category": "bedroom",
+    "name": "Full Mat.",
+    "allowMultiple": true,
+    "categoryIndex": 2
+  },
+  {
+    "category": "bedroom",
+    "name": "Queen Mat.",
+    "allowMultiple": true,
+    "categoryIndex": 3
+  },
+  {
+    "category": "bedroom",
+    "name": "King Mat.",
+    "allowMultiple": true,
+    "categoryIndex": 4
+  },
+  {
+    "category": "bedroom",
+    "name": "Matching Box Spring(s)",
+    "allowMultiple": true,
+    "categoryIndex": 5
+  },
+  {
+    "category": "bedroom",
+    "name": "Matching Bed Frame(s)",
+    "allowMultiple": true,
+    "categoryIndex": 6
+  },
+  {
+    "category": "bedroom",
+    "name": "Night Stand(s)",
+    "allowMultiple": true,
+    "categoryIndex": 7
+  },
+  {
+    "category": "bedroom",
+    "name": "Sheet Set(s)",
+    "allowMultiple": true,
+    "categoryIndex": 8
+  },
+  {
+    "category": "bedroom",
+    "name": "Blankets",
+    "allowMultiple": true,
+    "categoryIndex": 9
+  },
+  {
+    "category": "bedroom",
+    "name": "Dresser",
+    "allowMultiple": false,
+    "categoryIndex": 10
+  },
+  {
+    "category": "bathroom",
+    "name": "Bath Rug(s)",
+    "allowMultiple": true,
+    "categoryIndex": 1
+  },
+  {
+    "category": "bathroom",
+    "name": "Towel(s)",
+    "allowMultiple": true,
+    "categoryIndex": 2
+  },
+  {
+    "category": "bathroom",
+    "name": "Wash Cloth(s)",
+    "allowMultiple": true,
+    "categoryIndex": 3
+  },
+  {
+    "category": "kitchen",
+    "name": "Dish Set(s)",
+    "allowMultiple": true,
+    "categoryIndex": 1
+  },
+  {
+    "category": "kitchen",
+    "name": "Glasses",
+    "allowMultiple": true,
+    "categoryIndex": 2
+  },
+  {
+    "category": "kitchen",
+    "name": "Stove (Gas)",
+    "allowMultiple": false,
+    "categoryIndex": 3
+  },
+  {
+    "category": "kitchen",
+    "name": "Stove (Electric)",
+    "allowMultiple": false,
+    "categoryIndex": 4
+  },
+  {
+    "category": "kitchen",
+    "name": "Cups",
+    "allowMultiple": false,
+    "categoryIndex": 5
+  },
+  {
+    "category": "kitchen",
+    "name": "Silverware",
+    "allowMultiple": false,
+    "categoryIndex": 6
+  },
+  {
+    "category": "kitchen",
+    "name": "Pots and Pans",
+    "allowMultiple": false,
+    "categoryIndex": 7
+  },
+  {
+    "category": "kitchen",
+    "name": "Cooking Utensils",
+    "allowMultiple": false,
+    "categoryIndex": 8
+  },
+  {
+    "category": "kitchen",
+    "name": "Can Opener",
+    "allowMultiple": false,
+    "categoryIndex": 9
+  },
+  {
+    "category": "kitchen",
+    "name": "Refrigerator",
+    "allowMultiple": false,
+    "categoryIndex": 10
+  },
+  {
+    "category": "kitchen",
+    "name": "Microwave",
+    "allowMultiple": false,
+    "categoryIndex": 11
+  },
+  {
+    "category": "kitchen",
+    "name": "Toaster",
+    "allowMultiple": false,
+    "categoryIndex": 12
+  },
+  {
+    "category": "kitchen",
+    "name": "Coffee Pot",
+    "allowMultiple": false,
+    "categoryIndex": 13
+  },
+  {
+    "category": "living room",
+    "name": "Desk Lamp(s)",
+    "allowMultiple": true,
+    "categoryIndex": 1
+  },
+  {
+    "category": "living room",
+    "name": "Floor Lamp(s)",
+    "allowMultiple": true,
+    "categoryIndex": 2
+  },
+  {
+    "category": "living room",
+    "name": "End Table(s)",
+    "allowMultiple": true,
+    "categoryIndex": 3
+  },
+  {
+    "category": "living room",
+    "name": "Couch/Loveseat",
+    "allowMultiple": true,
+    "categoryIndex": 4
+  },
+  {
+    "category": "living room",
+    "name": "Rug(s)",
+    "allowMultiple": true,
+    "categoryIndex": 5
+  },
+  {
+    "category": "living room",
+    "name": "Couch",
+    "allowMultiple": false,
+    "categoryIndex": 6
+  },
+  {
+    "category": "living room",
+    "name": "Chair",
+    "allowMultiple": false,
+    "categoryIndex": 7
+  },
+  {
+    "category": "living room",
+    "name": "Coffee Table",
+    "allowMultiple": false,
+    "categoryIndex": 8
+  },
+  {
+    "category": "living room",
+    "name": "TV",
+    "allowMultiple": false,
+    "categoryIndex": 9
+  },
+  {
+    "category": "living room",
+    "name": "TV Stand",
+    "allowMultiple": false,
+    "categoryIndex": 10
+  },
+  {
+    "category": "living room",
+    "name": "TV/Stereo Wall Unit",
+    "allowMultiple": false,
+    "categoryIndex": 11
+  },
+  {
+    "category": "living room",
+    "name": "Desk",
+    "allowMultiple": false,
+    "categoryIndex": 12
+  },
+  {
+    "category": "dining room",
+    "name": "Chairs",
+    "allowMultiple": true,
+    "categoryIndex": 1
+  },
+  {
+    "category": "dining room",
+    "name": "China Cabinet/Buffet",
+    "allowMultiple": false,
+    "categoryIndex": 2
+  },
+  {
+    "category": "dining room",
+    "name": "Table",
+    "allowMultiple": false,
+    "categoryIndex": 3
+  },
+  {
+    "category": "other",
+    "name": "Dryer (Gas)",
+    "allowMultiple": false,
+    "categoryIndex": 1
+  },
+  {
+    "category": "other",
+    "name": "Dryer (Electric)",
+    "allowMultiple": false,
+    "categoryIndex": 2
+  },
+  {
+    "category": "other",
+    "name": "Washer",
+    "allowMultiple": false,
+    "categoryIndex": 3
+  }
+]

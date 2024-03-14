@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
@@ -7,8 +7,10 @@ import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import Dropdown from "@/components/shared/input/Dropdown";
 import HeaderBar from "@/components/shared/HeaderBar";
 import PageNumber from "@/components/VSRForm/PageNumber";
-import { createVSR, CreateVSRRequest } from "@/api/VSRs";
+import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
+import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import BinaryChoice from "@/components/BinaryChoice";
+import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
 
 interface IFormInput {
   name: string;
@@ -207,6 +209,50 @@ const VeteranServiceRequest: React.FC = () => {
     "WY",
   ];
 
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [furnitureCategoriesToItems, setFurnitureCategoriesToItems] =
+    useState<Record<string, FurnitureItem[]>>();
+  // Map furniture item IDs to selections for those items
+  const [selectedFurnitureItems, setSelectedFurnitureItems] = useState<
+    Record<string, FurnitureInput>
+  >({});
+
+  const [additionalItems, setAdditionalItems] = useState("");
+
+  // Fetch all available furniture items from database
+  useEffect(() => {
+    getFurnitureItems()
+      .then((result) => {
+        if (result.success) {
+          setFurnitureCategoriesToItems(
+            result.data.reduce(
+              (prevMap: Record<string, FurnitureItem[]>, curItem) => ({
+                ...prevMap,
+                [curItem.category]: [...(prevMap[curItem.category] ?? []), curItem],
+              }),
+              {},
+            ),
+          );
+          setErrorMessage(null);
+        } else {
+          setErrorMessage("Furniture items not found.");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(`An error occurred: ${error.message}`);
+      });
+  }, []);
+
+  // Handle furniture item count whenever a change is made
+  const handleSelectionChange = (newSelection: FurnitureInput) => {
+    setSelectedFurnitureItems((prevItems) => ({
+      ...prevItems,
+      [newSelection.furnitureItemId]: newSelection,
+    }));
+  };
+
+  // Execute when submit button is pressed
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
     const createVSRRequest: CreateVSRRequest = {
@@ -227,6 +273,7 @@ const VeteranServiceRequest: React.FC = () => {
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
+      
       streetAddress: data.streetAddress,
       city: data.city,
       state: data.state,
@@ -241,6 +288,12 @@ const VeteranServiceRequest: React.FC = () => {
       militaryID: data.militaryID,
       petCompanion: data.petCompanion,
       hearFrom: data.hearFrom,
+        
+      // Only submit items that the user selected at least 1 of
+      selectedFurnitureItems: Object.values(selectedFurnitureItems).filter(
+        (selectedItem) => selectedItem.quantity > 0,
+      ),
+      additionalItems,
     };
 
     try {
@@ -258,12 +311,12 @@ const VeteranServiceRequest: React.FC = () => {
     }
   };
 
-  const incrementPage: SubmitHandler<IFormInput> = () => {
+
+  const incrementPageNumber = () => {
     setPageNumber(pageNumber + 1);
   };
 
-  const decrementPageNumber = (e: React.FormEvent) => {
-    e.preventDefault();
+  const decrementPageNumber = () => {
     setPageNumber(pageNumber - 1);
   };
 
@@ -325,7 +378,7 @@ const VeteranServiceRequest: React.FC = () => {
   if (pageNumber == 1) {
     return (
       <div>
-        <form onSubmit={handleSubmit(incrementPage)}>
+        <form onSubmit={handleSubmit(incrementPageNumber)}>
           <HeaderBar />
           <div className={styles.main}>
             <h1>Veteran Service Request Form</h1>
@@ -568,10 +621,10 @@ const VeteranServiceRequest: React.FC = () => {
         </form>
       </div>
     );
-  } else {
+  } else if (pageNumber === 2) {
     return (
       <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(incrementPageNumber)}>
           <HeaderBar />
           <div className={styles.main}>
             <div className={styles.formContainer}>
@@ -907,6 +960,64 @@ const VeteranServiceRequest: React.FC = () => {
         </form>
       </div>
     );
+  } else {
+   return (
+      <div className={styles.page}>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <HeaderBar />
+          <div className={styles.canvas}>
+            <div className={styles.title}>Furnishings</div>
+            <div className={styles.sections}>
+              {Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
+                <div className={styles.furnitureItemsSection} key={category}>
+                  <p className={styles.furnitureItemsSectionLabel}>{category}</p>
+                  <div className={styles.chipContainer}>
+                    {(items ?? []).map((furnitureItem) => (
+                      <FurnitureItemSelection
+                        key={furnitureItem._id}
+                        furnitureItem={furnitureItem}
+                        selection={
+                          selectedFurnitureItems[furnitureItem._id] ?? {
+                            furnitureItemId: furnitureItem._id,
+                            quantity: 0,
+                          }
+                        }
+                        onChangeSelection={(newSelection) => handleSelectionChange(newSelection)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <div className={styles.section}>
+                <TextField
+                  label="Identify other necessary items"
+                  helperText="**We do not offer cleaning supplies"
+                  required={false}
+                  variant={"outlined"}
+                  onChange={(e) => setAdditionalItems(e.target.value)}
+                ></TextField>
+              </div>
+            </div>
+          </div>
+          <div className={styles.actions}>
+            <div className={styles.backButton}>
+              <button className={styles.back} onClick={decrementPageNumber}>
+                Back
+              </button>
+            </div>
+            <PageNumber pageNum={3} />
+            <div className={styles.submitButton}>
+              <button className={styles.submit} type="submit">
+                Submit
+              </button>
+            </div>
+          </div>
+        </form>
+        <div className={styles.footer}></div>
+        {/* TODO: better error handling */}
+        {errorMessage}
+      </div>
+    ); 
   }
 };
 

@@ -158,3 +158,101 @@
 .childInputWrapper {
   width: 100%;
 }
+
+.page {
+  margin: 0;
+  box-sizing: border-box;
+  background-color: var(--color-tse-primary-light);
+}
+.canvas {
+  border-radius: 20px;
+  background-color: #fff;
+  width: calc(100vw * 5 / 6);
+  margin: auto;
+  margin-top: 128px;
+  padding: 64px;
+}
+.title {
+  color: var(--Accent-Blue-1, #102d5f);
+  font-family: "Lora";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+.sections {
+  padding-top: 32px;
+}
+.section:not(:last-child) {
+  padding-bottom: 64px;
+}
+
+.furnitureItemsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1 0 0;
+  font-size: 16px;
+  color: var(--Light-Gray, #818181);
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 64px;
+}
+
+.furnitureItemsSectionLabel {
+  padding-bottom: 16px;
+  /* Capitalize names of furniture categories */
+  text-transform: capitalize;
+}
+
+.chipContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.actions {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: calc(100vw * 5 / 6);
+  margin: auto;
+  align-items: baseline;
+  padding-top: 64px;
+  padding-bottom: 128px;
+}
+
+.submit {
+  width: 306px;
+  height: 64px;
+  background-color: #102d5f;
+  color: white;
+  cursor: pointer;
+  font-family: "Lora";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border: none;
+  border-radius: 4px;
+}
+
+.back {
+  width: 306px;
+  height: 64px;
+  background-color: var(--color-tse-primary-light);
+  color: #102d5f;
+  cursor: pointer;
+  font-family: "Lora";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-radius: 4px;
+  border: 1px solid var(--Secondary-1, #102d5f);
+  background: rgba(255, 255, 255, 0);
+}
