@@ -151,7 +151,7 @@ const makeDischargeStatusValidator = () =>
 
 const makeServiceConnectedValidator = () =>
   body("serviceConnected")
-    .exists({ checkFalsy: true })
+    .exists({ checkFalsy: false })
     .withMessage("Service Connected is required")
     .isBoolean()
     .withMessage("Service Connected must be a boolean");
@@ -172,7 +172,7 @@ const makeMilitaryIDValidator = () =>
 
 const makePetCompanionValidator = () =>
   body("petCompanion")
-    .exists({ checkFalsy: true })
+    .exists({ checkFalsy: false })
     .withMessage("Pet interest is required")
     .isBoolean()
     .withMessage("Pet interest must be a boolean");

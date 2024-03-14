@@ -24,7 +24,7 @@ export interface VSRJson {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
   bedroomFurnishing: string[];
   bathroomFurnishing: string[];
@@ -66,7 +66,7 @@ export interface VSR {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
   bedroomFurnishing: string[];
   bathroomFurnishing: string[];
@@ -142,7 +142,7 @@ function parseVSR(vsr: VSRJson) {
     dischargeStatus: vsr.dischargeStatus,
     serviceConnected: vsr.serviceConnected,
     lastRank: vsr.lastRank,
-    militaryId: vsr.militaryId,
+    militaryID: vsr.militaryID,
     petCompanion: vsr.petCompanion,
     bedroomFurnishing: vsr.bedroomFurnishing,
     bathroomFurnishing: vsr.bathroomFurnishing,

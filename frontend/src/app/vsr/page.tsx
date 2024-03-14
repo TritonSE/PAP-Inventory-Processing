@@ -59,7 +59,6 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [selectedHearFrom, setSelectedHearFrom] = useState("");
   const [otherHearFrom, setOtherHearFrom] = useState("");
-  const [isFormValid, setIsFormValid] = useState(false);
 
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -258,10 +257,6 @@ const VeteranServiceRequest: React.FC = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
-
-  useEffect(() => {
-    setIsFormValid(isValid);
-  }, [isValid]);
 
   const incrementPage: SubmitHandler<IFormInput> = () => {
     setPageNumber(pageNumber + 1);
@@ -561,7 +556,10 @@ const VeteranServiceRequest: React.FC = () => {
               </div>
             </div>
             <div className={styles.submitButton}>
-              <button className={styles.submit} type="submit">
+              <button
+                className={`${styles.submit} ${isValid ? styles.enabled : styles.disabled}`}
+                type="submit"
+              >
                 Next
               </button>
             </div>
@@ -898,9 +896,8 @@ const VeteranServiceRequest: React.FC = () => {
               <PageNumber pageNum={2} />
               <div className={styles.submitButton}>
                 <button
-                  className={`${styles.submit} ${isFormValid ? styles.enabled : styles.disabled}`}
+                  className={`${styles.submit} ${isValid ? styles.enabled : styles.disabled}`}
                   type="submit"
-                  disabled={!isFormValid}
                 >
                   Submit
                 </button>

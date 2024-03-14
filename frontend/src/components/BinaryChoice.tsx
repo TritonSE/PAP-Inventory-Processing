@@ -14,14 +14,7 @@ export interface BinaryChoiceProps {
 const BinaryChoice = ({ label, value, onChange, required, helperText }: BinaryChoiceProps) => {
   const [selectedOption, setSelectedOption] = useState<boolean | null>(value);
 
-  /*
-  useEffect(() => {
-    setSelectedOption(value);
-  }, [value]);
-  */
-
   const handleOptionClick = (newOption: boolean | null) => {
-    console.log("Current value:", newOption);
     setSelectedOption(newOption);
     onChange(newOption);
   };

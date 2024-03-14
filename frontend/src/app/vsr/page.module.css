@@ -104,6 +104,7 @@
   height: 64px;
   background-color: #102d5f;
   color: white;
+  cursor: pointer;
   font-family: Lora;
   font-size: 24px;
   font-style: normal;
@@ -114,7 +115,6 @@
 }
 .enabled {
   background-color: #102d5f;
-  cursor: pointer;
 }
 
 .disabled {
