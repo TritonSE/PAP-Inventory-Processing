@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
