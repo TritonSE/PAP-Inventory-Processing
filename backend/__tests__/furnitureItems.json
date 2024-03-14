@@ -175,45 +175,57 @@
   },
   {
     "category": "living room",
-    "name": "Couch",
-    "allowMultiple": false,
+    "name": "Couch/Loveseat",
+    "allowMultiple": true,
     "categoryIndex": 4
   },
   {
     "category": "living room",
-    "name": "Chair",
-    "allowMultiple": false,
+    "name": "Rug(s)",
+    "allowMultiple": true,
     "categoryIndex": 5
   },
   {
     "category": "living room",
-    "name": "Coffee Table",
+    "name": "Couch",
     "allowMultiple": false,
     "categoryIndex": 6
   },
   {
     "category": "living room",
-    "name": "TV",
+    "name": "Chair",
     "allowMultiple": false,
     "categoryIndex": 7
   },
   {
     "category": "living room",
-    "name": "TV Stand",
+    "name": "Coffee Table",
     "allowMultiple": false,
     "categoryIndex": 8
   },
   {
     "category": "living room",
-    "name": "TV/Stereo Wall Unit",
+    "name": "TV",
     "allowMultiple": false,
     "categoryIndex": 9
   },
   {
     "category": "living room",
-    "name": "Desk",
+    "name": "TV Stand",
     "allowMultiple": false,
     "categoryIndex": 10
+  },
+  {
+    "category": "living room",
+    "name": "TV/Stereo Wall Unit",
+    "allowMultiple": false,
+    "categoryIndex": 11
+  },
+  {
+    "category": "living room",
+    "name": "Desk",
+    "allowMultiple": false,
+    "categoryIndex": 12
   },
   {
     "category": "dining room",
@@ -224,6 +236,12 @@
   {
     "category": "dining room",
     "name": "China Cabinet/Buffet",
+    "allowMultiple": false,
+    "categoryIndex": 2
+  },
+  {
+    "category": "dining room",
+    "name": "Table",
     "allowMultiple": false,
     "categoryIndex": 3
   },
