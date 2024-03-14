@@ -105,7 +105,6 @@ export interface CreateVSRRequest {
   hearFrom: string;
   selectedFurnitureItems: FurnitureInput[];
   additionalItems: string;
-  status: string;
 }
 
 function parseVSR(vsr: VSRJson) {

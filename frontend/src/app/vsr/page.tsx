@@ -273,7 +273,7 @@ const VeteranServiceRequest: React.FC = () => {
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
-      
+
       streetAddress: data.streetAddress,
       city: data.city,
       state: data.state,
@@ -288,7 +288,7 @@ const VeteranServiceRequest: React.FC = () => {
       militaryID: data.militaryID,
       petCompanion: data.petCompanion,
       hearFrom: data.hearFrom,
-        
+
       // Only submit items that the user selected at least 1 of
       selectedFurnitureItems: Object.values(selectedFurnitureItems).filter(
         (selectedItem) => selectedItem.quantity > 0,
@@ -310,7 +310,6 @@ const VeteranServiceRequest: React.FC = () => {
       console.error("There was a problem with the fetch operation:", error);
     }
   };
-
 
   const incrementPageNumber = () => {
     setPageNumber(pageNumber + 1);
@@ -952,7 +951,7 @@ const VeteranServiceRequest: React.FC = () => {
                   className={`${styles.submit} ${isValid ? styles.enabled : styles.disabled}`}
                   type="submit"
                 >
-                  Submit
+                  Next
                 </button>
               </div>
             </div>
@@ -961,7 +960,7 @@ const VeteranServiceRequest: React.FC = () => {
       </div>
     );
   } else {
-   return (
+    return (
       <div className={styles.page}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <HeaderBar />
@@ -1017,7 +1016,7 @@ const VeteranServiceRequest: React.FC = () => {
         {/* TODO: better error handling */}
         {errorMessage}
       </div>
-    ); 
+    );
   }
 };
 
