@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import InputField from "@/components/shared/input/InputField";
 import Image from "next/image";
-import "@/app/login/login.css";
+import styles from "@/app/login/page.module.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
@@ -63,7 +63,7 @@ const Login = () => {
 
   return (
     <body>
-      <div className="login-container">
+      <div className={styles.loginContainer}>
         <Image
           src="/Images/login_bg.png"
           alt=""
@@ -78,7 +78,7 @@ const Login = () => {
             right: "30",
             bottom: "0",
           }}
-          className="background-image"
+          className={styles.backgroundImage}
         />
         <div
           style={{
@@ -90,21 +90,21 @@ const Login = () => {
             background: "#232220D9",
           }}
         />
-        <div className="login-box">
-          <div className="logo-container">
-            <div className="logo-image">
+        <div className={styles.loginBox}>
+          <div className={styles.logoContainer}>
+            <div className={styles.logoImage}>
               <Image
                 src="/Images/LoginImage.png"
                 alt="Logo"
-                className="image"
+                className={styles.image}
                 width={isMobile ? 130 : 190}
                 height={isMobile ? 60 : 90}
               />
             </div>
           </div>
-          <div className="welcome-text">Welcome!</div>
-          <form onSubmit={handleLogin} className="login-form">
-            <div className="input-group">
+          <div className={styles.welcomeText}>Welcome!</div>
+          <form onSubmit={handleLogin} className={styles.loginForm}>
+            <div className={styles.inputGroup}>
               <InputField
                 label="Email"
                 id="email"
@@ -113,7 +113,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)}
               />
             </div>
-            <div className="input-group">
+            <div className={styles.inputGroup}>
               <InputField
                 label="Password"
                 id="password"
@@ -123,8 +123,8 @@ const Login = () => {
                 type="password"
               />
             </div>
-            <div className="forgot-password">Forgot Password?</div>
-            <button type="submit" className="login-button">
+            <div className={styles.forgotPassword}>Forgot Password?</div>
+            <button type="submit" className={styles.loginButton}>
               Log In
             </button>
           </form>
