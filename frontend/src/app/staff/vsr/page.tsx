@@ -7,7 +7,7 @@ import PageTitle from "@/components/VSRTable/PageTitle";
 import HeaderBar from "@/components/shared/HeaderBar";
 import Image from "next/image";
 import React from "react";
-import { DropdownDetail } from "@/components/VSRIndividual";
+import { StatusDropdown } from "@/components/VSRIndividual";
 
 export default function VSRTableView() {
   return (
@@ -22,7 +22,7 @@ export default function VSRTableView() {
             <div className={styles.statusContainer}>
               <p className={styles.statusLabel}>Status:</p>
               <div className={styles.statusWrapper}>
-                <DropdownDetail value="Received" />
+                <StatusDropdown value="Received" />
               </div>
             </div>
           </div>

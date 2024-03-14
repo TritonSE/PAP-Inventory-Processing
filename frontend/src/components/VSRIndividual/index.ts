@@ -8,5 +8,5 @@ export { MilitaryBackground } from "./MilitaryBackground";
 export { AdditionalInfo } from "./AdditionalInfo";
 export { RequestedFurnishings } from "./RequestedFurnishings";
 export { SingleDetail } from "./SingleDetail";
-export { DropdownDetail } from "../shared/StatusDropdown";
+export { StatusDropdown } from "../shared/StatusDropdown";
 export { ListDetail } from "./ListDetail";
