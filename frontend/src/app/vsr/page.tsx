@@ -652,9 +652,16 @@ const VeteranServiceRequest: React.FC = () => {
                     <div className={styles.longText}>
                       <TextField
                         label="Phone"
+                        type="tel"
                         variant="outlined"
                         placeholder="e.g. 6197123276"
-                        {...register("phoneNumber", { required: "Phone Number is required" })}
+                        {...register("phoneNumber", {
+                          required: "Phone Number is required",
+                          pattern: {
+                            value: /^\d{10}$/,
+                            message: "This field must be a 10 digit number",
+                          },
+                        })}
                         required
                         error={!!errors.phoneNumber}
                         helperText={errors.phoneNumber?.message}
@@ -664,9 +671,16 @@ const VeteranServiceRequest: React.FC = () => {
                     <div className={styles.longText}>
                       <TextField
                         label="Email Address"
+                        type="email"
                         variant="outlined"
                         placeholder="e.g. justintimberlake@gmail.com"
-                        {...register("email", { required: "Email Address is required" })}
+                        {...register("email", {
+                          required: "Email Address is required",
+                          pattern: {
+                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                            message: "Invalid Email Address",
+                          },
+                        })}
                         required
                         error={!!errors.email}
                         helperText={errors.email?.message}
