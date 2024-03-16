@@ -151,7 +151,7 @@ const makeDischargeStatusValidator = () =>
 
 const makeServiceConnectedValidator = () =>
   body("serviceConnected")
-    .exists({ checkFalsy: true })
+    .exists({ checkFalsy: false })
     .withMessage("Service Connected is required")
     .isBoolean()
     .withMessage("Service Connected must be a boolean");
@@ -172,7 +172,7 @@ const makeMilitaryIDValidator = () =>
 
 const makePetCompanionValidator = () =>
   body("petCompanion")
-    .exists({ checkFalsy: true })
+    .exists({ checkFalsy: false })
     .withMessage("Pet interest is required")
     .isBoolean()
     .withMessage("Pet interest must be a boolean");
@@ -183,6 +183,24 @@ const makeHearFromValidator = () =>
     .withMessage("Referral source is required")
     .isString()
     .withMessage("Referral source must be a string");
+
+const ALLOWED_STATUSES = [
+  "Received",
+  "Appointment Scheduled",
+  "Approved",
+  "Resubmit",
+  "No-show / Incomplete",
+  "Archived",
+];
+
+const updateStatusValidator = () =>
+  body("status")
+    .exists({ checkFalsy: true })
+    .withMessage("Status is required")
+    .isString()
+    .withMessage("Status must be a string")
+    .isIn(ALLOWED_STATUSES)
+    .withMessage("Status must be one of the allowed options");
 
 export const createVSR = [
   makeNameValidator(),
@@ -211,3 +229,5 @@ export const createVSR = [
   makePetCompanionValidator(),
   makeHearFromValidator(),
 ];
+
+export const updateStatus = [updateStatusValidator()];

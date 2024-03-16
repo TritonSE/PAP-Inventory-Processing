@@ -1,4 +1,9 @@
-import { APIResult, get, handleAPIError, post } from "@/api/requests";
+import { APIResult, get, handleAPIError, patch, post } from "@/api/requests";
+
+export interface FurnitureInput {
+  furnitureItemId: string;
+  quantity: number;
+}
 
 export interface VSRJson {
   _id: string;
@@ -24,14 +29,10 @@ export interface VSRJson {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
-  bedroomFurnishing: string[];
-  bathroomFurnishing: string[];
-  kitchenFurnishing: string[];
-  livingRoomFurnishing: string[];
-  diningRoomFurnishing: string[];
-  otherFurnishing: string[];
+  selectedFurnitureItems: FurnitureInput[];
+  additionalItems: string;
   dateReceived: string;
   lastUpdated: string;
   status: string;
@@ -66,14 +67,10 @@ export interface VSR {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
-  bedroomFurnishing: string[];
-  bathroomFurnishing: string[];
-  kitchenFurnishing: string[];
-  livingRoomFurnishing: string[];
-  diningRoomFurnishing: string[];
-  otherFurnishing: string[];
+  selectedFurnitureItems: FurnitureInput[];
+  additionalItems: string;
   dateReceived: Date;
   lastUpdated: Date;
   status: string;
@@ -106,15 +103,8 @@ export interface CreateVSRRequest {
   militaryID: number;
   petCompanion: boolean;
   hearFrom: string;
-
-  // Comment-out page 3 fields for now because they're not implemented on the form yet
-  // bedroomFurnishing: string[];
-  // bathroomFurnishing: string[];
-  // kitchenFurnishing: string[];
-  // livingRoomFurnishing: string[];
-  // diningRoomFurnishing: string[];
-  // otherFurnishing: string[];
-  // status: string;
+  selectedFurnitureItems: FurnitureInput[];
+  additionalItems: string;
 }
 
 function parseVSR(vsr: VSRJson) {
@@ -142,14 +132,10 @@ function parseVSR(vsr: VSRJson) {
     dischargeStatus: vsr.dischargeStatus,
     serviceConnected: vsr.serviceConnected,
     lastRank: vsr.lastRank,
-    militaryId: vsr.militaryId,
+    militaryID: vsr.militaryID,
     petCompanion: vsr.petCompanion,
-    bedroomFurnishing: vsr.bedroomFurnishing,
-    bathroomFurnishing: vsr.bathroomFurnishing,
-    kitchenFurnishing: vsr.kitchenFurnishing,
-    livingRoomFurnishing: vsr.livingRoomFurnishing,
-    diningRoomFurnishing: vsr.diningRoomFurnishing,
-    otherFurnishing: vsr.otherFurnishing,
+    selectedFurnitureItems: vsr.selectedFurnitureItems,
+    additionalItems: vsr.additionalItems,
     dateReceived: new Date(vsr.dateReceived),
     lastUpdated: new Date(vsr.lastUpdated),
     status: vsr.status,
@@ -180,6 +166,16 @@ export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
 export async function getVSR(id: string): Promise<APIResult<VSR>> {
   try {
     const response = await get(`/api/vsr/${id}`);
+    const json = (await response.json()) as VSRJson;
+    return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function updateVSRStatus(id: string, status: string): Promise<APIResult<VSR>> {
+  try {
+    const response = await patch(`/api/vsr/${id}/status`, { status });
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {

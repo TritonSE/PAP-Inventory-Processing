@@ -11,13 +11,32 @@ import {
 } from "@/components/VSRIndividual";
 import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
-import { type VSR, getVSR } from "@/api/VSRs";
+import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
+import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
+
+  const renderApproveButton = () => (
+    <button
+      className={styles.approveButton}
+      onClick={async () => {
+        const res = await updateVSRStatus(vsr._id, "Approved");
+
+        // TODO: error handling
+
+        const newVsr = res.success ? res.data : vsr;
+
+        setVSR(newVsr);
+      }}
+    >
+      Approve VSR
+    </button>
+  );
 
   useEffect(() => {
     getVSR(id as string)
@@ -33,6 +52,24 @@ export const Page = () => {
         setErrorMessage(`An error occurred: ${error.message}`);
       });
   }, [id]);
+
+  // Fetch all available furniture items from database
+  useEffect(() => {
+    getFurnitureItems()
+      .then((result) => {
+        if (result.success) {
+          setFurnitureItems(result.data);
+
+          setErrorMessage(null);
+        } else {
+          setErrorMessage("Furniture items not found.");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(`An error occurred: ${error.message}`);
+      });
+  }, []);
+
   return (
     <div className={styles.page}>
       <HeaderBar />
@@ -65,7 +102,7 @@ export const Page = () => {
           </div>
         </div>
         <div className={styles.bodyDetails}>
-          <CaseDetails vsr={vsr}></CaseDetails>
+          <CaseDetails vsr={vsr} onUpdateVSR={setVSR}></CaseDetails>
           <div className={styles.otherDetails}>
             <div className={styles.personalInfo}>
               <ContactInfo vsr={vsr} />
@@ -74,11 +111,11 @@ export const Page = () => {
               <AdditionalInfo vsr={vsr} />
             </div>
             <div className={styles.rightColumn}>
-              <RequestedFurnishings vsr={vsr} />
+              <RequestedFurnishings vsr={vsr} furnitureItems={furnitureItems ?? []} />
               <div className={styles.finalActions}>
-                <div className={styles.approve}>
-                  <a href="REPLACE">Approve VSR</a>
-                </div>
+                {vsr.status == "Received" || vsr.status === undefined
+                  ? renderApproveButton()
+                  : null}
               </div>
             </div>
           </div>
