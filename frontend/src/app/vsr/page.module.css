@@ -90,6 +90,11 @@
   color: var(--Secondary-2, #be2d46);
 }
 
+.buttonContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
 .submitButton {
   align-self: end;
 }
@@ -106,6 +111,32 @@
   font-weight: 700;
   line-height: normal;
   border: none;
+  border-radius: 4px;
+}
+.enabled {
+  background-color: #102d5f;
+}
+
+.disabled {
+  background-color: grey;
+}
+
+.backButton {
+  align-self: start;
+}
+
+.back {
+  width: 306px;
+  height: 64px;
+  background-color: white;
+  color: #102d5f;
+  cursor: pointer;
+  font-family: Lora;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border: #102d5f;
   border-radius: 4px;
 }
 
@@ -198,7 +229,6 @@
 .submit {
   width: 306px;
   height: 64px;
-  background-color: #102d5f;
   color: white;
   cursor: pointer;
   font-family: "Lora";
