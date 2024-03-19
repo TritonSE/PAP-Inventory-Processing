@@ -726,10 +726,6 @@ const VeteranServiceRequest: React.FC = () => {
                         placeholder="e.g. justintimberlake@gmail.com"
                         {...register("email", {
                           required: "Email Address is required",
-                          pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: "Invalid Email Address",
-                          },
                         })}
                         required
                         error={!!errors.email}
@@ -835,7 +831,8 @@ const VeteranServiceRequest: React.FC = () => {
                     name="serviceConnected"
                     control={control}
                     rules={{
-                      validate: (value) => value !== null || "Service connected is required",
+                      validate: (value) =>
+                        [true, false].includes(value) || "Service connected is required",
                     }}
                     render={({ field }) => (
                       <BinaryChoice
@@ -893,7 +890,8 @@ const VeteranServiceRequest: React.FC = () => {
                     name="petCompanion"
                     control={control}
                     rules={{
-                      validate: (value) => value !== null || "Service connected is required",
+                      validate: (value) =>
+                        [true, false].includes(value) || "Companionship animal is required",
                     }}
                     render={({ field }) => (
                       <BinaryChoice
