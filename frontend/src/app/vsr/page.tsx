@@ -178,17 +178,17 @@ const VeteranServiceRequest: React.FC = () => {
         <div className={styles.main}>
           <h1>Veteran Service Request Form</h1>
           <p className={styles.description}>
-            Welcome, Veterans, Active Duty, and Reservists. We invite you to schedule an appointment
-            to explore a selection of household furnishings and essential items available in our
-            warehouse.
+            Welcome, Veterans, Active Duty, Reservists, and Families. If you&apos;re in need of
+            furnishings, we&apos;re here to assist you. Please complete and submit the form below to
+            request what you require.
             <br></br>
             <br></br>
-            Let us know your specific needs, and we&apos;ll provide the best assistance possible.
-            Expect a response within 48 business hours; remember to check your junk mail if needed.
+            Upon submission, a copy of your VSR form will be sent to your email. We&apos;ll promptly
+            review it and respond via email as soon as possible. Remember to check your spam folder
+            if you don&apos;t receive a response within 48 business hours.
             <br></br>
             <br></br>
-            If you&apos;re a Veteran or Active Military Reservist in search of our services, simply
-            fill out and submit the form below.
+            If you have any questions or concerns, send us an email at veteran@patriotsandpaws.org.
           </p>
 
           <div className={styles.fieldsMarked}>
