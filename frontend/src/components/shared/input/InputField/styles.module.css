@@ -30,3 +30,18 @@
   font-weight: 300;
   line-height: normal;
 }
+
+@media screen and (max-width: 550px) {
+  .label {
+    font-size: 12px;
+  }
+
+  .input {
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  .input::placeholder {
+    font-size: 12px;
+  }
+}

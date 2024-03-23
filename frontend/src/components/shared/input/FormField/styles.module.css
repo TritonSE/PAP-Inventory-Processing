@@ -1,0 +1,41 @@
+.wrapperClass {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  flex: 1 0 0;
+  font-size: 16px;
+  color: var(--Light-Gray, #818181);
+  font-family: "Open Sans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.requiredAsterisk {
+  color: var(--Secondary-2, #be2d46);
+  text-align: left;
+}
+
+.helperText {
+  color: var(--Neutral-Gray6, #484848);
+  font-size: 12px;
+}
+
+.errorText {
+  color: var(--Secondary-2, #be2d46);
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .wrapperClass {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .wrapperClass {
+    font-size: 12px;
+  }
+}

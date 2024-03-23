@@ -7,4 +7,19 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
+  white-space: nowrap;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .pageNumber {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .pageNumber {
+    font-size: 12px;
+  }
 }
