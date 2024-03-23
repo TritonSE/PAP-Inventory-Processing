@@ -34,7 +34,7 @@ const columns: GridColDef[] = [
     hideSortIcons: true,
   },
   {
-    field: "militaryId",
+    field: "militaryID",
     headerName: "Military ID (Last 4)",
     type: "string",
     flex: 1,

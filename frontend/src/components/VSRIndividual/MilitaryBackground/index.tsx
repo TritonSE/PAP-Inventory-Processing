@@ -36,7 +36,7 @@ export const MilitaryBackground = ({ vsr }: MilitaryBackgroundProps) => {
       </div>
       <div className={styles.row}>
         <SingleDetail title="Last Rank:" value={vsr.lastRank} />
-        <SingleDetail className={styles.second} title="Military ID Number" value={vsr.militaryId} />
+        <SingleDetail className={styles.second} title="Military ID Number" value={vsr.militaryID} />
       </div>
     </VSRIndividualAccordion>
   );

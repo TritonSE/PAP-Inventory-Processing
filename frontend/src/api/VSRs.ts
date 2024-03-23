@@ -29,7 +29,7 @@ export interface VSRJson {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
   selectedFurnitureItems: FurnitureInput[];
   additionalItems: string;
@@ -67,7 +67,7 @@ export interface VSR {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
   selectedFurnitureItems: FurnitureInput[];
   additionalItems: string;
@@ -100,11 +100,11 @@ export interface CreateVSRRequest {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
+  hearFrom: string;
   selectedFurnitureItems: FurnitureInput[];
   additionalItems: string;
-  hearFrom: string;
 }
 
 function parseVSR(vsr: VSRJson) {
@@ -132,7 +132,7 @@ function parseVSR(vsr: VSRJson) {
     dischargeStatus: vsr.dischargeStatus,
     serviceConnected: vsr.serviceConnected,
     lastRank: vsr.lastRank,
-    militaryId: vsr.militaryId,
+    militaryID: vsr.militaryID,
     petCompanion: vsr.petCompanion,
     selectedFurnitureItems: vsr.selectedFurnitureItems,
     additionalItems: vsr.additionalItems,
