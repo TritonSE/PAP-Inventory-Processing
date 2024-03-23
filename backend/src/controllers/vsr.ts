@@ -34,6 +34,20 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     employmentStatus,
     incomeLevel,
     sizeOfHome,
+    hearFrom,
+    petCompanion,
+    militaryId,
+    lastRank,
+    serviceConnected,
+    dischargeStatus,
+    email,
+    phoneNumber,
+    zipCode,
+    state,
+    city,
+    streetAddress,
+    selectedFurnitureItems,
+    additionalItems,
   } = req.body;
 
   try {
@@ -61,8 +75,22 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       lastUpdated: currentDate,
 
       status: "Received",
-    });
 
+      hearFrom,
+      petCompanion,
+      militaryId,
+      lastRank,
+      serviceConnected,
+      dischargeStatus,
+      email,
+      phoneNumber,
+      zipCode,
+      state,
+      city,
+      streetAddress,
+      selectedFurnitureItems,
+      additionalItems,
+    });
     // 201 means a new resource has been created successfully
     // the newly created VSR is sent back to the user
     res.status(201).json(vsr);

@@ -33,7 +33,11 @@ const TextField = forwardRef(
           }}
           {...props}
         />
-        {helperText ? <div className={styles.helperText}>{helperText}</div> : null}
+        {helperText ? (
+          <div className={`${styles.helperText} ${error ? styles.errorText : ""}`}>
+            {helperText}
+          </div>
+        ) : null}
       </div>
     );
   },
