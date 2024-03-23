@@ -1,6 +1,7 @@
 import styles from "@/components/shared/input/TextField/styles.module.css";
 import MUITextField, { TextFieldProps as MUITextFieldProps } from "@mui/material/TextField";
 import { ForwardedRef, forwardRef } from "react";
+import { FormField } from "../FormField";
 
 export interface TextFieldProps extends MUITextFieldProps<"outlined"> {
   label: string;
@@ -15,11 +16,7 @@ const TextField = forwardRef(
     ref: ForwardedRef<HTMLDivElement>,
   ) => {
     return (
-      <div className={styles.wrapperClass}>
-        <p>
-          {required ? <span className={styles.requiredAsterisk}>* </span> : null}
-          {label}
-        </p>
+      <FormField label={label} required={required} error={error} helperText={helperText}>
         <MUITextField
           ref={ref}
           fullWidth
@@ -33,12 +30,7 @@ const TextField = forwardRef(
           }}
           {...props}
         />
-        {helperText ? (
-          <div className={`${styles.helperText} ${error ? styles.errorText : ""}`}>
-            {helperText}
-          </div>
-        ) : null}
-      </div>
+      </FormField>
     );
   },
 );

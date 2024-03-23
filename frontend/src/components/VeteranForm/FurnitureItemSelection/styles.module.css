@@ -1,7 +1,5 @@
 .chip {
   white-space: nowrap;
-  border-width: 1px;
-  border-style: solid;
   text-align: center;
   font-family: "OpenSans";
   font-size: 16px;
@@ -15,6 +13,7 @@
 .chipContent {
   display: flex;
   flex-direction: row;
+  align-items: center;
   padding: 9px 16px;
   align-content: baseline;
 }
@@ -83,4 +82,18 @@
 .incSelected {
   filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(36deg)
     brightness(103%) contrast(103%);
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .chip {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .chip {
+    font-size: 12px;
+  }
 }

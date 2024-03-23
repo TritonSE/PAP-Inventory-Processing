@@ -8,6 +8,7 @@ import Dropdown from "@/components/shared/input/Dropdown";
 import HeaderBar from "@/components/shared/HeaderBar";
 import PageNumber from "@/components/VSRForm/PageNumber";
 import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
+import { useMediaQuery } from "@mui/material";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import BinaryChoice from "@/components/shared/input/BinaryChoice";
 import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
@@ -252,6 +253,8 @@ const VeteranServiceRequest: React.FC = () => {
     }));
   };
 
+  const isMobile = useMediaQuery("@media screen and (max-width: 550px)");
+
   // Execute when submit button is pressed
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     // Construct the request object
@@ -326,7 +329,7 @@ const VeteranServiceRequest: React.FC = () => {
       <>
         <div className={styles.longText}>
           <TextField
-            label={`Number of ${gender}(s)`}
+            label={`Number of ${gender === "boy" ? "Male" : "Female"} Children`}
             variant="outlined"
             placeholder="e.g. 2"
             type="number"
@@ -344,34 +347,85 @@ const VeteranServiceRequest: React.FC = () => {
           />
         </div>
 
-        <div className={styles.numChildren}>
-          {/* Cap it at 99 children per gender to avoid freezing web browser */}
-          {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
-            <div key={index} className={styles.childInputWrapper}>
-              <TextField
-                label={`Age`}
-                type="number"
-                variant="outlined"
-                {...register(`ages_of_${gender}s.${index}`, {
-                  required: "This field is required",
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "This field must be a number",
-                  },
-                  max: {
-                    value: 17,
-                    message: "Only enter children under 18",
-                  },
-                })}
-                error={!!errors[`ages_of_${gender}s`]?.[index]}
-                helperText={errors[`ages_of_${gender}s`]?.[index]?.message}
-                required
-              />
-            </div>
-          ))}
-        </div>
+        {numChildrenThisGender > 0 ? (
+          <div className={styles.numChildren}>
+            {/* Cap it at 99 children per gender to avoid freezing web browser */}
+            {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
+              <div key={index} className={styles.childInputWrapper}>
+                <TextField
+                  label={`Age of ${gender.substring(0, 1).toUpperCase()}${gender.substring(1)}`}
+                  type="number"
+                  variant="outlined"
+                  {...register(`ages_of_${gender}s.${index}`, {
+                    required: "This field is required",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "This field must be a number",
+                    },
+                    max: {
+                      value: 17,
+                      message: "Only enter children under 18",
+                    },
+                  })}
+                  error={!!errors[`ages_of_${gender}s`]?.[index]}
+                  helperText={errors[`ages_of_${gender}s`]?.[index]?.message}
+                  required
+                />
+              </div>
+            ))}
+          </div>
+        ) : null}
       </>
     );
+  };
+
+  const renderPageNumber = () => {
+    return <PageNumber pageNum={pageNumber} />;
+  };
+
+  const renderBackButton = () => {
+    return pageNumber === 1 ? (
+      <div className={styles.bottomButton} />
+    ) : (
+      <button className={`${styles.bottomButton} ${styles.back}`} onClick={decrementPageNumber}>
+        Back
+      </button>
+    );
+  };
+
+  const renderNextButton = () => {
+    return (
+      <button
+        className={`${styles.bottomButton} ${styles.submit} ${
+          isValid ? styles.enabled : styles.disabled
+        }`}
+        type="submit"
+      >
+        {pageNumber === 3 ? "Submit" : "Next"}
+      </button>
+    );
+  };
+
+  const renderBottomRow = () => {
+    if (isMobile) {
+      return (
+        <div className={styles.bottomRow}>
+          <PageNumber pageNum={pageNumber} />
+          <div className={styles.bottomRowMobile}>
+            {pageNumber === 1 ? null : renderBackButton()}
+            {renderNextButton()}
+          </div>
+        </div>
+      );
+    } else {
+      return (
+        <div className={styles.bottomRow}>
+          {renderBackButton()}
+          {renderPageNumber()}
+          {renderNextButton()}
+        </div>
+      );
+    }
   };
 
   if (pageNumber == 1) {
@@ -380,7 +434,7 @@ const VeteranServiceRequest: React.FC = () => {
         <form onSubmit={handleSubmit(incrementPageNumber)}>
           <HeaderBar />
           <div className={styles.main}>
-            <h1>Veteran Service Request Form</h1>
+            <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>
               Welcome, Veterans, Active Duty, Reservists, and Families. If you&apos;re in need of
               furnishings, we&apos;re here to assist you. Please complete and submit the form below
@@ -405,7 +459,7 @@ const VeteranServiceRequest: React.FC = () => {
             <div className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
-                  <h1 className={styles.personalInfo}>Personal Information</h1>
+                  <h1 className={styles.sectionTitle}>Personal Information</h1>
 
                   <div className={styles.formRow}>
                     <div className={styles.longText}>
@@ -419,8 +473,8 @@ const VeteranServiceRequest: React.FC = () => {
                         helperText={errors.name?.message}
                       />
                     </div>
-                    {/* Add an empty div here with flex: 1 to take up the right half of the row */}
-                    <div style={{ flex: 1 }} />
+                    {/* Add an empty div here with flex: 1 to take up the right half of the row, on non-mobile */}
+                    {isMobile ? null : <div style={{ flex: 1 }} />}
                   </div>
 
                   <div className={styles.formRow}>
@@ -505,9 +559,9 @@ const VeteranServiceRequest: React.FC = () => {
 
                   <p className={styles.sectionHeader}>Children (under 18)</p>
 
-                  <div className={styles.formRow}>
-                    {renderChildInput("boy")}
-                    {renderChildInput("girl")}
+                  <div className={`${styles.formRow} ${styles.desktopRowTabletColumn}`}>
+                    <div className={styles.formRow}>{renderChildInput("boy")}</div>
+                    <div className={styles.formRow}>{renderChildInput("girl")}</div>
                   </div>
                 </div>
 
@@ -607,15 +661,7 @@ const VeteranServiceRequest: React.FC = () => {
                 />
               </div>
             </div>
-            <div className={styles.submitButton}>
-              <button
-                className={`${styles.submit} ${isValid ? styles.enabled : styles.disabled}`}
-                type="submit"
-              >
-                Next
-              </button>
-            </div>
-            <PageNumber pageNum={1} />
+            {renderBottomRow()}
           </div>
         </form>
       </div>
@@ -629,72 +675,75 @@ const VeteranServiceRequest: React.FC = () => {
             <div className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
-                  <h1 className={styles.personalInfo}>Contact Information</h1>
+                  <h1 className={styles.sectionTitle}>Contact Information</h1>
 
-                  <div className={styles.formRow}>
-                    <div className={styles.longText}>
-                      <TextField
-                        label="Street Address"
-                        variant="outlined"
-                        placeholder="e.g. 1234 Baker Street"
-                        {...register("streetAddress", { required: "Street address is required" })}
-                        required
-                        error={!!errors.streetAddress}
-                        helperText={errors.streetAddress?.message}
-                      />
+                  <div className={`${styles.formRow} ${styles.desktopRowTabletColumn}`}>
+                    <div className={styles.formRow}>
+                      <div className={styles.longText}>
+                        <TextField
+                          label="Street Address"
+                          variant="outlined"
+                          placeholder="e.g. 1234 Baker Street"
+                          {...register("streetAddress", { required: "Street address is required" })}
+                          required
+                          error={!!errors.streetAddress}
+                          helperText={errors.streetAddress?.message}
+                        />
+                      </div>
+
+                      <div className={styles.longText}>
+                        <TextField
+                          label="City"
+                          variant="outlined"
+                          placeholder="e.g. San Diego"
+                          {...register("city", { required: "City is required" })}
+                          required
+                          error={!!errors.city}
+                          helperText={errors.city?.message}
+                        />
+                      </div>
                     </div>
+                    <div className={styles.formRow}>
+                      <div className={styles.longText}>
+                        <Controller
+                          defaultValue=""
+                          name="state"
+                          control={control}
+                          rules={{ required: "State is required" }}
+                          render={({ field }) => (
+                            <Dropdown
+                              label="State"
+                              options={stateOptions}
+                              value={field.value}
+                              onChange={(e) => field.onChange(e)}
+                              required
+                              error={!!errors.state}
+                              helperText={errors.state?.message}
+                              placeholder="Select a state"
+                            />
+                          )}
+                        />
+                      </div>
 
-                    <div className={styles.longText}>
-                      <TextField
-                        label="City"
-                        variant="outlined"
-                        placeholder="e.g. San Diego"
-                        {...register("city", { required: "City is required" })}
-                        required
-                        error={!!errors.city}
-                        helperText={errors.city?.message}
-                      />
-                    </div>
-
-                    <div className={styles.longText}>
-                      <Controller
-                        defaultValue=""
-                        name="state"
-                        control={control}
-                        rules={{ required: "State is required" }}
-                        render={({ field }) => (
-                          <Dropdown
-                            label="State"
-                            options={stateOptions}
-                            value={field.value}
-                            onChange={(e) => field.onChange(e)}
-                            required
-                            error={!!errors.state}
-                            helperText={errors.state?.message}
-                            placeholder="Select a state"
-                          />
-                        )}
-                      />
-                    </div>
-
-                    <div className={styles.longText}>
-                      <TextField
-                        label="Zip Code"
-                        type="number"
-                        variant="outlined"
-                        placeholder="e.g. 92092"
-                        {...register("zipCode", {
-                          required: "Zip Code is required",
-                          pattern: {
-                            // Must be 5 digits
-                            value: /^\d{5}$/,
-                            message: "This field must be a 5 digit number",
-                          },
-                        })}
-                        required
-                        error={!!errors.zipCode}
-                        helperText={errors.zipCode?.message}
-                      />
+                      <div className={styles.longText}>
+                        <TextField
+                          label="Zip Code"
+                          type="number"
+                          variant="outlined"
+                          placeholder="e.g. 92092"
+                          {...register("zipCode", {
+                            required: "Zip Code is required",
+                            pattern: {
+                              // Must be 5 digits
+                              value: /^\d{5}$/,
+                              message: "This field must be a 5 digit number",
+                            },
+                          })}
+                          required
+                          error={!!errors.zipCode}
+                          helperText={errors.zipCode?.message}
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -740,7 +789,7 @@ const VeteranServiceRequest: React.FC = () => {
             <div className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
-                  <h1 className={styles.personalInfo}>Military Background</h1>
+                  <h1 className={styles.sectionTitle}>Military Background</h1>
 
                   <Controller
                     name="branch"
@@ -884,8 +933,7 @@ const VeteranServiceRequest: React.FC = () => {
             <div className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
-                  <h1 className={styles.personalInfo}>Additional Information</h1>
-
+                  <h1 className={styles.sectionTitle}>Additional Information</h1>
                   <Controller
                     name="petCompanion"
                     control={control}
@@ -951,77 +999,58 @@ const VeteranServiceRequest: React.FC = () => {
                 </div>
               </div>
             </div>
-            <div className={styles.buttonContainer}>
-              <div className={styles.backButton}>
-                <button className={styles.back} onClick={decrementPageNumber}>
-                  Back
-                </button>
-              </div>
-              <PageNumber pageNum={2} />
-              <div className={styles.submitButton}>
-                <button
-                  className={`${styles.submit} ${isValid ? styles.enabled : styles.disabled}`}
-                  type="submit"
-                >
-                  Next
-                </button>
-              </div>
-            </div>
+            {renderBottomRow()}
           </div>
         </form>
       </div>
     );
   } else {
     return (
-      <div className={styles.page}>
+      <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <HeaderBar />
-          <div className={styles.canvas}>
-            <div className={styles.title}>Furnishings</div>
-            <div className={styles.sections}>
-              {Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
-                <div className={styles.furnitureItemsSection} key={category}>
-                  <p className={styles.furnitureItemsSectionLabel}>{category}</p>
-                  <div className={styles.chipContainer}>
-                    {(items ?? []).map((furnitureItem) => (
-                      <FurnitureItemSelection
-                        key={furnitureItem._id}
-                        furnitureItem={furnitureItem}
-                        selection={
-                          selectedFurnitureItems[furnitureItem._id] ?? {
-                            furnitureItemId: furnitureItem._id,
-                            quantity: 0,
-                          }
-                        }
-                        onChangeSelection={(newSelection) => handleSelectionChange(newSelection)}
-                      />
+          <div className={styles.main}>
+            <div className={styles.formContainer}>
+              <div className={styles.form}>
+                <div className={styles.subSec}>
+                  <div className={styles.sectionTitle}>Furnishings</div>
+                  <div>
+                    {Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
+                      <div className={styles.furnitureItemsSection} key={category}>
+                        <p className={styles.furnitureItemsSectionLabel}>{category}</p>
+                        <div className={styles.chipContainer}>
+                          {(items ?? []).map((furnitureItem) => (
+                            <FurnitureItemSelection
+                              key={furnitureItem._id}
+                              furnitureItem={furnitureItem}
+                              selection={
+                                selectedFurnitureItems[furnitureItem._id] ?? {
+                                  furnitureItemId: furnitureItem._id,
+                                  quantity: 0,
+                                }
+                              }
+                              onChangeSelection={(newSelection) =>
+                                handleSelectionChange(newSelection)
+                              }
+                            />
+                          ))}
+                        </div>
+                      </div>
                     ))}
+                    <div className={styles.section}>
+                      <TextField
+                        label="Identify other necessary items"
+                        helperText="**We do not offer cleaning supplies"
+                        required={false}
+                        variant={"outlined"}
+                        onChange={(e) => setAdditionalItems(e.target.value)}
+                      ></TextField>
+                    </div>
                   </div>
                 </div>
-              ))}
-              <div className={styles.section}>
-                <TextField
-                  label="Identify other necessary items"
-                  helperText="**We do not offer cleaning supplies"
-                  required={false}
-                  variant={"outlined"}
-                  onChange={(e) => setAdditionalItems(e.target.value)}
-                ></TextField>
               </div>
             </div>
-          </div>
-          <div className={styles.actions}>
-            <div className={styles.backButton}>
-              <button className={styles.back} onClick={decrementPageNumber}>
-                Back
-              </button>
-            </div>
-            <PageNumber pageNum={3} />
-            <div className={styles.submitButton}>
-              <button className={styles.submit} type="submit">
-                Submit
-              </button>
-            </div>
+            {renderBottomRow()}
           </div>
         </form>
         <div className={styles.footer}></div>
