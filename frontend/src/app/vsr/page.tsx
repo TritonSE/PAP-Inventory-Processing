@@ -8,10 +8,10 @@ import Dropdown from "@/components/shared/input/Dropdown";
 import HeaderBar from "@/components/shared/HeaderBar";
 import PageNumber from "@/components/VSRForm/PageNumber";
 import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
-import { useMediaQuery } from "@mui/material";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import BinaryChoice from "@/components/shared/input/BinaryChoice";
 import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
+import { useScreenSizes } from "@/util/useScreenSizes";
 
 interface IFormInput {
   name: string;
@@ -253,7 +253,7 @@ const VeteranServiceRequest: React.FC = () => {
     }));
   };
 
-  const isMobile = useMediaQuery("@media screen and (max-width: 550px)");
+  const { isMobile } = useScreenSizes();
 
   // Execute when submit button is pressed
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {

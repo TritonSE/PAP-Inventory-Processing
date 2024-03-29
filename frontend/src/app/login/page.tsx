@@ -8,7 +8,7 @@ import styles from "@/app/login/page.module.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRouter } from "next/navigation";
-import { useMediaQuery } from "@mui/material";
+import { useScreenSizes } from "@/util/useScreenSizes";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -18,7 +18,7 @@ const Login = () => {
 
   const router = useRouter();
 
-  const isMobile = useMediaQuery("@media screen and (max-width: 550px)");
+  const { isMobile } = useScreenSizes();
 
   const sendTokenToBackend = async (token: string) => {
     try {

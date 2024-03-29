@@ -1,7 +1,8 @@
 import React from "react";
 import styles from "@/components/shared/input/Dropdown/styles.module.css";
-import { FormControl, Select, MenuItem, SelectChangeEvent, useMediaQuery } from "@mui/material";
+import { FormControl, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { FormField } from "../FormField";
+import { useScreenSizes } from "@/util/useScreenSizes";
 
 export interface DropDownProps {
   label: string;
@@ -24,8 +25,7 @@ const Dropdown = ({
   helperText,
   placeholder,
 }: DropDownProps) => {
-  const isMobile = useMediaQuery("@media screen and (max-width: 550px)");
-  const isTablet = useMediaQuery("@media screen and (max-width: 850px)");
+  const { isMobile, isTablet } = useScreenSizes();
 
   return (
     <FormField label={label} required={required} error={error} helperText={helperText}>
