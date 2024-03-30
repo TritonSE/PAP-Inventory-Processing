@@ -23,6 +23,7 @@
   flex-direction: row;
   flex-wrap: wrap;
 }
+
 .listItem {
   color: #fff;
   text-align: center;
@@ -31,7 +32,6 @@
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  height: 40px;
   border-radius: 64px;
   border: 1px solid var(--color-tse-accent-blue-1);
   background: var(--color-tse-accent-blue-1);
@@ -47,4 +47,34 @@
   font-family: var(--font-open-sans);
   font-size: 16px;
   font-style: italic;
+}
+
+/* tablet version */
+@media screen and (max-width: 550px) {
+  .title {
+    font-size: 14px;
+  }
+
+  .listItem {
+    font-size: 14px;
+  }
+
+  .noList {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .title {
+    font-size: 12px;
+  }
+
+  .listItem {
+    font-size: 12px;
+  }
+
+  .noList {
+    font-size: 12px;
+  }
 }

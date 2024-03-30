@@ -5,9 +5,22 @@
   margin-right: 4px;
   padding-bottom: 5px;
   margin-top: 15px;
+  justify-content: space-between;
   overflow: auto;
 }
 
-.details > * {
-  padding-right: 100px;
+.singleDetail {
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .details {
+    flex-direction: column;
+    gap: 18px;
+  }
+
+  .singleDetail {
+    flex-direction: row !important;
+    justify-content: space-between !important;
+  }
 }
