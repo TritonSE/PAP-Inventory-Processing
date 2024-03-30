@@ -557,7 +557,7 @@ const VeteranServiceRequest: React.FC = () => {
                     </div>
                   ) : null}
 
-                  <p className={styles.sectionHeader}>Children (under 18)</p>
+                  <p className={styles.sectionHeader}>Children Under the Age of 18:</p>
 
                   <div className={`${styles.formRow} ${styles.desktopRowTabletColumn}`}>
                     <div className={styles.formRow}>{renderChildInput("boy")}</div>

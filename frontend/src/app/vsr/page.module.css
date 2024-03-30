@@ -103,12 +103,12 @@
 .sectionHeader {
   gap: 4px;
   font-size: 16px;
-  color: black;
+  color: var(--Light-Gray, #818181);
   font-family: "Open Sans";
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin: 16px 0 -8px;
+  margin: 0 0 -16px;
 }
 
 .longText {
@@ -252,6 +252,10 @@
     gap: 32px;
   }
 
+  .sectionHeader {
+    font-size: 14px;
+  }
+
   .desktopRowTabletColumn {
     flex-direction: column;
   }
@@ -298,6 +302,11 @@
 
   .formRow {
     flex-direction: column;
+  }
+
+  .sectionHeader {
+    font-size: 12px;
+    margin: 0;
   }
 
   .bottomRow {
