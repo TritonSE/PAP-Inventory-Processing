@@ -3,4 +3,12 @@
   padding: 2px 8px;
   border-radius: 8px;
   width: max-content;
+  font-size: 16px;
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .statusChip {
+    font-size: 12px;
+  }
 }

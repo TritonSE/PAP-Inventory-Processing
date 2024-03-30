@@ -15,6 +15,10 @@
   line-height: normal;
 }
 
+.title {
+  font-size: 40px;
+}
+
 .description {
   color: #000;
   /* Desktop/Body 1 */
@@ -25,18 +29,9 @@
   line-height: normal;
 }
 
-.personalInfo {
-  color: var(--Accent-Blue-1, #102d5f);
-  /* Desktop/H2 */
-  font-family: Lora;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-}
-
 .fieldsMarked {
   color: #000;
+  font-family: "Open Sans";
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -70,6 +65,16 @@
   align-self: flex-start;
 }
 
+.sectionTitle {
+  color: var(--Accent-Blue-1, #102d5f);
+  /* Desktop/H2 */
+  font-family: Lora;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
 .formRow {
   width: 100%;
   display: flex;
@@ -78,52 +83,238 @@
   align-items: start;
 }
 
+.desktopRowTabletColumn {
+  flex-direction: row;
+}
+
 .numChildren {
   display: flex;
   flex-direction: column;
   gap: 20px;
   align-items: center;
   flex: 1;
+  width: 100%;
 }
 
 .asterisk {
   color: var(--Secondary-2, #be2d46);
 }
 
-.submitButton {
-  align-self: end;
-}
-
-.submit {
-  width: 306px;
-  height: 64px;
-  background-color: #102d5f;
-  color: white;
-  cursor: pointer;
-  font-family: Lora;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  border: none;
-  border-radius: 4px;
-}
-
 .sectionHeader {
   gap: 4px;
   font-size: 16px;
-  color: black;
+  color: var(--Light-Gray, #818181);
   font-family: "Open Sans";
   font-style: normal;
   font-weight: 400;
   line-height: normal;
-  margin: 16px 0 -8px;
+  margin: 0 0 -16px;
 }
 
 .longText {
   flex: 1;
+  width: 100%;
 }
 
 .childInputWrapper {
   width: 100%;
+}
+
+.canvas {
+  border-radius: 20px;
+  background-color: #fff;
+  width: calc(100vw * 5 / 6);
+  margin: auto;
+  margin-top: 128px;
+  padding: 64px;
+}
+
+.title {
+  color: var(--Accent-Blue-1, #102d5f);
+  font-family: "Lora";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.section:not(:last-child) {
+  padding-bottom: 64px;
+}
+
+.furnitureItemsSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  flex: 1 0 0;
+  font-size: 16px;
+  color: var(--Light-Gray, #818181);
+  font-family: "OpenSans";
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin-bottom: 64px;
+}
+
+.furnitureItemsSectionLabel {
+  padding-bottom: 16px;
+  font-size: 16px;
+  /* Capitalize names of furniture categories */
+  text-transform: capitalize;
+}
+
+.chipContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.bottomRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  gap: 64px;
+  padding-top: 32px;
+  padding-bottom: 128px;
+}
+
+.bottomRowMobile {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  gap: 32px;
+}
+
+.bottomButton {
+  width: 306px;
+  height: 64px;
+  cursor: pointer;
+  font-family: "Lora";
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  border-radius: 4px;
+}
+
+.submit {
+  color: white;
+  border: none;
+}
+
+.enabled {
+  background-color: #102d5f;
+}
+
+.disabled {
+  background-color: grey;
+}
+
+.back {
+  background-color: var(--color-tse-primary-light);
+  color: #102d5f;
+  border: 1px solid var(--Secondary-1, #102d5f);
+  background: rgba(255, 255, 255, 0);
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .main {
+    padding: 48px;
+    padding-top: 64px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .description {
+    font-size: 18px;
+  }
+
+  .fieldsMarked {
+    font-size: 14px;
+  }
+
+  .formContainer {
+    padding: 48px 32px;
+  }
+
+  .sectionTitle {
+    font-size: 28px;
+  }
+
+  .formRow {
+    gap: 32px;
+  }
+
+  .sectionHeader {
+    font-size: 14px;
+  }
+
+  .desktopRowTabletColumn {
+    flex-direction: column;
+  }
+
+  .bottomRow {
+    padding-bottom: 64px;
+  }
+
+  .bottomButton {
+    width: 100%;
+  }
+
+  .furnitureItemsSectionLabel {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .main {
+    padding: 24px;
+    padding-top: 35px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .fieldsMarked {
+    font-size: 12px;
+  }
+
+  .formContainer {
+    padding: 32px 16px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+  }
+
+  .formRow {
+    flex-direction: column;
+  }
+
+  .sectionHeader {
+    font-size: 12px;
+    margin: 0;
+  }
+
+  .bottomRow {
+    gap: 32px;
+    flex-direction: column;
+  }
+
+  .furnitureItemsSectionLabel {
+    font-size: 12px;
+  }
 }

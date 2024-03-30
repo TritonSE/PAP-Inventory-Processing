@@ -1,22 +1,3 @@
-.wrapperClass {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-  flex: 1 0 0;
-  font-size: 16px;
-  color: var(--Light-Gray, #818181);
-  font-family: "Open Sans";
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
-.requiredAsterisk {
-  color: var(--Secondary-2, #be2d46);
-  text-align: left;
-}
-
 .inputClass {
   display: flex;
   align-items: flex-start;
@@ -28,9 +9,9 @@
   line-height: normal;
 }
 
-.helperText {
-  color: var(--Secondary-2, #be2d46);
-  font-size: 12px;
+.input {
+  height: 22px;
+  padding: 6px 12px;
 }
 
 .input::placeholder {
@@ -38,4 +19,18 @@
   font-style: italic;
   font-weight: 300;
   color: var(--Dark-Gray, #484848);
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .input {
+    height: 19px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .input {
+    height: 16px;
+  }
 }

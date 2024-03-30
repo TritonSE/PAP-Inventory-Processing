@@ -12,3 +12,15 @@
   margin-top: 27px;
   margin-left: 63px;
 }
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .headerBar {
+    height: 115px;
+  }
+
+  .logo {
+    margin-top: 52px;
+    margin-left: 24px;
+  }
+}

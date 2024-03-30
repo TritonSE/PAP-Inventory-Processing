@@ -13,27 +13,51 @@ import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
 import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
+import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
+import { useScreenSizes } from "@/util/useScreenSizes";
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
 
-  const renderApproveButton = () => (
-    <button
-      className={styles.approveButton}
-      onClick={async () => {
-        const res = await updateVSRStatus(vsr._id, "Approved");
+  const { isMobile, isTablet } = useScreenSizes();
+  const iconSize = isMobile ? 16 : isTablet ? 19 : 24;
 
-        // TODO: error handling
+  const renderApproveButton = () =>
+    vsr.status == "Received" || vsr.status === undefined ? (
+      <button
+        className={styles.approveButton}
+        onClick={async () => {
+          const res = await updateVSRStatus(vsr._id, "Approved");
 
-        const newVsr = res.success ? res.data : vsr;
+          // TODO: error handling
 
-        setVSR(newVsr);
-      }}
-    >
-      Approve VSR
-    </button>
+          const newVsr = res.success ? res.data : vsr;
+
+          setVSR(newVsr);
+        }}
+      >
+        Approve VSR
+      </button>
+    ) : null;
+
+  const renderActions = () => (
+    <div className={styles.actions}>
+      <a href="REPLACE">
+        <button id="edit" className={styles.button}>
+          <Image width={iconSize} height={iconSize} src="/ic_edit.svg" alt="edit" />
+          {isMobile ? null : "Edit Form"}
+        </button>
+      </a>
+      <a href="REPLACE">
+        <button className={styles.button}>
+          <Image width={iconSize} height={iconSize} src="/ic_upload.svg" alt="upload" />
+          {isMobile ? null : "Export"}
+        </button>
+      </a>
+    </div>
   );
 
   useEffect(() => {
@@ -50,58 +74,67 @@ export const Page = () => {
         setErrorMessage(`An error occurred: ${error.message}`);
       });
   }, [id]);
-  return (
-    <div className={styles.page}>
-      <HeaderBar />
-      <a href="/staff/vsr">
-        <button className={styles.toDashboard}>
-          <Image src="/ic_arrowback.svg" width={24} height={24} alt="arrowback" />
-          Dashboard
-        </button>
-      </a>
-      <div className={styles.allDetails}>
-        <div className={styles.headerRow}>
-          <div className={styles.name}>
-            {errorMessage && <div className={styles.error}>{errorMessage}</div>}
 
-            <VeteranTag vsr={vsr}></VeteranTag>
-          </div>
-          <div className={styles.actions}>
-            <a href="REPLACE">
-              <button id="edit" className={styles.button}>
-                <Image width={24} height={24} src="/ic_edit.svg" alt="edit" />
-                Edit Form
-              </button>
-            </a>
-            <a href="REPLACE">
-              <button className={styles.button}>
-                <Image width={24} height={24} src="/ic_upload.svg" alt="upload" />
-                Export
-              </button>
-            </a>
-          </div>
+  // Fetch all available furniture items from database
+  useEffect(() => {
+    getFurnitureItems()
+      .then((result) => {
+        if (result.success) {
+          setFurnitureItems(result.data);
+
+          setErrorMessage(null);
+        } else {
+          setErrorMessage("Furniture items not found.");
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(`An error occurred: ${error.message}`);
+      });
+  }, []);
+
+  return (
+    <>
+      <HeaderBar />
+      <div className={styles.page}>
+        <div className={`${styles.headerRow} ${styles.toDashboardRow}`}>
+          <a href="/staff/vsr">
+            <button className={styles.toDashboard}>
+              <Image src="/ic_arrowback.svg" width={iconSize} height={iconSize} alt="arrowback" />
+              {isMobile ? null : "Dashboard"}
+            </button>
+          </a>
+          {isMobile ? renderActions() : null}
         </div>
-        <div className={styles.bodyDetails}>
-          <CaseDetails vsr={vsr} onUpdateVSR={setVSR}></CaseDetails>
-          <div className={styles.otherDetails}>
-            <div className={styles.personalInfo}>
-              <ContactInfo vsr={vsr} />
-              <PersonalInformation vsr={vsr} />
-              <MilitaryBackground vsr={vsr} />
-              <AdditionalInfo vsr={vsr} />
+        <div className={styles.allDetails}>
+          <div className={styles.headerRow}>
+            <div className={styles.name}>
+              {errorMessage && <div className={styles.error}>{errorMessage}</div>}
+
+              <VeteranTag vsr={vsr}></VeteranTag>
             </div>
-            <div className={styles.rightColumn}>
-              <RequestedFurnishings vsr={vsr} />
-              <div className={styles.finalActions}>
-                {vsr.status == "Received" || vsr.status === undefined
-                  ? renderApproveButton()
-                  : null}
+            {isMobile ? null : renderActions()}
+          </div>
+          <div className={styles.bodyDetails}>
+            <CaseDetails vsr={vsr} onUpdateVSR={setVSR}></CaseDetails>
+            <div className={styles.otherDetails}>
+              {isTablet ? renderApproveButton() : null}
+              <div className={styles.personalInfo}>
+                <ContactInfo vsr={vsr} />
+                <PersonalInformation vsr={vsr} />
+                <MilitaryBackground vsr={vsr} />
+                <AdditionalInfo vsr={vsr} />
+              </div>
+              <div className={styles.rightColumn}>
+                <RequestedFurnishings vsr={vsr} furnitureItems={furnitureItems ?? []} />
+                {isTablet ? null : (
+                  <div className={styles.finalActions}>{renderApproveButton()}</div>
+                )}
               </div>
             </div>
           </div>
+          <div className={styles.footer}></div>
         </div>
-        <div className={styles.footer}></div>
       </div>
-    </div>
+    </>
   );
 };

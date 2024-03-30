@@ -18,6 +18,7 @@
 .value {
   color: #222;
   font-family: var(--font-open-sans);
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -52,4 +53,42 @@
   font-family: var(--font-open-sans);
   font-size: 16px;
   font-style: italic;
+}
+
+/* tablet version */
+@media screen and (max-width: 550px) {
+  .title {
+    font-size: 14px;
+  }
+
+  .value {
+    font-size: 14px;
+  }
+
+  .email {
+    font-size: 14px;
+  }
+
+  .noValue {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .title {
+    font-size: 12px;
+  }
+
+  .value {
+    font-size: 12px;
+  }
+
+  .email {
+    font-size: 12px;
+  }
+
+  .noValue {
+    font-size: 12px;
+  }
 }

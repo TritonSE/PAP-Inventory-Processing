@@ -5,4 +5,20 @@
   font-size: 40px;
   font-weight: 700;
   line-height: 40px;
+  text-overflow: ellipsis;
+  overflow-wrap: anywhere;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .items span {
+    font-size: 36px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .items span {
+    font-size: 28px;
+  }
 }

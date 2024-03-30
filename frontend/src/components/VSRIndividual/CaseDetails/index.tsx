@@ -5,6 +5,7 @@ import moment from "moment";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 import { StatusChip } from "@/components/shared/StatusChip";
+import { useScreenSizes } from "@/util/useScreenSizes";
 
 export interface CaseDetailsProp {
   vsr: VSR;
@@ -21,6 +22,8 @@ const formatDate = (date: Date) => {
 };
 
 export const CaseDetails = ({ vsr, onUpdateVSR }: CaseDetailsProp) => {
+  const { isMobile, isTablet } = useScreenSizes();
+
   const renderStatus = () => {
     if (vsr.status === "Received" || vsr.status === undefined) {
       return (
@@ -43,22 +46,25 @@ export const CaseDetails = ({ vsr, onUpdateVSR }: CaseDetailsProp) => {
     );
   };
 
+  const valueFontSize = isMobile ? 14 : isTablet ? 18 : 20;
+
   return (
     <VSRIndividualAccordion permanentlyExpanded title="Case Details">
       <div className={styles.details}>
-        <SingleDetail title="Case ID:" value={vsr._id} valueFontSize="20px" />
         <SingleDetail
           title="Date Received:"
           value={formatDate(vsr.dateReceived)}
-          valueFontSize="20px"
+          valueFontSize={valueFontSize}
+          className={styles.singleDetail}
         />
         <SingleDetail
           title="Last Updated:"
           value={formatDate(vsr.lastUpdated)}
-          valueFontSize="20px"
+          valueFontSize={valueFontSize}
+          className={styles.singleDetail}
         />
 
-        <SingleDetail title="Status:" value={renderStatus()} />
+        <SingleDetail title="Status:" value={renderStatus()} className={styles.singleDetail} />
       </div>
     </VSRIndividualAccordion>
   );

@@ -1,7 +1,8 @@
-/* MultipleChoice.module.css */
+/* BinaryChoice.module.css */
 
 .chip {
   border-width: 1px;
+  border-style: solid;
   text-align: center;
   font-family: "Open Sans";
   font-size: 16px;
@@ -10,8 +11,6 @@
   line-height: normal;
   border-radius: 64px;
   border: 1px solid var(--Secondary-1, #102d5f);
-  padding: 8px 16px;
-  height: 40px;
 }
 
 .chipSelected {
@@ -37,21 +36,5 @@
 
 /*Need exact color for this*/
 .chipUnselected:hover {
-  background: rgb(142, 166, 175);
-}
-
-/* tablet version */
-@media screen and (max-width: 850px) {
-  .chip {
-    font-size: 14px;
-    height: 36px;
-  }
-}
-
-/* mobile version */
-@media screen and (max-width: 550px) {
-  .chip {
-    font-size: 12px;
-    height: 30px;
-  }
+  background: rgb(213, 232, 239);
 }

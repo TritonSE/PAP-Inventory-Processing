@@ -1,5 +1,6 @@
 import Chip from "@mui/material/Chip";
 import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
+import { FormField } from "../FormField";
 
 export interface MultipleChoiceProps {
   label: string;
@@ -19,14 +20,11 @@ const MultipleChoice = ({
   onChange,
   required,
   allowMultiple = false,
+  error,
   helperText,
 }: MultipleChoiceProps) => {
   return (
-    <div className={styles.wrapperClass}>
-      <p>
-        {required ? <span className={styles.requiredAsterisk}>* </span> : null}
-        {label}
-      </p>
+    <FormField label={label} required={required} error={error} helperText={helperText}>
       <div className={styles.chipContainer}>
         {options.map((option) => {
           const optionIsSelected = allowMultiple ? value?.includes(option) : value === option;
@@ -58,12 +56,16 @@ const MultipleChoice = ({
                 optionIsSelected ? styles.chipSelected : styles.chipUnselected
               }`}
               clickable
+              sx={{
+                ".MuiChip-label": {
+                  padding: "0 !important",
+                },
+              }}
             />
           );
         })}
       </div>
-      {helperText ? <div className={styles.helperText}>{helperText}</div> : null}
-    </div>
+    </FormField>
   );
 };
 

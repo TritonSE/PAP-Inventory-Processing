@@ -1,5 +1,10 @@
 import { APIResult, get, handleAPIError, patch, post } from "@/api/requests";
 
+export interface FurnitureInput {
+  furnitureItemId: string;
+  quantity: number;
+}
+
 export interface VSRJson {
   _id: string;
   name: string;
@@ -24,14 +29,10 @@ export interface VSRJson {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
-  bedroomFurnishing: string[];
-  bathroomFurnishing: string[];
-  kitchenFurnishing: string[];
-  livingRoomFurnishing: string[];
-  diningRoomFurnishing: string[];
-  otherFurnishing: string[];
+  selectedFurnitureItems: FurnitureInput[];
+  additionalItems: string;
   dateReceived: string;
   lastUpdated: string;
   status: string;
@@ -66,14 +67,10 @@ export interface VSR {
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
-  militaryId: number;
+  militaryID: number;
   petCompanion: boolean;
-  bedroomFurnishing: string[];
-  bathroomFurnishing: string[];
-  kitchenFurnishing: string[];
-  livingRoomFurnishing: string[];
-  diningRoomFurnishing: string[];
-  otherFurnishing: string[];
+  selectedFurnitureItems: FurnitureInput[];
+  additionalItems: string;
   dateReceived: Date;
   lastUpdated: Date;
   status: string;
@@ -92,29 +89,22 @@ export interface CreateVSRRequest {
   employmentStatus: string;
   incomeLevel: string;
   sizeOfHome: string;
-
-  // Comment-out page 2 & 3 fields for now because they're not implemented on the form yet
-  // streetAddress: string;
-  // city: string;
-  // state: string;
-  // zipCode: number;
-  // phoneNumber: string;
-  // email: string;
-  // branch: string[];
-  // conflicts: string[];
-  // dischargeStatus: string;
-  // serviceConnected: boolean;
-  // lastRank: string;
-  // militaryId: number;
-  // petCompanion: boolean;
-  // bedroomFurnishing: string[];
-  // bathroomFurnishing: string[];
-  // kitchenFurnishing: string[];
-  // livingRoomFurnishing: string[];
-  // diningRoomFurnishing: string[];
-  // otherFurnishing: string[];
-  // status: string;
-  // hearFrom: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  branch: string[];
+  conflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: boolean;
+  lastRank: string;
+  militaryID: number;
+  petCompanion: boolean;
+  hearFrom: string;
+  selectedFurnitureItems: FurnitureInput[];
+  additionalItems: string;
 }
 
 function parseVSR(vsr: VSRJson) {
@@ -142,14 +132,10 @@ function parseVSR(vsr: VSRJson) {
     dischargeStatus: vsr.dischargeStatus,
     serviceConnected: vsr.serviceConnected,
     lastRank: vsr.lastRank,
-    militaryId: vsr.militaryId,
+    militaryID: vsr.militaryID,
     petCompanion: vsr.petCompanion,
-    bedroomFurnishing: vsr.bedroomFurnishing,
-    bathroomFurnishing: vsr.bathroomFurnishing,
-    kitchenFurnishing: vsr.kitchenFurnishing,
-    livingRoomFurnishing: vsr.livingRoomFurnishing,
-    diningRoomFurnishing: vsr.diningRoomFurnishing,
-    otherFurnishing: vsr.otherFurnishing,
+    selectedFurnitureItems: vsr.selectedFurnitureItems,
+    additionalItems: vsr.additionalItems,
     dateReceived: new Date(vsr.dateReceived),
     lastUpdated: new Date(vsr.lastUpdated),
     status: vsr.status,

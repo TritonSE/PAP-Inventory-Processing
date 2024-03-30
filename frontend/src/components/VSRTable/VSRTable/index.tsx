@@ -11,79 +11,101 @@ import moment from "moment";
 import { useRouter } from "next/navigation";
 import { StatusChip } from "@/components/shared/StatusChip";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
+import { useScreenSizes } from "@/util/useScreenSizes";
 
 const formatDateReceived = (dateReceived: Date) => {
   // Return the empty string on a falsy date received, instead of defaulting to today's date
   return dateReceived ? moment(dateReceived).format("MMMM D, YYYY") : "";
 };
 
-const columns: GridColDef[] = [
-  {
-    ...GRID_CHECKBOX_SELECTION_COL_DEF,
-    width: 72,
-    headerClassName: "header",
-  },
-  {
-    field: "_id",
-    headerName: "Case ID",
-    type: "string",
-    flex: 1,
-    headerAlign: "left",
-    headerClassName: "header",
-    disableColumnMenu: true,
-    hideSortIcons: true,
-  },
-  {
-    field: "militaryId",
-    headerName: "Military ID (Last 4)",
-    type: "string",
-    flex: 1,
-    headerClassName: "header",
-    disableColumnMenu: true,
-    hideSortIcons: true,
-  },
-  {
-    field: "name",
-    headerName: "Name",
-    flex: 1,
-    headerClassName: "header",
-    disableColumnMenu: true,
-    hideSortIcons: true,
-  },
-
-  {
-    field: "dateReceived",
-    headerName: "Date Received",
-    type: "date",
-    sortable: true,
-    flex: 1,
-    headerClassName: "header",
-    disableColumnMenu: true,
-    hideSortIcons: true,
-    valueFormatter: (params) => formatDateReceived(params?.value),
-  },
-  {
-    field: "status",
-    headerName: "Status",
-    type: "string",
-    flex: 1,
-    headerClassName: "header",
-    disableColumnMenu: true,
-    hideSortIcons: true,
-    renderCell: (params) => (
-      <StatusChip
-        status={
-          STATUS_OPTIONS.find((statusOption) => statusOption.value === params.value) ??
-          STATUS_OPTIONS[0]
-        }
-      />
-    ),
-  },
-];
-
 export default function VSRTable() {
   const [vsrs, setVsrs] = React.useState<VSR[]>();
   const router = useRouter();
+
+  const { isMobile, isTablet } = useScreenSizes();
+
+  const columns: GridColDef[] = React.useMemo(() => {
+    const result = [
+      {
+        ...GRID_CHECKBOX_SELECTION_COL_DEF,
+        width: 72,
+        headerClassName: "header",
+      },
+    ];
+
+    if (!isMobile) {
+      result.push({
+        field: "_id",
+        headerName: "Case ID",
+        type: "string",
+        flex: 1,
+        headerAlign: "left",
+        headerClassName: "header",
+        disableColumnMenu: true,
+        hideSortIcons: true,
+        width: 100,
+      });
+    }
+
+    if (!isTablet) {
+      result.push({
+        field: "militaryID",
+        headerName: "Military ID (Last 4)",
+        type: "string",
+        flex: 1,
+        headerClassName: "header",
+        disableColumnMenu: true,
+        hideSortIcons: true,
+        width: 100,
+      });
+    }
+
+    result.push({
+      field: "name",
+      headerName: "Name",
+      flex: 1,
+      headerClassName: "header",
+      disableColumnMenu: true,
+      hideSortIcons: true,
+      width: 100,
+    });
+
+    if (!isTablet) {
+      result.push({
+        field: "dateReceived",
+        headerName: "Date Received",
+        type: "date",
+        sortable: true,
+        flex: 1,
+        headerClassName: "header",
+        disableColumnMenu: true,
+        hideSortIcons: true,
+        valueFormatter: (params) => formatDateReceived(params?.value),
+        width: 100,
+      });
+    }
+
+    result.push({
+      field: "status",
+      headerName: "Status",
+      type: "string",
+      flex: 1,
+      headerClassName: "header",
+      disableColumnMenu: true,
+      hideSortIcons: true,
+      renderCell: (params) => (
+        <StatusChip
+          status={
+            STATUS_OPTIONS.find((statusOption) => statusOption.value === params.value) ??
+            STATUS_OPTIONS[0]
+          }
+        />
+      ),
+      width: 100,
+    });
+
+    return result;
+  }, [isMobile, isTablet]);
 
   useEffect(() => {
     getAllVSRs().then((result) => {
@@ -121,7 +143,7 @@ export default function VSRTable() {
           cursor: "pointer",
         },
         ".MuiDataGrid-cellContent": {
-          fontSize: "1rem",
+          fontSize: isMobile ? "0.75rem" : isTablet ? "0.875rem" : "1rem",
         },
         "&.MuiDataGrid-root": {
           border: "none",

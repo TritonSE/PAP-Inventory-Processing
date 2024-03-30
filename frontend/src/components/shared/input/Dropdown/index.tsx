@@ -1,6 +1,8 @@
 import React from "react";
 import styles from "@/components/shared/input/Dropdown/styles.module.css";
 import { FormControl, Select, MenuItem, SelectChangeEvent } from "@mui/material";
+import { FormField } from "../FormField";
+import { useScreenSizes } from "@/util/useScreenSizes";
 
 export interface DropDownProps {
   label: string;
@@ -23,15 +25,13 @@ const Dropdown = ({
   helperText,
   placeholder,
 }: DropDownProps) => {
+  const { isMobile, isTablet } = useScreenSizes();
+
   return (
-    <div className={styles.wrapperClass}>
-      <p>
-        {required ? <span className={styles.requiredAsterisk}>* </span> : null}
-        {label}
-      </p>
+    <FormField label={label} required={required} error={error} helperText={helperText}>
       <FormControl className={styles.form} size="small">
         <Select
-          className={styles.Dropdown}
+          className={styles.dropDown}
           value={value}
           onChange={onChange}
           error={error}
@@ -40,6 +40,13 @@ const Dropdown = ({
           renderValue={(value) =>
             value === "" ? <p className={styles.placeholder}> {placeholder}</p> : value
           }
+          sx={{
+            ".MuiSelect-select": {
+              padding: "6px 12px",
+              minHeight: "unset !important",
+              height: isMobile ? 16 : isTablet ? 19 : 22,
+            },
+          }}
         >
           <MenuItem value="">
             <p className={styles.placeholder}>{placeholder}</p>
@@ -51,8 +58,7 @@ const Dropdown = ({
           ))}
         </Select>
       </FormControl>
-      {helperText ? <div className={styles.helperText}>{helperText}</div> : null}
-    </div>
+    </FormField>
   );
 };
 
