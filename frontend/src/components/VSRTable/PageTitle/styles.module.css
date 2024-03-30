@@ -3,10 +3,22 @@
   color: var(--color-tse-secondary-1);
   font-family: var(--font-title);
   font-size: 40px;
-  font-style: normal;
   font-weight: 700;
-  line-height: 51.2px;
   display: flex;
   flex-direction: row;
   align-items: flex-start;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .items {
+    font-size: 36px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .items {
+    font-size: 28px;
+  }
 }

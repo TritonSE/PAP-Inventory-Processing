@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Chip from "@mui/material/Chip";
 import styles from "@/components/shared/input/BinaryChoice/styles.module.css";
+import { FormField } from "../FormField";
 
 export interface BinaryChoiceProps {
   label: string;
@@ -11,7 +12,14 @@ export interface BinaryChoiceProps {
   helperText?: string;
 }
 
-const BinaryChoice = ({ label, value, onChange, required, helperText }: BinaryChoiceProps) => {
+const BinaryChoice = ({
+  label,
+  value,
+  onChange,
+  required,
+  error,
+  helperText,
+}: BinaryChoiceProps) => {
   const [selectedOption, setSelectedOption] = useState<boolean | null>(value);
 
   const handleOptionClick = (newOption: boolean | null) => {
@@ -20,11 +28,7 @@ const BinaryChoice = ({ label, value, onChange, required, helperText }: BinaryCh
   };
 
   return (
-    <div className={styles.wrapperClass}>
-      <p>
-        {required ? <span className={styles.requiredAsterisk}>* </span> : null}
-        {label}
-      </p>
+    <FormField label={label} required={required} error={error} helperText={helperText}>
       <div className={styles.chipContainer}>
         <Chip
           label="Yes"
@@ -43,8 +47,7 @@ const BinaryChoice = ({ label, value, onChange, required, helperText }: BinaryCh
           clickable
         />
       </div>
-      {helperText ? <div className={styles.helperText}>{helperText}</div> : null}
-    </div>
+    </FormField>
   );
 };
 

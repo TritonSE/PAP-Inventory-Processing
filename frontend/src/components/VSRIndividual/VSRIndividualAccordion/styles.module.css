@@ -16,16 +16,6 @@
   line-height: normal;
 }
 
-.title {
-  font-family: var(--font-title);
-  color: var(--Primary-Background-Dark, #232220);
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
-  padding-left: 6px;
-}
-
 .details {
   display: flex;
   flex-direction: column;
@@ -33,4 +23,18 @@
   margin-top: 15px;
   padding-left: 6px;
   padding-right: 6px;
+}
+
+/* tablet version */
+@media screen and (max-width: 550px) {
+  .title {
+    font-size: 28px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .title {
+    font-size: 20px;
+  }
 }
