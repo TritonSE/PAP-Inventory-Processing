@@ -1,6 +1,6 @@
 import { FurnitureItem } from "@/api/FurnitureItems";
 import { FurnitureInput } from "@/api/VSRs";
-import styles from "@/components/VeteranForm/FurnitureItemSelection/styles.module.css";
+import styles from "@/components/VSRForm/FurnitureItemSelection/styles.module.css";
 import Image from "next/image";
 
 export interface FurnitureItemSelectionProps {

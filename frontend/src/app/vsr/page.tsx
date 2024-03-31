@@ -10,8 +10,19 @@ import PageNumber from "@/components/VSRForm/PageNumber";
 import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import BinaryChoice from "@/components/shared/input/BinaryChoice";
-import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
+import { ConfirmVSRSubmissionModal } from "@/components/VSRForm/ConfirmVSRSubmissionModal";
+import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelection";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
+import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
+import Image from "next/image";
+
+enum VSRFormError {
+  CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
+  CANNOT_RETRIEVE_FURNITURE_INTERNAL,
+  CANNOT_SUBMIT_NO_INTERNET,
+  CANNOT_SUBMIT_INTERNAL,
+  NONE,
+}
 
 interface IFormInput {
   name: string;
@@ -51,6 +62,7 @@ const VeteranServiceRequest: React.FC = () => {
     control,
     formState: { errors, isValid },
     watch,
+    reset,
   } = useForm<IFormInput>();
   const [selectedEthnicities, setSelectedEthnicities] = useState<string[]>([]);
   const [otherEthnicity, setOtherEthnicity] = useState("");
@@ -64,6 +76,8 @@ const VeteranServiceRequest: React.FC = () => {
   const [otherHearFrom, setOtherHearFrom] = useState("");
 
   const [pageNumber, setPageNumber] = useState(1);
+
+  const [confirmSubmissionModalOpen, setConfirmSubmissionModalOpen] = useState(false);
 
   const numBoys = watch("num_boys");
   const numGirls = watch("num_girls");
@@ -210,7 +224,7 @@ const VeteranServiceRequest: React.FC = () => {
     "WY",
   ];
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [vsrFormError, setVsrFormError] = useState<VSRFormError>(VSRFormError.NONE);
 
   const [furnitureCategoriesToItems, setFurnitureCategoriesToItems] =
     useState<Record<string, FurnitureItem[]>>();
@@ -221,28 +235,33 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [additionalItems, setAdditionalItems] = useState("");
 
+  const fetchFurnitureItems = () => {
+    getFurnitureItems().then((result) => {
+      if (result.success) {
+        setFurnitureCategoriesToItems(
+          result.data.reduce(
+            (prevMap: Record<string, FurnitureItem[]>, curItem) => ({
+              ...prevMap,
+              [curItem.category]: [...(prevMap[curItem.category] ?? []), curItem],
+            }),
+            {},
+          ),
+        );
+        setVsrFormError(VSRFormError.NONE);
+      } else {
+        if (result.error === "Failed to fetch") {
+          setVsrFormError(VSRFormError.CANNOT_RETRIEVE_FURNITURE_NO_INTERNET);
+        } else {
+          setVsrFormError(VSRFormError.CANNOT_RETRIEVE_FURNITURE_INTERNAL);
+          console.error(`Cannot retrieve furniture items: error ${result.error}`);
+        }
+      }
+    });
+  };
+
   // Fetch all available furniture items from database
   useEffect(() => {
-    getFurnitureItems()
-      .then((result) => {
-        if (result.success) {
-          setFurnitureCategoriesToItems(
-            result.data.reduce(
-              (prevMap: Record<string, FurnitureItem[]>, curItem) => ({
-                ...prevMap,
-                [curItem.category]: [...(prevMap[curItem.category] ?? []), curItem],
-              }),
-              {},
-            ),
-          );
-          setErrorMessage(null);
-        } else {
-          setErrorMessage("Furniture items not found.");
-        }
-      })
-      .catch((error) => {
-        setErrorMessage(`An error occurred: ${error.message}`);
-      });
+    fetchFurnitureItems();
   }, []);
 
   // Handle furniture item count whenever a change is made
@@ -253,7 +272,7 @@ const VeteranServiceRequest: React.FC = () => {
     }));
   };
 
-  const { isMobile } = useScreenSizes();
+  const { isMobile, isTablet } = useScreenSizes();
 
   // Execute when submit button is pressed
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -299,18 +318,17 @@ const VeteranServiceRequest: React.FC = () => {
       additionalItems,
     };
 
-    try {
-      const response = await createVSR(createVSRRequest);
+    const response = await createVSR(createVSRRequest);
 
-      if (!response.success) {
-        // TODO: better way of displaying error
-        throw new Error(`HTTP error! status: ${response.error}`);
+    if (response.success) {
+      setConfirmSubmissionModalOpen(true);
+    } else {
+      if (response.error === "Failed to fetch") {
+        setVsrFormError(VSRFormError.CANNOT_SUBMIT_NO_INTERNET);
+      } else {
+        setVsrFormError(VSRFormError.CANNOT_SUBMIT_INTERNAL);
+        console.error(`Cannot submit VSR, error ${response.error}`);
       }
-
-      // TODO: better way of displaying successful submission (popup/modal)
-      alert("VSR submitted successfully!");
-    } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
     }
   };
 
@@ -425,6 +443,109 @@ const VeteranServiceRequest: React.FC = () => {
           {renderNextButton()}
         </div>
       );
+    }
+  };
+
+  const renderErrorModal = () => {
+    switch (vsrFormError) {
+      case VSRFormError.CANNOT_RETRIEVE_FURNITURE_NO_INTERNET:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/no_internet.svg"
+                alt="No Internet"
+                width={isMobile ? 100 : isTablet ? 138 : 114}
+                height={isMobile ? 93 : isTablet ? 129 : 106}
+              />
+            }
+            title="No Internet Connection"
+            content="Unable to retrieve the available furniture items due to no internet connection. Please check your connection and try again."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+              fetchFurnitureItems();
+            }}
+          />
+        );
+      case VSRFormError.CANNOT_RETRIEVE_FURNITURE_INTERNAL:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/500_internal_error.svg"
+                alt="Internal Error"
+                width={isMobile ? 100 : 155}
+                height={isMobile ? 69 : 106}
+              />
+            }
+            title="Internal Error"
+            content="Something went wrong with retrieving the available furniture items. Our team is working to fix it. Please try again later."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+              fetchFurnitureItems();
+            }}
+          />
+        );
+      case VSRFormError.CANNOT_SUBMIT_NO_INTERNET:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/no_internet.svg"
+                alt="No Internet"
+                width={isMobile ? 100 : isTablet ? 138 : 114}
+                height={isMobile ? 93 : isTablet ? 129 : 106}
+              />
+            }
+            title="No Internet Connection"
+            content="Unable to submit the VSR form due to no internet connection. Please check your connection and try again."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+              onSubmit(watch());
+            }}
+          />
+        );
+      case VSRFormError.CANNOT_SUBMIT_INTERNAL:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/500_internal_error.svg"
+                alt="Internal Error"
+                width={isMobile ? 100 : 155}
+                height={isMobile ? 69 : 106}
+              />
+            }
+            title="Internal Error"
+            content="Something went wrong with submitting the VSR form. Our team is working to fix it. Please try again later."
+            buttonText="OK"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+          />
+        );
+      case VSRFormError.NONE:
+      default:
+        return null;
     }
   };
 
@@ -664,6 +785,7 @@ const VeteranServiceRequest: React.FC = () => {
             {renderBottomRow()}
           </div>
         </form>
+        {renderErrorModal()}
       </div>
     );
   } else if (pageNumber === 2) {
@@ -1002,6 +1124,7 @@ const VeteranServiceRequest: React.FC = () => {
             {renderBottomRow()}
           </div>
         </form>
+        {renderErrorModal()}
       </div>
     );
   } else {
@@ -1054,8 +1177,15 @@ const VeteranServiceRequest: React.FC = () => {
           </div>
         </form>
         <div className={styles.footer}></div>
-        {/* TODO: better error handling */}
-        {errorMessage}
+        <ConfirmVSRSubmissionModal
+          isOpen={confirmSubmissionModalOpen}
+          onClose={() => {
+            setConfirmSubmissionModalOpen(false);
+            setPageNumber(1);
+            reset();
+          }}
+        />
+        {renderErrorModal()}
       </div>
     );
   }
