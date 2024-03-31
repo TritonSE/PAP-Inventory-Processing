@@ -33,8 +33,8 @@ describe("User Tests", () => {
       .get("/api/user/whoami")
       .set("Authorization", `Bearer ${testToken}`);
     expect(res.statusCode).toBe(200);
-    expect(res.body.user.uid).toBe(userInfo.uid);
-    expect(res.body.user.role).toBe(UserRole.STAFF);
-    expect(res.body.user._id).toBe(testUser._id.toString());
+    expect(res.body.uid).toBe(userInfo.uid);
+    expect(res.body.role).toBe(UserRole.STAFF);
+    expect(res.body._id).toBe(testUser._id.toString());
   });
 });

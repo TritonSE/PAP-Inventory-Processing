@@ -11,7 +11,7 @@ import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import BinaryChoice from "@/components/shared/input/BinaryChoice";
 import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
-import { useScreenSizes } from "@/util/useScreenSizes";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 interface IFormInput {
   name: string;
@@ -432,7 +432,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar />
+          <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>
@@ -670,7 +670,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar />
+          <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <div className={styles.formContainer}>
               <div className={styles.form}>
@@ -1008,7 +1008,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <HeaderBar />
+          <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <div className={styles.formContainer}>
               <div className={styles.form}>

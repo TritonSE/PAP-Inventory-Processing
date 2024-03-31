@@ -9,15 +9,18 @@ import Image from "next/image";
 import React from "react";
 import { StatusDropdown } from "@/components/VSRIndividual";
 import { useMediaQuery } from "@mui/material";
+import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
 
 export default function VSRTableView() {
   const searchOnOwnRow = useMediaQuery("@media screen and (max-width: 1000px)");
   const buttonIconsOnly = useMediaQuery("@media screen and (max-width: 700px)");
   const buttonIconSize = buttonIconsOnly ? 16 : 24;
 
+  useRedirectToLoginIfNotSignedIn();
+
   return (
     <div className={styles.page}>
-      <HeaderBar />
+      <HeaderBar showLogoutButton />
       <div className={styles.column}>
         <PageTitle />
         <div className={styles.button_row}>

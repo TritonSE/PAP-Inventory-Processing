@@ -11,7 +11,7 @@ import moment from "moment";
 import { useRouter } from "next/navigation";
 import { StatusChip } from "@/components/shared/StatusChip";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
-import { useScreenSizes } from "@/util/useScreenSizes";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 const formatDateReceived = (dateReceived: Date) => {
   // Return the empty string on a falsy date received, instead of defaulting to today's date

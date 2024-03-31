@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import {
-  HeaderBar,
   VeteranTag,
   ContactInfo,
   CaseDetails,
@@ -14,7 +13,8 @@ import Image from "next/image";
 import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
 import { useParams } from "next/navigation";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
-import { useScreenSizes } from "@/util/useScreenSizes";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
+import HeaderBar from "@/components/shared/HeaderBar";
 
 export const Page = () => {
   const [vsr, setVSR] = useState<VSR>({} as VSR);
@@ -94,7 +94,7 @@ export const Page = () => {
 
   return (
     <>
-      <HeaderBar />
+      <HeaderBar showLogoutButton />
       <div className={styles.page}>
         <div className={`${styles.headerRow} ${styles.toDashboardRow}`}>
           <a href="/staff/vsr">

@@ -8,12 +8,9 @@ export const getWhoAmI: RequestHandler = async (req: PAPRequest, res, next) => {
     const user = await UserModel.findOne({ uid: userUid });
     const { _id, uid, role } = user!;
     res.status(200).send({
-      message: "Current user information",
-      user: {
-        _id,
-        uid,
-        role,
-      },
+      _id,
+      uid,
+      role,
     });
   } catch (error) {
     next(error);

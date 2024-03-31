@@ -5,7 +5,7 @@ import moment from "moment";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 import { StatusChip } from "@/components/shared/StatusChip";
-import { useScreenSizes } from "@/util/useScreenSizes";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 export interface CaseDetailsProp {
   vsr: VSR;

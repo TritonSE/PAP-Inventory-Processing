@@ -1,4 +1,3 @@
-export { HeaderBar } from "./HeaderBar";
 export { Page } from "./Page";
 export { VeteranTag } from "./VeteranTag";
 export { CaseDetails } from "./CaseDetails";
