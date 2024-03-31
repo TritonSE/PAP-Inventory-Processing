@@ -1,7 +1,7 @@
 import request from "supertest";
 
 import app from "src/app";
-import { getTestUserToken, mongoMemoryHooks } from "__tests__/testUtils";
+import { getTestUserToken, mongoMemoryHooks } from "src/tests/testUtils";
 import UserModel, { UserRole } from "src/models/user";
 import { firebaseAuth } from "src/services/firebase";
 import env from "src/util/validateEnv";

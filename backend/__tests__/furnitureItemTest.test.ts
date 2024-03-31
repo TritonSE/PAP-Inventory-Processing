@@ -1,7 +1,7 @@
 import request from "supertest";
 
 import app from "src/app";
-import { mongoMemoryHooks } from "__tests__/testUtils";
+import { mongoMemoryHooks } from "src/tests/testUtils";
 import FurnitureItemModel from "src/models/furnitureItem";
 
 describe("Furniture Item Tests", () => {

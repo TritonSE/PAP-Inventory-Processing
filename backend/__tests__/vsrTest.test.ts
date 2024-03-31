@@ -1,7 +1,7 @@
 import request from "supertest";
 
 import app from "src/app";
-import { getTestUserInfo, getTestUserToken, mongoMemoryHooks } from "__tests__/testUtils";
+import { getTestUserInfo, getTestUserToken, mongoMemoryHooks } from "src/tests/testUtils";
 import UserModel, { UserRole } from "src/models/user";
 import VSRModel from "src/models/vsr";
 
