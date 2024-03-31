@@ -59,7 +59,7 @@ const makeEthnicityValidator = () =>
     .custom((ethnicities: string[]) =>
       ethnicities.every((ethnicity) => typeof ethnicity === "string"),
     )
-    .withMessage("Each ethnicity in Ethnicities must be a positive integer");
+    .withMessage("Each ethnicity in Ethnicities must be a string");
 
 const makeEmploymentStatusValidator = () =>
   body("employmentStatus")

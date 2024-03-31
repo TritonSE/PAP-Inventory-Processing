@@ -1,29 +1,21 @@
 import { RequestHandler } from "express";
-import { ServiceError } from "src/errors/service";
+import { PAPRequest } from "src/middleware/auth";
 import UserModel from "src/models/user";
 
-export const getWhoAmI: RequestHandler = async (req, res, next) => {
+export const getWhoAmI: RequestHandler = async (req: PAPRequest, res, next) => {
   try {
-    const uid = req.body.uid;
-    const user = await UserModel.findOne({ uid: uid });
-    if (!user) {
-      throw ServiceError.USER_NOT_FOUND;
-    }
-    const { _id: mongoId, role } = user;
+    const { userUid } = req;
+    const user = await UserModel.findOne({ uid: userUid });
+    const { _id, uid, role } = user!;
     res.status(200).send({
       message: "Current user information",
       user: {
-        mongoId,
+        _id,
         uid,
         role,
       },
     });
-    return;
-  } catch (e) {
-    next();
-    console.log(e);
-    return res.status(400).json({
-      error: e,
-    });
+  } catch (error) {
+    next(error);
   }
 };
