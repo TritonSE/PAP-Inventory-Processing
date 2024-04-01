@@ -1,4 +1,5 @@
 import { APIResult, get, handleAPIError, patch, post } from "@/api/requests";
+import { createAuthHeader } from "@/api/Users";
 
 export interface FurnitureInput {
   furnitureItemId: string;
@@ -153,9 +154,9 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
   }
 }
 
-export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
+export async function getAllVSRs(firebaseToken: string): Promise<APIResult<VSR[]>> {
   try {
-    const response = await get("/api/vsr");
+    const response = await get("/api/vsr", createAuthHeader(firebaseToken));
     const json = (await response.json()) as VSRListJson;
     return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
@@ -163,9 +164,9 @@ export async function getAllVSRs(): Promise<APIResult<VSR[]>> {
   }
 }
 
-export async function getVSR(id: string): Promise<APIResult<VSR>> {
+export async function getVSR(id: string, firebaseToken: string): Promise<APIResult<VSR>> {
   try {
-    const response = await get(`/api/vsr/${id}`);
+    const response = await get(`/api/vsr/${id}`, createAuthHeader(firebaseToken));
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {
@@ -173,9 +174,17 @@ export async function getVSR(id: string): Promise<APIResult<VSR>> {
   }
 }
 
-export async function updateVSRStatus(id: string, status: string): Promise<APIResult<VSR>> {
+export async function updateVSRStatus(
+  id: string,
+  status: string,
+  firebaseToken: string,
+): Promise<APIResult<VSR>> {
   try {
-    const response = await patch(`/api/vsr/${id}/status`, { status });
+    const response = await patch(
+      `/api/vsr/${id}/status`,
+      { status },
+      createAuthHeader(firebaseToken),
+    );
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {

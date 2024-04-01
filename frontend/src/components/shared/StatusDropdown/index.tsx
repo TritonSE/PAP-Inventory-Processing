@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/components/shared/StatusDropdown/styles.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -46,6 +46,8 @@ export interface StatusDropdownProps {
 export function StatusDropdown({ value, onChanged }: StatusDropdownProps) {
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => setSelectedValue(value), [value]);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSelectedValue(event.target.value);

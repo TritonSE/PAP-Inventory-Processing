@@ -21,6 +21,7 @@ export const UserContext = createContext<IUserContext>({
 
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
+  const [initialLoading, setInitialLoading] = useState(true);
   const [papUser, setPapUser] = useState<User | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
 
@@ -28,9 +29,13 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
 
   onAuthStateChanged(auth, (firebaseUser) => {
     setFirebaseUser(firebaseUser);
+    setInitialLoading(false);
   });
 
   const reloadUser = () => {
+    if (initialLoading) {
+      return;
+    }
     setLoadingUser(true);
     setPapUser(null);
     if (firebaseUser === null) {
@@ -49,7 +54,7 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  useEffect(reloadUser, [firebaseUser]);
+  useEffect(reloadUser, [initialLoading, firebaseUser]);
 
   return (
     <UserContext.Provider value={{ firebaseUser, papUser, loadingUser, reloadUser }}>

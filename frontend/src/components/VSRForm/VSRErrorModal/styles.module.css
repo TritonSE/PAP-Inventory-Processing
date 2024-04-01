@@ -16,6 +16,7 @@
   padding: 64px;
   gap: 32px;
   border: none !important;
+  outline: none !important;
 }
 
 .closeButton {

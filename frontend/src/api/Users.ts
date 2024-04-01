@@ -6,9 +6,13 @@ export interface User {
   role: string;
 }
 
+export const createAuthHeader = (firebaseToken: string) => ({
+  Authorization: `Bearer ${firebaseToken}`,
+});
+
 export const getWhoAmI = async (firebaseToken: string): Promise<APIResult<User>> => {
   try {
-    const response = await get("/api/user/whoami", { Authorization: `Bearer ${firebaseToken}` });
+    const response = await get("/api/user/whoami", createAuthHeader(firebaseToken));
     const json = (await response.json()) as User;
     return { success: true, data: json };
   } catch (error) {

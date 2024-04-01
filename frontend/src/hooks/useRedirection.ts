@@ -42,7 +42,7 @@ export const useRedirection = ({ checkShouldRedirect, redirectURL }: UseRedirect
     if (checkShouldRedirect({ firebaseUser, papUser })) {
       router.push(redirectURL);
     }
-  }, [loadingUser]);
+  }, [firebaseUser, papUser, loadingUser]);
 };
 
 /**

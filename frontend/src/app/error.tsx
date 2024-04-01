@@ -14,7 +14,7 @@ const InternalError500Page = () => {
       imageComponent={
         <Image
           priority
-          src="errors/500_internal_error.svg"
+          src="/errors/500_internal_error.svg"
           alt="500 Internal Error"
           width={isMobile ? 100 : isTablet ? 220 : 320}
           height={isMobile ? 69 : isTablet ? 150 : 220}

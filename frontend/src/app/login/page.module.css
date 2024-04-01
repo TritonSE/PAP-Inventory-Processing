@@ -109,6 +109,11 @@
   margin-bottom: 49px;
 }
 
+.disabledButton {
+  background: grey;
+  cursor: auto;
+}
+
 /* tablet version */
 @media screen and (max-width: 850px) {
   .backgroundImage {

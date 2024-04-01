@@ -1,6 +1,6 @@
 import styles from "src/components/VSRIndividual/CaseDetails/styles.module.css";
 import { SingleDetail, StatusDropdown } from "@/components/VSRIndividual";
-import { updateVSRStatus, type VSR } from "@/api/VSRs";
+import { type VSR } from "@/api/VSRs";
 import moment from "moment";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
@@ -9,7 +9,7 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 export interface CaseDetailsProp {
   vsr: VSR;
-  onUpdateVSR: (status: VSR) => void;
+  onUpdateVSRStatus: (status: string) => void;
 }
 
 /**
@@ -21,7 +21,7 @@ const formatDate = (date: Date) => {
   return `${dateMoment.format("MM-DD-YYYY")} [${dateMoment.format("hh:mm A")}]`;
 };
 
-export const CaseDetails = ({ vsr, onUpdateVSR }: CaseDetailsProp) => {
+export const CaseDetails = ({ vsr, onUpdateVSRStatus }: CaseDetailsProp) => {
   const { isMobile, isTablet } = useScreenSizes();
 
   const renderStatus = () => {
@@ -34,13 +34,7 @@ export const CaseDetails = ({ vsr, onUpdateVSR }: CaseDetailsProp) => {
     }
     return (
       <StatusDropdown
-        onChanged={async (status) => {
-          const res = await updateVSRStatus(vsr._id, status);
-
-          // TODO: error handling
-
-          onUpdateVSR(res.success ? res.data : vsr);
-        }}
+        onChanged={onUpdateVSRStatus}
         value={vsr.status != undefined ? vsr.status : "Received"}
       />
     );

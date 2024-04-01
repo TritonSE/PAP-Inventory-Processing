@@ -14,7 +14,7 @@ const NotFound404Page = () => {
       imageComponent={
         <Image
           priority
-          src="errors/404_not_found.svg"
+          src="/errors/404_not_found.svg"
           alt="404 Not Found"
           width={isMobile ? 232 : isTablet ? 310 : 464}
           height={isMobile ? 90 : isTablet ? 120 : 180}
