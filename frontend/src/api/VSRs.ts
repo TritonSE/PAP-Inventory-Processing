@@ -194,7 +194,7 @@ export async function updateVSRStatus(
 
 export async function deleteVSR(id: string, firebaseToken: string): Promise<APIResult<null>> {
   try {
-    const response = await httpDelete(`/api/vsr/${id}`, createAuthHeader(firebaseToken));
+    await httpDelete(`/api/vsr/${id}`, createAuthHeader(firebaseToken));
     return { success: true, data: null };
   } catch (error) {
     return handleAPIError(error);
