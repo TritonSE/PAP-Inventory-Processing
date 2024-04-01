@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, patch, post } from "@/api/requests";
+import { APIResult, get, handleAPIError, httpDelete, patch, post } from "@/api/requests";
 import { createAuthHeader } from "@/api/Users";
 
 export interface FurnitureInput {
@@ -187,6 +187,15 @@ export async function updateVSRStatus(
     );
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function deleteVSR(id: string, firebaseToken: string): Promise<APIResult<null>> {
+  try {
+    const response = await httpDelete(`/api/vsr/${id}`, createAuthHeader(firebaseToken));
+    return { success: true, data: null };
   } catch (error) {
     return handleAPIError(error);
   }

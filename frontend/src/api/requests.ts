@@ -132,6 +132,22 @@ export async function patch(
   return response;
 }
 
+/**
+ * Sends a DELETE request to the provided API URL.
+ *
+ * @param url The URL to request
+ * @param headers The headers of the request (optional)
+ * @returns The Response object returned by `fetch()`
+ */
+export async function httpDelete(
+  url: string,
+  headers: Record<string, string> = {},
+): Promise<Response> {
+  const response = await fetchRequest("DELETE", API_BASE_URL + url, undefined, headers);
+  await assertOk(response);
+  return response;
+}
+
 export type APIData<T> = { success: true; data: T };
 export type APIError = { success: false; error: string };
 /**

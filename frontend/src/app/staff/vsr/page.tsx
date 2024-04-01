@@ -6,17 +6,121 @@ import SearchKeyword from "@/components/VSRTable/SearchKeyword";
 import PageTitle from "@/components/VSRTable/PageTitle";
 import HeaderBar from "@/components/shared/HeaderBar";
 import Image from "next/image";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { StatusDropdown } from "@/components/VSRIndividual";
 import { useMediaQuery } from "@mui/material";
 import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
+import { UserContext } from "@/contexts/userContext";
+import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
+import { VSR, getAllVSRs } from "@/api/VSRs";
+import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
+import { LoadingScreen } from "@/components/shared/LoadingScreen";
+
+enum VSRTableError {
+  CANNOT_FETCH_VSRS_NO_INTERNET,
+  CANNOT_FETCH_VSRS_INTERNAL,
+  NONE,
+}
 
 export default function VSRTableView() {
+  const { isMobile, isTablet } = useScreenSizes();
   const searchOnOwnRow = useMediaQuery("@media screen and (max-width: 1000px)");
   const buttonIconsOnly = useMediaQuery("@media screen and (max-width: 700px)");
   const buttonIconSize = buttonIconsOnly ? 16 : 24;
 
+  const { firebaseUser, papUser } = useContext(UserContext);
+  const [loadingVsrs, setLoadingVsrs] = useState(true);
+  const [vsrs, setVsrs] = useState<VSR[]>();
+  const [tableError, setTableError] = useState(VSRTableError.NONE);
+
+  const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
+  const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
+
   useRedirectToLoginIfNotSignedIn();
+
+  const atLeastOneRowSelected = selectedVsrIds.length > 0;
+  const fetchVSRs = () => {
+    if (!firebaseUser) {
+      return;
+    }
+
+    setLoadingVsrs(true);
+    firebaseUser?.getIdToken().then((firebaseToken) => {
+      getAllVSRs(firebaseToken).then((result) => {
+        if (result.success) {
+          setVsrs(result.data);
+        } else {
+          if (result.error === "Failed to fetch") {
+            setTableError(VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET);
+          } else {
+            console.error(`Error retrieving VSRs: ${result.error}`);
+            setTableError(VSRTableError.CANNOT_FETCH_VSRS_INTERNAL);
+          }
+        }
+        setLoadingVsrs(false);
+      });
+    });
+  };
+
+  useEffect(() => {
+    fetchVSRs();
+  }, [firebaseUser]);
+
+  const renderErrorModal = () => {
+    switch (tableError) {
+      case VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setTableError(VSRTableError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/no_internet.svg"
+                alt="No Internet"
+                width={isMobile ? 100 : isTablet ? 138 : 114}
+                height={isMobile ? 93 : isTablet ? 129 : 106}
+              />
+            }
+            title="No Internet Connection"
+            content="Unable to retrieve the VSRs due to no internet connection. Please check your connection and try again."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setTableError(VSRTableError.NONE);
+              fetchVSRs();
+            }}
+          />
+        );
+      case VSRTableError.CANNOT_FETCH_VSRS_INTERNAL:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setTableError(VSRTableError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/500_internal_error.svg"
+                alt="Internal Error"
+                width={isMobile ? 100 : 155}
+                height={isMobile ? 69 : 106}
+              />
+            }
+            title="Internal Error"
+            content="Something went wrong with retrieving the VSRs. Our team is working to fix it. Please try again later."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setTableError(VSRTableError.NONE);
+              fetchVSRs();
+            }}
+          />
+        );
+      default:
+        return null;
+    }
+  };
 
   return (
     <div className={styles.page}>
@@ -35,15 +139,31 @@ export default function VSRTableView() {
             </div>
           </div>
           <div className={styles.row_right}>
-            <button className={styles.buttons}>
-              <Image
-                width={buttonIconSize}
-                height={buttonIconSize}
-                src="/round-sort.svg"
-                alt="Filter"
-              />
-              {buttonIconsOnly ? null : <text className={styles.buttontext}>Filter</text>}
-            </button>
+            {papUser?.role === "admin" && atLeastOneRowSelected ? (
+              <button
+                className={`${styles.buttons} ${styles.deleteButton}`}
+                onClick={() => setDeleteVsrModalOpen(true)}
+              >
+                <Image
+                  width={buttonIconSize}
+                  height={buttonIconSize}
+                  src="/mdi_trash.svg"
+                  alt="Delete"
+                />
+                {buttonIconsOnly ? null : "Delete VSR(s)"}
+              </button>
+            ) : null}
+            {atLeastOneRowSelected ? null : (
+              <button className={styles.buttons}>
+                <Image
+                  width={buttonIconSize}
+                  height={buttonIconSize}
+                  src="/round-sort.svg"
+                  alt="Filter"
+                />
+                {buttonIconsOnly ? null : "Filter"}
+              </button>
+            )}
             <button className={styles.buttons}>
               <Image
                 width={buttonIconSize}
@@ -51,15 +171,34 @@ export default function VSRTableView() {
                 src="/upload.svg"
                 alt="Upload"
               />
-              {buttonIconsOnly ? null : <text className={styles.buttontext}>Export</text>}
+              {buttonIconsOnly ? null : "Export"}
             </button>
           </div>
         </div>
         {searchOnOwnRow ? <SearchKeyword /> : null}
         <div className={styles.table}>
-          <VSRTable />
+          {loadingVsrs ? (
+            <LoadingScreen />
+          ) : (
+            <VSRTable
+              vsrs={vsrs ?? []}
+              selectedVsrIds={selectedVsrIds}
+              onChangeSelectedVsrIds={setSelectedVsrIds}
+            />
+          )}
         </div>
       </div>
+
+      {renderErrorModal()}
+      <DeleteVSRsModal
+        isOpen={deleteVsrModalOpen}
+        onClose={() => setDeleteVsrModalOpen(false)}
+        afterDelete={() => {
+          setSelectedVsrIds([]);
+          fetchVSRs();
+        }}
+        vsrIds={selectedVsrIds}
+      />
     </div>
   );
 }

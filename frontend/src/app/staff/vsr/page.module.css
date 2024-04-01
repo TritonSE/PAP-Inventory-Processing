@@ -74,18 +74,18 @@
   background-color: var(--color-tse-secondary-1);
   cursor: pointer;
   border: none !important;
-}
-
-.buttontext {
   color: var(--Primary-Background-Light, #f7f7f7);
   text-align: center;
-
-  /* Desktop/Body 2 */
   font-family: "Open Sans";
   font-size: 16px;
-  font-style: normal;
   font-weight: 400;
-  line-height: normal;
+}
+
+.deleteButton {
+  max-width: unset;
+  background-color: transparent;
+  border: 1px solid #be2d46 !important;
+  color: #be2d46;
 }
 
 .table {

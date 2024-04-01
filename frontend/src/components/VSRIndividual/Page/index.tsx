@@ -21,6 +21,7 @@ import { UserContext } from "@/contexts/userContext";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { CircularProgress } from "@mui/material";
+import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -35,7 +36,7 @@ export const Page = () => {
   const [loadingVsr, setLoadingVsr] = useState(true);
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
-  const { firebaseUser } = useContext(UserContext);
+  const { firebaseUser, papUser } = useContext(UserContext);
   const router = useRouter();
   const [loadingFurnitureItems, setLoadingFurnitureItems] = useState(false);
   const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
@@ -45,6 +46,8 @@ export const Page = () => {
   const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
   const [previousVSRStatus, setPreviousVSRStatus] = useState<string | null>(null);
   const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
+
+  const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
   const iconSize = isMobile ? 16 : isTablet ? 19 : 24;
@@ -112,6 +115,16 @@ export const Page = () => {
   const renderActions = () =>
     loadingVsr ? null : (
       <div className={styles.actions}>
+        {/* Show delete button only if user is an admin */}
+        {papUser?.role === "admin" ? (
+          <button
+            className={`${styles.button} ${styles.deleteButton}`}
+            onClick={() => setDeleteVsrModalOpen(true)}
+          >
+            <Image width={iconSize} height={iconSize} src="/mdi_trash.svg" alt="edit" />
+            {isMobile ? null : "Delete"}
+          </button>
+        ) : null}
         <a href="REPLACE">
           <button id="edit" className={styles.button}>
             <Image width={iconSize} height={iconSize} src="/ic_edit.svg" alt="edit" />
@@ -383,6 +396,17 @@ export const Page = () => {
         subText="An error occurred, please check your internet connection or try again later"
         actionText="Dismiss"
         onActionClicked={() => setErrorNotificationOpen(false)}
+      />
+      <DeleteVSRsModal
+        isOpen={deleteVsrModalOpen}
+        onClose={() => setDeleteVsrModalOpen(false)}
+        afterDelete={() => {
+          // Redirect user to dashboard after deleting VSR, but give them some time to see the success message first
+          setTimeout(() => {
+            router.push("/staff/vsr");
+          }, 1000);
+        }}
+        vsrIds={[vsr._id]}
       />
     </>
   );

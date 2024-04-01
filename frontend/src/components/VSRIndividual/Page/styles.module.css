@@ -45,7 +45,6 @@
 
 .button {
   border-radius: 4px;
-  border: 1px solid var(--color-tse-accent-blue-1);
   background-color: var(--color-tse-accent-blue-1);
   padding: 8px 16px;
   font-family: var(--font-open-sans);
@@ -61,6 +60,12 @@
   gap: 6px;
   align-items: center;
   white-space: nowrap;
+}
+
+.deleteButton {
+  background-color: transparent;
+  border: 1px solid #be2d46;
+  color: #be2d46;
 }
 
 #edit:hover {
