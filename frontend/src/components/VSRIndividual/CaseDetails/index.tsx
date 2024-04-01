@@ -6,9 +6,11 @@ import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividual
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 import { StatusChip } from "@/components/shared/StatusChip";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
+import { CircularProgress } from "@mui/material";
 
 export interface CaseDetailsProp {
   vsr: VSR;
+  loadingStatus: boolean;
   onUpdateVSRStatus: (status: string) => void;
 }
 
@@ -21,10 +23,14 @@ const formatDate = (date: Date) => {
   return `${dateMoment.format("MM-DD-YYYY")} [${dateMoment.format("hh:mm A")}]`;
 };
 
-export const CaseDetails = ({ vsr, onUpdateVSRStatus }: CaseDetailsProp) => {
+export const CaseDetails = ({ vsr, loadingStatus, onUpdateVSRStatus }: CaseDetailsProp) => {
   const { isMobile, isTablet } = useScreenSizes();
 
   const renderStatus = () => {
+    if (loadingStatus) {
+      return <CircularProgress size={24} />;
+    }
+
     if (vsr.status === "Received" || vsr.status === undefined) {
       return (
         <StatusChip

@@ -15,10 +15,12 @@ import { useParams, useRouter } from "next/navigation";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import HeaderBar from "@/components/shared/HeaderBar";
-import { SuccessNotification } from "@/components/SuccessNotification";
-import { ErrorNotification } from "@/components/ErrorNotification";
+import { SuccessNotification } from "@/components/shared/SuccessNotification";
+import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { UserContext } from "@/contexts/userContext";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
+import { LoadingScreen } from "@/components/shared/LoadingScreen";
+import { CircularProgress } from "@mui/material";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -30,27 +32,36 @@ enum VSRIndividualError {
 }
 
 export const Page = () => {
+  const [loadingVsr, setLoadingVsr] = useState(true);
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
   const { firebaseUser } = useContext(UserContext);
   const router = useRouter();
+  const [loadingFurnitureItems, setLoadingFurnitureItems] = useState(false);
   const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
   const [pageError, setPageError] = useState(VSRIndividualError.NONE);
 
   const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
   const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
   const [previousVSRStatus, setPreviousVSRStatus] = useState<string | null>(null);
+  const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
   const iconSize = isMobile ? 16 : isTablet ? 19 : 24;
 
   const onUpdateVSRStatus = async (newStatus: string) => {
+    if (loadingUpdateStatus) {
+      return;
+    }
+
+    setLoadingUpdateStatus(true);
     setSuccessNotificationOpen(false);
     setErrorNotificationOpen(false);
     const currentStatus = vsr.status;
 
     const firebaseToken = await firebaseUser?.getIdToken();
     if (!firebaseToken) {
+      setLoadingUpdateStatus(false);
       return;
     }
     const res = await updateVSRStatus(vsr._id, newStatus, firebaseToken);
@@ -62,14 +73,21 @@ export const Page = () => {
     } else {
       setErrorNotificationOpen(true);
     }
+    setLoadingUpdateStatus(false);
   };
 
   const onUndoVSRStatusUpdate = async () => {
+    if (loadingUpdateStatus) {
+      return;
+    }
+
+    setLoadingUpdateStatus(true);
     setSuccessNotificationOpen(false);
     setErrorNotificationOpen(false);
 
     const firebaseToken = await firebaseUser?.getIdToken();
     if (!firebaseToken) {
+      setLoadingUpdateStatus(false);
       return;
     }
     const res = await updateVSRStatus(vsr._id, previousVSRStatus!, firebaseToken);
@@ -81,33 +99,40 @@ export const Page = () => {
     } else {
       setErrorNotificationOpen(true);
     }
+    setLoadingUpdateStatus(false);
   };
 
   const renderApproveButton = () =>
     vsr.status == "Received" || vsr.status === undefined ? (
       <button className={styles.approveButton} onClick={() => onUpdateVSRStatus("Approved")}>
-        Approve VSR
+        {loadingUpdateStatus ? <CircularProgress size={24} /> : "Approve VSR"}
       </button>
     ) : null;
 
-  const renderActions = () => (
-    <div className={styles.actions}>
-      <a href="REPLACE">
-        <button id="edit" className={styles.button}>
-          <Image width={iconSize} height={iconSize} src="/ic_edit.svg" alt="edit" />
-          {isMobile ? null : "Edit Form"}
-        </button>
-      </a>
-      <a href="REPLACE">
-        <button className={styles.button}>
-          <Image width={iconSize} height={iconSize} src="/ic_upload.svg" alt="upload" />
-          {isMobile ? null : "Export"}
-        </button>
-      </a>
-    </div>
-  );
+  const renderActions = () =>
+    loadingVsr ? null : (
+      <div className={styles.actions}>
+        <a href="REPLACE">
+          <button id="edit" className={styles.button}>
+            <Image width={iconSize} height={iconSize} src="/ic_edit.svg" alt="edit" />
+            {isMobile ? null : "Edit Form"}
+          </button>
+        </a>
+        <a href="REPLACE">
+          <button className={styles.button}>
+            <Image width={iconSize} height={iconSize} src="/ic_upload.svg" alt="upload" />
+            {isMobile ? null : "Export"}
+          </button>
+        </a>
+      </div>
+    );
 
   const fetchVSR = () => {
+    if (!firebaseUser) {
+      return;
+    }
+
+    setLoadingVsr(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
       setPageError(VSRIndividualError.NONE);
       getVSR(id as string, firebaseToken).then((result) => {
@@ -123,6 +148,7 @@ export const Page = () => {
             setPageError(VSRIndividualError.CANNOT_FETCH_VSR_INTERNAL);
           }
         }
+        setLoadingVsr(false);
       });
     });
   };
@@ -132,6 +158,11 @@ export const Page = () => {
   }, [id, firebaseUser]);
 
   const fetchFurnitureItems = () => {
+    if (loadingFurnitureItems) {
+      return;
+    }
+
+    setLoadingFurnitureItems(true);
     getFurnitureItems().then((result) => {
       if (result.success) {
         setFurnitureItems(result.data);
@@ -143,6 +174,7 @@ export const Page = () => {
           setPageError(VSRIndividualError.CANNOT_RETRIEVE_FURNITURE_INTERNAL);
         }
       }
+      setLoadingFurnitureItems(false);
     });
   };
 
@@ -291,33 +323,45 @@ export const Page = () => {
           </a>
           {isMobile ? renderActions() : null}
         </div>
-        <div className={styles.allDetails}>
-          <div className={styles.headerRow}>
-            <div className={styles.name}>
-              <VeteranTag vsr={vsr}></VeteranTag>
-            </div>
-            {isMobile ? null : renderActions()}
-          </div>
-          <div className={styles.bodyDetails}>
-            <CaseDetails vsr={vsr} onUpdateVSRStatus={onUpdateVSRStatus}></CaseDetails>
-            <div className={styles.otherDetails}>
-              {isTablet ? renderApproveButton() : null}
-              <div className={styles.personalInfo}>
-                <ContactInfo vsr={vsr} />
-                <PersonalInformation vsr={vsr} />
-                <MilitaryBackground vsr={vsr} />
-                <AdditionalInfo vsr={vsr} />
+        {loadingVsr ? (
+          <LoadingScreen />
+        ) : (
+          <div className={styles.allDetails}>
+            <div className={styles.headerRow}>
+              <div className={styles.name}>
+                <VeteranTag vsr={vsr}></VeteranTag>
               </div>
-              <div className={styles.rightColumn}>
-                <RequestedFurnishings vsr={vsr} furnitureItems={furnitureItems ?? []} />
-                {isTablet ? null : (
-                  <div className={styles.finalActions}>{renderApproveButton()}</div>
-                )}
+              {isMobile ? null : renderActions()}
+            </div>
+            <div className={styles.bodyDetails}>
+              <CaseDetails
+                vsr={vsr}
+                loadingStatus={loadingUpdateStatus}
+                onUpdateVSRStatus={onUpdateVSRStatus}
+              ></CaseDetails>
+              <div className={styles.otherDetails}>
+                {isTablet ? renderApproveButton() : null}
+                <div className={styles.personalInfo}>
+                  <ContactInfo vsr={vsr} />
+                  <PersonalInformation vsr={vsr} />
+                  <MilitaryBackground vsr={vsr} />
+                  <AdditionalInfo vsr={vsr} />
+                </div>
+                <div className={styles.rightColumn}>
+                  {loadingFurnitureItems ? (
+                    <LoadingScreen />
+                  ) : (
+                    <RequestedFurnishings vsr={vsr} furnitureItems={furnitureItems ?? []} />
+                  )}
+                  {isTablet ? null : (
+                    <div className={styles.finalActions}>{renderApproveButton()}</div>
+                  )}
+                </div>
               </div>
             </div>
+            <div className={styles.footer}></div>
           </div>
-          <div className={styles.footer}></div>
-        </div>
+        )}
       </div>
 
       {renderErrorModal()}

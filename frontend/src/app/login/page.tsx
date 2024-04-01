@@ -10,8 +10,9 @@ import { initFirebase } from "@/firebase/firebase";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
 import { getWhoAmI } from "@/api/Users";
-import { ErrorNotification } from "@/components/ErrorNotification";
+import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { FirebaseError } from "firebase/app";
+import { CircularProgress } from "@mui/material";
 
 enum LoginPageError {
   NO_INTERNET,
@@ -24,6 +25,7 @@ enum LoginPageError {
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const [pageError, setPageError] = useState(LoginPageError.NONE);
 
   useRedirectToHomeIfSignedIn();
@@ -46,6 +48,7 @@ const Login = () => {
 
   const login = async (email: string, password: string) => {
     try {
+      setLoading(true);
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const token = await userCredential.user?.getIdToken();
       if (!token) {
@@ -75,6 +78,8 @@ const Login = () => {
           setPageError(LoginPageError.INTERNAL);
           break;
       }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -206,9 +211,9 @@ const Login = () => {
           <button
             type="submit"
             className={`${styles.loginButton} ${missingCredentials ? styles.disabledButton : ""}`}
-            disabled={missingCredentials}
+            disabled={missingCredentials || loading}
           >
-            Log In
+            {loading ? <CircularProgress /> : "Log In"}
           </button>
         </form>
       </div>

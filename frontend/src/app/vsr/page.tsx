@@ -15,6 +15,8 @@ import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelect
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import Image from "next/image";
+import { LoadingScreen } from "@/components/shared/LoadingScreen";
+import { CircularProgress } from "@mui/material";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -224,8 +226,10 @@ const VeteranServiceRequest: React.FC = () => {
     "WY",
   ];
 
+  const [loadingVsrSubmission, setLoadingVsrSubmission] = useState(false);
   const [vsrFormError, setVsrFormError] = useState<VSRFormError>(VSRFormError.NONE);
 
+  const [loadingFurnitureItems, setLoadingFurnitureItems] = useState(false);
   const [furnitureCategoriesToItems, setFurnitureCategoriesToItems] =
     useState<Record<string, FurnitureItem[]>>();
   // Map furniture item IDs to selections for those items
@@ -236,6 +240,10 @@ const VeteranServiceRequest: React.FC = () => {
   const [additionalItems, setAdditionalItems] = useState("");
 
   const fetchFurnitureItems = () => {
+    if (loadingFurnitureItems) {
+      return;
+    }
+    setLoadingFurnitureItems(true);
     getFurnitureItems().then((result) => {
       if (result.success) {
         setFurnitureCategoriesToItems(
@@ -256,6 +264,7 @@ const VeteranServiceRequest: React.FC = () => {
           console.error(`Cannot retrieve furniture items: error ${result.error}`);
         }
       }
+      setLoadingFurnitureItems(false);
     });
   };
 
@@ -276,6 +285,11 @@ const VeteranServiceRequest: React.FC = () => {
 
   // Execute when submit button is pressed
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    if (loadingVsrSubmission) {
+      return;
+    }
+    setLoadingVsrSubmission(true);
+
     // Construct the request object
     const createVSRRequest: CreateVSRRequest = {
       name: data.name,
@@ -330,6 +344,7 @@ const VeteranServiceRequest: React.FC = () => {
         console.error(`Cannot submit VSR, error ${response.error}`);
       }
     }
+    setLoadingVsrSubmission(false);
   };
 
   const incrementPageNumber = () => {
@@ -419,7 +434,7 @@ const VeteranServiceRequest: React.FC = () => {
         }`}
         type="submit"
       >
-        {pageNumber === 3 ? "Submit" : "Next"}
+        {loadingVsrSubmission ? <CircularProgress /> : pageNumber === 3 ? "Submit" : "Next"}
       </button>
     );
   };
@@ -1138,28 +1153,32 @@ const VeteranServiceRequest: React.FC = () => {
                 <div className={styles.subSec}>
                   <div className={styles.sectionTitle}>Furnishings</div>
                   <div>
-                    {Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
-                      <div className={styles.furnitureItemsSection} key={category}>
-                        <p className={styles.furnitureItemsSectionLabel}>{category}</p>
-                        <div className={styles.chipContainer}>
-                          {(items ?? []).map((furnitureItem) => (
-                            <FurnitureItemSelection
-                              key={furnitureItem._id}
-                              furnitureItem={furnitureItem}
-                              selection={
-                                selectedFurnitureItems[furnitureItem._id] ?? {
-                                  furnitureItemId: furnitureItem._id,
-                                  quantity: 0,
+                    {loadingFurnitureItems ? (
+                      <LoadingScreen />
+                    ) : (
+                      Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
+                        <div className={styles.furnitureItemsSection} key={category}>
+                          <p className={styles.furnitureItemsSectionLabel}>{category}</p>
+                          <div className={styles.chipContainer}>
+                            {(items ?? []).map((furnitureItem) => (
+                              <FurnitureItemSelection
+                                key={furnitureItem._id}
+                                furnitureItem={furnitureItem}
+                                selection={
+                                  selectedFurnitureItems[furnitureItem._id] ?? {
+                                    furnitureItemId: furnitureItem._id,
+                                    quantity: 0,
+                                  }
                                 }
-                              }
-                              onChangeSelection={(newSelection) =>
-                                handleSelectionChange(newSelection)
-                              }
-                            />
-                          ))}
+                                onChangeSelection={(newSelection) =>
+                                  handleSelectionChange(newSelection)
+                                }
+                              />
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                     <div className={styles.section}>
                       <TextField
                         label="Identify other necessary items"
@@ -1182,7 +1201,18 @@ const VeteranServiceRequest: React.FC = () => {
           onClose={() => {
             setConfirmSubmissionModalOpen(false);
             setPageNumber(1);
+
+            // Reset all form fields after submission
             reset();
+            setSelectedEthnicities([]);
+            setOtherEthnicity("");
+            setSelectedConflicts([]);
+            setOtherConflict("");
+            setSelectedBranch([]);
+            setSelectedHearFrom("");
+            setOtherHearFrom("");
+            setSelectedFurnitureItems({});
+            setAdditionalItems("");
           }}
         />
         {renderErrorModal()}

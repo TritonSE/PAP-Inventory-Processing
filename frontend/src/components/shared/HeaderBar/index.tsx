@@ -4,7 +4,8 @@ import styles from "@/components/shared/HeaderBar/styles.module.css";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { signOut } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
-import { ErrorNotification } from "@/components/ErrorNotification";
+import { ErrorNotification } from "@/components/Errors/ErrorNotification";
+import { CircularProgress } from "@mui/material";
 
 interface HeaderBarProps {
   showLogoutButton: boolean;
@@ -13,22 +14,26 @@ interface HeaderBarProps {
 const HeaderBar = ({ showLogoutButton }: HeaderBarProps) => {
   const { isTablet } = useScreenSizes();
   const { auth } = initFirebase();
+  const [loading, setLoading] = useState(false);
   const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
 
   const logout = () => {
     setErrorNotificationOpen(false);
-    signOut(auth).catch((error) => {
-      console.error(`Could not logout: ${error}`);
-      setErrorNotificationOpen(true);
-    });
+    setLoading(true);
+    signOut(auth)
+      .catch((error) => {
+        console.error(`Could not logout: ${error}`);
+        setErrorNotificationOpen(true);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <div className={styles.headerBar}>
       <Image width={isTablet ? 80 : 99} height={isTablet ? 39 : 48} src="/logo.svg" alt="logo" />
       {showLogoutButton ? (
-        <button className={styles.logoutButton} onClick={logout}>
-          Logout
+        <button className={styles.logoutButton} onClick={logout} disabled={loading}>
+          {loading ? <CircularProgress size={16} /> : "Logout"}
         </button>
       ) : null}
       <ErrorNotification

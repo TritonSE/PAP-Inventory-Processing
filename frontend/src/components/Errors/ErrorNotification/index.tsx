@@ -1,4 +1,4 @@
-import styles from "@/components/ErrorNotification/styles.module.css";
+import styles from "@/components/Errors/ErrorNotification/styles.module.css";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { Portal } from "@mui/material";
 import Image from "next/image";

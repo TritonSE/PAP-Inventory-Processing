@@ -1,4 +1,4 @@
-import styles from "@/components/SuccessNotification/styles.module.css";
+import styles from "@/components/shared/SuccessNotification/styles.module.css";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { Portal } from "@mui/material";
 import Image from "next/image";
