@@ -23,6 +23,9 @@ const formatDate = (date: Date) => {
   return `${dateMoment.format("MM-DD-YYYY")} [${dateMoment.format("hh:mm A")}]`;
 };
 
+/**
+ * The "Case Details" section of the VSR individual page.
+ */
 export const CaseDetails = ({ vsr, loadingStatus, onUpdateVSRStatus }: CaseDetailsProp) => {
   const { isMobile, isTablet } = useScreenSizes();
 

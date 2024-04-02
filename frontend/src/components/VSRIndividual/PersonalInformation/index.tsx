@@ -7,6 +7,10 @@ import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
 export interface PersonalInformationProps {
   vsr: VSR;
 }
+
+/**
+ * The "Personal Information" section of the VSR individual page.
+ */
 export const PersonalInformation = ({ vsr }: PersonalInformationProps) => {
   return (
     <VSRIndividualAccordion permanentlyExpanded={false} title="Personal Information">

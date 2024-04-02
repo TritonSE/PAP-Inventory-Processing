@@ -1,3 +1,6 @@
+/**
+ * Class for a custom error object sent from our backend.
+ */
 export class CustomError extends Error {
   public code: number;
   public status: number;

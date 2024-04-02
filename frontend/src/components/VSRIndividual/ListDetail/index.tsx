@@ -6,6 +6,9 @@ export interface ListDetailProps {
   values: string[];
 }
 
+/**
+ * A component that displays a list of values separated by commas on the VSR individual page.
+ */
 export function ListDetail({ title, values }: ListDetailProps) {
   const list = (
     <div className={styles.list}>

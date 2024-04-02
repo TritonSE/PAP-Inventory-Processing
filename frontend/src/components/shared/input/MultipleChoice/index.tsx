@@ -13,6 +13,10 @@ export interface MultipleChoiceProps {
   helperText?: string;
 }
 
+/**
+ * An input component that displays multiple options as chips, and enables the user
+ * to choose one of them by clicking on it.
+ */
 const MultipleChoice = ({
   label,
   options,

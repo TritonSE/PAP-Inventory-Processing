@@ -13,6 +13,9 @@ export interface VSRErrorModalProps {
   onButtonClicked: () => unknown;
 }
 
+/**
+ * A modal that displays an error with loading/submitting a VSR.
+ */
 export const VSRErrorModal = ({
   isOpen,
   onClose,

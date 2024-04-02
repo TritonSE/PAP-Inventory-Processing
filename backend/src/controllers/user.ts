@@ -2,6 +2,10 @@ import { RequestHandler } from "express";
 import { PAPRequest } from "src/middleware/auth";
 import UserModel from "src/models/user";
 
+/**
+ * Retrieves data about the current user (their MongoDB ID, Firebase UID, and role).
+ * Requires the user to be signed in.
+ */
 export const getWhoAmI: RequestHandler = async (req: PAPRequest, res, next) => {
   try {
     const { userUid } = req;

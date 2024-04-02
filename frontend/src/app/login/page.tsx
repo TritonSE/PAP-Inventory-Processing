@@ -22,6 +22,9 @@ enum LoginPageError {
   NONE,
 }
 
+/**
+ * The root Login page component.
+ */
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,6 +37,10 @@ const Login = () => {
 
   const { isMobile } = useScreenSizes();
 
+  /**
+   * Sends the user's Firebase token to the /api/user/whoami backend route,
+   * to ensure they are a valid user and we can retrieve their identity.
+   */
   const sendTokenToBackend = async (token: string) => {
     const res = await getWhoAmI(token);
     if (!res.success) {
@@ -46,19 +53,26 @@ const Login = () => {
     }
   };
 
+  /**
+   * Logs the user in using their entered email and password.
+   */
   const login = async (email: string, password: string) => {
     try {
       setLoading(true);
+
+      // Sign in to Firebase
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+      // Get token for user
       const token = await userCredential.user?.getIdToken();
       if (!token) {
         console.error("JWT token not retrieved.");
         setPageError(LoginPageError.INTERNAL);
       } else {
+        // Once we have the token, send it to the /api/user/whoami backend route
         await sendTokenToBackend(token);
       }
     } catch (error) {
-      // TODO: better error handling (e.g. no network, invalid credentials)
       console.error("Firebase login failed with error: ", error);
 
       // See https://firebase.google.com/docs/auth/admin/errors for Firebase error codes
@@ -93,6 +107,10 @@ const Login = () => {
     top: 18,
   };
 
+  /**
+   * Renders an error notification based on the current error, or renders nothing
+   * if there is no error.
+   */
   const renderErrorNotification = () => {
     switch (pageError) {
       case LoginPageError.NO_INTERNET:
@@ -144,6 +162,8 @@ const Login = () => {
     }
   };
 
+  // Whether at least one of the credential fields is missing, in which case we
+  // disable the submit button.
   const missingCredentials = email === "" || password === "";
 
   return (

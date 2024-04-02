@@ -7,6 +7,9 @@ interface ConfirmVSRSubmissionModalProps {
   onClose: () => unknown;
 }
 
+/**
+ * A modal that displays a confirmation that a VSR was submitted successfully.
+ */
 export const ConfirmVSRSubmissionModal = ({ isOpen, onClose }: ConfirmVSRSubmissionModalProps) => {
   return (
     <Modal open={isOpen} onClose={onClose}>

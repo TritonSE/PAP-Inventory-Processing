@@ -1,10 +1,16 @@
 import { InferSchemaType, Schema, model } from "mongoose";
 
+/**
+ * A model for a user of our application.
+ */
 const userSchema = new Schema({
+  // The user's role (either staff or admin)
   role: {
     type: String,
     required: true,
   },
+
+  // The user's Firebase UID (used to relate the MongoDB user to the Firebas user)
   uid: {
     type: String,
     required: true,

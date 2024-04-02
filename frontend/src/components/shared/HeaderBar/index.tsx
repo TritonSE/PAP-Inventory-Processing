@@ -11,6 +11,10 @@ interface HeaderBarProps {
   showLogoutButton: boolean;
 }
 
+/**
+ * A component that displays a header bar at the top of the screen and, optionally,
+ * a logout button for staff and admins.
+ */
 const HeaderBar = ({ showLogoutButton }: HeaderBarProps) => {
   const { isTablet } = useScreenSizes();
   const { auth } = initFirebase();

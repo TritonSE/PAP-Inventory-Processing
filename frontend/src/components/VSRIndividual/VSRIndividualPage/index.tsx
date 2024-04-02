@@ -32,7 +32,10 @@ enum VSRIndividualError {
   NONE,
 }
 
-export const Page = () => {
+/**
+ * The root component for the VSR individual page.
+ */
+export const VSRIndividualPage = () => {
   const [loadingVsr, setLoadingVsr] = useState(true);
   const [vsr, setVSR] = useState<VSR>({} as VSR);
   const { id } = useParams();
@@ -52,6 +55,9 @@ export const Page = () => {
   const { isMobile, isTablet } = useScreenSizes();
   const iconSize = isMobile ? 16 : isTablet ? 19 : 24;
 
+  /**
+   * Callback triggered when the VSR's status is updated to a new value.
+   */
   const onUpdateVSRStatus = async (newStatus: string) => {
     if (loadingUpdateStatus) {
       return;
@@ -79,6 +85,10 @@ export const Page = () => {
     setLoadingUpdateStatus(false);
   };
 
+  /**
+   * Callback triggered when the user clicks "Undo" on the success notification
+   * after updating the VSR's status
+   */
   const onUndoVSRStatusUpdate = async () => {
     if (loadingUpdateStatus) {
       return;
@@ -105,6 +115,9 @@ export const Page = () => {
     setLoadingUpdateStatus(false);
   };
 
+  /**
+   * Conditionally renders the "Approve" button on the page, if the VSR's status is "Received"
+   */
   const renderApproveButton = () =>
     vsr.status == "Received" || vsr.status === undefined ? (
       <button className={styles.approveButton} onClick={() => onUpdateVSRStatus("Approved")}>
@@ -112,6 +125,9 @@ export const Page = () => {
       </button>
     ) : null;
 
+  /**
+   * Renders the action buttons (Edit, Export, and possibly Delete) at the top of the page.
+   */
   const renderActions = () =>
     loadingVsr ? null : (
       <div className={styles.actions}>
@@ -140,6 +156,9 @@ export const Page = () => {
       </div>
     );
 
+  /**
+   * Fetches the current VSR data from the backend and updates our "vsr" state.
+   */
   const fetchVSR = () => {
     if (!firebaseUser) {
       return;
@@ -166,10 +185,17 @@ export const Page = () => {
     });
   };
 
+  /**
+   * Fetch the VSR from the backend, once we have the VSR id and the Firebase user is loaded
+   */
   useEffect(() => {
     fetchVSR();
   }, [id, firebaseUser]);
 
+  /**
+   * Fetches the list of available furniture items from the backend and updates
+   * our "furnitureItems" state
+   */
   const fetchFurnitureItems = () => {
     if (loadingFurnitureItems) {
       return;
@@ -191,11 +217,15 @@ export const Page = () => {
     });
   };
 
-  // Fetch all available furniture items from database
+  // Fetch all available furniture items from database when page first loads
   useEffect(() => {
     fetchFurnitureItems();
   }, []);
 
+  /**
+   * Renders the error modal corresponding to the current page error, or renders nothing
+   * if there is no error.
+   */
   const renderErrorModal = () => {
     switch (pageError) {
       case VSRIndividualError.CANNOT_RETRIEVE_FURNITURE_NO_INTERNET:
@@ -377,6 +407,7 @@ export const Page = () => {
         )}
       </div>
 
+      {/* Success, error, and delete modals/notifications */}
       {renderErrorModal()}
       <SuccessNotification
         isOpen={successNotificationOpen}

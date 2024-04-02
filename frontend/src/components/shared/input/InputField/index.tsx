@@ -10,6 +10,9 @@ interface InputFieldProps {
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
+/**
+ * A text input field component, used on the login screen.
+ */
 const InputField: React.FC<InputFieldProps> = ({
   label,
   id,

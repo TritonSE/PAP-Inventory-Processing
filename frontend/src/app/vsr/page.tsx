@@ -57,7 +57,13 @@ interface IFormInput {
   hearFrom: string;
 }
 
+/**
+ * Root component for the page with the VSR form for veterans to fill out.
+ */
 const VeteranServiceRequest: React.FC = () => {
+  /**
+   * Form utilities
+   */
   const {
     register,
     handleSubmit,
@@ -66,6 +72,11 @@ const VeteranServiceRequest: React.FC = () => {
     watch,
     reset,
   } = useForm<IFormInput>();
+
+  /**
+   * Internal state for fields that are complicated and cannot be controlled with a
+   * named form field alone (e.g. there is a multiple choice and a text field for "Other")
+   */
   const [selectedEthnicities, setSelectedEthnicities] = useState<string[]>([]);
   const [otherEthnicity, setOtherEthnicity] = useState("");
 
@@ -77,13 +88,16 @@ const VeteranServiceRequest: React.FC = () => {
   const [selectedHearFrom, setSelectedHearFrom] = useState("");
   const [otherHearFrom, setOtherHearFrom] = useState("");
 
-  const [pageNumber, setPageNumber] = useState(1);
+  const [additionalItems, setAdditionalItems] = useState("");
 
-  const [confirmSubmissionModalOpen, setConfirmSubmissionModalOpen] = useState(false);
+  const [pageNumber, setPageNumber] = useState(1);
 
   const numBoys = watch("num_boys");
   const numGirls = watch("num_girls");
 
+  /**
+   * Define the list of options for several multiple choice fields.
+   */
   const maritalOptions = ["Married", "Single", "It's Complicated", "Widowed/Widower"];
   const genderOptions = ["Male", "Female", "Other"];
   const employmentOptions = [
@@ -226,7 +240,11 @@ const VeteranServiceRequest: React.FC = () => {
     "WY",
   ];
 
+  /**
+   * Internal state for loading, errors, and data
+   */
   const [loadingVsrSubmission, setLoadingVsrSubmission] = useState(false);
+  const [confirmSubmissionModalOpen, setConfirmSubmissionModalOpen] = useState(false);
   const [vsrFormError, setVsrFormError] = useState<VSRFormError>(VSRFormError.NONE);
 
   const [loadingFurnitureItems, setLoadingFurnitureItems] = useState(false);
@@ -237,8 +255,10 @@ const VeteranServiceRequest: React.FC = () => {
     Record<string, FurnitureInput>
   >({});
 
-  const [additionalItems, setAdditionalItems] = useState("");
-
+  /**
+   * Fetches the list of available furniture items from the backend, and updates
+   * our state for the items to render on page 3.
+   */
   const fetchFurnitureItems = () => {
     if (loadingFurnitureItems) {
       return;
@@ -332,8 +352,10 @@ const VeteranServiceRequest: React.FC = () => {
       additionalItems,
     };
 
+    // Send request to backend
     const response = await createVSR(createVSRRequest);
 
+    // Handle success/error
     if (response.success) {
       setConfirmSubmissionModalOpen(true);
     } else {
@@ -355,6 +377,9 @@ const VeteranServiceRequest: React.FC = () => {
     setPageNumber(pageNumber - 1);
   };
 
+  /**
+   * Renders the inputs for children of a certain gender
+   */
   const renderChildInput = (gender: "boy" | "girl") => {
     const numChildrenThisGender = gender === "boy" ? numBoys : numGirls;
 
@@ -564,6 +589,9 @@ const VeteranServiceRequest: React.FC = () => {
     }
   };
 
+  /**
+   * Render different fields based on current page number
+   */
   if (pageNumber == 1) {
     return (
       <div>

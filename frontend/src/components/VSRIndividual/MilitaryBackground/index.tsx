@@ -8,6 +8,9 @@ export interface MilitaryBackgroundProps {
   vsr: VSR;
 }
 
+/**
+ * The "Military Background" section of the VSR individual page.
+ */
 export const MilitaryBackground = ({ vsr }: MilitaryBackgroundProps) => {
   return (
     <VSRIndividualAccordion permanentlyExpanded={false} title="Military Background">

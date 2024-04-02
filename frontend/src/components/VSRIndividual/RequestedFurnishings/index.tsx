@@ -10,6 +10,9 @@ export interface RequestedFurnishingsProps {
   furnitureItems: FurnitureItem[];
 }
 
+/**
+ * The "Furnishing Requests" section of the VSR individual page.
+ */
 export const RequestedFurnishings = ({ vsr, furnitureItems }: RequestedFurnishingsProps) => {
   const furnitureItemIdsToItems = useMemo(
     () =>

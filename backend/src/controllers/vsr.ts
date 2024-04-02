@@ -8,6 +8,10 @@ import {
 } from "src/services/emails";
 import validationErrorParser from "src/util/validationErrorParser";
 
+/**
+ * Gets all VSRs in the database. Requires the user to be signed in and have
+ * staff or admin permission.
+ */
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
     const vsrs = await VSRModel.find();
@@ -18,6 +22,10 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Retrieves a single VSR by its ID. Requires the user to get signed in and have
+ * staff or admin permission.
+ */
 export const getVSR: RequestHandler = async (req, res, next) => {
   const { id } = req.params;
 
@@ -33,8 +41,12 @@ export const getVSR: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Creates a new VSR in the database, called when a veteran submits the VSR form.
+ * Does not require authentication.
+ */
 export const createVSR: RequestHandler = async (req, res, next) => {
-  // extract any errors that were found by the validator
+  // Extract any errors that were found by the validator
   const errors = validationResult(req);
   const {
     name,
@@ -122,6 +134,10 @@ export const createVSR: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Updates a VSR's status, by its ID. Requires the user to be signed in and
+ * have staff or admin permission.
+ */
 export const updateStatus: RequestHandler = async (req, res, next) => {
   try {
     // extract any errors that were found by the validator
@@ -142,6 +158,10 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Deletes a VSR from the database, by its ID. Requires the user to be signed in
+ * and have admin permission.
+ */
 export const deleteVSR: RequestHandler = async (req, res, next) => {
   try {
     const { id } = req.params;

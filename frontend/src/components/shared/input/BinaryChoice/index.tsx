@@ -12,6 +12,9 @@ export interface BinaryChoiceProps {
   helperText?: string;
 }
 
+/**
+ * An input component that allows the user to select either "Yes" or "No" by clicking on chips.
+ */
 const BinaryChoice = ({
   label,
   value,

@@ -6,6 +6,9 @@ import Image from "next/image";
 
 const VSR_URL = "/vsr";
 
+/**
+ * Page that is shown on any URL that does not match one of our defined frontend routes.
+ */
 const NotFound404Page = () => {
   const { isMobile, isTablet } = useScreenSizes();
 

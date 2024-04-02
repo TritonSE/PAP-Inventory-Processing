@@ -1,5 +1,9 @@
 import { body } from "express-validator";
 
+/**
+ * Validators for creating and updating VSRs
+ */
+
 const makeNameValidator = () =>
   body("name")
     .exists({ checkFalsy: true })

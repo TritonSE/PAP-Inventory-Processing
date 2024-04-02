@@ -8,6 +8,9 @@ export interface SingleDetailProps {
   className?: string;
 }
 
+/**
+ * A component for a single (non-list) field on the VSR individual page.
+ */
 export function SingleDetail({ title, value, valueFontSize, className }: SingleDetailProps) {
   const valueStyle = {
     fontSize: valueFontSize, // Use the passed font size or default to CSS class

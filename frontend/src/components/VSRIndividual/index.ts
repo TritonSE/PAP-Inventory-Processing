@@ -1,4 +1,4 @@
-export { Page } from "./Page";
+export { VSRIndividualPage } from "./VSRIndividualPage";
 export { VeteranTag } from "./VeteranTag";
 export { CaseDetails } from "./CaseDetails";
 export { ContactInfo } from "./ContactInfo";

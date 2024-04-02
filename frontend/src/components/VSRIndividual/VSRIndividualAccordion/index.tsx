@@ -12,6 +12,10 @@ export interface VSRIndividualAccordionProps {
   children: ReactNode;
 }
 
+/**
+ * A component for an accordion for one of the VSR individual pages. Can be either
+ * permanently expanded, or expand/collapse on click.
+ */
 export const VSRIndividualAccordion = ({
   title,
   permanentlyExpanded,
@@ -43,7 +47,6 @@ export const VSRIndividualAccordion = ({
             )
           }
           aria-controls="panel1-content"
-          id="military-background-header"
           sx={{
             ...(expanded && {
               borderBottom: "1px solid rgba(214, 214, 214)", // Custom line style

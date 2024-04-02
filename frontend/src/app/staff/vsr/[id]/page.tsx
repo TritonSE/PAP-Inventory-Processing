@@ -1,5 +1,5 @@
 "use client";
-import { Page } from "@/components/VSRIndividual";
+import { VSRIndividualPage } from "@/components/VSRIndividual";
 import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
 
 export default function Individual() {
@@ -7,7 +7,7 @@ export default function Individual() {
 
   return (
     <div>
-      <Page></Page>
+      <VSRIndividualPage />
     </div>
   );
 }

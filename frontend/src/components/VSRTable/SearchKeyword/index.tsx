@@ -2,6 +2,9 @@ import styles from "@/components/VSRTable/SearchKeyword/styles.module.css";
 import Image from "next/image";
 import * as React from "react";
 
+/**
+ * A component for the Search input above the VSR table.
+ */
 export default function SearchKeyword() {
   return (
     <div className={styles.search}>

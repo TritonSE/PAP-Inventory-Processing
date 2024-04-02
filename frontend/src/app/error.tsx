@@ -6,6 +6,9 @@ import Image from "next/image";
 
 const PAP_EMAIL = "info@patriotsandpaws.org";
 
+/**
+ * Page that is shown if our web app throws a 500 Internal Error (e.g. our JavaScript crashes)
+ */
 const InternalError500Page = () => {
   const { isMobile, isTablet } = useScreenSizes();
 

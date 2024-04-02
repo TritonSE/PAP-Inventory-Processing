@@ -15,6 +15,10 @@ export interface DropDownProps {
   placeholder?: string;
 }
 
+/**
+ * An input component that displays a dropdown and enables the user to select one
+ * of the options from the dropdown.
+ */
 const Dropdown = ({
   label,
   options,

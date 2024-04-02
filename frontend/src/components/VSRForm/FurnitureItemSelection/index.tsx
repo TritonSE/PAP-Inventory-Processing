@@ -9,6 +9,10 @@ export interface FurnitureItemSelectionProps {
   onChangeSelection: (newSelection: FurnitureInput) => unknown;
 }
 
+/**
+ * An input component that enables a user to select one or more of a single furniture
+ * item on the VSR form.
+ */
 export const FurnitureItemSelection = ({
   furnitureItem,
   selection,

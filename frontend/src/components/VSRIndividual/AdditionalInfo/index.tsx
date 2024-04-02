@@ -8,6 +8,9 @@ export interface AdditionalInfoProps {
   vsr: VSR;
 }
 
+/**
+ * The "Additional Information" section of the VSR individual page.
+ */
 export const AdditionalInfo = ({ vsr }: AdditionalInfoProps) => {
   return (
     <VSRIndividualAccordion title="Additional Information" permanentlyExpanded={false}>

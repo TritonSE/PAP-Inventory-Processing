@@ -10,6 +10,9 @@ export interface TextFieldProps extends MUITextFieldProps<"outlined"> {
   required: boolean;
 }
 
+/**
+ * A text input field component
+ */
 const TextField = forwardRef(
   (
     { label, error, required, helperText, ...props }: TextFieldProps,

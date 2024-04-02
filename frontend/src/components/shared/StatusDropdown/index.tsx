@@ -11,6 +11,9 @@ export interface StatusOption {
   color: string;
 }
 
+/**
+ * All available statuses that can be set using the status dropdown
+ */
 export const STATUS_OPTIONS: StatusOption[] = [
   {
     value: "Received",
@@ -38,6 +41,10 @@ export const STATUS_OPTIONS: StatusOption[] = [
   },
 ];
 
+/**
+ * An input component that displays a dropdown menu with all available status
+ * options and enables the user to select a status.
+ */
 export interface StatusDropdownProps {
   value: string;
   onChanged?: (value: string) => void;

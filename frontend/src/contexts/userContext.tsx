@@ -12,6 +12,10 @@ interface IUserContext {
   reloadUser: () => unknown;
 }
 
+/**
+ * A context that provides the current Firebase and PAP (MongoDB) user data,
+ * automatically fetching them when the page loads.
+ */
 export const UserContext = createContext<IUserContext>({
   firebaseUser: null,
   papUser: null,
@@ -19,6 +23,10 @@ export const UserContext = createContext<IUserContext>({
   reloadUser: () => {},
 });
 
+/**
+ * A provider component that handles the logic for supplying the context
+ * with its current user & loading state variables.
+ */
 export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [firebaseUser, setFirebaseUser] = useState<FirebaseUser | null>(null);
   const [initialLoading, setInitialLoading] = useState(true);
@@ -27,6 +35,9 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
 
   const { auth } = initFirebase();
 
+  /**
+   * Callback triggered by Firebase when the user logs in/out, or on page load
+   */
   onAuthStateChanged(auth, (firebaseUser) => {
     setFirebaseUser(firebaseUser);
     setInitialLoading(false);

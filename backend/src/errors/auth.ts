@@ -7,6 +7,9 @@ const USER_NOT_FOUND = "User not found";
 const NOT_STAFF_OR_ADMIN = "User must be a staff/admin.";
 const NOT_ADMIN = "User must be an admin.";
 
+/**
+ * List of authentication-related errors that may be thrown by our backend.
+ */
 export class AuthError extends CustomError {
   static DECODE_ERROR = new AuthError(0, 401, DECODE_ERROR);
   static TOKEN_NOT_IN_HEADER = new AuthError(1, 401, TOKEN_NOT_IN_HEADER);

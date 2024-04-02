@@ -23,6 +23,9 @@ enum VSRTableError {
   NONE,
 }
 
+/**
+ * Root component for the VSR list/table view.
+ */
 export default function VSRTableView() {
   const { isMobile, isTablet } = useScreenSizes();
   const searchOnOwnRow = useMediaQuery("@media screen and (max-width: 1000px)");
@@ -40,6 +43,10 @@ export default function VSRTableView() {
   useRedirectToLoginIfNotSignedIn();
 
   const atLeastOneRowSelected = selectedVsrIds.length > 0;
+
+  /**
+   * Fetches the list of all VSRs from the backend and updates our vsrs state.
+   */
   const fetchVSRs = () => {
     if (!firebaseUser) {
       return;
@@ -63,10 +70,15 @@ export default function VSRTableView() {
     });
   };
 
+  // Fetch the VSRs from the backend once the Firebase user loads.
   useEffect(() => {
     fetchVSRs();
   }, [firebaseUser]);
 
+  /**
+   * Renders an error modal corresponding to the page's error state, or renders
+   * nothing if there is no error.
+   */
   const renderErrorModal = () => {
     switch (tableError) {
       case VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET:
@@ -189,6 +201,7 @@ export default function VSRTableView() {
         </div>
       </div>
 
+      {/* Error modal and delete modal */}
       {renderErrorModal()}
       <DeleteVSRsModal
         isOpen={deleteVsrModalOpen}

@@ -23,10 +23,14 @@ interface VSRTableProps {
   onChangeSelectedVsrIds: (newIds: string[]) => unknown;
 }
 
+/**
+ * A component for the table itself on the VSR table page.
+ */
 export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds }: VSRTableProps) {
   const { isMobile, isTablet } = useScreenSizes();
   const router = useRouter();
 
+  // Define the columns to show in the table (some columns are hidden on smaller screens)
   const columns: GridColDef[] = React.useMemo(() => {
     const result = [
       {
