@@ -2,6 +2,10 @@ import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 import VSRModel from "src/models/vsr";
+import {
+  sendVSRConfirmationEmailToVeteran,
+  sendVSRNotificationEmailToStaff,
+} from "src/services/emails";
 import validationErrorParser from "src/util/validationErrorParser";
 
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
@@ -105,6 +109,11 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       selectedFurnitureItems,
       additionalItems,
     });
+
+    // Once the VSR is created successfully, send notification & confirmation emails
+    sendVSRNotificationEmailToStaff(name, email, vsr._id.toString());
+    sendVSRConfirmationEmailToVeteran(name, email);
+
     // 201 means a new resource has been created successfully
     // the newly created VSR is sent back to the user
     res.status(201).json(vsr);
