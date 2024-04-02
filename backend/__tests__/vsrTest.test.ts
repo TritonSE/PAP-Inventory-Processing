@@ -274,4 +274,87 @@ describe("VSR Tests", () => {
       }
     }
   });
+
+  it("PUT /api/vsr/:id requires user to be signed in", async () => {
+    const testVsr = await createTestVSR();
+    const vsrId = testVsr._id;
+
+    const res = await request(app)
+      .put(`/api/vsr/${vsrId}`)
+      .send({
+        ...vsrTestData,
+        name: "Updated name",
+        email: "updatedemail@gmail.com",
+      })
+      .set("Content-Type", "application/json");
+    expect(res.statusCode).toBe(401);
+
+    // Ensure that VSR in DB was not updated
+    const currentVsr = await VSRModel.findById(vsrId);
+    expect(currentVsr).not.toBeNull();
+    expect(currentVsr!.name).toBe("Test Veteran 1");
+    expect(currentVsr!.email).toBe("tsepapdev@gmail.com");
+  });
+
+  it("PUT /api/vsr/:id returns 404 for invalid VSR id", async () => {
+    const { testToken } = await signInAsRole(UserRole.STAFF);
+
+    const res = await request(app)
+      .put("/api/vsr/65bc31561826f0d6ee2c4b21")
+      .send({
+        ...vsrTestData,
+        name: "Updated name",
+        email: "updatedemail@gmail.com",
+      })
+      .set("Authorization", `Bearer ${testToken}`)
+      .set("Content-Type", "application/json");
+    expect(res.statusCode).toBe(404);
+  });
+
+  it("PUT /api/vsr/:id throws 400 when required fields are missing", async () => {
+    const testVsr = await createTestVSR();
+    const vsrId = testVsr._id;
+
+    const { testToken } = await signInAsRole(UserRole.STAFF);
+
+    const res = await request(app)
+      .put(`/api/vsr/${vsrId}`)
+      .send({
+        name: "Updated name",
+        email: "updatedemail@gmail.com",
+      })
+      .set("Authorization", `Bearer ${testToken}`)
+      .set("Content-Type", "application/json");
+    expect(res.statusCode).toBe(400);
+
+    // Ensure that VSR in DB was not updated
+    const currentVsr = await VSRModel.findById(vsrId);
+    expect(currentVsr).not.toBeNull();
+    expect(currentVsr!.name).toBe("Test Veteran 1");
+    expect(currentVsr!.email).toBe("tsepapdev@gmail.com");
+  });
+
+  it("PUT /api/vsr/:id successfully updates VSR data", async () => {
+    const testVsr = await createTestVSR();
+    const vsrId = testVsr._id;
+
+    const { testToken } = await signInAsRole(UserRole.STAFF);
+
+    const res = await request(app)
+      .put(`/api/vsr/${vsrId}`)
+      .send({
+        ...vsrTestData,
+        name: "Updated name",
+        email: "updatedemail@gmail.com",
+      })
+      .set("Authorization", `Bearer ${testToken}`)
+      .set("Content-Type", "application/json");
+    expect(res.statusCode).toBe(200);
+
+    // Ensure that VSR in DB was updated
+    const currentVsr = await VSRModel.findById(vsrId);
+    expect(currentVsr).not.toBeNull();
+    expect(currentVsr!.name).toBe("Updated name");
+    expect(currentVsr!.email).toBe("updatedemail@gmail.com");
+  });
 });

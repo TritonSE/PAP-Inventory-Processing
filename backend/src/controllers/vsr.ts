@@ -7,7 +7,6 @@ import {
   sendVSRNotificationEmailToStaff,
 } from "src/services/emails";
 import validationErrorParser from "src/util/validationErrorParser";
-import { CustomError } from "src/errors/errors";
 
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
@@ -159,16 +158,85 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+/**
+ * Updates a VSR's data, by its ID. Requires the user to be signed in and
+ * have staff or admin permission.
+ */
 export const updateVSR: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
+  const {
+    name,
+    gender,
+    age,
+    maritalStatus,
+    spouseName,
+    agesOfBoys,
+    agesOfGirls,
+    ethnicity,
+    employmentStatus,
+    incomeLevel,
+    sizeOfHome,
+    streetAddress,
+    city,
+    state,
+    zipCode,
+    phoneNumber,
+    email,
+    branch,
+    conflicts,
+    dischargeStatus,
+    serviceConnected,
+    lastRank,
+    militaryID,
+    petCompanion,
+    hearFrom,
+    selectedFurnitureItems,
+    additionalItems,
+  } = req.body;
+
   try {
+    const { id } = req.params;
     validationErrorParser(errors);
-    const updatedVSR = await VSRModel.findByIdAndUpdate(req.body._id, req.body);
+    const updatedVSR = await VSRModel.findByIdAndUpdate(
+      id,
+      {
+        name,
+        gender,
+        age,
+        maritalStatus,
+        spouseName,
+        agesOfBoys,
+        agesOfGirls,
+        ethnicity,
+        employmentStatus,
+        incomeLevel,
+        sizeOfHome,
+
+        streetAddress,
+        city,
+        state,
+        zipCode,
+        phoneNumber,
+        email,
+        branch,
+        conflicts,
+        dischargeStatus,
+        serviceConnected,
+        lastRank,
+        militaryID,
+        petCompanion,
+        hearFrom,
+
+        selectedFurnitureItems,
+        additionalItems,
+      },
+      { new: true },
+    );
     if (updatedVSR === null) {
-      throw new CustomError(0, 404, "Could not find id");
+      throw createHttpError(404, "VSR not found at id " + id);
     }
-    const vsr = await VSRModel.findById(req.body._id);
-    res.status(200).json(vsr);
+    res.status(200).json(updatedVSR);
   } catch (error) {
     next(error);
   }

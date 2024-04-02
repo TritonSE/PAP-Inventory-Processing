@@ -17,6 +17,12 @@ router.patch(
   VSRValidator.updateStatus,
   VSRController.updateStatus,
 );
-router.put("/:id", VSRValidator.updateVSR, VSRController.updateVSR);
+router.put(
+  "/:id",
+  requireSignedIn,
+  requireStaffOrAdmin,
+  VSRValidator.updateVSR,
+  VSRController.updateVSR,
+);
 
 export default router;
