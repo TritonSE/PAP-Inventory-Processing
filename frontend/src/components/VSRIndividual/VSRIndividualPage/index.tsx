@@ -10,7 +10,7 @@ import {
 } from "@/components/VSRIndividual";
 import styles from "src/components/VSRIndividual/Page/styles.module.css";
 import Image from "next/image";
-import { type VSR, getVSR, updateVSRStatus } from "@/api/VSRs";
+import { type VSR, getVSR, updateVSRStatus, UpdateVSRRequest, updateVSR } from "@/api/VSRs";
 import { useParams, useRouter } from "next/navigation";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
@@ -22,6 +22,8 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { CircularProgress } from "@mui/material";
 import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { IFormInput } from "@/app/vsr/page";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -45,15 +47,57 @@ export const VSRIndividualPage = () => {
   const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
   const [pageError, setPageError] = useState(VSRIndividualError.NONE);
 
+  const [isEditing, setIsEditing] = useState(false);
+
+  const formProps = useForm<IFormInput>();
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+    watch,
+  } = formProps;
+
   const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
   const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
   const [previousVSRStatus, setPreviousVSRStatus] = useState<string | null>(null);
   const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
+  const [discardConfirmationModalOpen, setDiscardConfirmationModalOpen] = useState(false);
+  const [saveConfirmationModalOpen, setSaveConfirmationModalOpen] = useState(false);
 
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
   const iconSize = isMobile ? 16 : isTablet ? 19 : 24;
+
+  /**
+   * Callback triggered when form edits are submitted
+   */
+  const onSubmitEdits: SubmitHandler<IFormInput> = async (data) => {
+    const updateVSRRequest: UpdateVSRRequest = {
+      name: data.name,
+      gender: data.gender,
+      age: data.age,
+      maritalStatus: data.marital_status,
+      spouseName: data.spouse,
+      agesOfBoys:
+        data.ages_of_boys
+          ?.slice(0, data.num_boys)
+          .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
+      agesOfGirls:
+        data.ages_of_girls
+          ?.slice(0, data.num_girls)
+          .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
+      // ethnicity: selectedEthnicities.concat(otherEthnicity === "" ? [] : [otherEthnicity]),
+      employmentStatus: data.employment_status,
+      incomeLevel: data.income_level,
+      sizeOfHome: data.size_of_home,
+    };
+
+    try {
+      const response = await updateVSR(vsr._id, updateVSRRequest);
+    } catch (error) {}
+  };
 
   /**
    * Callback triggered when the VSR's status is updated to a new value.
@@ -131,28 +175,41 @@ export const VSRIndividualPage = () => {
   const renderActions = () =>
     loadingVsr ? null : (
       <div className={styles.actions}>
-        {/* Show delete button only if user is an admin */}
-        {papUser?.role === "admin" ? (
-          <button
-            className={`${styles.button} ${styles.deleteButton}`}
-            onClick={() => setDeleteVsrModalOpen(true)}
-          >
-            <Image width={iconSize} height={iconSize} src="/mdi_trash.svg" alt="edit" />
-            {isMobile ? null : "Delete"}
-          </button>
-        ) : null}
-        <a href="REPLACE">
-          <button id="edit" className={styles.button}>
-            <Image width={iconSize} height={iconSize} src="/ic_edit.svg" alt="edit" />
-            {isMobile ? null : "Edit Form"}
-          </button>
-        </a>
-        <a href="REPLACE">
-          <button className={styles.button}>
-            <Image width={iconSize} height={iconSize} src="/ic_upload.svg" alt="upload" />
-            {isMobile ? null : "Export"}
-          </button>
-        </a>
+        {isEditing ? (
+          <>
+            <button className={styles.button} onClick={() => setDiscardConfirmationModalOpen(true)}>
+              <Image width={iconSize} height={iconSize} src="/ic_close_large.svg" alt="Close" />
+              {isMobile ? null : "Discard Changes"}
+            </button>
+            <button className={styles.button} onClick={() => setSaveConfirmationModalOpen(true)}>
+              <Image width={iconSize} height={iconSize} src="/ic_check.svg" alt="Check" />
+              {isMobile ? null : "Save Changes"}
+            </button>
+          </>
+        ) : (
+          <>
+            {/* Show delete button only if user is an admin */}
+            {papUser?.role === "admin" ? (
+              <button
+                className={`${styles.button} ${styles.deleteButton}`}
+                onClick={() => setDeleteVsrModalOpen(true)}
+              >
+                <Image width={iconSize} height={iconSize} src="/mdi_trash.svg" alt="Delete" />
+                {isMobile ? null : "Delete"}
+              </button>
+            ) : null}
+            <button id="edit" className={styles.button} onClick={() => setIsEditing(true)}>
+              <Image width={iconSize} height={iconSize} src="/ic_edit.svg" alt="Edit" />
+              {isMobile ? null : "Edit Form"}
+            </button>
+            <a href="REPLACE">
+              <button className={styles.button}>
+                <Image width={iconSize} height={iconSize} src="/ic_upload.svg" alt="upload" />
+                {isMobile ? null : "Export"}
+              </button>
+            </a>
+          </>
+        )}
       </div>
     );
 
@@ -385,7 +442,7 @@ export const VSRIndividualPage = () => {
               <div className={styles.otherDetails}>
                 {isTablet ? renderApproveButton() : null}
                 <div className={styles.personalInfo}>
-                  <ContactInfo vsr={vsr} />
+                  <ContactInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
                   <PersonalInformation vsr={vsr} />
                   <MilitaryBackground vsr={vsr} />
                   <AdditionalInfo vsr={vsr} />

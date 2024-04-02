@@ -1,21 +1,33 @@
-import React from "react";
+import React, { useEffect } from "react";
 import styles from "src/components/VSRIndividual/ContactInfo/styles.module.css";
 import { SingleDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "../VSRIndividualAccordion";
+import { TextInputDetail } from "../TextInputDetail";
+import { UseFormReturn } from "react-hook-form";
+import { IFormInput } from "@/app/vsr/page";
 
 export interface ContactInfoProps {
   vsr: VSR;
+  isEditing: boolean;
+  formProps: UseFormReturn<IFormInput>;
 }
-
 /**
  * The "Contact Information" section of the VSR individual page.
  */
-export const ContactInfo = ({ vsr }: ContactInfoProps) => {
+export const ContactInfo = ({ vsr, isEditing, formProps }: ContactInfoProps) => {
+  useEffect(() => {
+    formProps.setValue("phoneNumber", vsr.phoneNumber);
+  }, [vsr]);
+
   return (
     <VSRIndividualAccordion permanentlyExpanded={false} title="Contact Information">
       <div className={styles.row}>
-        <SingleDetail title="Phone Number" value={vsr.phoneNumber} />{" "}
+        {isEditing ? (
+          <TextInputDetail name="phoneNumber" title="Phone Number" formProps={formProps} />
+        ) : (
+          <SingleDetail title="Phone Number" value={vsr.phoneNumber} />
+        )}
       </div>
       <div className={styles.row}>
         <SingleDetail title="Email Address" value={vsr.email} />

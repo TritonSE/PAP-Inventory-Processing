@@ -26,7 +26,7 @@ enum VSRFormError {
   NONE,
 }
 
-interface IFormInput {
+export interface IFormInput {
   name: string;
   marital_status: string;
   gender: string;
@@ -41,6 +41,7 @@ interface IFormInput {
   num_girls: number;
   ages_of_boys: number[];
   ages_of_girls: number[];
+
   streetAddress: string;
   city: string;
   state: string;
@@ -311,6 +312,7 @@ const VeteranServiceRequest: React.FC = () => {
     setLoadingVsrSubmission(true);
 
     // Construct the request object
+
     const createVSRRequest: CreateVSRRequest = {
       name: data.name,
       gender: data.gender,
@@ -1248,5 +1250,4 @@ const VeteranServiceRequest: React.FC = () => {
     );
   }
 };
-
 export default VeteranServiceRequest;

@@ -7,6 +7,7 @@ import {
   sendVSRNotificationEmailToStaff,
 } from "src/services/emails";
 import validationErrorParser from "src/util/validationErrorParser";
+import { CustomError } from "src/errors/errors";
 
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
@@ -97,6 +98,7 @@ export const createVSR: RequestHandler = async (req, res, next) => {
       employmentStatus,
       incomeLevel,
       sizeOfHome,
+
       streetAddress,
       city,
       state,
@@ -152,6 +154,20 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
     if (vsr === null) {
       throw createHttpError(404, "VSR not found at id " + id);
     }
+    res.status(200).json(vsr);
+  } catch (error) {
+    next(error);
+  }
+};
+export const updateVSR: RequestHandler = async (req, res, next) => {
+  const errors = validationResult(req);
+  try {
+    validationErrorParser(errors);
+    const updatedVSR = await VSRModel.findByIdAndUpdate(req.body._id, req.body);
+    if (updatedVSR === null) {
+      throw new CustomError(0, 404, "Could not find id");
+    }
+    const vsr = await VSRModel.findById(req.body._id);
     res.status(200).json(vsr);
   } catch (error) {
     next(error);

@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "src/components/VSRIndividual/ListDetail/styles.module.css";
+import { FieldDetail } from "../FieldDetail";
 
 export interface ListDetailProps {
   title: string;
@@ -21,12 +22,5 @@ export function ListDetail({ title, values }: ListDetailProps) {
   );
   const noList = <div className={styles.noList}>N/A</div>;
 
-  return (
-    <div>
-      <div className={styles.items}>
-        <div className={styles.title}>{title}</div>
-        {values.includes("N/A") ? noList : list}
-      </div>
-    </div>
-  );
+  return <FieldDetail title={title}>{values.includes("N/A") ? noList : list}</FieldDetail>;
 }

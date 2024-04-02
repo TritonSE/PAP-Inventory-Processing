@@ -235,3 +235,17 @@ export const createVSR = [
 ];
 
 export const updateStatus = [updateStatusValidator()];
+
+export const updateVSR = [
+  makeNameValidator(),
+  makeGenderValidator(),
+  makeAgeValidator(),
+  makeMaritalStatusValidator(),
+  makeSpouseNameValidator(),
+  makeAgesOfBoysValidator(),
+  makeAgesOfGirlsValidator(),
+  makeEthnicityValidator(),
+  makeEmploymentStatusValidator(),
+  makeIncomeLevelValidator(),
+  makeSizeOfHomeValidator(),
+];

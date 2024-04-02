@@ -1,4 +1,4 @@
-import { APIResult, get, handleAPIError, httpDelete, patch, post } from "@/api/requests";
+import { APIResult, get, handleAPIError, httpDelete, patch, post, put } from "@/api/requests";
 import { createAuthHeader } from "@/api/Users";
 
 export interface FurnitureInput {
@@ -79,6 +79,37 @@ export interface VSR {
 }
 
 export interface CreateVSRRequest {
+  name: string;
+  gender: string;
+  age: number;
+  maritalStatus: string;
+  spouseName?: string;
+  agesOfBoys: number[];
+  agesOfGirls: number[];
+  ethnicity: string[];
+  employmentStatus: string;
+  incomeLevel: string;
+  sizeOfHome: string;
+  streetAddress: string;
+  city: string;
+  state: string;
+  zipCode: number;
+  phoneNumber: string;
+  email: string;
+  branch: string[];
+  conflicts: string[];
+  dischargeStatus: string;
+  serviceConnected: boolean;
+  lastRank: string;
+  militaryID: number;
+  petCompanion: boolean;
+  hearFrom: string;
+  selectedFurnitureItems: FurnitureInput[];
+  additionalItems: string;
+}
+
+export interface UpdateVSRRequest {
+  _id: string;
   name: string;
   gender: string;
   age: number;
@@ -196,6 +227,16 @@ export async function deleteVSR(id: string, firebaseToken: string): Promise<APIR
   try {
     await httpDelete(`/api/vsr/${id}`, createAuthHeader(firebaseToken));
     return { success: true, data: null };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function updateVSR(id: string, vsr: UpdateVSRRequest): Promise<APIResult<VSR>> {
+  try {
+    const response = await put(`/api/vsr/${id}`, vsr);
+    const json = (await response.json()) as VSRJson;
+    return { success: true, data: parseVSR(json) };
   } catch (error) {
     return handleAPIError(error);
   }
