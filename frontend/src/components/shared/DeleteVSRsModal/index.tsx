@@ -66,7 +66,6 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
 
   return (
     <>
-      {" "}
       <BaseModal
         isOpen={isOpen}
         onClose={onClose}
@@ -81,7 +80,7 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
           </>
         }
         bottomRow={
-          <>
+          <div className={styles.buttonContainer}>
             <button className={`${styles.button} ${styles.cancelButton}`} onClick={onClose}>
               Cancel
             </button>
@@ -92,7 +91,7 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
             >
               {loadingDelete ? <CircularProgress size={24} /> : "Delete VSR(s)"}
             </button>
-          </>
+          </div>
         }
       />
       <SuccessNotification

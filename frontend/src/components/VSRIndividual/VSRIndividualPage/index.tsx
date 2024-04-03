@@ -429,7 +429,6 @@ export const VSRIndividualPage = () => {
             content="Sorry, we couldn't find the VSR you're looking for."
             buttonText="Back to Dashboard"
             onButtonClicked={() => {
-              setPageError(VSRIndividualError.NONE);
               router.push("/staff/vsr");
             }}
           />
@@ -478,7 +477,7 @@ export const VSRIndividualPage = () => {
         </div>
         {loadingVsr ? (
           <LoadingScreen />
-        ) : (
+        ) : pageError === VSRIndividualError.NONE ? (
           <div className={styles.allDetails}>
             <div className={styles.headerRow}>
               <div className={styles.name}>
@@ -520,7 +519,7 @@ export const VSRIndividualPage = () => {
             </div>
             <div className={styles.footer}></div>
           </div>
-        )}
+        ) : null}
       </div>
 
       {/* Success, error, and delete modals/notifications */}
