@@ -7,6 +7,9 @@ interface StyledChipProps {
   onClick: () => unknown;
 }
 
+/**
+ * A wrapper component around the MUI Chip that provides our app's custom styles.
+ */
 export const StyledChip = ({ text, selected, onClick }: StyledChipProps) => {
   const { isMobile, isTablet } = useScreenSizes();
 
@@ -34,6 +37,13 @@ export const StyledChip = ({ text, selected, onClick }: StyledChipProps) => {
         color: selected ? "white" : "var(--Accent-Blue-1, #102d5f)",
         background: selected ? "#102d5f" : "rgba(255, 255, 255, 0)",
       }}
+      style={
+        selected
+          ? {
+              background: "#102d5f",
+            }
+          : {}
+      }
     />
   );
 };
