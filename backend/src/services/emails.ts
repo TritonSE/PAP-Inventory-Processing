@@ -1,6 +1,6 @@
 import "dotenv/config";
 import nodemailer from "nodemailer";
-import env from "../util/validateEnv";
+import env from "src/util/validateEnv";
 
 /**
  * Sends a notification email to PAP staff when a VSR is submitted.

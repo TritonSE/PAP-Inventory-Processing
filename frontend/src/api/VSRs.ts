@@ -109,7 +109,6 @@ export interface CreateVSRRequest {
 }
 
 export interface UpdateVSRRequest {
-  _id: string;
   name: string;
   gender: string;
   age: number;
@@ -232,9 +231,13 @@ export async function deleteVSR(id: string, firebaseToken: string): Promise<APIR
   }
 }
 
-export async function updateVSR(id: string, vsr: UpdateVSRRequest): Promise<APIResult<VSR>> {
+export async function updateVSR(
+  id: string,
+  vsr: UpdateVSRRequest,
+  firebaseToken: string,
+): Promise<APIResult<VSR>> {
   try {
-    const response = await put(`/api/vsr/${id}`, vsr);
+    const response = await put(`/api/vsr/${id}`, vsr, createAuthHeader(firebaseToken));
     const json = (await response.json()) as VSRJson;
     return { success: true, data: parseVSR(json) };
   } catch (error) {

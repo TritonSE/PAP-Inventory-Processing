@@ -87,15 +87,6 @@
   flex-direction: row;
 }
 
-.numChildren {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  align-items: center;
-  flex: 1;
-  width: 100%;
-}
-
 .asterisk {
   color: var(--Secondary-2, #be2d46);
 }
@@ -113,10 +104,6 @@
 
 .longText {
   flex: 1;
-  width: 100%;
-}
-
-.childInputWrapper {
   width: 100%;
 }
 

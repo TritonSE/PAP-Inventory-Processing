@@ -17,6 +17,20 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import Image from "next/image";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { CircularProgress } from "@mui/material";
+import {
+  branchOptions,
+  conflictsOptions,
+  dischargeStatusOptions,
+  employmentOptions,
+  ethnicityOptions,
+  genderOptions,
+  hearFromOptions,
+  homeOptions,
+  maritalOptions,
+  incomeOptions,
+  stateOptions,
+} from "@/constants/fieldOptions";
+import { ChildrenInput } from "@/components/shared/input/ChildrenInput";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -28,19 +42,19 @@ enum VSRFormError {
 
 export interface IFormInput {
   name: string;
-  marital_status: string;
+  maritalStatus: string;
   gender: string;
-  spouse: string;
+  spouseName: string;
   age: number;
-  ethnicity: string;
+  ethnicity: string[];
   other_ethnicity: string;
   employment_status: string;
   income_level: string;
   size_of_home: string;
   num_boys: number;
   num_girls: number;
-  ages_of_boys: number[];
-  ages_of_girls: number[];
+  agesOfBoys: number[];
+  agesOfGirls: number[];
 
   streetAddress: string;
   city: string;
@@ -50,12 +64,17 @@ export interface IFormInput {
   email: string;
   branch: string[];
   conflicts: string[];
+  other_conflicts: string;
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
   militaryID: number;
   petCompanion: boolean;
   hearFrom: string;
+  other_hearFrom: string;
+
+  selectedFurnitureItems: Record<string, FurnitureInput>;
+  additionalItems: string;
 }
 
 /**
@@ -65,6 +84,7 @@ const VeteranServiceRequest: React.FC = () => {
   /**
    * Form utilities
    */
+  const formProps = useForm<IFormInput>();
   const {
     register,
     handleSubmit,
@@ -72,7 +92,7 @@ const VeteranServiceRequest: React.FC = () => {
     formState: { errors, isValid },
     watch,
     reset,
-  } = useForm<IFormInput>();
+  } = formProps;
 
   /**
    * Internal state for fields that are complicated and cannot be controlled with a
@@ -84,162 +104,12 @@ const VeteranServiceRequest: React.FC = () => {
   const [selectedConflicts, setSelectedConflicts] = useState<string[]>([]);
   const [otherConflict, setOtherConflict] = useState("");
 
-  const [selectedBranch, setSelectedBranch] = useState<string[]>([]);
-
   const [selectedHearFrom, setSelectedHearFrom] = useState("");
   const [otherHearFrom, setOtherHearFrom] = useState("");
 
   const [additionalItems, setAdditionalItems] = useState("");
 
   const [pageNumber, setPageNumber] = useState(1);
-
-  const numBoys = watch("num_boys");
-  const numGirls = watch("num_girls");
-
-  /**
-   * Define the list of options for several multiple choice fields.
-   */
-  const maritalOptions = ["Married", "Single", "It's Complicated", "Widowed/Widower"];
-  const genderOptions = ["Male", "Female", "Other"];
-  const employmentOptions = [
-    "Employed",
-    "Unemployed",
-    "Currently Looking",
-    "Retired",
-    "In School",
-    "Unable to work",
-  ];
-
-  const incomeOptions = [
-    "$12,500 and under",
-    "$12,501 - $25,000",
-    "$25,001 - $50,000",
-    "$50,001 and over",
-  ];
-
-  const homeOptions = [
-    "House",
-    "Apartment",
-    "Studio",
-    "1 Bedroom",
-    "2 Bedroom",
-    "3 Bedroom",
-    "4 Bedroom",
-    "4+ Bedroom",
-  ];
-
-  const ethnicityOptions = [
-    "Asian",
-    "African American",
-    "Caucasian",
-    "Native American",
-    "Pacific Islander",
-    "Middle Eastern",
-    "Prefer not to say",
-  ];
-
-  const branchOptions = [
-    "Air Force",
-    "Air Force Reserve",
-    "Air National Guard",
-    "Army",
-    "Army Air Corps",
-    "Army Reserve",
-    "Coast Guard",
-    "Marine Corps",
-    "Navy",
-    "Navy Reserve",
-  ];
-
-  const conflictsOptions = [
-    "WWII",
-    "Korea",
-    "Vietnam",
-    "Persian Gulf",
-    "Bosnia",
-    "Kosovo",
-    "Panama",
-    "Kuwait",
-    "Iraq",
-    "Somalia",
-    "Desert Shield/Storm",
-    "Operation Enduring Freedom (OEF)",
-    "Afghanistan",
-    "Irani Crisis",
-    "Granada",
-    "Lebanon",
-    "Beirut",
-    "Special Ops",
-    "Peacetime",
-  ];
-
-  const dischargeStatusOptions = [
-    "Honorable Discharge",
-    "General Under Honorable",
-    "Other Than Honorable",
-    "Bad Conduct",
-    "Entry Level",
-    "Dishonorable",
-    "Still Serving",
-    "Civilian",
-    "Medical",
-    "Not Given",
-  ];
-
-  const hearFromOptions = ["Colleague", "Social Worker", "Friend", "Internet", "Social Media"];
-
-  const stateOptions = [
-    "AL",
-    "AK",
-    "AZ",
-    "AR",
-    "CA",
-    "CO",
-    "CT",
-    "DE",
-    "FL",
-    "GA",
-    "HI",
-    "ID",
-    "IL",
-    "IN",
-    "IA",
-    "KS",
-    "KY",
-    "LA",
-    "ME",
-    "MD",
-    "MA",
-    "MI",
-    "MN",
-    "MS",
-    "MO",
-    "MT",
-    "NE",
-    "NV",
-    "NH",
-    "NJ",
-    "NM",
-    "NY",
-    "NC",
-    "ND",
-    "OH",
-    "OK",
-    "OR",
-    "PA",
-    "RI",
-    "SC",
-    "SD",
-    "TN",
-    "TX",
-    "UT",
-    "VT",
-    "VA",
-    "WA",
-    "WV",
-    "WI",
-    "WY",
-  ];
 
   /**
    * Internal state for loading, errors, and data
@@ -317,14 +187,14 @@ const VeteranServiceRequest: React.FC = () => {
       name: data.name,
       gender: data.gender,
       age: data.age,
-      maritalStatus: data.marital_status,
-      spouseName: data.spouse,
+      maritalStatus: data.maritalStatus,
+      spouseName: data.spouseName,
       agesOfBoys:
-        data.ages_of_boys
+        data.agesOfBoys
           ?.slice(0, data.num_boys)
           .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
       agesOfGirls:
-        data.ages_of_girls
+        data.agesOfGirls
           ?.slice(0, data.num_girls)
           .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
       ethnicity: selectedEthnicities.concat(otherEthnicity === "" ? [] : [otherEthnicity]),
@@ -338,7 +208,7 @@ const VeteranServiceRequest: React.FC = () => {
       zipCode: data.zipCode,
       phoneNumber: data.phoneNumber,
       email: data.email,
-      branch: selectedBranch,
+      branch: data.branch,
       conflicts: selectedConflicts.concat(otherConflict === "" ? [] : [otherConflict]),
       dischargeStatus: data.dischargeStatus,
       serviceConnected: data.serviceConnected,
@@ -377,66 +247,6 @@ const VeteranServiceRequest: React.FC = () => {
 
   const decrementPageNumber = () => {
     setPageNumber(pageNumber - 1);
-  };
-
-  /**
-   * Renders the inputs for children of a certain gender
-   */
-  const renderChildInput = (gender: "boy" | "girl") => {
-    const numChildrenThisGender = gender === "boy" ? numBoys : numGirls;
-
-    return (
-      <>
-        <div className={styles.longText}>
-          <TextField
-            label={`Number of ${gender === "boy" ? "Male" : "Female"} Children`}
-            variant="outlined"
-            placeholder="e.g. 2"
-            type="number"
-            {...register(`num_${gender}s`, {
-              required: `Number of ${gender}s is required`,
-              pattern: {
-                // Only allow up to 2 digits
-                value: /^[0-9][0-9]?$/,
-                message: "This field must be a number less than 100",
-              },
-            })}
-            required
-            error={!!errors[`num_${gender}s`]}
-            helperText={errors[`num_${gender}s`]?.message}
-          />
-        </div>
-
-        {numChildrenThisGender > 0 ? (
-          <div className={styles.numChildren}>
-            {/* Cap it at 99 children per gender to avoid freezing web browser */}
-            {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
-              <div key={index} className={styles.childInputWrapper}>
-                <TextField
-                  label={`Age of ${gender.substring(0, 1).toUpperCase()}${gender.substring(1)}`}
-                  type="number"
-                  variant="outlined"
-                  {...register(`ages_of_${gender}s.${index}`, {
-                    required: "This field is required",
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: "This field must be a number",
-                    },
-                    max: {
-                      value: 17,
-                      message: "Only enter children under 18",
-                    },
-                  })}
-                  error={!!errors[`ages_of_${gender}s`]?.[index]}
-                  helperText={errors[`ages_of_${gender}s`]?.[index]?.message}
-                  required
-                />
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </>
-    );
   };
 
   const renderPageNumber = () => {
@@ -688,7 +498,7 @@ const VeteranServiceRequest: React.FC = () => {
 
                 <div className={styles.subSec}>
                   <Controller
-                    name="marital_status"
+                    name="maritalStatus"
                     control={control}
                     rules={{ required: "Marital status is required" }}
                     render={({ field }) => (
@@ -698,24 +508,24 @@ const VeteranServiceRequest: React.FC = () => {
                         value={field.value}
                         onChange={(newValue) => field.onChange(newValue)}
                         required
-                        error={!!errors.marital_status}
-                        helperText={errors.marital_status?.message}
+                        error={!!errors.maritalStatus}
+                        helperText={errors.maritalStatus?.message}
                       />
                     )}
                   />
-                  {watch().marital_status === "Married" ? (
+                  {watch().maritalStatus === "Married" ? (
                     <div className={styles.formRow}>
                       <div className={styles.longText}>
                         <TextField
                           label="Spouse's Name"
                           variant="outlined"
                           placeholder="e.g. Jane Timberlake"
-                          {...register("spouse", {
+                          {...register("spouseName", {
                             required: "Spouse's Name is required",
                           })}
                           required
-                          error={!!errors.spouse}
-                          helperText={errors.spouse?.message}
+                          error={!!errors.spouseName}
+                          helperText={errors.spouseName?.message}
                         />
                       </div>
                       {/* Add an empty div here with flex: 1 to take up the right half of the row */}
@@ -726,8 +536,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <p className={styles.sectionHeader}>Children Under the Age of 18:</p>
 
                   <div className={`${styles.formRow} ${styles.desktopRowTabletColumn}`}>
-                    <div className={styles.formRow}>{renderChildInput("boy")}</div>
-                    <div className={styles.formRow}>{renderChildInput("girl")}</div>
+                    <div className={styles.formRow}>
+                      <ChildrenInput gender="boy" formProps={formProps} />
+                    </div>
+                    <div className={styles.formRow}>
+                      <ChildrenInput gender="girl" formProps={formProps} />
+                    </div>
                   </div>
                 </div>
 
@@ -966,14 +780,8 @@ const VeteranServiceRequest: React.FC = () => {
                       <MultipleChoice
                         label="Branch"
                         options={branchOptions}
-                        value={selectedBranch}
-                        onChange={(newValue) => {
-                          const valueToSet = ((newValue as string[]) ?? [])[0] ?? "";
-                          if (valueToSet !== "") {
-                            field.onChange(valueToSet);
-                          }
-                          setSelectedBranch(newValue as string[]);
-                        }}
+                        value={field.value}
+                        onChange={field.onChange}
                         required
                         error={!!errors.branch}
                         helperText={errors.branch?.message}
@@ -1216,7 +1024,7 @@ const VeteranServiceRequest: React.FC = () => {
                         required={false}
                         variant={"outlined"}
                         onChange={(e) => setAdditionalItems(e.target.value)}
-                      ></TextField>
+                      />
                     </div>
                   </div>
                 </div>
@@ -1238,7 +1046,6 @@ const VeteranServiceRequest: React.FC = () => {
             setOtherEthnicity("");
             setSelectedConflicts([]);
             setOtherConflict("");
-            setSelectedBranch([]);
             setSelectedHearFrom("");
             setOtherHearFrom("");
             setSelectedFurnitureItems({});

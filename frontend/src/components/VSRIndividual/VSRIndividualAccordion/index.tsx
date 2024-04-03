@@ -9,6 +9,7 @@ import Image from "next/image";
 export interface VSRIndividualAccordionProps {
   title: string;
   permanentlyExpanded: boolean;
+  className?: string;
   children: ReactNode;
 }
 
@@ -19,6 +20,7 @@ export interface VSRIndividualAccordionProps {
 export const VSRIndividualAccordion = ({
   title,
   permanentlyExpanded,
+  className,
   children,
 }: VSRIndividualAccordionProps) => {
   const [expanded, setExpanded] = useState(permanentlyExpanded);
@@ -28,7 +30,7 @@ export const VSRIndividualAccordion = ({
   }, [permanentlyExpanded]);
 
   return (
-    <div className={styles.box}>
+    <div className={className}>
       <Accordion
         className={styles.accordion}
         expanded={expanded || permanentlyExpanded}

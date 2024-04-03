@@ -8,7 +8,7 @@ import {
   AdditionalInfo,
   RequestedFurnishings,
 } from "@/components/VSRIndividual";
-import styles from "src/components/VSRIndividual/Page/styles.module.css";
+import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 import Image from "next/image";
 import { type VSR, getVSR, updateVSRStatus, UpdateVSRRequest, updateVSR } from "@/api/VSRs";
 import { useParams, useRouter } from "next/navigation";
@@ -24,6 +24,7 @@ import { CircularProgress } from "@mui/material";
 import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IFormInput } from "@/app/vsr/page";
+import { BaseModal } from "@/components/shared/BaseModal";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -50,20 +51,19 @@ export const VSRIndividualPage = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const formProps = useForm<IFormInput>();
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-    watch,
-  } = formProps;
+  const { watch } = formProps;
 
-  const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
-  const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
+  const [updateStatusSuccessNotificationOpen, setUpdateStatusSuccessNotificationOpen] =
+    useState(false);
+  const [updateStatusErrorNotificationOpen, setUpdateStatusErrorNotificationOpen] = useState(false);
   const [previousVSRStatus, setPreviousVSRStatus] = useState<string | null>(null);
   const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
-  const [discardConfirmationModalOpen, setDiscardConfirmationModalOpen] = useState(false);
-  const [saveConfirmationModalOpen, setSaveConfirmationModalOpen] = useState(false);
+
+  const [discardEditsConfirmationModalOpen, setDiscardEditsConfirmationModalOpen] = useState(false);
+  const [saveEditsConfirmationModalOpen, setSaveEditsConfirmationModalOpen] = useState(false);
+  const [editSuccessNotificationOpen, setEditSuccessNotificationOpen] = useState(false);
+  const [editErrorNotificationOpen, setEditErrorNotificationOpen] = useState(false);
+  const [loadingEdit, setLoadingEdit] = useState(false);
 
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
@@ -74,29 +74,74 @@ export const VSRIndividualPage = () => {
    * Callback triggered when form edits are submitted
    */
   const onSubmitEdits: SubmitHandler<IFormInput> = async (data) => {
+    if (loadingEdit) {
+      return;
+    }
+
+    setEditSuccessNotificationOpen(false);
+    setEditErrorNotificationOpen(false);
+    setLoadingEdit(true);
+
     const updateVSRRequest: UpdateVSRRequest = {
       name: data.name,
       gender: data.gender,
       age: data.age,
-      maritalStatus: data.marital_status,
-      spouseName: data.spouse,
+      maritalStatus: data.maritalStatus,
+      spouseName: data.spouseName,
       agesOfBoys:
-        data.ages_of_boys
+        data.agesOfBoys
           ?.slice(0, data.num_boys)
           .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
       agesOfGirls:
-        data.ages_of_girls
+        data.agesOfGirls
           ?.slice(0, data.num_girls)
           .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
-      // ethnicity: selectedEthnicities.concat(otherEthnicity === "" ? [] : [otherEthnicity]),
+      ethnicity: data.ethnicity.concat(data.other_ethnicity === "" ? [] : [data.other_ethnicity]),
       employmentStatus: data.employment_status,
       incomeLevel: data.income_level,
       sizeOfHome: data.size_of_home,
+
+      streetAddress: data.streetAddress,
+      city: data.city,
+      state: data.state,
+      zipCode: data.zipCode,
+      phoneNumber: data.phoneNumber,
+      email: data.email,
+      branch: data.branch,
+      conflicts: data.conflicts.concat(data.other_conflicts === "" ? [] : [data.other_conflicts]),
+      dischargeStatus: data.dischargeStatus,
+      serviceConnected: data.serviceConnected,
+      lastRank: data.lastRank,
+      militaryID: data.militaryID,
+      petCompanion: data.petCompanion,
+      hearFrom: data.hearFrom,
+
+      // Only submit items that the user selected at least 1 of
+      selectedFurnitureItems: Object.values(data.selectedFurnitureItems).filter(
+        (selectedItem) => selectedItem.quantity > 0,
+      ),
+      additionalItems: data.additionalItems,
     };
 
-    try {
-      const response = await updateVSR(vsr._id, updateVSRRequest);
-    } catch (error) {}
+    const firebaseToken = await firebaseUser?.getIdToken();
+    if (!firebaseToken) {
+      setLoadingEdit(false);
+      setEditErrorNotificationOpen(true);
+      return;
+    }
+    const response = await updateVSR(vsr._id, updateVSRRequest, firebaseToken);
+
+    // Handle success/error
+    if (response.success) {
+      setIsEditing(false);
+      setVSR(response.data);
+      setEditSuccessNotificationOpen(true);
+    } else {
+      console.error(`Cannot edit VSR, error ${response.error}`);
+      setEditErrorNotificationOpen(true);
+    }
+    setSaveEditsConfirmationModalOpen(false);
+    setLoadingEdit(false);
   };
 
   /**
@@ -108,13 +153,14 @@ export const VSRIndividualPage = () => {
     }
 
     setLoadingUpdateStatus(true);
-    setSuccessNotificationOpen(false);
-    setErrorNotificationOpen(false);
+    setUpdateStatusSuccessNotificationOpen(false);
+    setUpdateStatusErrorNotificationOpen(false);
     const currentStatus = vsr.status;
 
     const firebaseToken = await firebaseUser?.getIdToken();
     if (!firebaseToken) {
       setLoadingUpdateStatus(false);
+      setUpdateStatusErrorNotificationOpen(true);
       return;
     }
     const res = await updateVSRStatus(vsr._id, newStatus, firebaseToken);
@@ -122,9 +168,9 @@ export const VSRIndividualPage = () => {
     if (res.success) {
       setPreviousVSRStatus(currentStatus);
       setVSR(res.data);
-      setSuccessNotificationOpen(true);
+      setUpdateStatusSuccessNotificationOpen(true);
     } else {
-      setErrorNotificationOpen(true);
+      setUpdateStatusErrorNotificationOpen(true);
     }
     setLoadingUpdateStatus(false);
   };
@@ -139,12 +185,13 @@ export const VSRIndividualPage = () => {
     }
 
     setLoadingUpdateStatus(true);
-    setSuccessNotificationOpen(false);
-    setErrorNotificationOpen(false);
+    setUpdateStatusSuccessNotificationOpen(false);
+    setUpdateStatusErrorNotificationOpen(false);
 
     const firebaseToken = await firebaseUser?.getIdToken();
     if (!firebaseToken) {
       setLoadingUpdateStatus(false);
+      setUpdateStatusErrorNotificationOpen(true);
       return;
     }
     const res = await updateVSRStatus(vsr._id, previousVSRStatus!, firebaseToken);
@@ -152,9 +199,9 @@ export const VSRIndividualPage = () => {
     if (res.success) {
       setPreviousVSRStatus(null);
       setVSR(res.data);
-      setSuccessNotificationOpen(true);
+      setUpdateStatusSuccessNotificationOpen(true);
     } else {
-      setErrorNotificationOpen(true);
+      setUpdateStatusErrorNotificationOpen(true);
     }
     setLoadingUpdateStatus(false);
   };
@@ -177,11 +224,17 @@ export const VSRIndividualPage = () => {
       <div className={styles.actions}>
         {isEditing ? (
           <>
-            <button className={styles.button} onClick={() => setDiscardConfirmationModalOpen(true)}>
-              <Image width={iconSize} height={iconSize} src="/ic_close_large.svg" alt="Close" />
+            <button
+              className={`${styles.button} ${styles.redOutlinedButton}`}
+              onClick={() => setDiscardEditsConfirmationModalOpen(true)}
+            >
+              <Image width={iconSize} height={iconSize} src="/ic_close_red.svg" alt="Close" />
               {isMobile ? null : "Discard Changes"}
             </button>
-            <button className={styles.button} onClick={() => setSaveConfirmationModalOpen(true)}>
+            <button
+              className={styles.button}
+              onClick={() => setSaveEditsConfirmationModalOpen(true)}
+            >
               <Image width={iconSize} height={iconSize} src="/ic_check.svg" alt="Check" />
               {isMobile ? null : "Save Changes"}
             </button>
@@ -191,7 +244,7 @@ export const VSRIndividualPage = () => {
             {/* Show delete button only if user is an admin */}
             {papUser?.role === "admin" ? (
               <button
-                className={`${styles.button} ${styles.deleteButton}`}
+                className={`${styles.button} ${styles.redOutlinedButton}`}
                 onClick={() => setDeleteVsrModalOpen(true)}
               >
                 <Image width={iconSize} height={iconSize} src="/mdi_trash.svg" alt="Delete" />
@@ -415,7 +468,7 @@ export const VSRIndividualPage = () => {
       <HeaderBar showLogoutButton />
       <div className={styles.page}>
         <div className={`${styles.headerRow} ${styles.toDashboardRow}`}>
-          <a href="/staff/vsr">
+          <a href="/staff/vsr" style={isEditing ? { opacity: 0.5 } : {}}>
             <button className={styles.toDashboard}>
               <Image src="/ic_arrowback.svg" width={iconSize} height={iconSize} alt="arrowback" />
               {isMobile ? null : "Dashboard"}
@@ -429,13 +482,14 @@ export const VSRIndividualPage = () => {
           <div className={styles.allDetails}>
             <div className={styles.headerRow}>
               <div className={styles.name}>
-                <VeteranTag vsr={vsr}></VeteranTag>
+                <VeteranTag vsr={vsr} isEditing={isEditing}></VeteranTag>
               </div>
               {isMobile ? null : renderActions()}
             </div>
             <div className={styles.bodyDetails}>
               <CaseDetails
                 vsr={vsr}
+                isEditing={isEditing}
                 loadingStatus={loadingUpdateStatus}
                 onUpdateVSRStatus={onUpdateVSRStatus}
               ></CaseDetails>
@@ -443,15 +497,20 @@ export const VSRIndividualPage = () => {
                 {isTablet ? renderApproveButton() : null}
                 <div className={styles.personalInfo}>
                   <ContactInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                  <PersonalInformation vsr={vsr} />
-                  <MilitaryBackground vsr={vsr} />
-                  <AdditionalInfo vsr={vsr} />
+                  <PersonalInformation vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <MilitaryBackground vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <AdditionalInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
                 </div>
                 <div className={styles.rightColumn}>
                   {loadingFurnitureItems ? (
                     <LoadingScreen />
                   ) : (
-                    <RequestedFurnishings vsr={vsr} furnitureItems={furnitureItems ?? []} />
+                    <RequestedFurnishings
+                      vsr={vsr}
+                      furnitureItems={furnitureItems ?? []}
+                      isEditing={isEditing}
+                      formProps={formProps}
+                    />
                   )}
                   {isTablet ? null : (
                     <div className={styles.finalActions}>{renderApproveButton()}</div>
@@ -467,23 +526,23 @@ export const VSRIndividualPage = () => {
       {/* Success, error, and delete modals/notifications */}
       {renderErrorModal()}
       <SuccessNotification
-        isOpen={successNotificationOpen}
+        isOpen={updateStatusSuccessNotificationOpen}
         mainText={
           previousVSRStatus === null ? "Undo Successful" : "VSR Status Successfully Updated"
         }
         actionText={previousVSRStatus === null ? "Dismiss" : "Undo"}
         onActionClicked={
           previousVSRStatus === null
-            ? () => setSuccessNotificationOpen(false)
+            ? () => setUpdateStatusSuccessNotificationOpen(false)
             : onUndoVSRStatusUpdate
         }
       />
       <ErrorNotification
-        isOpen={errorNotificationOpen}
+        isOpen={updateStatusErrorNotificationOpen}
         mainText="Unable to Update VSR Status"
         subText="An error occurred, please check your internet connection or try again later"
         actionText="Dismiss"
-        onActionClicked={() => setErrorNotificationOpen(false)}
+        onActionClicked={() => setUpdateStatusErrorNotificationOpen(false)}
       />
       <DeleteVSRsModal
         isOpen={deleteVsrModalOpen}
@@ -495,6 +554,73 @@ export const VSRIndividualPage = () => {
           }, 1000);
         }}
         vsrIds={[vsr._id]}
+      />
+      <BaseModal
+        isOpen={discardEditsConfirmationModalOpen}
+        onClose={() => setDiscardEditsConfirmationModalOpen(false)}
+        title="Discard Changes"
+        content="Are you sure you want to discard your changes?"
+        bottomRow={
+          <div className={styles.modalBottomRow}>
+            <button
+              className={`${styles.button} ${styles.blueOutlinedButton} ${styles.modalButton}`}
+              onClick={() => setDiscardEditsConfirmationModalOpen(false)}
+              style={{ width: "100%" }}
+            >
+              Keep Editing
+            </button>
+            <button
+              className={`${styles.button} ${styles.redButton} ${styles.modalButton}`}
+              onClick={() => {
+                fetchVSR();
+                setDiscardEditsConfirmationModalOpen(false);
+                setIsEditing(false);
+              }}
+              style={{ width: "100%" }}
+            >
+              Discard Changes
+            </button>
+          </div>
+        }
+      />
+
+      {/* Modals & notifications for saving changes to VSR */}
+      <BaseModal
+        isOpen={saveEditsConfirmationModalOpen}
+        onClose={() => setSaveEditsConfirmationModalOpen(false)}
+        title="Save Changes"
+        content="Would you like to save your changes?"
+        bottomRow={
+          <div className={styles.modalBottomRow}>
+            <button
+              className={`${styles.button} ${styles.blueOutlinedButton} ${styles.modalButton}`}
+              onClick={() => setSaveEditsConfirmationModalOpen(false)}
+              style={{ width: "100%" }}
+            >
+              Keep Editing
+            </button>
+            <button
+              className={`${styles.button} ${styles.modalButton}`}
+              onClick={() => onSubmitEdits(watch())}
+              style={{ width: "100%" }}
+            >
+              Save Changes
+            </button>
+          </div>
+        }
+      />
+      <SuccessNotification
+        isOpen={editSuccessNotificationOpen}
+        mainText={"Changes Saved Successfully"}
+        actionText="Dismiss"
+        onActionClicked={() => setEditSuccessNotificationOpen(false)}
+      />
+      <ErrorNotification
+        isOpen={editErrorNotificationOpen}
+        mainText="Unable to Save Changes"
+        subText="An error occurred, please check your internet connection or try again later"
+        actionText="Dismiss"
+        onActionClicked={() => setEditErrorNotificationOpen(false)}
       />
     </>
   );

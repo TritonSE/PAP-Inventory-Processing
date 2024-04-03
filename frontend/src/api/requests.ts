@@ -173,9 +173,7 @@ export type APIError = { success: false; error: string };
  * })
  * ```
  *
- * See `createTask` in `src/api/tasks` and its use in `src/components/TaskForm`
- * for a more concrete example, and see
- * https://www.typescriptlang.org/docs/handbook/2/narrowing.html for more info
+ * See https://www.typescriptlang.org/docs/handbook/2/narrowing.html for more info
  * about type narrowing.
  */
 export type APIResult<T> = APIData<T> | APIError;

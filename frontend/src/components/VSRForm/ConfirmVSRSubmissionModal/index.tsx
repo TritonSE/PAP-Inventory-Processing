@@ -1,6 +1,4 @@
-import { Modal } from "@mui/material";
-import styles from "@/components/VSRForm/ConfirmVSRSubmissionModal/styles.module.css";
-import Image from "next/image";
+import { BaseModal } from "@/components/shared/BaseModal";
 
 interface ConfirmVSRSubmissionModalProps {
   isOpen: boolean;
@@ -12,13 +10,12 @@ interface ConfirmVSRSubmissionModalProps {
  */
 export const ConfirmVSRSubmissionModal = ({ isOpen, onClose }: ConfirmVSRSubmissionModalProps) => {
   return (
-    <Modal open={isOpen} onClose={onClose}>
-      <div className={styles.root}>
-        <button onClick={onClose} className={styles.closeButton}>
-          <Image src="/ic_close_large.svg" alt="close" width={24} height={24} />
-        </button>
-        <h2 className={styles.title}>Submitted successfully!</h2>
-        <p className={styles.content}>
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title="Submitted successfully!"
+      content={
+        <>
           A copy of your submitted VSR form has been sent to your email. We&apos;ll review it
           promptly and respond via email as soon as possible. Allow up to 48 business hours to be
           contacted for appointment scheduling.
@@ -35,8 +32,9 @@ export const ConfirmVSRSubmissionModal = ({ isOpen, onClose }: ConfirmVSRSubmiss
           >
             veteran@patriotsandpaws.org.
           </a>
-        </p>
-      </div>
-    </Modal>
+        </>
+      }
+      bottomRow={null}
+    />
   );
 };

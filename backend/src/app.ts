@@ -6,8 +6,8 @@ import "dotenv/config";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
-import vsrRoutes from "../src/routes/vsr";
-import furnitureItemRoutes from "../src/routes/furnitureItem";
+import vsrRoutes from "src/routes/vsr";
+import furnitureItemRoutes from "src/routes/furnitureItem";
 import userRoutes from "src/routes/user";
 import env from "src/util/validateEnv";
 

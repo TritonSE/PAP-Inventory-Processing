@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Chip from "@mui/material/Chip";
 import styles from "@/components/shared/input/BinaryChoice/styles.module.css";
-import { FormField } from "../FormField";
+import { FormField } from "@/components/shared/input/FormField";
 
 export interface BinaryChoiceProps {
   label: string;

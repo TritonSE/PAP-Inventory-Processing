@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "@/components/shared/input/Dropdown/styles.module.css";
 import { FormControl, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { FormField } from "../FormField";
+import { FormField } from "@/components/shared/input/FormField";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 export interface DropDownProps {

@@ -1,11 +1,11 @@
 import { deleteVSR } from "@/api/VSRs";
 import styles from "@/components/shared/DeleteVSRsModal/styles.module.css";
 import { UserContext } from "@/contexts/userContext";
-import { CircularProgress, Modal } from "@mui/material";
-import Image from "next/image";
+import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
-import { SuccessNotification } from "../SuccessNotification";
+import { SuccessNotification } from "@/components/shared/SuccessNotification";
 import { ErrorNotification } from "@/components/Errors/ErrorNotification";
+import { BaseModal } from "@/components/shared/BaseModal";
 
 interface DeleteVSRsModalProps {
   isOpen: boolean;
@@ -66,17 +66,22 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
 
   return (
     <>
-      <Modal open={isOpen} onClose={onClose}>
-        <div className={styles.root}>
-          <button onClick={onClose} className={styles.closeButton}>
-            <Image src="/ic_close_large.svg" alt="close" width={24} height={24} />
-          </button>
-          <h2 className={styles.title}>Delete VSR(s)</h2>
-          <p className={styles.content}>
-            Deleted VSR’s <span style={{ fontWeight: 700 }}>cannot</span> be recovered. Are you sure
-            you’d like to delete the selected VSR forms ({vsrIds.length})?
-          </p>
-          <div className={styles.buttonContainer}>
+      {" "}
+      <BaseModal
+        isOpen={isOpen}
+        onClose={onClose}
+        title="Delete VSR(s)"
+        content={
+          <>
+            {"Deleted VSR’s "}
+            <span style={{ fontWeight: 700 }}>cannot</span>
+            {" be recovered. Are you sure you’d like to delete the selected VSR forms ("}
+            {vsrIds.length}
+            {")?"}
+          </>
+        }
+        bottomRow={
+          <>
             <button className={`${styles.button} ${styles.cancelButton}`} onClick={onClose}>
               Cancel
             </button>
@@ -87,9 +92,9 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
             >
               {loadingDelete ? <CircularProgress size={24} /> : "Delete VSR(s)"}
             </button>
-          </div>
-        </div>
-      </Modal>
+          </>
+        }
+      />
       <SuccessNotification
         isOpen={successNotificationOpen}
         mainText="VSR(s) Deleted Successfully"
