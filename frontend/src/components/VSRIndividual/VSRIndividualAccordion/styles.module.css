@@ -1,12 +1,3 @@
-.accordion {
-  display: inline-block;
-  background-color: hsl(0, 0%, 100%);
-  width: 100%;
-  border-radius: 6px;
-  box-shadow: none;
-  padding: 8px 6px;
-}
-
 .title {
   font-family: var(--font-title);
   color: var(--Primary-Background-Dark, #232220);
@@ -23,18 +14,4 @@
   margin-top: 15px;
   padding-left: 6px;
   padding-right: 6px;
-}
-
-/* tablet version */
-@media screen and (max-width: 550px) {
-  .title {
-    font-size: 28px;
-  }
-}
-
-/* mobile version */
-@media screen and (max-width: 550px) {
-  .title {
-    font-size: 20px;
-  }
 }

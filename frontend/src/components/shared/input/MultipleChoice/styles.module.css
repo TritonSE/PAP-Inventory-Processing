@@ -1,57 +1,8 @@
 /* MultipleChoice.module.css */
 
-.chip {
-  border-width: 1px;
-  text-align: center;
-  font-family: "Open Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-  border-radius: 64px;
-  border: 1px solid var(--Secondary-1, #102d5f);
-  padding: 8px 16px;
-  height: 40px;
-}
-
-.chipSelected {
-  color: white;
-  background: #102d5f;
-}
-
-.chipSelected:hover {
-  background: #102d5f;
-}
-
 .chipContainer {
   display: flex;
   flex-direction: row;
   gap: 16px;
   flex-wrap: wrap;
-}
-
-.chipUnselected {
-  color: var(--Accent-Blue-1, #102d5f);
-  background: rgba(255, 255, 255, 0);
-}
-
-/*Need exact color for this*/
-.chipUnselected:hover {
-  background: rgb(142, 166, 175);
-}
-
-/* tablet version */
-@media screen and (max-width: 850px) {
-  .chip {
-    font-size: 14px;
-    height: 36px;
-  }
-}
-
-/* mobile version */
-@media screen and (max-width: 550px) {
-  .chip {
-    font-size: 12px;
-    height: 30px;
-  }
 }

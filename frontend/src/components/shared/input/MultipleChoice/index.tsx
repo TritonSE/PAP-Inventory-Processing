@@ -1,6 +1,6 @@
-import Chip from "@mui/material/Chip";
 import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
 import { FormField } from "@/components/shared/input/FormField";
+import { StyledChip } from "../StyledChip";
 
 export interface MultipleChoiceProps {
   label: string;
@@ -34,9 +34,10 @@ const MultipleChoice = ({
           const optionIsSelected = allowMultiple ? value?.includes(option) : value === option;
 
           return (
-            <Chip
-              label={option}
+            <StyledChip
               key={option}
+              text={option}
+              selected={optionIsSelected}
               onClick={() => {
                 if (allowMultiple) {
                   if (optionIsSelected) {
@@ -55,15 +56,6 @@ const MultipleChoice = ({
                     onChange(option);
                   }
                 }
-              }}
-              className={`${styles.chip} ${
-                optionIsSelected ? styles.chipSelected : styles.chipUnselected
-              }`}
-              clickable
-              sx={{
-                ".MuiChip-label": {
-                  padding: "0 !important",
-                },
               }}
             />
           );

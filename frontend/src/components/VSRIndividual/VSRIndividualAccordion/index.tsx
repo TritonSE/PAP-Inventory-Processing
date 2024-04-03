@@ -5,6 +5,7 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 export interface VSRIndividualAccordionProps {
   title: string;
@@ -25,6 +26,8 @@ export const VSRIndividualAccordion = ({
 }: VSRIndividualAccordionProps) => {
   const [expanded, setExpanded] = useState(permanentlyExpanded);
 
+  const { isMobile, isTablet } = useScreenSizes();
+
   useEffect(() => {
     setExpanded(permanentlyExpanded);
   }, [permanentlyExpanded]);
@@ -32,10 +35,15 @@ export const VSRIndividualAccordion = ({
   return (
     <div className={className}>
       <Accordion
-        className={styles.accordion}
         expanded={expanded || permanentlyExpanded}
         onChange={(e, isExpanded) => setExpanded(isExpanded || permanentlyExpanded)}
         sx={{
+          display: "inline-block",
+          backgroundColor: "hsl(0, 0%, 100%)",
+          width: "100%",
+          borderRadius: 6,
+          boxShadow: "none",
+          padding: "8px 6px",
           paddingTop: "6px",
           "&.Mui-expanded": {
             paddingTop: "0px",
@@ -56,7 +64,18 @@ export const VSRIndividualAccordion = ({
             }),
           }}
         >
-          <Typography className={styles.title}>{title}</Typography>
+          <Typography
+            sx={{
+              fontFamily: "var(--font-title)",
+              color: "var(--Primary-Background-Dark, #232220)",
+              fontSize: isMobile ? 20 : isTablet ? 28 : 24,
+              fontStyle: "normal",
+              fontWeight: 700,
+              lineHeight: "normal",
+            }}
+          >
+            {title}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>{children}</div>
