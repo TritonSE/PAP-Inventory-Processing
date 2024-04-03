@@ -48,35 +48,6 @@ export const getVSR: RequestHandler = async (req, res, next) => {
 export const createVSR: RequestHandler = async (req, res, next) => {
   // Extract any errors that were found by the validator
   const errors = validationResult(req);
-  const {
-    name,
-    gender,
-    age,
-    maritalStatus,
-    spouseName,
-    agesOfBoys,
-    agesOfGirls,
-    ethnicity,
-    employmentStatus,
-    incomeLevel,
-    sizeOfHome,
-    streetAddress,
-    city,
-    state,
-    zipCode,
-    phoneNumber,
-    email,
-    branch,
-    conflicts,
-    dischargeStatus,
-    serviceConnected,
-    lastRank,
-    militaryID,
-    petCompanion,
-    hearFrom,
-    selectedFurnitureItems,
-    additionalItems,
-  } = req.body;
 
   try {
     // if there are errors, then this function throws an exception
@@ -86,46 +57,18 @@ export const createVSR: RequestHandler = async (req, res, next) => {
     const currentDate = new Date();
 
     const vsr = await VSRModel.create({
-      name,
-      gender,
-      age,
-      maritalStatus,
-      spouseName,
-      agesOfBoys,
-      agesOfGirls,
-      ethnicity,
-      employmentStatus,
-      incomeLevel,
-      sizeOfHome,
-
-      streetAddress,
-      city,
-      state,
-      zipCode,
-      phoneNumber,
-      email,
-      branch,
-      conflicts,
-      dischargeStatus,
-      serviceConnected,
-      lastRank,
-      militaryID,
-      petCompanion,
-      hearFrom,
+      ...req.body,
 
       // Use current date as timestamp for received & updated
       dateReceived: currentDate,
       lastUpdated: currentDate,
 
       status: "Received",
-
-      selectedFurnitureItems,
-      additionalItems,
     });
 
     // Once the VSR is created successfully, send notification & confirmation emails
-    sendVSRNotificationEmailToStaff(name, email, vsr._id.toString());
-    sendVSRConfirmationEmailToVeteran(name, email);
+    sendVSRNotificationEmailToStaff(req.body.name, req.body.email, vsr._id.toString());
+    sendVSRConfirmationEmailToVeteran(req.body.name, req.body.email);
 
     // 201 means a new resource has been created successfully
     // the newly created VSR is sent back to the user
@@ -148,8 +91,15 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
     // if there are errors, then this function throws an exception
     validationErrorParser(errors);
 
+    // Get the current date as a timestamp for when VSR was updated
+    const currentDate = new Date();
+
     const { id } = req.params;
-    const vsr = await VSRModel.findByIdAndUpdate(id, { status }, { new: true });
+    const vsr = await VSRModel.findByIdAndUpdate(
+      id,
+      { status, lastUpdated: currentDate },
+      { new: true },
+    );
     if (vsr === null) {
       throw createHttpError(404, "VSR not found at id " + id);
     }
@@ -165,71 +115,19 @@ export const updateStatus: RequestHandler = async (req, res, next) => {
  */
 export const updateVSR: RequestHandler = async (req, res, next) => {
   const errors = validationResult(req);
-  const {
-    name,
-    gender,
-    age,
-    maritalStatus,
-    spouseName,
-    agesOfBoys,
-    agesOfGirls,
-    ethnicity,
-    employmentStatus,
-    incomeLevel,
-    sizeOfHome,
-    streetAddress,
-    city,
-    state,
-    zipCode,
-    phoneNumber,
-    email,
-    branch,
-    conflicts,
-    dischargeStatus,
-    serviceConnected,
-    lastRank,
-    militaryID,
-    petCompanion,
-    hearFrom,
-    selectedFurnitureItems,
-    additionalItems,
-  } = req.body;
 
   try {
     const { id } = req.params;
+
+    // Get the current date as a timestamp for when VSR was updated
+    const currentDate = new Date();
+
     validationErrorParser(errors);
     const updatedVSR = await VSRModel.findByIdAndUpdate(
       id,
       {
-        name,
-        gender,
-        age,
-        maritalStatus,
-        spouseName,
-        agesOfBoys,
-        agesOfGirls,
-        ethnicity,
-        employmentStatus,
-        incomeLevel,
-        sizeOfHome,
-
-        streetAddress,
-        city,
-        state,
-        zipCode,
-        phoneNumber,
-        email,
-        branch,
-        conflicts,
-        dischargeStatus,
-        serviceConnected,
-        lastRank,
-        militaryID,
-        petCompanion,
-        hearFrom,
-
-        selectedFurnitureItems,
-        additionalItems,
+        ...req.body,
+        lastUpdated: currentDate,
       },
       { new: true },
     );

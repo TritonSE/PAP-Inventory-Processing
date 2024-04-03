@@ -140,37 +140,9 @@ export interface UpdateVSRRequest {
 
 function parseVSR(vsr: VSRJson) {
   return {
-    _id: vsr._id,
-    name: vsr.name,
-    gender: vsr.gender,
-    age: vsr.age,
-    maritalStatus: vsr.maritalStatus,
-    spouseName: vsr.spouseName,
-    agesOfBoys: vsr.agesOfBoys,
-    agesOfGirls: vsr.agesOfGirls,
-    ethnicity: vsr.ethnicity,
-    employmentStatus: vsr.employmentStatus,
-    incomeLevel: vsr.incomeLevel,
-    sizeOfHome: vsr.sizeOfHome,
-    streetAddress: vsr.streetAddress,
-    city: vsr.city,
-    state: vsr.state,
-    zipCode: vsr.zipCode,
-    phoneNumber: vsr.phoneNumber,
-    email: vsr.email,
-    branch: vsr.branch,
-    conflicts: vsr.conflicts,
-    dischargeStatus: vsr.dischargeStatus,
-    serviceConnected: vsr.serviceConnected,
-    lastRank: vsr.lastRank,
-    militaryID: vsr.militaryID,
-    petCompanion: vsr.petCompanion,
-    selectedFurnitureItems: vsr.selectedFurnitureItems,
-    additionalItems: vsr.additionalItems,
+    ...vsr,
     dateReceived: new Date(vsr.dateReceived),
     lastUpdated: new Date(vsr.lastUpdated),
-    status: vsr.status,
-    hearFrom: vsr.hearFrom,
   };
 }
 

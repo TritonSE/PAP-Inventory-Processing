@@ -1,9 +1,9 @@
 import styles from "@/components/VSRIndividual/PageSections/CaseDetails/styles.module.css";
-import { SingleDetail, StatusDropdown } from "@/components/VSRIndividual";
+import { SingleDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import moment from "moment";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
-import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
+import { STATUS_OPTIONS, StatusDropdown } from "@/components/shared/StatusDropdown";
 import { StatusChip } from "@/components/shared/StatusChip";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { CircularProgress } from "@mui/material";

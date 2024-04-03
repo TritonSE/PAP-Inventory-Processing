@@ -7,7 +7,7 @@ import PageTitle from "@/components/VSRTable/PageTitle";
 import HeaderBar from "@/components/shared/HeaderBar";
 import Image from "next/image";
 import React, { useContext, useEffect, useState } from "react";
-import { StatusDropdown } from "@/components/VSRIndividual";
+import { StatusDropdown } from "@/components/shared/StatusDropdown";
 import { useMediaQuery } from "@mui/material";
 import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
 import { UserContext } from "@/contexts/userContext";
