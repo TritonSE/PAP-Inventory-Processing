@@ -8,6 +8,9 @@ const INVALID_AUTH_TOKEN = "Token was invalid.";
 const USER_NOT_FOUND = "User not found";
 const NOT_STAFF_OR_ADMIN = "User must be a staff/admin.";
 const NOT_ADMIN = "User must be an admin.";
+/**
+ * List of authentication-related errors that may be thrown by our backend.
+ */
 class AuthError extends errors_1.CustomError {
 }
 exports.AuthError = AuthError;

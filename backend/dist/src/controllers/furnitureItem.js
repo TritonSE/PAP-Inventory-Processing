@@ -14,6 +14,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getFurnitureItems = void 0;
 const furnitureItem_1 = __importDefault(require("../models/furnitureItem"));
+/**
+ * Gets all available furniture items in the database. Does not require authentication.
+ */
 const getFurnitureItems = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const furnitureItems = yield furnitureItem_1.default.find();

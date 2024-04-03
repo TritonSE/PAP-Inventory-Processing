@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.CustomError = void 0;
+/**
+ * Class for a custom error object sent from our backend.
+ */
 class CustomError extends Error {
     constructor(code, status, message) {
         super(message);

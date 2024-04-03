@@ -36,4 +36,5 @@ router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 router.get("/:id", auth_1.requireSignedIn, auth_1.requireStaffOrAdmin, VSRController.getVSR);
 router.delete("/:id", auth_1.requireSignedIn, auth_1.requireAdmin, VSRController.deleteVSR);
 router.patch("/:id/status", auth_1.requireSignedIn, auth_1.requireStaffOrAdmin, VSRValidator.updateStatus, VSRController.updateStatus);
+router.put("/:id", auth_1.requireSignedIn, auth_1.requireStaffOrAdmin, VSRValidator.updateVSR, VSRController.updateVSR);
 exports.default = router;

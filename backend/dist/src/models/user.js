@@ -2,11 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserRole = void 0;
 const mongoose_1 = require("mongoose");
+/**
+ * A model for a user of our application.
+ */
 const userSchema = new mongoose_1.Schema({
+    // The user's role (either staff or admin)
     role: {
         type: String,
         required: true,
     },
+    // The user's Firebase UID (used to relate the MongoDB user to the Firebas user)
     uid: {
         type: String,
         required: true,

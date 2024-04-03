@@ -37,6 +37,9 @@ const firebase = __importStar(require("firebase-admin/app"));
 const auth_1 = require("firebase-admin/auth");
 const internal_1 = require("../errors/internal");
 const validateEnv_1 = __importDefault(require("../util/validateEnv"));
+/**
+ * Initializes Firebase Auth using the SERVICE_ACCOUNT_KEY environment variable
+ */
 let serviceAccountKey;
 if (!validateEnv_1.default.SERVICE_ACCOUNT_KEY) {
     throw internal_1.InternalError.NO_SERVICE_ACCOUNT_KEY;

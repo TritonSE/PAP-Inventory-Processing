@@ -14,6 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getWhoAmI = void 0;
 const user_1 = __importDefault(require("../models/user"));
+/**
+ * Retrieves data about the current user (their MongoDB ID, Firebase UID, and role).
+ * Requires the user to be signed in.
+ */
 const getWhoAmI = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const { userUid } = req;

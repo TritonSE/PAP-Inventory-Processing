@@ -12,6 +12,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.decodeAuthToken = void 0;
 const firebase_1 = require("../services/firebase");
 const auth_1 = require("../errors/auth");
+/**
+ * Decodes a Firebase token and returns the user info for the user who the token is for,
+ * or throws an error if the token is invalid.
+ */
 function decodeAuthToken(token) {
     return __awaiter(this, void 0, void 0, function* () {
         try {

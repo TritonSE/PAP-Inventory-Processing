@@ -4,6 +4,9 @@ exports.ServiceError = void 0;
 const errors_1 = require("../errors/errors");
 const INVALID_MONGO_ID = "User ID is not a valid MONGO ID";
 const USER_NOT_FOUND = "User not found in mongo database";
+/**
+ * List of errors that can be thrown by our backend services.
+ */
 class ServiceError extends errors_1.CustomError {
 }
 exports.ServiceError = ServiceError;

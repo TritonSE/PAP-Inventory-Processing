@@ -1,7 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateStatus = exports.createVSR = void 0;
+exports.updateVSR = exports.updateStatus = exports.createVSR = void 0;
 const express_validator_1 = require("express-validator");
+/**
+ * Validators for creating and updating VSRs
+ */
 const makeNameValidator = () => (0, express_validator_1.body)("name")
     .exists({ checkFalsy: true })
     .withMessage("Name is required")
@@ -177,3 +180,16 @@ exports.createVSR = [
     makeHearFromValidator(),
 ];
 exports.updateStatus = [updateStatusValidator()];
+exports.updateVSR = [
+    makeNameValidator(),
+    makeGenderValidator(),
+    makeAgeValidator(),
+    makeMaritalStatusValidator(),
+    makeSpouseNameValidator(),
+    makeAgesOfBoysValidator(),
+    makeAgesOfGirlsValidator(),
+    makeEthnicityValidator(),
+    makeEmploymentStatusValidator(),
+    makeIncomeLevelValidator(),
+    makeSizeOfHomeValidator(),
+];
