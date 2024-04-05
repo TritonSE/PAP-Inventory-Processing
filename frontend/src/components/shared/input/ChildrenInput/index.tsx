@@ -2,6 +2,7 @@ import styles from "@/components/shared/input/ChildrenInput/styles.module.css";
 import { UseFormReturn } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
 import { IFormInput } from "@/app/vsr/page";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 interface ChildrenInputProps {
   gender: "boy" | "girl";
@@ -16,6 +17,8 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
   const fieldInputName = `agesOf${gender[0].toUpperCase()}${gender.substring(1)}s` as
     | "agesOfBoys"
     | "agesOfGirls";
+
+  const { isMobile } = useScreenSizes();
 
   return (
     <>
@@ -39,7 +42,7 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
         />
       </div>
 
-      {numChildrenThisGender > 0 ? (
+      {numChildrenThisGender > 0 || !isMobile ? (
         <div className={styles.numChildren}>
           {/* Cap it at 99 children per gender to avoid freezing web browser */}
           {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
