@@ -111,6 +111,12 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [pageNumber, setPageNumber] = useState(1);
 
+  const goToPage = (newPage: number) => {
+    setPageNumber(newPage);
+    // Jump to top of window when going to new page
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  };
+
   /**
    * Internal state for loading, errors, and data
    */
@@ -242,11 +248,11 @@ const VeteranServiceRequest: React.FC = () => {
   };
 
   const incrementPageNumber = () => {
-    setPageNumber(pageNumber + 1);
+    goToPage(pageNumber + 1);
   };
 
   const decrementPageNumber = () => {
-    setPageNumber(pageNumber - 1);
+    goToPage(pageNumber - 1);
   };
 
   const renderPageNumber = () => {
@@ -1041,7 +1047,7 @@ const VeteranServiceRequest: React.FC = () => {
           isOpen={confirmSubmissionModalOpen}
           onClose={() => {
             setConfirmSubmissionModalOpen(false);
-            setPageNumber(1);
+            goToPage(1);
 
             // Reset all form fields after submission
             reset();
