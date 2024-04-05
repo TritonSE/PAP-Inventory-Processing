@@ -283,7 +283,7 @@ export const VSRIndividualPage = () => {
         } else {
           if (result.error === "Failed to fetch") {
             setPageError(VSRIndividualError.CANNOT_FETCH_VSR_NO_INTERNET);
-          } else if (result.error.includes("404 Not Found")) {
+          } else if (result.error.startsWith("404")) {
             setPageError(VSRIndividualError.CANNOT_FETCH_VSR_NOT_FOUND);
           } else {
             console.error(`Error retrieving VSR: ${result.error}`);
