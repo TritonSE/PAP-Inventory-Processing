@@ -195,6 +195,7 @@ const ALLOWED_STATUSES = [
   "Resubmit",
   "No-show / Incomplete",
   "Archived",
+  "Complete",
 ];
 
 const updateStatusValidator = () =>
