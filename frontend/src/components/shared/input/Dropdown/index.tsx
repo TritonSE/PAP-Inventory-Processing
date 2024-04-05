@@ -51,6 +51,9 @@ const Dropdown = ({
               height: isMobile ? 16 : isTablet ? 19 : 22,
             },
           }}
+          MenuProps={{
+            disableScrollLock: true,
+          }}
         >
           <MenuItem value="">
             <p className={styles.placeholder}>{placeholder}</p>
