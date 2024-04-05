@@ -422,8 +422,11 @@ const VeteranServiceRequest: React.FC = () => {
               spam folder if you don&apos;t receive a response within 48 business hours.
               <br></br>
               <br></br>
-              If you have any questions or concerns, send us an email at
-              veteran@patriotsandpaws.org.
+              If you have any questions or concerns, send us an email at{" "}
+              <a className={styles.emailLink} href="mailto:veteran@patriotsandpaws.org">
+                veteran@patriotsandpaws.org
+              </a>
+              .
             </p>
 
             <div className={styles.fieldsMarked}>

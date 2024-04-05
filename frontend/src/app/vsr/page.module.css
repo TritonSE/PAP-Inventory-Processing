@@ -29,6 +29,11 @@
   line-height: normal;
 }
 
+.emailLink {
+  font-style: italic;
+  text-decoration-line: underline;
+}
+
 .fieldsMarked {
   color: #000;
   font-family: "Open Sans";
