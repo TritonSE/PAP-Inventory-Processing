@@ -488,7 +488,7 @@ const VeteranServiceRequest: React.FC = () => {
                           pattern: {
                             // Only allow up to 2 digits
                             value: /^[0-9]+$/,
-                            message: "This field must be a number",
+                            message: "This field must be a positive number",
                           },
                         })}
                         required

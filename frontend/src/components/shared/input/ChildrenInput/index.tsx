@@ -30,7 +30,7 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
             pattern: {
               // Only allow up to 2 digits
               value: /^[0-9][0-9]?$/,
-              message: "This field must be a number less than 100",
+              message: "This field must be a positive number less than 100",
             },
           })}
           required
@@ -52,7 +52,7 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
                   required: "This field is required",
                   pattern: {
                     value: /^[0-9]+$/,
-                    message: "This field must be a number",
+                    message: "This field must be a positive number",
                   },
                   max: {
                     value: 17,
