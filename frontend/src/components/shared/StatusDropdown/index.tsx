@@ -28,6 +28,10 @@ export const STATUS_OPTIONS: StatusOption[] = [
     color: "#d7eebc",
   },
   {
+    value: "Complete",
+    color: "#bfe1f6",
+  },
+  {
     value: "Resubmit",
     color: "#fae69e",
   },
@@ -38,10 +42,6 @@ export const STATUS_OPTIONS: StatusOption[] = [
   {
     value: "Archived",
     color: "#e4cef1",
-  },
-  {
-    value: "Complete",
-    color: "#bfe1f6",
   },
 ];
 
