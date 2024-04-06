@@ -263,7 +263,15 @@ const VeteranServiceRequest: React.FC = () => {
     return pageNumber === 1 ? (
       <div className={styles.bottomButton} />
     ) : (
-      <button className={`${styles.bottomButton} ${styles.back}`} onClick={decrementPageNumber}>
+      <button
+        className={`${styles.bottomButton} ${styles.back}`}
+        onClick={decrementPageNumber}
+        /**
+         * We need to set type="button" because the default, type="submit", would cause
+         * this button to be triggered when the user presses enter on any input field.
+         */
+        type="button"
+      >
         Back
       </button>
     );
