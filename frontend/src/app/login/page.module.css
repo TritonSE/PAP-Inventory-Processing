@@ -104,7 +104,7 @@
 }
 
 .disabledButton {
-  background: grey;
+  background: grey !important;
 }
 
 /* tablet version */

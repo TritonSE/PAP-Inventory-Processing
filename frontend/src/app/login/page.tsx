@@ -2,7 +2,6 @@
 "use client";
 
 import React, { useState } from "react";
-import InputField from "@/components/shared/input/InputField";
 import Image from "next/image";
 import styles from "@/app/login/page.module.css";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -13,6 +12,9 @@ import { getWhoAmI } from "@/api/Users";
 import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { FirebaseError } from "firebase/app";
 import { Button } from "@/components/shared/Button";
+import TextField from "@/components/shared/input/TextField";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { IconButton } from "@mui/material";
 
 enum LoginPageError {
   NO_INTERNET,
@@ -22,12 +24,16 @@ enum LoginPageError {
   NONE,
 }
 
+interface ILoginFormInput {
+  email: string;
+  password: string;
+}
+
 /**
  * The root Login page component.
  */
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [passwordVisible, setPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
   const [pageError, setPageError] = useState(LoginPageError.NONE);
 
@@ -36,6 +42,12 @@ const Login = () => {
   const { auth } = initFirebase();
 
   const { isMobile } = useScreenSizes();
+
+  const {
+    handleSubmit,
+    register,
+    formState: { errors, isValid },
+  } = useForm<ILoginFormInput>();
 
   /**
    * Sends the user's Firebase token to the /api/user/whoami backend route,
@@ -56,12 +68,12 @@ const Login = () => {
   /**
    * Logs the user in using their entered email and password.
    */
-  const login = async (email: string, password: string) => {
+  const onSubmit: SubmitHandler<ILoginFormInput> = async (data) => {
     try {
       setLoading(true);
 
       // Sign in to Firebase
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
 
       // Get token for user
       const token = await userCredential.user?.getIdToken();
@@ -95,11 +107,6 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    login(email, password);
   };
 
   // Move error notification higher up than usual
@@ -162,10 +169,6 @@ const Login = () => {
     }
   };
 
-  // Whether at least one of the credential fields is missing, in which case we
-  // disable the submit button.
-  const missingCredentials = email === "" || password === "";
-
   return (
     <div className={styles.loginContainer}>
       <Image
@@ -207,24 +210,44 @@ const Login = () => {
           </div>
         </div>
         <div className={styles.welcomeText}>Welcome!</div>
-        <form onSubmit={handleLogin} className={styles.loginForm}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
           <div className={styles.inputGroup}>
-            <InputField
+            <TextField
               label="Email"
-              id="email"
+              variant="outlined"
               placeholder="e.g. johndoe@gmail.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email", {
+                required: "Email is required",
+              })}
+              required={false}
+              error={!!errors.email}
+              helperText={errors.email?.message}
             />
           </div>
           <div className={styles.inputGroup}>
-            <InputField
+            <TextField
               label="Password"
-              id="password"
+              variant="outlined"
               placeholder=""
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              type="password"
+              {...register("password", {
+                required: "Password is required",
+              })}
+              required={false}
+              error={!!errors.password}
+              helperText={errors.password?.message}
+              type={passwordVisible ? "text" : "password"}
+              InputProps={{
+                endAdornment: (
+                  <IconButton onClick={() => setPasswordVisible((prevVisible) => !prevVisible)}>
+                    <Image
+                      src={passwordVisible ? "/ic_show.svg" : "/ic_hide.svg"}
+                      alt={passwordVisible ? "Show" : "Hide"}
+                      width={17}
+                      height={17}
+                    />
+                  </IconButton>
+                ),
+              }}
             />
           </div>
           <div className={styles.forgotPassword}>Forgot Password?</div>
@@ -234,7 +257,7 @@ const Login = () => {
             text="Log In"
             loading={loading}
             type="submit"
-            className={`${styles.loginButton} ${missingCredentials ? styles.disabledButton : ""}`}
+            className={`${styles.loginButton} ${isValid ? "" : styles.disabledButton}`}
           />
         </form>
       </div>
