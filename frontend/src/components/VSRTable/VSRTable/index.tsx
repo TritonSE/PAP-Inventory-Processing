@@ -42,20 +42,6 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
 
     if (!isMobile) {
       result.push({
-        field: "_id",
-        headerName: "Case ID",
-        type: "string",
-        flex: 1,
-        headerAlign: "left",
-        headerClassName: "header",
-        disableColumnMenu: true,
-        hideSortIcons: true,
-        width: 100,
-      });
-    }
-
-    if (!isTablet) {
-      result.push({
         field: "militaryID",
         headerName: "Military ID (Last 4)",
         type: "string",
