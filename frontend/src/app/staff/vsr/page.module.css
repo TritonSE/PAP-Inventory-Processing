@@ -1,6 +1,7 @@
 .page {
   background-color: var(--color-background);
   padding-bottom: 67px;
+  min-height: 100vh;
 }
 
 .column {
