@@ -19,16 +19,31 @@ describe("Furniture Item Tests", () => {
       {
         category: "Bedroom",
         name: "Rug",
+        allowMultiple: false,
+        categoryIndex: 2,
+      },
+      {
+        category: "Bathroom",
+        name: "Wash Cloth(s)",
         allowMultiple: true,
         categoryIndex: 2,
+      },
+      {
+        category: "Bathroom",
+        name: "Towel(s)",
+        allowMultiple: true,
+        categoryIndex: 1,
       },
     );
 
     const res = await request(app).get("/api/furnitureItems");
     expect(res.statusCode).toBe(200);
-    expect(res.body.length).toBe(2);
-    for (let i = 0; i < 2; i++) {
-      expect(res.body[i].category).toBe("Bedroom");
-    }
+    expect(res.body.length).toBe(4);
+
+    // Should be ordered by allowMultiple (desc), then categoryIndex (asc)
+    expect(res.body[0].name).toBe("Towel(s)");
+    expect(res.body[1].name).toBe("Wash Cloth(s)");
+    expect(res.body[2].name).toBe("Table");
+    expect(res.body[3].name).toBe("Rug");
   });
 });
