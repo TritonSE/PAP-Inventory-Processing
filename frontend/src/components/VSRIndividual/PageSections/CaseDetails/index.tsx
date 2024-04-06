@@ -77,7 +77,11 @@ export const CaseDetails = ({
           className={styles.singleDetail}
         />
 
-        <SingleDetail title="Status:" value={renderStatus()} className={styles.singleDetail} />
+        <SingleDetail
+          title="Status:"
+          value={<div className={styles.statusWrapper}>{renderStatus()}</div>}
+          className={styles.singleDetail}
+        />
       </div>
     </VSRIndividualAccordion>
   );
