@@ -1,4 +1,5 @@
 "use client";
+import emailValidator from "email-validator";
 import React, { useEffect, useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
@@ -62,6 +63,7 @@ export interface IFormInput {
   zipCode: number;
   phoneNumber: string;
   email: string;
+  confirmEmail: string;
   branch: string[];
   conflicts: string[];
   other_conflicts: string;
@@ -773,10 +775,38 @@ const VeteranServiceRequest: React.FC = () => {
                         placeholder="e.g. justintimberlake@gmail.com"
                         {...register("email", {
                           required: "Email Address is required",
+                          validate: {
+                            validate: (emailAddress) =>
+                              emailValidator.validate(emailAddress) ||
+                              "This field must be a valid email address",
+                          },
                         })}
                         required
                         error={!!errors.email}
                         helperText={errors.email?.message}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.formRow}>
+                    {isMobile ? null : <div className={styles.longText} />}
+                    <div className={styles.longText}>
+                      <TextField
+                        label="Confirm Email Address"
+                        type="email"
+                        variant="outlined"
+                        placeholder="e.g. justintimberlake@gmail.com"
+                        {...register("confirmEmail", {
+                          required: "Please confirm your email address",
+                          validate: {
+                            validate: (emailAddress) =>
+                              emailValidator.validate(emailAddress)
+                                ? emailAddress === watch().email || "Emails do not match"
+                                : "This field must be a valid email address",
+                          },
+                        })}
+                        required
+                        error={!!errors.confirmEmail}
+                        helperText={errors.confirmEmail?.message}
                       />
                     </div>
                   </div>
