@@ -123,6 +123,8 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
         },
         ".MuiDataGrid-cell": {
           cursor: "pointer",
+          // Disable the default blue outline around a focused table cell
+          outline: "none !important",
         },
         ".MuiDataGrid-cellContent": {
           fontSize: isMobile ? "0.75rem" : isTablet ? "0.875rem" : "1rem",
