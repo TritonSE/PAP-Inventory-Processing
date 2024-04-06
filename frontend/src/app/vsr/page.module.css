@@ -193,24 +193,8 @@
   border-radius: 4px;
 }
 
-.submit {
-  color: white;
-  border: none;
-}
-
-.enabled {
-  background-color: #102d5f;
-}
-
 .disabled {
-  background-color: grey;
-}
-
-.back {
-  background-color: var(--color-tse-primary-light);
-  color: #102d5f;
-  border: 1px solid var(--Secondary-1, #102d5f);
-  background: rgba(255, 255, 255, 0);
+  background-color: grey !important;
 }
 
 /* tablet version */

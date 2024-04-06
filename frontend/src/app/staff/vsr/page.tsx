@@ -16,6 +16,7 @@ import { VSR, getAllVSRs } from "@/api/VSRs";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
+import { Button } from "@/components/shared/Button";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -29,8 +30,6 @@ enum VSRTableError {
 export default function VSRTableView() {
   const { isMobile, isTablet } = useScreenSizes();
   const searchOnOwnRow = useMediaQuery("@media screen and (max-width: 1000px)");
-  const buttonIconsOnly = useMediaQuery("@media screen and (max-width: 700px)");
-  const buttonIconSize = buttonIconsOnly ? 16 : 24;
 
   const { firebaseUser, papUser } = useContext(UserContext);
   const [loadingVsrs, setLoadingVsrs] = useState(true);
@@ -152,39 +151,40 @@ export default function VSRTableView() {
           </div>
           <div className={styles.row_right}>
             {papUser?.role === "admin" && atLeastOneRowSelected ? (
-              <button
-                className={`${styles.buttons} ${styles.deleteButton}`}
+              <Button
+                variant="error"
+                outlined
+                iconPath="/mdi_trash.svg"
+                iconAlt="Delete"
+                text="Delete VSR(s)"
+                hideTextOnMobile
                 onClick={() => setDeleteVsrModalOpen(true)}
-              >
-                <Image
-                  width={buttonIconSize}
-                  height={buttonIconSize}
-                  src="/mdi_trash.svg"
-                  alt="Delete"
-                />
-                {buttonIconsOnly ? null : "Delete VSR(s)"}
-              </button>
+              />
             ) : null}
             {atLeastOneRowSelected ? null : (
-              <button className={styles.buttons}>
-                <Image
-                  width={buttonIconSize}
-                  height={buttonIconSize}
-                  src="/round-sort.svg"
-                  alt="Filter"
-                />
-                {buttonIconsOnly ? null : "Filter"}
-              </button>
-            )}
-            <button className={styles.buttons}>
-              <Image
-                width={buttonIconSize}
-                height={buttonIconSize}
-                src="/upload.svg"
-                alt="Upload"
+              <Button
+                variant="primary"
+                outlined={false}
+                iconPath="/round-sort.svg"
+                iconAlt="Filter"
+                text="Filter"
+                hideTextOnMobile
+                onClick={() => {
+                  // TODO: implement filtering
+                }}
               />
-              {buttonIconsOnly ? null : "Export"}
-            </button>
+            )}
+            <Button
+              variant="primary"
+              outlined={false}
+              iconPath="/upload.svg"
+              iconAlt="Export"
+              text="Export"
+              hideTextOnMobile
+              onClick={() => {
+                // TODO: implement exporting VSRs
+              }}
+            />
           </div>
         </div>
         {searchOnOwnRow ? <SearchKeyword /> : null}

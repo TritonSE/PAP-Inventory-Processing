@@ -13,21 +13,6 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
-.logoutButton {
-  background-color: var(--color-tse-secondary-1);
-  color: var(--Primary-Background-Light, #f7f7f7);
-  padding: 11px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  border: none !important;
-
-  font-family: "Open Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
-}
-
 /* tablet version */
 @media screen and (max-width: 850px) {
   .headerBar {

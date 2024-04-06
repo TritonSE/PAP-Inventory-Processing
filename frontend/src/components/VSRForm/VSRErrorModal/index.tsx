@@ -2,6 +2,7 @@ import styles from "@/components/VSRForm/VSRErrorModal/styles.module.css";
 import { Modal } from "@mui/material";
 import { ReactNode } from "react";
 import Image from "next/image";
+import { Button } from "@/components/shared/Button";
 
 export interface VSRErrorModalProps {
   isOpen: boolean;
@@ -34,9 +35,13 @@ export const VSRErrorModal = ({
         {imageComponent}
         <h2 className={styles.title}>{title}</h2>
         <p className={styles.content}>{content}</p>
-        <button className={styles.button} onClick={onButtonClicked}>
-          {buttonText}
-        </button>
+        <Button
+          variant="primary"
+          outlined={false}
+          text={buttonText}
+          className={styles.button}
+          onClick={onButtonClicked}
+        />
       </div>
     </Modal>
   );

@@ -5,7 +5,7 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { signOut } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { ErrorNotification } from "@/components/Errors/ErrorNotification";
-import { CircularProgress } from "@mui/material";
+import { Button } from "@/components/shared/Button";
 
 interface HeaderBarProps {
   showLogoutButton: boolean;
@@ -36,9 +36,13 @@ const HeaderBar = ({ showLogoutButton }: HeaderBarProps) => {
     <div className={styles.headerBar}>
       <Image width={isTablet ? 80 : 99} height={isTablet ? 39 : 48} src="/logo.svg" alt="logo" />
       {showLogoutButton ? (
-        <button className={styles.logoutButton} onClick={logout} disabled={loading}>
-          {loading ? <CircularProgress size={16} /> : "Logout"}
-        </button>
+        <Button
+          variant="primary"
+          outlined={false}
+          text="Logout"
+          loading={loading}
+          onClick={logout}
+        />
       ) : null}
       <ErrorNotification
         isOpen={errorNotificationOpen}

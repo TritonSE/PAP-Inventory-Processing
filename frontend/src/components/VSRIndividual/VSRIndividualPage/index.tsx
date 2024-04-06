@@ -20,11 +20,11 @@ import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { UserContext } from "@/contexts/userContext";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
-import { CircularProgress } from "@mui/material";
 import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IFormInput } from "@/app/vsr/page";
 import { BaseModal } from "@/components/shared/BaseModal";
+import { Button } from "@/components/shared/Button";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -68,7 +68,6 @@ export const VSRIndividualPage = () => {
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
-  const iconSize = isMobile ? 16 : isTablet ? 19 : 24;
 
   /**
    * Callback triggered when form edits are submitted
@@ -211,9 +210,14 @@ export const VSRIndividualPage = () => {
    */
   const renderApproveButton = () =>
     vsr.status == "Received" || vsr.status === undefined ? (
-      <button className={styles.approveButton} onClick={() => onUpdateVSRStatus("Approved")}>
-        {loadingUpdateStatus ? <CircularProgress size={24} /> : "Approve VSR"}
-      </button>
+      <Button
+        variant="primary"
+        outlined={false}
+        text="Approve VSR"
+        loading={loadingUpdateStatus}
+        className={styles.approveButton}
+        onClick={() => onUpdateVSRStatus("Approved")}
+      />
     ) : null;
 
   /**
@@ -224,43 +228,59 @@ export const VSRIndividualPage = () => {
       <div className={styles.actions}>
         {isEditing ? (
           <>
-            <button
-              className={`${styles.button} ${styles.redOutlinedButton}`}
+            <Button
+              variant="error"
+              outlined
+              iconPath="/ic_close_red.svg"
+              iconAlt="Close"
+              text="Discard Changes"
+              hideTextOnMobile
               onClick={() => setDiscardEditsConfirmationModalOpen(true)}
-            >
-              <Image width={iconSize} height={iconSize} src="/ic_close_red.svg" alt="Close" />
-              {isMobile ? null : "Discard Changes"}
-            </button>
-            <button
-              className={styles.button}
+            />
+            <Button
+              variant="primary"
+              outlined={false}
+              iconPath="/ic_check.svg"
+              iconAlt="Check"
+              text="Save Changes"
+              hideTextOnMobile
               onClick={() => setSaveEditsConfirmationModalOpen(true)}
-            >
-              <Image width={iconSize} height={iconSize} src="/ic_check.svg" alt="Check" />
-              {isMobile ? null : "Save Changes"}
-            </button>
+            />
           </>
         ) : (
           <>
             {/* Show delete button only if user is an admin */}
             {papUser?.role === "admin" ? (
-              <button
-                className={`${styles.button} ${styles.redOutlinedButton}`}
+              <Button
+                variant="error"
+                outlined
+                iconPath="/mdi_trash.svg"
+                iconAlt="Delete"
+                text="Delete"
+                hideTextOnMobile
                 onClick={() => setDeleteVsrModalOpen(true)}
-              >
-                <Image width={iconSize} height={iconSize} src="/mdi_trash.svg" alt="Delete" />
-                {isMobile ? null : "Delete"}
-              </button>
+              />
             ) : null}
-            <button id="edit" className={styles.button} onClick={() => setIsEditing(true)}>
-              <Image width={iconSize} height={iconSize} src="/ic_edit.svg" alt="Edit" />
-              {isMobile ? null : "Edit Form"}
-            </button>
-            <a href="REPLACE">
-              <button className={styles.button}>
-                <Image width={iconSize} height={iconSize} src="/ic_upload.svg" alt="upload" />
-                {isMobile ? null : "Export"}
-              </button>
-            </a>
+            <Button
+              variant="primary"
+              outlined
+              iconPath="/ic_edit.svg"
+              iconAlt="Edit"
+              text="Edit Form"
+              hideTextOnMobile
+              onClick={() => setIsEditing(true)}
+            />
+            <Button
+              variant="primary"
+              outlined={false}
+              iconPath="/ic_upload.svg"
+              iconAlt="Export"
+              text="Export"
+              hideTextOnMobile
+              onClick={() => {
+                // TODO: implement VSR export feature
+              }}
+            />
           </>
         )}
       </div>
@@ -468,10 +488,15 @@ export const VSRIndividualPage = () => {
       <div className={styles.page}>
         <div className={`${styles.headerRow} ${styles.toDashboardRow}`}>
           <a href="/staff/vsr" style={isEditing ? { opacity: 0.5 } : {}}>
-            <button className={styles.toDashboard}>
-              <Image src="/ic_arrowback.svg" width={iconSize} height={iconSize} alt="arrowback" />
-              {isMobile ? null : "Dashboard"}
-            </button>
+            <Button
+              variant="primary"
+              outlined
+              iconPath="/ic_arrowback.svg"
+              iconAlt="Arrowback"
+              text="Dashboard"
+              hideTextOnMobile
+              className={styles.toDashboard}
+            />
           </a>
           {isMobile ? renderActions() : null}
         </div>
@@ -561,24 +586,26 @@ export const VSRIndividualPage = () => {
         content="Are you sure you want to discard your changes?"
         bottomRow={
           <div className={styles.modalBottomRow}>
-            <button
-              className={`${styles.button} ${styles.blueOutlinedButton} ${styles.modalButton}`}
+            <Button
+              variant="primary"
+              outlined
+              text="Keep Editing"
+              className={styles.modalButton}
               onClick={() => setDiscardEditsConfirmationModalOpen(false)}
               style={{ width: "100%" }}
-            >
-              Keep Editing
-            </button>
-            <button
-              className={`${styles.button} ${styles.redButton} ${styles.modalButton}`}
+            />
+            <Button
+              variant="error"
+              outlined={false}
+              text="Discard Changes"
+              className={styles.modalButton}
               onClick={() => {
                 fetchVSR();
                 setDiscardEditsConfirmationModalOpen(false);
                 setIsEditing(false);
               }}
               style={{ width: "100%" }}
-            >
-              Discard Changes
-            </button>
+            />
           </div>
         }
       />
@@ -591,20 +618,22 @@ export const VSRIndividualPage = () => {
         content="Would you like to save your changes?"
         bottomRow={
           <div className={styles.modalBottomRow}>
-            <button
-              className={`${styles.button} ${styles.blueOutlinedButton} ${styles.modalButton}`}
+            <Button
+              variant="primary"
+              outlined
+              text="Keep Editing"
+              className={styles.modalButton}
               onClick={() => setSaveEditsConfirmationModalOpen(false)}
               style={{ width: "100%" }}
-            >
-              Keep Editing
-            </button>
-            <button
-              className={`${styles.button} ${styles.modalButton}`}
+            />
+            <Button
+              variant="primary"
+              outlined={false}
+              text="Save Changes"
+              className={styles.modalButton}
               onClick={() => onSubmitEdits(watch())}
               style={{ width: "100%" }}
-            >
-              Save Changes
-            </button>
+            />
           </div>
         }
       />

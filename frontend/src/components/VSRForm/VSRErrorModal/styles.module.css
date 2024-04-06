@@ -45,15 +45,10 @@
 }
 
 .button {
-  background: var(--Secondary-1, #102d5f);
-  color: var(--Neutral-White, #fff);
   font-family: "Lora";
   font-size: 24px;
   font-weight: 700;
-  border-radius: 4px;
   padding: 12px 24px;
-  cursor: pointer;
-  border: none !important;
 }
 
 /* tablet version */

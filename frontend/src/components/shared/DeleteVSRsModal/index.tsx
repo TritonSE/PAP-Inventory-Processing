@@ -1,11 +1,11 @@
 import { deleteVSR } from "@/api/VSRs";
 import styles from "@/components/shared/DeleteVSRsModal/styles.module.css";
 import { UserContext } from "@/contexts/userContext";
-import { CircularProgress } from "@mui/material";
 import { useContext, useState } from "react";
 import { SuccessNotification } from "@/components/shared/SuccessNotification";
 import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { BaseModal } from "@/components/shared/BaseModal";
+import { Button } from "@/components/shared/Button";
 
 interface DeleteVSRsModalProps {
   isOpen: boolean;
@@ -81,16 +81,21 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
         }
         bottomRow={
           <div className={styles.buttonContainer}>
-            <button className={`${styles.button} ${styles.cancelButton}`} onClick={onClose}>
-              Cancel
-            </button>
-            <button
-              className={`${styles.button} ${styles.deleteButton}`}
-              disabled={loadingDelete}
+            <Button
+              variant="primary"
+              outlined
+              text="Cancel"
+              onClick={onClose}
+              className={styles.button}
+            />
+            <Button
+              variant="error"
+              outlined={false}
+              text="Delete VSR(s)"
               onClick={onDelete}
-            >
-              {loadingDelete ? <CircularProgress size={24} /> : "Delete VSR(s)"}
-            </button>
+              loading={loadingDelete}
+              className={styles.button}
+            />
           </div>
         }
       />

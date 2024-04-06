@@ -63,32 +63,6 @@
   align-items: center;
 }
 
-.buttons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  max-width: 137px;
-  padding: 11px 16px;
-  border-radius: 4px;
-  gap: 6px;
-  justify-content: center;
-  background-color: var(--color-tse-secondary-1);
-  cursor: pointer;
-  border: none !important;
-  color: var(--Primary-Background-Light, #f7f7f7);
-  text-align: center;
-  font-family: "Open Sans";
-  font-size: 16px;
-  font-weight: 400;
-}
-
-.deleteButton {
-  max-width: unset;
-  background-color: transparent;
-  border: 1px solid #be2d46 !important;
-  color: #be2d46;
-}
-
 .table {
   display: flex;
   flex-direction: column;

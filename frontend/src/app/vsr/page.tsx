@@ -17,7 +17,6 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import Image from "next/image";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
-import { CircularProgress } from "@mui/material";
 import {
   branchOptions,
   conflictsOptions,
@@ -32,6 +31,7 @@ import {
   stateOptions,
 } from "@/constants/fieldOptions";
 import { ChildrenInput } from "@/components/shared/input/ChildrenInput";
+import { Button } from "@/components/shared/Button";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -265,30 +265,31 @@ const VeteranServiceRequest: React.FC = () => {
     return pageNumber === 1 ? (
       <div className={styles.bottomButton} />
     ) : (
-      <button
-        className={`${styles.bottomButton} ${styles.back}`}
+      <Button
+        variant="primary"
+        outlined
+        text="Back"
+        className={styles.bottomButton}
         onClick={decrementPageNumber}
         /**
          * We need to set type="button" because the default, type="submit", would cause
          * this button to be triggered when the user presses enter on any input field.
          */
         type="button"
-      >
-        Back
-      </button>
+      />
     );
   };
 
   const renderNextButton = () => {
     return (
-      <button
-        className={`${styles.bottomButton} ${styles.submit} ${
-          isValid ? styles.enabled : styles.disabled
-        }`}
+      <Button
+        variant="primary"
+        outlined={false}
+        loading={loadingVsrSubmission}
+        text={pageNumber === 3 ? "Submit" : "Next"}
+        className={`${styles.bottomButton} ${isValid ? "" : styles.disabled}`}
         type="submit"
-      >
-        {loadingVsrSubmission ? <CircularProgress /> : pageNumber === 3 ? "Submit" : "Next"}
-      </button>
+      />
     );
   };
 

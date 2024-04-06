@@ -12,7 +12,7 @@ import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
 import { getWhoAmI } from "@/api/Users";
 import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { FirebaseError } from "firebase/app";
-import { CircularProgress } from "@mui/material";
+import { Button } from "@/components/shared/Button";
 
 enum LoginPageError {
   NO_INTERNET,
@@ -228,13 +228,14 @@ const Login = () => {
             />
           </div>
           <div className={styles.forgotPassword}>Forgot Password?</div>
-          <button
+          <Button
+            variant="primary"
+            outlined={false}
+            text="Log In"
+            loading={loading}
             type="submit"
             className={`${styles.loginButton} ${missingCredentials ? styles.disabledButton : ""}`}
-            disabled={missingCredentials || loading}
-          >
-            {loading ? <CircularProgress /> : "Log In"}
-          </button>
+          />
         </form>
       </div>
       {renderErrorNotification()}

@@ -5,25 +5,12 @@
 }
 
 .button {
-  border-radius: 4px;
+  width: 100%;
   padding: 12px 24px;
-  border: none !important;
-  cursor: pointer;
   text-align: center;
   font-family: "Lora";
   font-size: 24px;
   font-weight: 700;
-}
-
-.cancelButton {
-  border: 1px solid var(--Accent-Blue-1, #102d5f) !important;
-  color: var(--Accent-Blue-1, #102d5f);
-  background-color: white;
-}
-
-.deleteButton {
-  background-color: var(--Secondary-2, #be2d46);
-  color: white;
 }
 
 /* tablet version */
