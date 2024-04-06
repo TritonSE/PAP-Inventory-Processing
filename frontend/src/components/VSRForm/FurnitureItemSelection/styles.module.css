@@ -84,6 +84,10 @@
     brightness(103%) contrast(103%);
 }
 
+.quantityText {
+  margin: 0 6px;
+}
+
 /* tablet version */
 @media screen and (max-width: 850px) {
   .chip {

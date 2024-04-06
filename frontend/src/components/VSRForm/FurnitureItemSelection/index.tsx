@@ -65,7 +65,7 @@ export const FurnitureItemSelection = ({
                 alt="dropdown"
               />
             </button>
-            <span>{selection.quantity}</span>
+            <span className={styles.quantityText}>{selection.quantity}</span>
             <button
               onClick={(e) => {
                 e.stopPropagation();
