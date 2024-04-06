@@ -554,12 +554,20 @@ export const VSRIndividualPage = () => {
         mainText={
           previousVSRStatus === null ? "Undo Successful" : "VSR Status Successfully Updated"
         }
-        actionText={previousVSRStatus === null ? "Dismiss" : "Undo"}
-        onActionClicked={
-          previousVSRStatus === null
-            ? () => setUpdateStatusSuccessNotificationOpen(false)
-            : onUndoVSRStatusUpdate
-        }
+        actions={[
+          ...(previousVSRStatus === null
+            ? []
+            : [
+                {
+                  text: "Undo",
+                  onClick: onUndoVSRStatusUpdate,
+                },
+              ]),
+          {
+            text: "Dismiss",
+            onClick: () => setUpdateStatusSuccessNotificationOpen(false),
+          },
+        ]}
       />
       <ErrorNotification
         isOpen={updateStatusErrorNotificationOpen}
@@ -640,8 +648,12 @@ export const VSRIndividualPage = () => {
       <SuccessNotification
         isOpen={editSuccessNotificationOpen}
         mainText={"Changes Saved Successfully"}
-        actionText="Dismiss"
-        onActionClicked={() => setEditSuccessNotificationOpen(false)}
+        actions={[
+          {
+            text: "Dismiss",
+            onClick: () => setEditSuccessNotificationOpen(false),
+          },
+        ]}
       />
       <ErrorNotification
         isOpen={editErrorNotificationOpen}

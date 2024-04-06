@@ -3,22 +3,21 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { Portal } from "@mui/material";
 import Image from "next/image";
 
+interface SuccessAction {
+  text: string;
+  onClick: () => unknown;
+}
+
 interface SuccessNotificationProps {
   isOpen: boolean;
   mainText: string;
-  actionText: string;
-  onActionClicked: () => unknown;
+  actions: SuccessAction[];
 }
 
 /**
  * A component that displays a success notification at the top of the screen
  */
-export const SuccessNotification = ({
-  isOpen,
-  mainText,
-  actionText,
-  onActionClicked,
-}: SuccessNotificationProps) => {
+export const SuccessNotification = ({ isOpen, mainText, actions }: SuccessNotificationProps) => {
   const { isMobile } = useScreenSizes();
   const iconSize = isMobile ? 36 : 49;
 
@@ -27,9 +26,11 @@ export const SuccessNotification = ({
       <div className={styles.root}>
         <Image src="/ic_success.svg" alt="Checkmark" width={iconSize} height={iconSize} />
         <p className={styles.mainText}>{mainText}</p>
-        <p className={styles.actionText} onClick={onActionClicked}>
-          {actionText}
-        </p>
+        {actions.map((action, index) => (
+          <p key={index} className={styles.actionText} onClick={action.onClick}>
+            {action.text}
+          </p>
+        ))}
       </div>
     </Portal>
   ) : null;

@@ -102,8 +102,7 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
       <SuccessNotification
         isOpen={successNotificationOpen}
         mainText="VSR(s) Deleted Successfully"
-        actionText="Dismiss"
-        onActionClicked={() => setSuccessNotificationOpen(false)}
+        actions={[{ text: "Dismiss", onClick: () => setSuccessNotificationOpen(false) }]}
       />
       <ErrorNotification
         isOpen={errorNotificationOpen}
