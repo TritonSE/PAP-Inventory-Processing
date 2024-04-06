@@ -45,9 +45,6 @@ export const VSRIndividualAccordion = ({
           boxShadow: "none",
           padding: "8px 6px",
           paddingTop: "6px",
-          "&.Mui-expanded": {
-            paddingTop: "0px",
-          },
         }}
       >
         <AccordionSummary
@@ -58,10 +55,12 @@ export const VSRIndividualAccordion = ({
           }
           aria-controls="panel1-content"
           sx={{
-            ...(expanded && {
-              borderBottom: "1px solid rgba(214, 214, 214)", // Custom line style
-              marginBottom: -1, // Adjust as needed
-            }),
+            ...{
+              borderBottom: `1px solid ${expanded ? "rgba(214, 214, 214)" : "transparent"}`, // Custom line style
+              ".MuiAccordionSummary-content": {
+                margin: "20px 0",
+              },
+            },
           }}
         >
           <Typography
