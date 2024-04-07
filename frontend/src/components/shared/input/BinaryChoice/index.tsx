@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Chip from "@mui/material/Chip";
 import styles from "@/components/shared/input/BinaryChoice/styles.module.css";
-import { FormField } from "../FormField";
+import { FormField } from "@/components/shared/input/FormField";
+import { StyledChip } from "@/components/shared/input/StyledChip";
 
 export interface BinaryChoiceProps {
   label: string;
@@ -12,6 +12,9 @@ export interface BinaryChoiceProps {
   helperText?: string;
 }
 
+/**
+ * An input component that allows the user to select either "Yes" or "No" by clicking on chips.
+ */
 const BinaryChoice = ({
   label,
   value,
@@ -30,21 +33,15 @@ const BinaryChoice = ({
   return (
     <FormField label={label} required={required} error={error} helperText={helperText}>
       <div className={styles.chipContainer}>
-        <Chip
-          label="Yes"
+        <StyledChip
+          text="Yes"
+          selected={selectedOption === true}
           onClick={() => handleOptionClick(true)}
-          className={`${styles.chip} ${
-            selectedOption === true ? styles.chipSelected : styles.chipUnselected
-          }`}
-          clickable
         />
-        <Chip
-          label="No"
+        <StyledChip
+          text="No"
+          selected={selectedOption === false}
           onClick={() => handleOptionClick(false)}
-          className={`${styles.chip} ${
-            selectedOption === false ? styles.chipSelected : styles.chipUnselected
-          }`}
-          clickable
         />
       </div>
     </FormField>

@@ -5,35 +5,46 @@ import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 export interface VSRIndividualAccordionProps {
   title: string;
   permanentlyExpanded: boolean;
+  className?: string;
   children: ReactNode;
 }
 
+/**
+ * A component for an accordion for one of the VSR individual pages. Can be either
+ * permanently expanded, or expand/collapse on click.
+ */
 export const VSRIndividualAccordion = ({
   title,
   permanentlyExpanded,
+  className,
   children,
 }: VSRIndividualAccordionProps) => {
   const [expanded, setExpanded] = useState(permanentlyExpanded);
+
+  const { isMobile, isTablet } = useScreenSizes();
 
   useEffect(() => {
     setExpanded(permanentlyExpanded);
   }, [permanentlyExpanded]);
 
   return (
-    <div className={styles.box}>
+    <div className={className}>
       <Accordion
-        className={styles.accordion}
         expanded={expanded || permanentlyExpanded}
         onChange={(e, isExpanded) => setExpanded(isExpanded || permanentlyExpanded)}
         sx={{
+          display: "inline-block",
+          backgroundColor: "hsl(0, 0%, 100%)",
+          width: "100%",
+          borderRadius: 6,
+          boxShadow: "none",
+          padding: "8px 6px",
           paddingTop: "6px",
-          "&.Mui-expanded": {
-            paddingTop: "0px",
-          },
         }}
       >
         <AccordionSummary
@@ -43,15 +54,27 @@ export const VSRIndividualAccordion = ({
             )
           }
           aria-controls="panel1-content"
-          id="military-background-header"
           sx={{
-            ...(expanded && {
-              borderBottom: "1px solid rgba(214, 214, 214)", // Custom line style
-              marginBottom: -1, // Adjust as needed
-            }),
+            ...{
+              borderBottom: `1px solid ${expanded ? "rgba(214, 214, 214)" : "transparent"}`, // Custom line style
+              ".MuiAccordionSummary-content": {
+                margin: "20px 0",
+              },
+            },
           }}
         >
-          <Typography className={styles.title}>{title}</Typography>
+          <Typography
+            sx={{
+              fontFamily: "var(--font-title)",
+              color: "var(--Primary-Background-Dark, #232220)",
+              fontSize: isMobile ? 20 : isTablet ? 28 : 24,
+              fontStyle: "normal",
+              fontWeight: 700,
+              lineHeight: "normal",
+            }}
+          >
+            {title}
+          </Typography>
         </AccordionSummary>
         <AccordionDetails>
           <div className={styles.details}>{children}</div>

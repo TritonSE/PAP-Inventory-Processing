@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "@/components/shared/StatusDropdown/styles.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
@@ -11,6 +11,9 @@ export interface StatusOption {
   color: string;
 }
 
+/**
+ * All available statuses that can be set using the status dropdown
+ */
 export const STATUS_OPTIONS: StatusOption[] = [
   {
     value: "Received",
@@ -23,6 +26,10 @@ export const STATUS_OPTIONS: StatusOption[] = [
   {
     value: "Approved",
     color: "#d7eebc",
+  },
+  {
+    value: "Complete",
+    color: "#bfe1f6",
   },
   {
     value: "Resubmit",
@@ -38,6 +45,10 @@ export const STATUS_OPTIONS: StatusOption[] = [
   },
 ];
 
+/**
+ * An input component that displays a dropdown menu with all available status
+ * options and enables the user to select a status.
+ */
 export interface StatusDropdownProps {
   value: string;
   onChanged?: (value: string) => void;
@@ -46,6 +57,8 @@ export interface StatusDropdownProps {
 export function StatusDropdown({ value, onChanged }: StatusDropdownProps) {
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => setSelectedValue(value), [value]);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     setSelectedValue(event.target.value);

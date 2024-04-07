@@ -1,0 +1,87 @@
+.root {
+  position: absolute;
+  width: 723px;
+  background-color: white;
+  border-radius: 12px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  align-items: center;
+  justify-content: center;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 64px;
+  gap: 32px;
+  border: none !important;
+  outline: none !important;
+}
+
+.closeButton {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  cursor: pointer;
+  border: none !important;
+  background: transparent;
+}
+
+.title {
+  color: var(--Secondary-2, #be2d46);
+  text-align: center;
+  font-family: "Lora";
+  font-size: 40px;
+  font-weight: 700;
+}
+
+.content {
+  color: var(--Secondary-1, #102d5f);
+  text-align: center;
+  font-family: "Open Sans";
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.button {
+  font-family: "Lora";
+  font-size: 24px;
+  font-weight: 700;
+  padding: 12px 24px;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .root {
+    width: calc(100% - 96px);
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .content {
+    font-size: 18px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .root {
+    width: calc(100% - 48px);
+    padding: 32px 16px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .content {
+    font-size: 14px;
+  }
+
+  .button {
+    font-size: 18px;
+  }
+}

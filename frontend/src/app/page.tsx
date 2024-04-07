@@ -1,14 +1,10 @@
-"use client";
+import { redirect } from "next/navigation";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-
+/**
+ * On the root URL of our site (i.e. "<domain>/"), redirect the user to the staff login page.
+ */
 const Home = () => {
-  const router = useRouter();
-  useEffect(() => {
-    router.push("/login");
-  });
-  return null;
+  redirect("/login");
 };
 
 export default Home;

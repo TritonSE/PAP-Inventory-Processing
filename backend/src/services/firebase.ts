@@ -10,6 +10,9 @@ import { getAuth } from "firebase-admin/auth";
 import { InternalError } from "src/errors/internal";
 import env from "src/util/validateEnv";
 
+/**
+ * Initializes Firebase Auth using the SERVICE_ACCOUNT_KEY environment variable
+ */
 let serviceAccountKey: firebase.ServiceAccount;
 
 if (!env.SERVICE_ACCOUNT_KEY) {

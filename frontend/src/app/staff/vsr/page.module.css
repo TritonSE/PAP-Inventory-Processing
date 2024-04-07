@@ -1,6 +1,7 @@
 .page {
   background-color: var(--color-background);
   padding-bottom: 67px;
+  min-height: 100vh;
 }
 
 .column {
@@ -60,32 +61,6 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-.buttons {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  max-width: 137px;
-  padding: 11px 16px;
-  border-radius: 4px;
-  gap: 6px;
-  justify-content: center;
-  background-color: var(--color-tse-secondary-1);
-  cursor: pointer;
-  border: none !important;
-}
-
-.buttontext {
-  color: var(--Primary-Background-Light, #f7f7f7);
-  text-align: center;
-
-  /* Desktop/Body 2 */
-  font-family: "Open Sans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
 }
 
 .table {

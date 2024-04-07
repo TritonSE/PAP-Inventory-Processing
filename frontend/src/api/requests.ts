@@ -74,7 +74,7 @@ async function assertOk(response: Response): Promise<void> {
 export async function get(url: string, headers: Record<string, string> = {}): Promise<Response> {
   // GET requests do not have a body
   const response = await fetchRequest("GET", API_BASE_URL + url, undefined, headers);
-  assertOk(response);
+  await assertOk(response);
   return response;
 }
 
@@ -92,7 +92,7 @@ export async function post(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("POST", API_BASE_URL + url, body, headers);
-  assertOk(response);
+  await assertOk(response);
   return response;
 }
 
@@ -110,7 +110,7 @@ export async function put(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("PUT", API_BASE_URL + url, body, headers);
-  assertOk(response);
+  await assertOk(response);
   return response;
 }
 
@@ -128,7 +128,23 @@ export async function patch(
   headers: Record<string, string> = {},
 ): Promise<Response> {
   const response = await fetchRequest("PATCH", API_BASE_URL + url, body, headers);
-  assertOk(response);
+  await assertOk(response);
+  return response;
+}
+
+/**
+ * Sends a DELETE request to the provided API URL.
+ *
+ * @param url The URL to request
+ * @param headers The headers of the request (optional)
+ * @returns The Response object returned by `fetch()`
+ */
+export async function httpDelete(
+  url: string,
+  headers: Record<string, string> = {},
+): Promise<Response> {
+  const response = await fetchRequest("DELETE", API_BASE_URL + url, undefined, headers);
+  await assertOk(response);
   return response;
 }
 
@@ -157,9 +173,7 @@ export type APIError = { success: false; error: string };
  * })
  * ```
  *
- * See `createTask` in `src/api/tasks` and its use in `src/components/TaskForm`
- * for a more concrete example, and see
- * https://www.typescriptlang.org/docs/handbook/2/narrowing.html for more info
+ * See https://www.typescriptlang.org/docs/handbook/2/narrowing.html for more info
  * about type narrowing.
  */
 export type APIResult<T> = APIData<T> | APIError;

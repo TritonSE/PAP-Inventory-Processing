@@ -2,28 +2,35 @@
 
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { GRID_CHECKBOX_SELECTION_COL_DEF } from "@mui/x-data-grid";
+import { GRID_CHECKBOX_SELECTION_COL_DEF, GridRowSelectionModel } from "@mui/x-data-grid";
 
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import { useEffect } from "react";
-import { VSR, getAllVSRs } from "@/api/VSRs";
 import moment from "moment";
 import { useRouter } from "next/navigation";
-import { StatusChip } from "@/components/shared/StatusChip";
 import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
-import { useScreenSizes } from "@/util/useScreenSizes";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
+import { VSR } from "@/api/VSRs";
+import { StatusChip } from "@/components/shared/StatusChip";
 
 const formatDateReceived = (dateReceived: Date) => {
   // Return the empty string on a falsy date received, instead of defaulting to today's date
   return dateReceived ? moment(dateReceived).format("MMMM D, YYYY") : "";
 };
 
-export default function VSRTable() {
-  const [vsrs, setVsrs] = React.useState<VSR[]>();
+interface VSRTableProps {
+  vsrs: VSR[];
+  selectedVsrIds: string[];
+  onChangeSelectedVsrIds: (newIds: string[]) => unknown;
+}
+
+/**
+ * A component for the table itself on the VSR table page.
+ */
+export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds }: VSRTableProps) {
+  const { isMobile, isTablet } = useScreenSizes();
   const router = useRouter();
 
-  const { isMobile, isTablet } = useScreenSizes();
-
+  // Define the columns to show in the table (some columns are hidden on smaller screens)
   const columns: GridColDef[] = React.useMemo(() => {
     const result = [
       {
@@ -34,20 +41,6 @@ export default function VSRTable() {
     ];
 
     if (!isMobile) {
-      result.push({
-        field: "_id",
-        headerName: "Case ID",
-        type: "string",
-        flex: 1,
-        headerAlign: "left",
-        headerClassName: "header",
-        disableColumnMenu: true,
-        hideSortIcons: true,
-        width: 100,
-      });
-    }
-
-    if (!isTablet) {
       result.push({
         field: "militaryID",
         headerName: "Military ID (Last 4)",
@@ -107,17 +100,6 @@ export default function VSRTable() {
     return result;
   }, [isMobile, isTablet]);
 
-  useEffect(() => {
-    getAllVSRs().then((result) => {
-      if (result.success) {
-        setVsrs(result.data);
-      } else {
-        // TODO better error handling
-        alert(`Could not fetch VSRs: ${result.error}`);
-      }
-    });
-  }, []);
-
   return (
     <Box
       style={{ width: "100%" }}
@@ -141,6 +123,8 @@ export default function VSRTable() {
         },
         ".MuiDataGrid-cell": {
           cursor: "pointer",
+          // Disable the default blue outline around a focused table cell
+          outline: "none !important",
         },
         ".MuiDataGrid-cellContent": {
           fontSize: isMobile ? "0.75rem" : isTablet ? "0.875rem" : "1rem",
@@ -219,6 +203,10 @@ export default function VSRTable() {
             router.push(`/staff/vsr/${params.id}`);
           }
         }}
+        rowSelectionModel={selectedVsrIds}
+        onRowSelectionModelChange={(vsrIds: GridRowSelectionModel) =>
+          onChangeSelectedVsrIds(vsrIds as string[])
+        }
       />
     </Box>
   );

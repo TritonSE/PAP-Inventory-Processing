@@ -5,6 +5,9 @@ export interface PageNumberProps {
   pageNum: number;
 }
 
+/**
+ * A component that displays the current page number of the VSR form.
+ */
 const PageNumber = ({ pageNum }: PageNumberProps) => {
   return (
     <div className={styles.pageNumber}>

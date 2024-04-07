@@ -1,7 +1,8 @@
 "use client";
+import emailValidator from "email-validator";
 import React, { useEffect, useState } from "react";
 import styles from "src/app/vsr/page.module.css";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useForm, Controller, SubmitHandler, RegisterOptions } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
 import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import Dropdown from "@/components/shared/input/Dropdown";
@@ -10,208 +11,86 @@ import PageNumber from "@/components/VSRForm/PageNumber";
 import { createVSR, CreateVSRRequest, FurnitureInput } from "@/api/VSRs";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import BinaryChoice from "@/components/shared/input/BinaryChoice";
-import { FurnitureItemSelection } from "@/components/VeteranForm/FurnitureItemSelection";
-import { useScreenSizes } from "@/util/useScreenSizes";
+import { ConfirmVSRSubmissionModal } from "@/components/VSRForm/ConfirmVSRSubmissionModal";
+import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelection";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
+import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
+import Image from "next/image";
+import { LoadingScreen } from "@/components/shared/LoadingScreen";
+import {
+  branchOptions,
+  conflictsOptions,
+  dischargeStatusOptions,
+  employmentOptions,
+  ethnicityOptions,
+  genderOptions,
+  hearFromOptions,
+  homeOptions,
+  maritalOptions,
+  incomeOptions,
+  stateOptions,
+} from "@/constants/fieldOptions";
+import { ChildrenInput } from "@/components/shared/input/ChildrenInput";
+import { Button } from "@/components/shared/Button";
+import { ICreateVSRFormInput, IVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
+import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 
-interface IFormInput {
-  name: string;
-  marital_status: string;
-  gender: string;
-  spouse: string;
-  age: number;
-  ethnicity: string;
-  other_ethnicity: string;
-  employment_status: string;
-  income_level: string;
-  size_of_home: string;
-  num_boys: number;
-  num_girls: number;
-  ages_of_boys: number[];
-  ages_of_girls: number[];
-  streetAddress: string;
-  city: string;
-  state: string;
-  zipCode: number;
-  phoneNumber: string;
-  email: string;
-  branch: string[];
-  conflicts: string[];
-  dischargeStatus: string;
-  serviceConnected: boolean;
-  lastRank: string;
-  militaryID: number;
-  petCompanion: boolean;
-  hearFrom: string;
+enum VSRFormError {
+  CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
+  CANNOT_RETRIEVE_FURNITURE_INTERNAL,
+  CANNOT_SUBMIT_NO_INTERNET,
+  CANNOT_SUBMIT_INTERNAL,
+  NONE,
 }
 
+/**
+ * Root component for the page with the VSR form for veterans to fill out.
+ */
 const VeteranServiceRequest: React.FC = () => {
+  /**
+   * Form utilities
+   */
+  const formProps = useForm<ICreateVSRFormInput>();
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isValid },
     watch,
-  } = useForm<IFormInput>();
+    reset,
+  } = formProps;
+
+  /**
+   * Internal state for fields that are complicated and cannot be controlled with a
+   * named form field alone (e.g. there is a multiple choice and a text field for "Other")
+   */
   const [selectedEthnicities, setSelectedEthnicities] = useState<string[]>([]);
   const [otherEthnicity, setOtherEthnicity] = useState("");
 
   const [selectedConflicts, setSelectedConflicts] = useState<string[]>([]);
   const [otherConflict, setOtherConflict] = useState("");
 
-  const [selectedBranch, setSelectedBranch] = useState<string[]>([]);
-
   const [selectedHearFrom, setSelectedHearFrom] = useState("");
   const [otherHearFrom, setOtherHearFrom] = useState("");
 
+  const [additionalItems, setAdditionalItems] = useState("");
+
   const [pageNumber, setPageNumber] = useState(1);
 
-  const numBoys = watch("num_boys");
-  const numGirls = watch("num_girls");
+  const goToPage = (newPage: number) => {
+    setPageNumber(newPage);
+    // Jump to top of window when going to new page
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
+  };
 
-  const maritalOptions = ["Married", "Single", "It's Complicated", "Widowed/Widower"];
-  const genderOptions = ["Male", "Female", "Other"];
-  const employmentOptions = [
-    "Employed",
-    "Unemployed",
-    "Currently Looking",
-    "Retired",
-    "In School",
-    "Unable to work",
-  ];
+  /**
+   * Internal state for loading, errors, and data
+   */
+  const [loadingVsrSubmission, setLoadingVsrSubmission] = useState(false);
+  const [confirmSubmissionModalOpen, setConfirmSubmissionModalOpen] = useState(false);
+  const [vsrFormError, setVsrFormError] = useState<VSRFormError>(VSRFormError.NONE);
 
-  const incomeOptions = [
-    "$12,500 and under",
-    "$12,501 - $25,000",
-    "$25,001 - $50,000",
-    "$50,001 and over",
-  ];
-
-  const homeOptions = [
-    "House",
-    "Apartment",
-    "Studio",
-    "1 Bedroom",
-    "2 Bedroom",
-    "3 Bedroom",
-    "4 Bedroom",
-    "4+ Bedroom",
-  ];
-
-  const ethnicityOptions = [
-    "Asian",
-    "African American",
-    "Caucasian",
-    "Native American",
-    "Pacific Islander",
-    "Middle Eastern",
-    "Prefer not to say",
-  ];
-
-  const branchOptions = [
-    "Air Force",
-    "Air Force Reserve",
-    "Air National Guard",
-    "Army",
-    "Army Air Corps",
-    "Army Reserve",
-    "Coast Guard",
-    "Marine Corps",
-    "Navy",
-    "Navy Reserve",
-  ];
-
-  const conflictsOptions = [
-    "WWII",
-    "Korea",
-    "Vietnam",
-    "Persian Gulf",
-    "Bosnia",
-    "Kosovo",
-    "Panama",
-    "Kuwait",
-    "Iraq",
-    "Somalia",
-    "Desert Shield/Storm",
-    "Operation Enduring Freedom (OEF)",
-    "Afghanistan",
-    "Irani Crisis",
-    "Granada",
-    "Lebanon",
-    "Beirut",
-    "Special Ops",
-    "Peacetime",
-  ];
-
-  const dischargeStatusOptions = [
-    "Honorable Discharge",
-    "General Under Honorable",
-    "Other Than Honorable",
-    "Bad Conduct",
-    "Entry Level",
-    "Dishonorable",
-    "Still Serving",
-    "Civilian",
-    "Medical",
-    "Not Given",
-  ];
-
-  const hearFromOptions = ["Colleague", "Social Worker", "Friend", "Internet", "Social Media"];
-
-  const stateOptions = [
-    "AL",
-    "AK",
-    "AZ",
-    "AR",
-    "CA",
-    "CO",
-    "CT",
-    "DE",
-    "FL",
-    "GA",
-    "HI",
-    "ID",
-    "IL",
-    "IN",
-    "IA",
-    "KS",
-    "KY",
-    "LA",
-    "ME",
-    "MD",
-    "MA",
-    "MI",
-    "MN",
-    "MS",
-    "MO",
-    "MT",
-    "NE",
-    "NV",
-    "NH",
-    "NJ",
-    "NM",
-    "NY",
-    "NC",
-    "ND",
-    "OH",
-    "OK",
-    "OR",
-    "PA",
-    "RI",
-    "SC",
-    "SD",
-    "TN",
-    "TX",
-    "UT",
-    "VT",
-    "VA",
-    "WA",
-    "WV",
-    "WI",
-    "WY",
-  ];
-
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [loadingFurnitureItems, setLoadingFurnitureItems] = useState(false);
   const [furnitureCategoriesToItems, setFurnitureCategoriesToItems] =
     useState<Record<string, FurnitureItem[]>>();
   // Map furniture item IDs to selections for those items
@@ -219,30 +98,42 @@ const VeteranServiceRequest: React.FC = () => {
     Record<string, FurnitureInput>
   >({});
 
-  const [additionalItems, setAdditionalItems] = useState("");
+  /**
+   * Fetches the list of available furniture items from the backend, and updates
+   * our state for the items to render on page 3.
+   */
+  const fetchFurnitureItems = () => {
+    if (loadingFurnitureItems) {
+      return;
+    }
+    setLoadingFurnitureItems(true);
+    getFurnitureItems().then((result) => {
+      if (result.success) {
+        setFurnitureCategoriesToItems(
+          result.data.reduce(
+            (prevMap: Record<string, FurnitureItem[]>, curItem) => ({
+              ...prevMap,
+              [curItem.category]: [...(prevMap[curItem.category] ?? []), curItem],
+            }),
+            {},
+          ),
+        );
+        setVsrFormError(VSRFormError.NONE);
+      } else {
+        if (result.error === "Failed to fetch") {
+          setVsrFormError(VSRFormError.CANNOT_RETRIEVE_FURNITURE_NO_INTERNET);
+        } else {
+          setVsrFormError(VSRFormError.CANNOT_RETRIEVE_FURNITURE_INTERNAL);
+          console.error(`Cannot retrieve furniture items: error ${result.error}`);
+        }
+      }
+      setLoadingFurnitureItems(false);
+    });
+  };
 
   // Fetch all available furniture items from database
   useEffect(() => {
-    getFurnitureItems()
-      .then((result) => {
-        if (result.success) {
-          setFurnitureCategoriesToItems(
-            result.data.reduce(
-              (prevMap: Record<string, FurnitureItem[]>, curItem) => ({
-                ...prevMap,
-                [curItem.category]: [...(prevMap[curItem.category] ?? []), curItem],
-              }),
-              {},
-            ),
-          );
-          setErrorMessage(null);
-        } else {
-          setErrorMessage("Furniture items not found.");
-        }
-      })
-      .catch((error) => {
-        setErrorMessage(`An error occurred: ${error.message}`);
-      });
+    fetchFurnitureItems();
   }, []);
 
   // Handle furniture item count whenever a change is made
@@ -253,23 +144,29 @@ const VeteranServiceRequest: React.FC = () => {
     }));
   };
 
-  const { isMobile } = useScreenSizes();
+  const { isMobile, isTablet } = useScreenSizes();
 
   // Execute when submit button is pressed
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<ICreateVSRFormInput> = async (data) => {
+    if (loadingVsrSubmission) {
+      return;
+    }
+    setLoadingVsrSubmission(true);
+
     // Construct the request object
+
     const createVSRRequest: CreateVSRRequest = {
       name: data.name,
       gender: data.gender,
       age: data.age,
-      maritalStatus: data.marital_status,
-      spouseName: data.spouse,
+      maritalStatus: data.maritalStatus,
+      spouseName: data.spouseName,
       agesOfBoys:
-        data.ages_of_boys
+        data.agesOfBoys
           ?.slice(0, data.num_boys)
           .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
       agesOfGirls:
-        data.ages_of_girls
+        data.agesOfGirls
           ?.slice(0, data.num_girls)
           .map((age) => (typeof age === "number" ? age : parseInt(age))) ?? [],
       ethnicity: selectedEthnicities.concat(otherEthnicity === "" ? [] : [otherEthnicity]),
@@ -283,7 +180,7 @@ const VeteranServiceRequest: React.FC = () => {
       zipCode: data.zipCode,
       phoneNumber: data.phoneNumber,
       email: data.email,
-      branch: selectedBranch,
+      branch: data.branch,
       conflicts: selectedConflicts.concat(otherConflict === "" ? [] : [otherConflict]),
       dischargeStatus: data.dischargeStatus,
       serviceConnected: data.serviceConnected,
@@ -299,84 +196,29 @@ const VeteranServiceRequest: React.FC = () => {
       additionalItems,
     };
 
-    try {
-      const response = await createVSR(createVSRRequest);
+    // Send request to backend
+    const response = await createVSR(createVSRRequest);
 
-      if (!response.success) {
-        // TODO: better way of displaying error
-        throw new Error(`HTTP error! status: ${response.error}`);
+    // Handle success/error
+    if (response.success) {
+      setConfirmSubmissionModalOpen(true);
+    } else {
+      if (response.error === "Failed to fetch") {
+        setVsrFormError(VSRFormError.CANNOT_SUBMIT_NO_INTERNET);
+      } else {
+        setVsrFormError(VSRFormError.CANNOT_SUBMIT_INTERNAL);
+        console.error(`Cannot submit VSR, error ${response.error}`);
       }
-
-      // TODO: better way of displaying successful submission (popup/modal)
-      alert("VSR submitted successfully!");
-    } catch (error) {
-      console.error("There was a problem with the fetch operation:", error);
     }
+    setLoadingVsrSubmission(false);
   };
 
   const incrementPageNumber = () => {
-    setPageNumber(pageNumber + 1);
+    goToPage(pageNumber + 1);
   };
 
   const decrementPageNumber = () => {
-    setPageNumber(pageNumber - 1);
-  };
-
-  const renderChildInput = (gender: "boy" | "girl") => {
-    const numChildrenThisGender = gender === "boy" ? numBoys : numGirls;
-
-    return (
-      <>
-        <div className={styles.longText}>
-          <TextField
-            label={`Number of ${gender === "boy" ? "Male" : "Female"} Children`}
-            variant="outlined"
-            placeholder="e.g. 2"
-            type="number"
-            {...register(`num_${gender}s`, {
-              required: `Number of ${gender}s is required`,
-              pattern: {
-                // Only allow up to 2 digits
-                value: /^[0-9][0-9]?$/,
-                message: "This field must be a number less than 100",
-              },
-            })}
-            required
-            error={!!errors[`num_${gender}s`]}
-            helperText={errors[`num_${gender}s`]?.message}
-          />
-        </div>
-
-        {numChildrenThisGender > 0 ? (
-          <div className={styles.numChildren}>
-            {/* Cap it at 99 children per gender to avoid freezing web browser */}
-            {Array.from({ length: Math.min(numChildrenThisGender, 99) }, (_, index) => (
-              <div key={index} className={styles.childInputWrapper}>
-                <TextField
-                  label={`Age of ${gender.substring(0, 1).toUpperCase()}${gender.substring(1)}`}
-                  type="number"
-                  variant="outlined"
-                  {...register(`ages_of_${gender}s.${index}`, {
-                    required: "This field is required",
-                    pattern: {
-                      value: /^[0-9]+$/,
-                      message: "This field must be a number",
-                    },
-                    max: {
-                      value: 17,
-                      message: "Only enter children under 18",
-                    },
-                  })}
-                  error={!!errors[`ages_of_${gender}s`]?.[index]}
-                  helperText={errors[`ages_of_${gender}s`]?.[index]?.message}
-                  required
-                />
-              </div>
-            ))}
-          </div>
-        ) : null}
-      </>
-    );
+    goToPage(pageNumber - 1);
   };
 
   const renderPageNumber = () => {
@@ -387,22 +229,31 @@ const VeteranServiceRequest: React.FC = () => {
     return pageNumber === 1 ? (
       <div className={styles.bottomButton} />
     ) : (
-      <button className={`${styles.bottomButton} ${styles.back}`} onClick={decrementPageNumber}>
-        Back
-      </button>
+      <Button
+        variant="primary"
+        outlined
+        text="Back"
+        className={styles.bottomButton}
+        onClick={decrementPageNumber}
+        /**
+         * We need to set type="button" because the default, type="submit", would cause
+         * this button to be triggered when the user presses enter on any input field.
+         */
+        type="button"
+      />
     );
   };
 
   const renderNextButton = () => {
     return (
-      <button
-        className={`${styles.bottomButton} ${styles.submit} ${
-          isValid ? styles.enabled : styles.disabled
-        }`}
+      <Button
+        variant="primary"
+        outlined={false}
+        loading={loadingVsrSubmission}
+        text={pageNumber === 3 ? "Submit" : "Next"}
+        className={`${styles.bottomButton} ${isValid ? "" : styles.disabled}`}
         type="submit"
-      >
-        {pageNumber === 3 ? "Submit" : "Next"}
-      </button>
+      />
     );
   };
 
@@ -428,11 +279,117 @@ const VeteranServiceRequest: React.FC = () => {
     }
   };
 
+  const renderErrorModal = () => {
+    switch (vsrFormError) {
+      case VSRFormError.CANNOT_RETRIEVE_FURNITURE_NO_INTERNET:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/no_internet.svg"
+                alt="No Internet"
+                width={isMobile ? 100 : isTablet ? 138 : 114}
+                height={isMobile ? 93 : isTablet ? 129 : 106}
+              />
+            }
+            title="No Internet Connection"
+            content="Unable to retrieve the available furniture items due to no internet connection. Please check your connection and try again."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+              fetchFurnitureItems();
+            }}
+          />
+        );
+      case VSRFormError.CANNOT_RETRIEVE_FURNITURE_INTERNAL:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/500_internal_error.svg"
+                alt="Internal Error"
+                width={isMobile ? 100 : 155}
+                height={isMobile ? 69 : 106}
+              />
+            }
+            title="Internal Error"
+            content="Something went wrong with retrieving the available furniture items. Our team is working to fix it. Please try again later."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+              fetchFurnitureItems();
+            }}
+          />
+        );
+      case VSRFormError.CANNOT_SUBMIT_NO_INTERNET:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/no_internet.svg"
+                alt="No Internet"
+                width={isMobile ? 100 : isTablet ? 138 : 114}
+                height={isMobile ? 93 : isTablet ? 129 : 106}
+              />
+            }
+            title="No Internet Connection"
+            content="Unable to submit the VSR form due to no internet connection. Please check your connection and try again."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+              onSubmit(watch());
+            }}
+          />
+        );
+      case VSRFormError.CANNOT_SUBMIT_INTERNAL:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/500_internal_error.svg"
+                alt="Internal Error"
+                width={isMobile ? 100 : 155}
+                height={isMobile ? 69 : 106}
+              />
+            }
+            title="Internal Error"
+            content="Something went wrong with submitting the VSR form. Our team is working to fix it. Please try again later."
+            buttonText="OK"
+            onButtonClicked={() => {
+              setVsrFormError(VSRFormError.NONE);
+            }}
+          />
+        );
+      case VSRFormError.NONE:
+      default:
+        return null;
+    }
+  };
+
+  /**
+   * Render different fields based on current page number
+   */
   if (pageNumber == 1) {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar />
+          <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>
@@ -446,8 +403,11 @@ const VeteranServiceRequest: React.FC = () => {
               spam folder if you don&apos;t receive a response within 48 business hours.
               <br></br>
               <br></br>
-              If you have any questions or concerns, send us an email at
-              veteran@patriotsandpaws.org.
+              If you have any questions or concerns, send us an email at{" "}
+              <a className={styles.emailLink} href="mailto:veteran@patriotsandpaws.org">
+                veteran@patriotsandpaws.org
+              </a>
+              .
             </p>
 
             <div className={styles.fieldsMarked}>
@@ -467,7 +427,10 @@ const VeteranServiceRequest: React.FC = () => {
                         label="Name"
                         variant="outlined"
                         placeholder="e.g. Justin Timberlake"
-                        {...register("name", { required: "Name is required" })}
+                        {...register(
+                          "name",
+                          vsrInputFieldValidators.name as RegisterOptions<IVSRFormInput, "name">,
+                        )}
                         required
                         error={!!errors.name}
                         helperText={errors.name?.message}
@@ -483,7 +446,9 @@ const VeteranServiceRequest: React.FC = () => {
                         defaultValue=""
                         name="gender"
                         control={control}
-                        rules={{ required: "Gender is required" }}
+                        rules={
+                          vsrInputFieldValidators.gender as RegisterOptions<IVSRFormInput, "gender">
+                        }
                         render={({ field }) => (
                           <Dropdown
                             label="Gender"
@@ -504,14 +469,10 @@ const VeteranServiceRequest: React.FC = () => {
                         type="number"
                         variant="outlined"
                         placeholder="Enter your age"
-                        {...register("age", {
-                          required: "Age is required",
-                          pattern: {
-                            // Only allow up to 2 digits
-                            value: /^[0-9]+$/,
-                            message: "This field must be a number",
-                          },
-                        })}
+                        {...register(
+                          "age",
+                          vsrInputFieldValidators.age as RegisterOptions<IVSRFormInput, "age">,
+                        )}
                         required
                         error={!!errors.age}
                         helperText={errors.age?.message}
@@ -522,9 +483,14 @@ const VeteranServiceRequest: React.FC = () => {
 
                 <div className={styles.subSec}>
                   <Controller
-                    name="marital_status"
+                    name="maritalStatus"
                     control={control}
-                    rules={{ required: "Marital status is required" }}
+                    rules={
+                      vsrInputFieldValidators.maritalStatus as RegisterOptions<
+                        IVSRFormInput,
+                        "maritalStatus"
+                      >
+                    }
                     render={({ field }) => (
                       <MultipleChoice
                         label="Marital Status"
@@ -532,24 +498,28 @@ const VeteranServiceRequest: React.FC = () => {
                         value={field.value}
                         onChange={(newValue) => field.onChange(newValue)}
                         required
-                        error={!!errors.marital_status}
-                        helperText={errors.marital_status?.message}
+                        error={!!errors.maritalStatus}
+                        helperText={errors.maritalStatus?.message}
                       />
                     )}
                   />
-                  {watch().marital_status === "Married" ? (
+                  {watch().maritalStatus === "Married" ? (
                     <div className={styles.formRow}>
                       <div className={styles.longText}>
                         <TextField
                           label="Spouse's Name"
                           variant="outlined"
                           placeholder="e.g. Jane Timberlake"
-                          {...register("spouse", {
-                            required: "Spouse's Name is required",
-                          })}
+                          {...register(
+                            "spouseName",
+                            vsrInputFieldValidators.spouseName as RegisterOptions<
+                              IVSRFormInput,
+                              "spouseName"
+                            >,
+                          )}
                           required
-                          error={!!errors.spouse}
-                          helperText={errors.spouse?.message}
+                          error={!!errors.spouseName}
+                          helperText={errors.spouseName?.message}
                         />
                       </div>
                       {/* Add an empty div here with flex: 1 to take up the right half of the row */}
@@ -560,15 +530,21 @@ const VeteranServiceRequest: React.FC = () => {
                   <p className={styles.sectionHeader}>Children Under the Age of 18:</p>
 
                   <div className={`${styles.formRow} ${styles.desktopRowTabletColumn}`}>
-                    <div className={styles.formRow}>{renderChildInput("boy")}</div>
-                    <div className={styles.formRow}>{renderChildInput("girl")}</div>
+                    <div className={styles.formRow}>
+                      <ChildrenInput gender="boy" formProps={formProps} />
+                    </div>
+                    <div className={styles.formRow}>
+                      <ChildrenInput gender="girl" formProps={formProps} />
+                    </div>
                   </div>
                 </div>
 
                 <Controller
                   name="ethnicity"
                   control={control}
-                  rules={{ required: "Ethnicity is required" }}
+                  rules={
+                    vsrInputFieldValidators.ethnicity as RegisterOptions<IVSRFormInput, "ethnicity">
+                  }
                   render={({ field }) => (
                     <>
                       <MultipleChoice
@@ -612,7 +588,12 @@ const VeteranServiceRequest: React.FC = () => {
                 <Controller
                   name="employment_status"
                   control={control}
-                  rules={{ required: "Employment status is required" }}
+                  rules={
+                    vsrInputFieldValidators.employment_status as RegisterOptions<
+                      IVSRFormInput,
+                      "employment_status"
+                    >
+                  }
                   render={({ field }) => (
                     <MultipleChoice
                       label="Employment Status"
@@ -629,7 +610,12 @@ const VeteranServiceRequest: React.FC = () => {
                 <Controller
                   name="income_level"
                   control={control}
-                  rules={{ required: "Income level is required" }}
+                  rules={
+                    vsrInputFieldValidators.income_level as RegisterOptions<
+                      IVSRFormInput,
+                      "income_level"
+                    >
+                  }
                   render={({ field }) => (
                     <MultipleChoice
                       label="Income Level"
@@ -646,7 +632,12 @@ const VeteranServiceRequest: React.FC = () => {
                 <Controller
                   name="size_of_home"
                   control={control}
-                  rules={{ required: "Size of home is required" }}
+                  rules={
+                    vsrInputFieldValidators.size_of_home as RegisterOptions<
+                      IVSRFormInput,
+                      "size_of_home"
+                    >
+                  }
                   render={({ field }) => (
                     <MultipleChoice
                       label="Size of Home"
@@ -664,13 +655,14 @@ const VeteranServiceRequest: React.FC = () => {
             {renderBottomRow()}
           </div>
         </form>
+        {renderErrorModal()}
       </div>
     );
   } else if (pageNumber === 2) {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar />
+          <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <div className={styles.formContainer}>
               <div className={styles.form}>
@@ -684,7 +676,13 @@ const VeteranServiceRequest: React.FC = () => {
                           label="Street Address"
                           variant="outlined"
                           placeholder="e.g. 1234 Baker Street"
-                          {...register("streetAddress", { required: "Street address is required" })}
+                          {...register(
+                            "streetAddress",
+                            vsrInputFieldValidators.streetAddress as RegisterOptions<
+                              IVSRFormInput,
+                              "streetAddress"
+                            >,
+                          )}
                           required
                           error={!!errors.streetAddress}
                           helperText={errors.streetAddress?.message}
@@ -696,7 +694,10 @@ const VeteranServiceRequest: React.FC = () => {
                           label="City"
                           variant="outlined"
                           placeholder="e.g. San Diego"
-                          {...register("city", { required: "City is required" })}
+                          {...register(
+                            "city",
+                            vsrInputFieldValidators.city as RegisterOptions<IVSRFormInput, "city">,
+                          )}
                           required
                           error={!!errors.city}
                           helperText={errors.city?.message}
@@ -709,7 +710,9 @@ const VeteranServiceRequest: React.FC = () => {
                           defaultValue=""
                           name="state"
                           control={control}
-                          rules={{ required: "State is required" }}
+                          rules={
+                            vsrInputFieldValidators.state as RegisterOptions<IVSRFormInput, "state">
+                          }
                           render={({ field }) => (
                             <Dropdown
                               label="State"
@@ -731,14 +734,13 @@ const VeteranServiceRequest: React.FC = () => {
                           type="number"
                           variant="outlined"
                           placeholder="e.g. 92092"
-                          {...register("zipCode", {
-                            required: "Zip Code is required",
-                            pattern: {
-                              // Must be 5 digits
-                              value: /^\d{5}$/,
-                              message: "This field must be a 5 digit number",
-                            },
-                          })}
+                          {...register(
+                            "zipCode",
+                            vsrInputFieldValidators.zipCode as RegisterOptions<
+                              IVSRFormInput,
+                              "zipCode"
+                            >,
+                          )}
                           required
                           error={!!errors.zipCode}
                           helperText={errors.zipCode?.message}
@@ -754,13 +756,13 @@ const VeteranServiceRequest: React.FC = () => {
                         type="tel"
                         variant="outlined"
                         placeholder="e.g. 6197123276"
-                        {...register("phoneNumber", {
-                          required: "Phone Number is required",
-                          pattern: {
-                            value: /^\d{10}$/,
-                            message: "This field must be a 10 digit number",
-                          },
-                        })}
+                        {...register(
+                          "phoneNumber",
+                          vsrInputFieldValidators.phoneNumber as RegisterOptions<
+                            IVSRFormInput,
+                            "phoneNumber"
+                          >,
+                        )}
                         required
                         error={!!errors.phoneNumber}
                         helperText={errors.phoneNumber?.message}
@@ -773,12 +775,36 @@ const VeteranServiceRequest: React.FC = () => {
                         type="email"
                         variant="outlined"
                         placeholder="e.g. justintimberlake@gmail.com"
-                        {...register("email", {
-                          required: "Email Address is required",
-                        })}
+                        {...register(
+                          "email",
+                          vsrInputFieldValidators.email as RegisterOptions<IVSRFormInput, "email">,
+                        )}
                         required
                         error={!!errors.email}
                         helperText={errors.email?.message}
+                      />
+                    </div>
+                  </div>
+                  <div className={styles.formRow}>
+                    {isMobile ? null : <div className={styles.longText} />}
+                    <div className={styles.longText}>
+                      <TextField
+                        label="Confirm Email Address"
+                        type="email"
+                        variant="outlined"
+                        placeholder="e.g. justintimberlake@gmail.com"
+                        {...register("confirmEmail", {
+                          required: "Please confirm your email address",
+                          validate: {
+                            validate: (emailAddress) =>
+                              emailValidator.validate(emailAddress)
+                                ? emailAddress === watch().email || "Emails do not match"
+                                : "This field must be a valid email address",
+                          },
+                        })}
+                        required
+                        error={!!errors.confirmEmail}
+                        helperText={errors.confirmEmail?.message}
                       />
                     </div>
                   </div>
@@ -794,19 +820,15 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="branch"
                     control={control}
-                    rules={{ required: "Military Branch is required" }}
+                    rules={
+                      vsrInputFieldValidators.branch as RegisterOptions<IVSRFormInput, "branch">
+                    }
                     render={({ field }) => (
                       <MultipleChoice
                         label="Branch"
                         options={branchOptions}
-                        value={selectedBranch}
-                        onChange={(newValue) => {
-                          const valueToSet = ((newValue as string[]) ?? [])[0] ?? "";
-                          if (valueToSet !== "") {
-                            field.onChange(valueToSet);
-                          }
-                          setSelectedBranch(newValue as string[]);
-                        }}
+                        value={field.value}
+                        onChange={field.onChange}
                         required
                         error={!!errors.branch}
                         helperText={errors.branch?.message}
@@ -818,7 +840,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="conflicts"
                     control={control}
-                    rules={{ required: "Military Conflicts is required" }}
+                    rules={
+                      vsrInputFieldValidators.conflicts as RegisterOptions<
+                        IVSRFormInput,
+                        "conflicts"
+                      >
+                    }
                     render={({ field }) => (
                       <>
                         <MultipleChoice
@@ -862,7 +889,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="dischargeStatus"
                     control={control}
-                    rules={{ required: "Discharge status is required" }}
+                    rules={
+                      vsrInputFieldValidators.dischargeStatus as RegisterOptions<
+                        IVSRFormInput,
+                        "dischargeStatus"
+                      >
+                    }
                     render={({ field }) => (
                       <MultipleChoice
                         label="Discharge Status"
@@ -879,10 +911,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="serviceConnected"
                     control={control}
-                    rules={{
-                      validate: (value) =>
-                        [true, false].includes(value) || "Service connected is required",
-                    }}
+                    rules={
+                      vsrInputFieldValidators.serviceConnected as RegisterOptions<
+                        IVSRFormInput,
+                        "serviceConnected"
+                      >
+                    }
                     render={({ field }) => (
                       <BinaryChoice
                         label="Service Connected"
@@ -901,7 +935,13 @@ const VeteranServiceRequest: React.FC = () => {
                         label="Last Rank"
                         variant="outlined"
                         placeholder="Enter"
-                        {...register("lastRank", { required: "Last rank is required" })}
+                        {...register(
+                          "lastRank",
+                          vsrInputFieldValidators.lastRank as RegisterOptions<
+                            IVSRFormInput,
+                            "lastRank"
+                          >,
+                        )}
                         required
                         error={!!errors.lastRank}
                         helperText={errors.lastRank?.message}
@@ -913,13 +953,13 @@ const VeteranServiceRequest: React.FC = () => {
                         label="Military ID Number (Last 4)"
                         variant="outlined"
                         placeholder="Enter"
-                        {...register("militaryID", {
-                          required: "Last rank is required",
-                          pattern: {
-                            value: /^\d{4}$/,
-                            message: "This field must be a 4 digit number",
-                          },
-                        })}
+                        {...register(
+                          "militaryID",
+                          vsrInputFieldValidators.militaryID as RegisterOptions<
+                            IVSRFormInput,
+                            "militaryID"
+                          >,
+                        )}
                         required
                         error={!!errors.militaryID}
                         helperText={errors.militaryID?.message}
@@ -937,10 +977,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="petCompanion"
                     control={control}
-                    rules={{
-                      validate: (value) =>
-                        [true, false].includes(value) || "Companionship animal is required",
-                    }}
+                    rules={
+                      vsrInputFieldValidators.petCompanion as RegisterOptions<
+                        IVSRFormInput,
+                        "petCompanion"
+                      >
+                    }
                     render={({ field }) => (
                       <BinaryChoice
                         label="Are you interested in a companionship animal (pet)?"
@@ -956,7 +998,9 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="hearFrom"
                     control={control}
-                    rules={{ required: "Referral source is required" }}
+                    rules={
+                      vsrInputFieldValidators.hearFrom as RegisterOptions<IVSRFormInput, "hearFrom">
+                    }
                     render={({ field }) => (
                       <>
                         <MultipleChoice
@@ -1002,41 +1046,46 @@ const VeteranServiceRequest: React.FC = () => {
             {renderBottomRow()}
           </div>
         </form>
+        {renderErrorModal()}
       </div>
     );
   } else {
     return (
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <HeaderBar />
+          <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <div className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
                   <div className={styles.sectionTitle}>Furnishings</div>
                   <div>
-                    {Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
-                      <div className={styles.furnitureItemsSection} key={category}>
-                        <p className={styles.furnitureItemsSectionLabel}>{category}</p>
-                        <div className={styles.chipContainer}>
-                          {(items ?? []).map((furnitureItem) => (
-                            <FurnitureItemSelection
-                              key={furnitureItem._id}
-                              furnitureItem={furnitureItem}
-                              selection={
-                                selectedFurnitureItems[furnitureItem._id] ?? {
-                                  furnitureItemId: furnitureItem._id,
-                                  quantity: 0,
+                    {loadingFurnitureItems ? (
+                      <LoadingScreen />
+                    ) : (
+                      Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
+                        <div className={styles.furnitureItemsSection} key={category}>
+                          <p className={styles.furnitureItemsSectionLabel}>{category}</p>
+                          <div className={styles.chipContainer}>
+                            {(items ?? []).map((furnitureItem) => (
+                              <FurnitureItemSelection
+                                key={furnitureItem._id}
+                                furnitureItem={furnitureItem}
+                                selection={
+                                  selectedFurnitureItems[furnitureItem._id] ?? {
+                                    furnitureItemId: furnitureItem._id,
+                                    quantity: 0,
+                                  }
                                 }
-                              }
-                              onChangeSelection={(newSelection) =>
-                                handleSelectionChange(newSelection)
-                              }
-                            />
-                          ))}
+                                onChangeSelection={(newSelection) =>
+                                  handleSelectionChange(newSelection)
+                                }
+                              />
+                            ))}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      ))
+                    )}
                     <div className={styles.section}>
                       <TextField
                         label="Identify other necessary items"
@@ -1044,7 +1093,7 @@ const VeteranServiceRequest: React.FC = () => {
                         required={false}
                         variant={"outlined"}
                         onChange={(e) => setAdditionalItems(e.target.value)}
-                      ></TextField>
+                      />
                     </div>
                   </div>
                 </div>
@@ -1054,11 +1103,27 @@ const VeteranServiceRequest: React.FC = () => {
           </div>
         </form>
         <div className={styles.footer}></div>
-        {/* TODO: better error handling */}
-        {errorMessage}
+        <ConfirmVSRSubmissionModal
+          isOpen={confirmSubmissionModalOpen}
+          onClose={() => {
+            setConfirmSubmissionModalOpen(false);
+            goToPage(1);
+
+            // Reset all form fields after submission
+            reset();
+            setSelectedEthnicities([]);
+            setOtherEthnicity("");
+            setSelectedConflicts([]);
+            setOtherConflict("");
+            setSelectedHearFrom("");
+            setOtherHearFrom("");
+            setSelectedFurnitureItems({});
+            setAdditionalItems("");
+          }}
+        />
+        {renderErrorModal()}
       </div>
     );
   }
 };
-
 export default VeteranServiceRequest;

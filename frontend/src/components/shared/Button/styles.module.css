@@ -1,0 +1,23 @@
+.button {
+  border-radius: 4px;
+  padding: 8px 16px;
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  outline: none !important;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .button {
+    font-size: 14px;
+  }
+}

@@ -1,5 +1,9 @@
 import { body } from "express-validator";
 
+/**
+ * Validators for creating and updating VSRs
+ */
+
 const makeNameValidator = () =>
   body("name")
     .exists({ checkFalsy: true })
@@ -59,7 +63,7 @@ const makeEthnicityValidator = () =>
     .custom((ethnicities: string[]) =>
       ethnicities.every((ethnicity) => typeof ethnicity === "string"),
     )
-    .withMessage("Each ethnicity in Ethnicities must be a positive integer");
+    .withMessage("Each ethnicity in Ethnicities must be a string");
 
 const makeEmploymentStatusValidator = () =>
   body("employmentStatus")
@@ -188,6 +192,7 @@ const ALLOWED_STATUSES = [
   "Received",
   "Appointment Scheduled",
   "Approved",
+  "Complete",
   "Resubmit",
   "No-show / Incomplete",
   "Archived",
@@ -231,3 +236,17 @@ export const createVSR = [
 ];
 
 export const updateStatus = [updateStatusValidator()];
+
+export const updateVSR = [
+  makeNameValidator(),
+  makeGenderValidator(),
+  makeAgeValidator(),
+  makeMaritalStatusValidator(),
+  makeSpouseNameValidator(),
+  makeAgesOfBoysValidator(),
+  makeAgesOfGirlsValidator(),
+  makeEthnicityValidator(),
+  makeEmploymentStatusValidator(),
+  makeIncomeLevelValidator(),
+  makeSizeOfHomeValidator(),
+];

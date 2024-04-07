@@ -1,0 +1,32 @@
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+
+.button {
+  width: 100%;
+  padding: 12px 24px;
+  text-align: center;
+  font-family: "Lora";
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .button {
+    font-size: 18px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .buttonContainer {
+    gap: 16px;
+  }
+
+  .button {
+    font-size: 14px;
+  }
+}

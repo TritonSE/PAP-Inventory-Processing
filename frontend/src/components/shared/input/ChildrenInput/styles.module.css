@@ -1,0 +1,17 @@
+.textInputWrapper {
+  flex: 1;
+  width: 100%;
+}
+
+.numChildren {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+  flex: 1;
+  width: 100%;
+}
+
+.childInputWrapper {
+  width: 100%;
+}

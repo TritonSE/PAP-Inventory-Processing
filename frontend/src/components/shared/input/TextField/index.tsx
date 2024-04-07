@@ -1,7 +1,7 @@
 import styles from "@/components/shared/input/TextField/styles.module.css";
 import MUITextField, { TextFieldProps as MUITextFieldProps } from "@mui/material/TextField";
 import { ForwardedRef, forwardRef } from "react";
-import { FormField } from "../FormField";
+import { FormField } from "@/components/shared/input/FormField";
 
 export interface TextFieldProps extends MUITextFieldProps<"outlined"> {
   label: string;
@@ -10,6 +10,9 @@ export interface TextFieldProps extends MUITextFieldProps<"outlined"> {
   required: boolean;
 }
 
+/**
+ * A text input field component
+ */
 const TextField = forwardRef(
   (
     { label, error, required, helperText, ...props }: TextFieldProps,

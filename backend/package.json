@@ -4,6 +4,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "nodemon src/server.ts",
+    "build": "tsc && tsc-alias && cp -r ./public ./dist/public",
     "test": "jest",
     "format": "npm run check-git-hooks && prettier --write .",
     "lint-fix": "npm run check-git-hooks && (eslint --fix --cache --report-unused-disable-directives . || true) && prettier --write .",
@@ -26,7 +27,8 @@
     "mongoose": "^7.4.0",
     "nodemailer": "^6.9.8",
     "supertest": "^6.3.3",
-    "ts-jest": "^29.1.1"
+    "ts-jest": "^29.1.1",
+    "tsc-alias": "^1.8.8"
   },
   "devDependencies": {
     "@types/cors": "^2.8.13",

@@ -6,9 +6,9 @@ import "dotenv/config";
 import cors from "cors";
 import express, { NextFunction, Request, Response } from "express";
 import { isHttpError } from "http-errors";
-import vsrRoutes from "../src/routes/vsr";
-import furnitureItemRoutes from "../src/routes/furnitureItem";
-import { userRouter } from "src/routes/users";
+import vsrRoutes from "src/routes/vsr";
+import furnitureItemRoutes from "src/routes/furnitureItem";
+import userRoutes from "src/routes/user";
 import env from "src/util/validateEnv";
 
 const app = express();
@@ -28,7 +28,9 @@ app.use(
 );
 
 // Put routes here (e.g. app.use("/api/example", exampleRoutes); )
-app.use(userRouter);
+app.use("/api/user", userRoutes);
+app.use("/api/vsr", vsrRoutes);
+app.use("/api/furnitureItems", furnitureItemRoutes);
 
 /**
  * Error handler; all errors thrown by server are handled here.
@@ -53,8 +55,5 @@ app.use((error: unknown, req: Request, res: Response, next: NextFunction) => {
 
   res.status(statusCode).json({ error: errorMessage });
 });
-
-app.use("/api/vsr", vsrRoutes);
-app.use("/api/furnitureItems", furnitureItemRoutes);
 
 export default app;

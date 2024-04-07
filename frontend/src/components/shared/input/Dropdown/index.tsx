@@ -1,8 +1,8 @@
 import React from "react";
 import styles from "@/components/shared/input/Dropdown/styles.module.css";
 import { FormControl, Select, MenuItem, SelectChangeEvent } from "@mui/material";
-import { FormField } from "../FormField";
-import { useScreenSizes } from "@/util/useScreenSizes";
+import { FormField } from "@/components/shared/input/FormField";
+import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 export interface DropDownProps {
   label: string;
@@ -15,6 +15,10 @@ export interface DropDownProps {
   placeholder?: string;
 }
 
+/**
+ * An input component that displays a dropdown and enables the user to select one
+ * of the options from the dropdown.
+ */
 const Dropdown = ({
   label,
   options,
@@ -46,6 +50,9 @@ const Dropdown = ({
               minHeight: "unset !important",
               height: isMobile ? 16 : isTablet ? 19 : 22,
             },
+          }}
+          MenuProps={{
+            disableScrollLock: true,
           }}
         >
           <MenuItem value="">

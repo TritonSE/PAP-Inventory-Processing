@@ -1,0 +1,29 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+}
+
+.text {
+  color: var(--Secondary-1, #102d5f);
+  text-align: center;
+  font-family: "Lora";
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .text {
+    font-size: 28px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .text {
+    font-size: 20px;
+  }
+}
