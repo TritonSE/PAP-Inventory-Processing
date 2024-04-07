@@ -141,6 +141,7 @@ const ALLOWED_STATUSES = [
     "Received",
     "Appointment Scheduled",
     "Approved",
+    "Complete",
     "Resubmit",
     "No-show / Incomplete",
     "Archived",

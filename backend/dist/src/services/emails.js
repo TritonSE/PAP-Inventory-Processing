@@ -16,6 +16,9 @@ exports.sendVSRConfirmationEmailToVeteran = exports.sendVSRNotificationEmailToSt
 require("dotenv/config");
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const validateEnv_1 = __importDefault(require("../util/validateEnv"));
+const trimmedFrontendUrl = validateEnv_1.default.FRONTEND_ORIGIN.replace(
+// Trim trailing slash from frontend URL, if there is one
+/\/$/gi, "");
 /**
  * Sends a notification email to PAP staff when a VSR is submitted.
  * Throws an error if the email could not be sent.
@@ -26,9 +29,7 @@ const validateEnv_1 = __importDefault(require("../util/validateEnv"));
  */
 const sendVSRNotificationEmailToStaff = (name, email, id) => __awaiter(void 0, void 0, void 0, function* () {
     const EMAIL_SUBJECT = "New VSR Submitted";
-    const EMAIL_BODY = `A new VSR was submitted by ${name} from ${email}. You can view it at ${validateEnv_1.default.FRONTEND_ORIGIN.replace(
-    // Trim trailing slash from frontend URL, if there is one
-    /\/$/gi, "")}/staff/vsr/${id}`;
+    const EMAIL_BODY = `A new VSR was submitted by ${name} from ${email}. You can view it at ${trimmedFrontendUrl}/staff/vsr/${id}`;
     const transporter = nodemailer_1.default.createTransport({
         service: "gmail",
         auth: {
@@ -108,7 +109,7 @@ const sendVSRConfirmationEmailToVeteran = (name, email) => __awaiter(void 0, voi
   <p>Volunteer</p>\
   \
   <p><a href="mailto:veteran@patriotsandpaws.org"> veteran@patriotsandpaws.org</a></p>\
-  \
+  <img src="${trimmedFrontendUrl}/pap_logo.png" alt="Patriots & Paws Logo" width="446" height="217" />\
   <p>\
     Facebook\
     <a href="https://www.facebook.com/pages/Patriots-and-Paws/283613748323930"\

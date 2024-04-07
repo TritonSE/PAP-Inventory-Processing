@@ -19,7 +19,12 @@ const furnitureItem_1 = __importDefault(require("../models/furnitureItem"));
  */
 const getFurnitureItems = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const furnitureItems = yield furnitureItem_1.default.find();
+        const furnitureItems = yield furnitureItem_1.default.find().sort({
+            // First, sort the items by whether they allow multiple (true before false)
+            allowMultiple: -1,
+            // Second, sort by category index (ascending)
+            categoryIndex: 1,
+        });
         res.status(200).json(furnitureItems);
     }
     catch (error) {
