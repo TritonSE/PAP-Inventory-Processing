@@ -1,6 +1,7 @@
 .page {
   background-color: var(--color-background);
   padding: 0 120px;
+  min-height: 100vh;
 }
 
 .toDashboardRow {
