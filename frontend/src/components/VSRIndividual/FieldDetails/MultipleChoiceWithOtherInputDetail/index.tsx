@@ -1,16 +1,17 @@
 import { Controller, UseFormReturn } from "react-hook-form";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import TextField from "@/components/shared/input/TextField";
+import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 
 interface MultipleChoiceWithOtherInputDetailProps {
   title: string;
-  name: keyof IFormInput;
-  otherName: keyof IFormInput;
+  name: keyof IEditVSRFormInput;
+  otherName: keyof IEditVSRFormInput;
   options: string[];
   allowMultiple: boolean;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 
 /**
@@ -32,6 +33,7 @@ export const MultipleChoiceWithOtherInputDetail = ({
       <Controller
         name={name}
         control={formProps.control}
+        rules={vsrInputFieldValidators[name]}
         render={({ field }) => (
           <MultipleChoice
             label=""

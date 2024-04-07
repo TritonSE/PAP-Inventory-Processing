@@ -5,7 +5,7 @@ import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividual
 import { FurnitureItem } from "@/api/FurnitureItems";
 import { useEffect, useMemo } from "react";
 import { Controller, UseFormReturn } from "react-hook-form";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { TextInputDetail } from "@/components/VSRIndividual/FieldDetails/TextInputDetail";
 import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelection";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
@@ -14,7 +14,7 @@ export interface RequestedFurnishingsProps {
   vsr: VSR;
   furnitureItems: FurnitureItem[];
   isEditing: boolean;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 
 /**

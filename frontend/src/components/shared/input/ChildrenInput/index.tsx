@@ -1,12 +1,12 @@
 import styles from "@/components/shared/input/ChildrenInput/styles.module.css";
 import { UseFormReturn } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
-import { IFormInput } from "@/app/vsr/page";
+import { ICreateVSRFormInput, IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 interface ChildrenInputProps {
   gender: "boy" | "girl";
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<ICreateVSRFormInput> | UseFormReturn<IEditVSRFormInput>;
 }
 
 /**
@@ -28,7 +28,7 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
           variant="outlined"
           placeholder="e.g. 2"
           type="number"
-          {...formProps.register(`num_${gender}s`, {
+          {...(formProps as UseFormReturn<ICreateVSRFormInput>).register(`num_${gender}s`, {
             required: `Number of ${gender}s is required`,
             pattern: {
               // Only allow up to 2 digits
@@ -51,17 +51,20 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
                 label={`Age of ${gender.substring(0, 1).toUpperCase()}${gender.substring(1)}`}
                 type="number"
                 variant="outlined"
-                {...formProps.register(`${fieldInputName}.${index}`, {
-                  required: "This field is required",
-                  pattern: {
-                    value: /^[0-9]+$/,
-                    message: "This field must be a positive number",
+                {...(formProps as UseFormReturn<ICreateVSRFormInput>).register(
+                  `${fieldInputName}.${index}`,
+                  {
+                    required: "This field is required",
+                    pattern: {
+                      value: /^[0-9]+$/,
+                      message: "This field must be a positive number",
+                    },
+                    max: {
+                      value: 17,
+                      message: "Only enter children under 18",
+                    },
                   },
-                  max: {
-                    value: 17,
-                    message: "Only enter children under 18",
-                  },
-                })}
+                )}
                 error={!!formProps.formState.errors[fieldInputName]?.[index]}
                 helperText={formProps.formState.errors[fieldInputName]?.[index]?.message}
                 required

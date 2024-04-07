@@ -4,7 +4,7 @@ import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { UseFormReturn } from "react-hook-form";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { branchOptions, conflictsOptions, dischargeStatusOptions } from "@/constants/fieldOptions";
 import { MultipleChoiceInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceInputDetail";
 import { MultipleChoiceWithOtherInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceWithOtherInputDetail";
@@ -14,7 +14,7 @@ import { TextInputDetail } from "@/components/VSRIndividual/FieldDetails/TextInp
 export interface MilitaryBackgroundProps {
   vsr: VSR;
   isEditing: boolean;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 
 /**

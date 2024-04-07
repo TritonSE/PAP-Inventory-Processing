@@ -22,7 +22,7 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 
@@ -50,8 +50,8 @@ export const VSRIndividualPage = () => {
 
   const [isEditing, setIsEditing] = useState(false);
 
-  const formProps = useForm<IFormInput>();
-  const { watch } = formProps;
+  const formProps = useForm<IEditVSRFormInput>();
+  const { handleSubmit } = formProps;
 
   const [updateStatusSuccessNotificationOpen, setUpdateStatusSuccessNotificationOpen] =
     useState(false);
@@ -72,7 +72,7 @@ export const VSRIndividualPage = () => {
   /**
    * Callback triggered when form edits are submitted
    */
-  const onSubmitEdits: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmitEdits: SubmitHandler<IEditVSRFormInput> = async (data) => {
     if (loadingEdit) {
       return;
     }
@@ -139,7 +139,6 @@ export const VSRIndividualPage = () => {
       console.error(`Cannot edit VSR, error ${response.error}`);
       setEditErrorNotificationOpen(true);
     }
-    setSaveEditsConfirmationModalOpen(false);
     setLoadingEdit(false);
   };
 
@@ -639,7 +638,11 @@ export const VSRIndividualPage = () => {
               outlined={false}
               text="Save Changes"
               className={styles.modalButton}
-              onClick={() => onSubmitEdits(watch())}
+              onClick={(e) => {
+                // Close the confirmation modal to enable user to see any errors on the form
+                setSaveEditsConfirmationModalOpen(false);
+                handleSubmit(onSubmitEdits)(e);
+              }}
               style={{ width: "100%" }}
             />
           </div>

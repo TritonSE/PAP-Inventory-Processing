@@ -1,12 +1,13 @@
 import { Controller, UseFormReturn } from "react-hook-form";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import BinaryChoice from "@/components/shared/input/BinaryChoice";
+import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 
 interface BinaryChoiceInputDetailProps {
   title: string;
-  name: keyof IFormInput;
-  formProps: UseFormReturn<IFormInput>;
+  name: keyof IEditVSRFormInput;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 
 /**
@@ -23,6 +24,7 @@ export const BinaryChoiceInputDetail = ({
       <Controller
         name={name}
         control={formProps.control}
+        rules={vsrInputFieldValidators[name]}
         render={({ field }) => (
           <BinaryChoice
             label=""

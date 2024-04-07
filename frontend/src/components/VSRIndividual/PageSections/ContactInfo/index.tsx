@@ -5,14 +5,14 @@ import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { TextInputDetail } from "@/components/VSRIndividual/FieldDetails/TextInputDetail";
 import { UseFormReturn } from "react-hook-form";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { SelectInputDetail } from "@/components/VSRIndividual/FieldDetails/SelectInputDetail";
 import { genderOptions, stateOptions } from "@/constants/fieldOptions";
 
 export interface ContactInfoProps {
   vsr: VSR;
   isEditing: boolean;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 /**
  * The "Contact Information" section of the VSR individual page.

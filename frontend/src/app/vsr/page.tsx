@@ -2,7 +2,7 @@
 import emailValidator from "email-validator";
 import React, { useEffect, useState } from "react";
 import styles from "src/app/vsr/page.module.css";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { useForm, Controller, SubmitHandler, RegisterOptions } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
 import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import Dropdown from "@/components/shared/input/Dropdown";
@@ -32,6 +32,8 @@ import {
 } from "@/constants/fieldOptions";
 import { ChildrenInput } from "@/components/shared/input/ChildrenInput";
 import { Button } from "@/components/shared/Button";
+import { ICreateVSRFormInput, IVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
+import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -41,44 +43,6 @@ enum VSRFormError {
   NONE,
 }
 
-export interface IFormInput {
-  name: string;
-  maritalStatus: string;
-  gender: string;
-  spouseName: string;
-  age: number;
-  ethnicity: string[];
-  other_ethnicity: string;
-  employment_status: string;
-  income_level: string;
-  size_of_home: string;
-  num_boys: number;
-  num_girls: number;
-  agesOfBoys: number[];
-  agesOfGirls: number[];
-
-  streetAddress: string;
-  city: string;
-  state: string;
-  zipCode: number;
-  phoneNumber: string;
-  email: string;
-  confirmEmail: string;
-  branch: string[];
-  conflicts: string[];
-  other_conflicts: string;
-  dischargeStatus: string;
-  serviceConnected: boolean;
-  lastRank: string;
-  militaryID: number;
-  petCompanion: boolean;
-  hearFrom: string;
-  other_hearFrom: string;
-
-  selectedFurnitureItems: Record<string, FurnitureInput>;
-  additionalItems: string;
-}
-
 /**
  * Root component for the page with the VSR form for veterans to fill out.
  */
@@ -86,7 +50,7 @@ const VeteranServiceRequest: React.FC = () => {
   /**
    * Form utilities
    */
-  const formProps = useForm<IFormInput>();
+  const formProps = useForm<ICreateVSRFormInput>();
   const {
     register,
     handleSubmit,
@@ -183,7 +147,7 @@ const VeteranServiceRequest: React.FC = () => {
   const { isMobile, isTablet } = useScreenSizes();
 
   // Execute when submit button is pressed
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<ICreateVSRFormInput> = async (data) => {
     if (loadingVsrSubmission) {
       return;
     }
@@ -463,7 +427,10 @@ const VeteranServiceRequest: React.FC = () => {
                         label="Name"
                         variant="outlined"
                         placeholder="e.g. Justin Timberlake"
-                        {...register("name", { required: "Name is required" })}
+                        {...register(
+                          "name",
+                          vsrInputFieldValidators.name as RegisterOptions<IVSRFormInput, "name">,
+                        )}
                         required
                         error={!!errors.name}
                         helperText={errors.name?.message}
@@ -479,7 +446,9 @@ const VeteranServiceRequest: React.FC = () => {
                         defaultValue=""
                         name="gender"
                         control={control}
-                        rules={{ required: "Gender is required" }}
+                        rules={
+                          vsrInputFieldValidators.gender as RegisterOptions<IVSRFormInput, "gender">
+                        }
                         render={({ field }) => (
                           <Dropdown
                             label="Gender"
@@ -500,14 +469,10 @@ const VeteranServiceRequest: React.FC = () => {
                         type="number"
                         variant="outlined"
                         placeholder="Enter your age"
-                        {...register("age", {
-                          required: "Age is required",
-                          pattern: {
-                            // Only allow up to 2 digits
-                            value: /^[0-9]+$/,
-                            message: "This field must be a positive number",
-                          },
-                        })}
+                        {...register(
+                          "age",
+                          vsrInputFieldValidators.age as RegisterOptions<IVSRFormInput, "age">,
+                        )}
                         required
                         error={!!errors.age}
                         helperText={errors.age?.message}
@@ -520,7 +485,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="maritalStatus"
                     control={control}
-                    rules={{ required: "Marital status is required" }}
+                    rules={
+                      vsrInputFieldValidators.maritalStatus as RegisterOptions<
+                        IVSRFormInput,
+                        "maritalStatus"
+                      >
+                    }
                     render={({ field }) => (
                       <MultipleChoice
                         label="Marital Status"
@@ -540,9 +510,13 @@ const VeteranServiceRequest: React.FC = () => {
                           label="Spouse's Name"
                           variant="outlined"
                           placeholder="e.g. Jane Timberlake"
-                          {...register("spouseName", {
-                            required: "Spouse's Name is required",
-                          })}
+                          {...register(
+                            "spouseName",
+                            vsrInputFieldValidators.spouseName as RegisterOptions<
+                              IVSRFormInput,
+                              "spouseName"
+                            >,
+                          )}
                           required
                           error={!!errors.spouseName}
                           helperText={errors.spouseName?.message}
@@ -568,7 +542,9 @@ const VeteranServiceRequest: React.FC = () => {
                 <Controller
                   name="ethnicity"
                   control={control}
-                  rules={{ required: "Ethnicity is required" }}
+                  rules={
+                    vsrInputFieldValidators.ethnicity as RegisterOptions<IVSRFormInput, "ethnicity">
+                  }
                   render={({ field }) => (
                     <>
                       <MultipleChoice
@@ -612,7 +588,12 @@ const VeteranServiceRequest: React.FC = () => {
                 <Controller
                   name="employment_status"
                   control={control}
-                  rules={{ required: "Employment status is required" }}
+                  rules={
+                    vsrInputFieldValidators.employment_status as RegisterOptions<
+                      IVSRFormInput,
+                      "employment_status"
+                    >
+                  }
                   render={({ field }) => (
                     <MultipleChoice
                       label="Employment Status"
@@ -629,7 +610,12 @@ const VeteranServiceRequest: React.FC = () => {
                 <Controller
                   name="income_level"
                   control={control}
-                  rules={{ required: "Income level is required" }}
+                  rules={
+                    vsrInputFieldValidators.income_level as RegisterOptions<
+                      IVSRFormInput,
+                      "income_level"
+                    >
+                  }
                   render={({ field }) => (
                     <MultipleChoice
                       label="Income Level"
@@ -646,7 +632,12 @@ const VeteranServiceRequest: React.FC = () => {
                 <Controller
                   name="size_of_home"
                   control={control}
-                  rules={{ required: "Size of home is required" }}
+                  rules={
+                    vsrInputFieldValidators.size_of_home as RegisterOptions<
+                      IVSRFormInput,
+                      "size_of_home"
+                    >
+                  }
                   render={({ field }) => (
                     <MultipleChoice
                       label="Size of Home"
@@ -685,7 +676,13 @@ const VeteranServiceRequest: React.FC = () => {
                           label="Street Address"
                           variant="outlined"
                           placeholder="e.g. 1234 Baker Street"
-                          {...register("streetAddress", { required: "Street address is required" })}
+                          {...register(
+                            "streetAddress",
+                            vsrInputFieldValidators.streetAddress as RegisterOptions<
+                              IVSRFormInput,
+                              "streetAddress"
+                            >,
+                          )}
                           required
                           error={!!errors.streetAddress}
                           helperText={errors.streetAddress?.message}
@@ -697,7 +694,10 @@ const VeteranServiceRequest: React.FC = () => {
                           label="City"
                           variant="outlined"
                           placeholder="e.g. San Diego"
-                          {...register("city", { required: "City is required" })}
+                          {...register(
+                            "city",
+                            vsrInputFieldValidators.city as RegisterOptions<IVSRFormInput, "city">,
+                          )}
                           required
                           error={!!errors.city}
                           helperText={errors.city?.message}
@@ -710,7 +710,9 @@ const VeteranServiceRequest: React.FC = () => {
                           defaultValue=""
                           name="state"
                           control={control}
-                          rules={{ required: "State is required" }}
+                          rules={
+                            vsrInputFieldValidators.state as RegisterOptions<IVSRFormInput, "state">
+                          }
                           render={({ field }) => (
                             <Dropdown
                               label="State"
@@ -732,14 +734,13 @@ const VeteranServiceRequest: React.FC = () => {
                           type="number"
                           variant="outlined"
                           placeholder="e.g. 92092"
-                          {...register("zipCode", {
-                            required: "Zip Code is required",
-                            pattern: {
-                              // Must be 5 digits
-                              value: /^\d{5}$/,
-                              message: "This field must be a 5 digit number",
-                            },
-                          })}
+                          {...register(
+                            "zipCode",
+                            vsrInputFieldValidators.zipCode as RegisterOptions<
+                              IVSRFormInput,
+                              "zipCode"
+                            >,
+                          )}
                           required
                           error={!!errors.zipCode}
                           helperText={errors.zipCode?.message}
@@ -755,13 +756,13 @@ const VeteranServiceRequest: React.FC = () => {
                         type="tel"
                         variant="outlined"
                         placeholder="e.g. 6197123276"
-                        {...register("phoneNumber", {
-                          required: "Phone Number is required",
-                          pattern: {
-                            value: /^\d{10}$/,
-                            message: "This field must be a 10 digit number",
-                          },
-                        })}
+                        {...register(
+                          "phoneNumber",
+                          vsrInputFieldValidators.phoneNumber as RegisterOptions<
+                            IVSRFormInput,
+                            "phoneNumber"
+                          >,
+                        )}
                         required
                         error={!!errors.phoneNumber}
                         helperText={errors.phoneNumber?.message}
@@ -774,14 +775,10 @@ const VeteranServiceRequest: React.FC = () => {
                         type="email"
                         variant="outlined"
                         placeholder="e.g. justintimberlake@gmail.com"
-                        {...register("email", {
-                          required: "Email Address is required",
-                          validate: {
-                            validate: (emailAddress) =>
-                              emailValidator.validate(emailAddress) ||
-                              "This field must be a valid email address",
-                          },
-                        })}
+                        {...register(
+                          "email",
+                          vsrInputFieldValidators.email as RegisterOptions<IVSRFormInput, "email">,
+                        )}
                         required
                         error={!!errors.email}
                         helperText={errors.email?.message}
@@ -823,7 +820,9 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="branch"
                     control={control}
-                    rules={{ required: "Military Branch is required" }}
+                    rules={
+                      vsrInputFieldValidators.branch as RegisterOptions<IVSRFormInput, "branch">
+                    }
                     render={({ field }) => (
                       <MultipleChoice
                         label="Branch"
@@ -841,7 +840,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="conflicts"
                     control={control}
-                    rules={{ required: "Military Conflicts is required" }}
+                    rules={
+                      vsrInputFieldValidators.conflicts as RegisterOptions<
+                        IVSRFormInput,
+                        "conflicts"
+                      >
+                    }
                     render={({ field }) => (
                       <>
                         <MultipleChoice
@@ -885,7 +889,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="dischargeStatus"
                     control={control}
-                    rules={{ required: "Discharge status is required" }}
+                    rules={
+                      vsrInputFieldValidators.dischargeStatus as RegisterOptions<
+                        IVSRFormInput,
+                        "dischargeStatus"
+                      >
+                    }
                     render={({ field }) => (
                       <MultipleChoice
                         label="Discharge Status"
@@ -902,10 +911,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="serviceConnected"
                     control={control}
-                    rules={{
-                      validate: (value) =>
-                        [true, false].includes(value) || "Service connected is required",
-                    }}
+                    rules={
+                      vsrInputFieldValidators.serviceConnected as RegisterOptions<
+                        IVSRFormInput,
+                        "serviceConnected"
+                      >
+                    }
                     render={({ field }) => (
                       <BinaryChoice
                         label="Service Connected"
@@ -924,7 +935,13 @@ const VeteranServiceRequest: React.FC = () => {
                         label="Last Rank"
                         variant="outlined"
                         placeholder="Enter"
-                        {...register("lastRank", { required: "Last rank is required" })}
+                        {...register(
+                          "lastRank",
+                          vsrInputFieldValidators.lastRank as RegisterOptions<
+                            IVSRFormInput,
+                            "lastRank"
+                          >,
+                        )}
                         required
                         error={!!errors.lastRank}
                         helperText={errors.lastRank?.message}
@@ -936,13 +953,13 @@ const VeteranServiceRequest: React.FC = () => {
                         label="Military ID Number (Last 4)"
                         variant="outlined"
                         placeholder="Enter"
-                        {...register("militaryID", {
-                          required: "Last rank is required",
-                          pattern: {
-                            value: /^\d{4}$/,
-                            message: "This field must be a 4 digit number",
-                          },
-                        })}
+                        {...register(
+                          "militaryID",
+                          vsrInputFieldValidators.militaryID as RegisterOptions<
+                            IVSRFormInput,
+                            "militaryID"
+                          >,
+                        )}
                         required
                         error={!!errors.militaryID}
                         helperText={errors.militaryID?.message}
@@ -960,10 +977,12 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="petCompanion"
                     control={control}
-                    rules={{
-                      validate: (value) =>
-                        [true, false].includes(value) || "Companionship animal is required",
-                    }}
+                    rules={
+                      vsrInputFieldValidators.petCompanion as RegisterOptions<
+                        IVSRFormInput,
+                        "petCompanion"
+                      >
+                    }
                     render={({ field }) => (
                       <BinaryChoice
                         label="Are you interested in a companionship animal (pet)?"
@@ -979,7 +998,9 @@ const VeteranServiceRequest: React.FC = () => {
                   <Controller
                     name="hearFrom"
                     control={control}
-                    rules={{ required: "Referral source is required" }}
+                    rules={
+                      vsrInputFieldValidators.hearFrom as RegisterOptions<IVSRFormInput, "hearFrom">
+                    }
                     render={({ field }) => (
                       <>
                         <MultipleChoice

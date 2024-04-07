@@ -5,14 +5,14 @@ import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { BinaryChoiceInputDetail } from "@/components/VSRIndividual/FieldDetails/BinaryChoiceInputDetail";
 import { UseFormReturn } from "react-hook-form";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { MultipleChoiceWithOtherInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceWithOtherInputDetail";
 import { hearFromOptions } from "@/constants/fieldOptions";
 
 export interface AdditionalInfoProps {
   vsr: VSR;
   isEditing: boolean;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 
 /**

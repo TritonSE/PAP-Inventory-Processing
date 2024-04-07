@@ -1,13 +1,14 @@
 import { Controller, UseFormReturn } from "react-hook-form";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import TextField from "@/components/shared/input/TextField";
+import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 
 interface TextInputDetailProps {
   title: string;
-  name: keyof IFormInput;
+  name: keyof IEditVSRFormInput;
   placeholder?: string;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
   type?: string;
 }
 
@@ -30,8 +31,8 @@ export const TextInputDetail = ({
           <TextField
             label=""
             variant="outlined"
-            name={name}
             placeholder={placeholder}
+            {...formProps.register(name, vsrInputFieldValidators[name])}
             value={field.value}
             onChange={field.onChange}
             required={false}

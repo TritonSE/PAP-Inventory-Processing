@@ -4,7 +4,7 @@ import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
 import { UseFormReturn } from "react-hook-form";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { TextInputDetail } from "@/components/VSRIndividual/FieldDetails/TextInputDetail";
 import { SelectInputDetail } from "@/components/VSRIndividual/FieldDetails/SelectInputDetail";
 import {
@@ -22,7 +22,7 @@ import { ChildrenInput } from "@/components/shared/input/ChildrenInput";
 export interface PersonalInformationProps {
   vsr: VSR;
   isEditing: boolean;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 
 /**
@@ -130,7 +130,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
           <ListDetail title="Marital Status" values={[vsr.maritalStatus]} />
         )}
       </div>
-      {vsr.maritalStatus === "Married" ? (
+      {formProps.watch().maritalStatus === "Married" ? (
         <div className={styles.row}>
           {isEditing ? (
             <TextInputDetail

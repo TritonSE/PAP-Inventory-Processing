@@ -1,14 +1,15 @@
 import { Controller, UseFormReturn } from "react-hook-form";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
-import { IFormInput } from "@/app/vsr/page";
+import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import Dropdown from "@/components/shared/input/Dropdown";
+import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 
 interface SelectInputDetailProps {
   title: string;
-  name: keyof IFormInput;
+  name: keyof IEditVSRFormInput;
   options: string[];
   placeholder?: string;
-  formProps: UseFormReturn<IFormInput>;
+  formProps: UseFormReturn<IEditVSRFormInput>;
 }
 
 /**
@@ -27,6 +28,7 @@ export const SelectInputDetail = ({
       <Controller
         name={name}
         control={formProps.control}
+        rules={vsrInputFieldValidators[name]}
         render={({ field }) => (
           <Dropdown
             label=""
