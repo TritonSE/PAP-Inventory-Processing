@@ -109,7 +109,7 @@ const sendVSRConfirmationEmailToVeteran = (name, email) => __awaiter(void 0, voi
   <p>Volunteer</p>\
   \
   <p><a href="mailto:veteran@patriotsandpaws.org"> veteran@patriotsandpaws.org</a></p>\
-  <img src="${trimmedFrontendUrl}/pap_logo.png" alt="Patriots & Paws Logo" width="446" height="217" />\
+  <img src="cid:pap_logo.png" alt="Patriots & Paws Logo" width="446" height="217" />\
   <p>\
     Facebook\
     <a href="https://www.facebook.com/pages/Patriots-and-Paws/283613748323930"\
@@ -131,6 +131,13 @@ const sendVSRConfirmationEmailToVeteran = (name, email) => __awaiter(void 0, voi
         to: email,
         subject: EMAIL_SUBJECT,
         html: EMAIL_HTML,
+        attachments: [
+            {
+                filename: "pap_logo.png",
+                path: `${__dirname}/../../public/pap_logo.png`,
+                cid: "pap_logo.png",
+            },
+        ],
     };
     yield transporter.sendMail(mailOptions);
 });

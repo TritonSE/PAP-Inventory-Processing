@@ -101,7 +101,7 @@ const sendVSRConfirmationEmailToVeteran = async (name: string, email: string) =>
   <p>Volunteer</p>\
   \
   <p><a href="mailto:veteran@patriotsandpaws.org"> veteran@patriotsandpaws.org</a></p>\
-  <img src="${trimmedFrontendUrl}/pap_logo.png" alt="Patriots & Paws Logo" width="446" height="217" />\
+  <img src="cid:pap_logo.png" alt="Patriots & Paws Logo" width="446" height="217" />\
   <p>\
     Facebook\
     <a href="https://www.facebook.com/pages/Patriots-and-Paws/283613748323930"\
@@ -125,6 +125,13 @@ const sendVSRConfirmationEmailToVeteran = async (name: string, email: string) =>
     to: email,
     subject: EMAIL_SUBJECT,
     html: EMAIL_HTML,
+    attachments: [
+      {
+        filename: "pap_logo.png",
+        path: `${__dirname}/../../public/pap_logo.png`,
+        cid: "pap_logo.png",
+      },
+    ],
   };
 
   await transporter.sendMail(mailOptions);

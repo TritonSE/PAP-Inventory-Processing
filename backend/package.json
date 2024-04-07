@@ -4,7 +4,7 @@
   "main": "dist/server.js",
   "scripts": {
     "start": "nodemon src/server.ts",
-    "build": "tsc && tsc-alias",
+    "build": "tsc && tsc-alias && cp -r ./public ./dist/public",
     "test": "jest",
     "format": "npm run check-git-hooks && prettier --write .",
     "lint-fix": "npm run check-git-hooks && (eslint --fix --cache --report-unused-disable-directives . || true) && prettier --write .",
