@@ -19,3 +19,13 @@ export const getWhoAmI = async (firebaseToken: string): Promise<APIResult<User>>
     return handleAPIError(error);
   }
 };
+
+export const getUsers = async (firebaseToken: string): Promise<APIResult<User[]>> => {
+  try {
+    const response = await get("/api/user", createAuthHeader(firebaseToken));
+    const json = (await response.json()) as User[];
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+};

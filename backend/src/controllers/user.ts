@@ -20,3 +20,12 @@ export const getWhoAmI: RequestHandler = async (req: PAPRequest, res, next) => {
     next(error);
   }
 };
+
+export const getUsers: RequestHandler = async (req: PAPRequest, res, next) => {
+  try {
+    const users = await UserModel.find();
+    res.status(200).send(users);
+  } catch (error) {
+    next(error);
+  }
+};
