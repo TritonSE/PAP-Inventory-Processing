@@ -1,0 +1,44 @@
+.user {
+  display: flex;
+  flex-direction: row;
+  border-radius: 6px;
+  background: var(--Functional-Background, #f9f9f9);
+
+  display: flex;
+  padding: 26px 34px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  margin-bottom: 32px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+}
+
+.name {
+  color: var(--Accent-Blue-1, #102d5f);
+
+  /* Desktop/H2 */
+  font-family: Lora;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.email {
+  color: var(--Neutral-Gray6, #484848);
+
+  /* Desktop/Body 2 */
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.pfp {
+  border-radius: 50%;
+}
