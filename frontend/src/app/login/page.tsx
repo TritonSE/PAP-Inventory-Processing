@@ -49,6 +49,12 @@ const Login = () => {
     formState: { errors, isValid },
   } = useForm<ILoginFormInput>();
 
+  const [passwordReset, setPasswordReset] = useState(false);
+
+  const toggleReset = () => {
+    setPasswordReset(!passwordReset);
+  };
+
   /**
    * Sends the user's Firebase token to the /api/user/whoami backend route,
    * to ensure they are a valid user and we can retrieve their identity.
@@ -169,101 +175,108 @@ const Login = () => {
     }
   };
 
-  return (
-    <div className={styles.loginContainer}>
-      <Image
-        src="/Images/login_bg.png"
-        alt=""
-        layout="fill"
-        objectFit="cover"
-        priority
-        /* Inline styling due to using Image Component*/
-        style={{
-          position: "absolute",
-          top: "0",
-          left: "0",
-          right: "30",
-          bottom: "0",
-        }}
-        className={styles.backgroundImage}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "0",
-          left: "0",
-          right: "0",
-          bottom: "0",
-          background: "#232220D9",
-        }}
-      />
-      <div className={styles.loginBox}>
-        <div className={styles.logoContainer}>
-          <div className={styles.logoImage}>
-            <Image
-              src="/Images/LoginImage.png"
-              alt="Logo"
-              className={styles.image}
-              width={isMobile ? 130 : 190}
-              height={isMobile ? 60 : 90}
-            />
+  if (!passwordReset) {
+    return (
+      <div className={styles.loginContainer}>
+        <Image
+          src="/Images/login_bg.png"
+          alt=""
+          layout="fill"
+          objectFit="cover"
+          priority
+          /* Inline styling due to using Image Component*/
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "30",
+            bottom: "0",
+          }}
+          className={styles.backgroundImage}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            background: "#232220D9",
+          }}
+        />
+        <div className={styles.loginBox}>
+          <div className={styles.logoContainer}>
+            <div className={styles.logoImage}>
+              <Image
+                src="/Images/LoginImage.png"
+                alt="Logo"
+                className={styles.image}
+                width={isMobile ? 130 : 190}
+                height={isMobile ? 60 : 90}
+              />
+            </div>
           </div>
+          <div className={styles.welcomeText}>Welcome!</div>
+          <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
+            <div className={styles.inputGroup}>
+              <TextField
+                label="Email"
+                variant="outlined"
+                placeholder="e.g. johndoe@gmail.com"
+                {...register("email", {
+                  required: "Email is required",
+                })}
+                required={false}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            </div>
+            <div className={styles.inputGroup}>
+              <TextField
+                label="Password"
+                variant="outlined"
+                placeholder=""
+                {...register("password", {
+                  required: "Password is required",
+                })}
+                required={false}
+                error={!!errors.password}
+                helperText={errors.password?.message}
+                type={passwordVisible ? "text" : "password"}
+                InputProps={{
+                  endAdornment: (
+                    <IconButton onClick={() => setPasswordVisible((prevVisible) => !prevVisible)}>
+                      <Image
+                        src={passwordVisible ? "/ic_show.svg" : "/ic_hide.svg"}
+                        alt={passwordVisible ? "Show" : "Hide"}
+                        width={17}
+                        height={17}
+                      />
+                    </IconButton>
+                  ),
+                }}
+              />
+            </div>
+            <div className={styles.forgotPassword} onClick={toggleReset}>
+              Forgot Password?
+            </div>
+            <Button
+              variant="primary"
+              outlined={false}
+              text="Log In"
+              loading={loading}
+              type="submit"
+              className={`${styles.loginButton} ${isValid ? "" : styles.disabledButton}`}
+            />
+          </form>
         </div>
-        <div className={styles.welcomeText}>Welcome!</div>
-        <form onSubmit={handleSubmit(onSubmit)} className={styles.loginForm}>
-          <div className={styles.inputGroup}>
-            <TextField
-              label="Email"
-              variant="outlined"
-              placeholder="e.g. johndoe@gmail.com"
-              {...register("email", {
-                required: "Email is required",
-              })}
-              required={false}
-              error={!!errors.email}
-              helperText={errors.email?.message}
-            />
-          </div>
-          <div className={styles.inputGroup}>
-            <TextField
-              label="Password"
-              variant="outlined"
-              placeholder=""
-              {...register("password", {
-                required: "Password is required",
-              })}
-              required={false}
-              error={!!errors.password}
-              helperText={errors.password?.message}
-              type={passwordVisible ? "text" : "password"}
-              InputProps={{
-                endAdornment: (
-                  <IconButton onClick={() => setPasswordVisible((prevVisible) => !prevVisible)}>
-                    <Image
-                      src={passwordVisible ? "/ic_show.svg" : "/ic_hide.svg"}
-                      alt={passwordVisible ? "Show" : "Hide"}
-                      width={17}
-                      height={17}
-                    />
-                  </IconButton>
-                ),
-              }}
-            />
-          </div>
-          <div className={styles.forgotPassword}>Forgot Password?</div>
-          <Button
-            variant="primary"
-            outlined={false}
-            text="Log In"
-            loading={loading}
-            type="submit"
-            className={`${styles.loginButton} ${isValid ? "" : styles.disabledButton}`}
-          />
-        </form>
+        {renderErrorNotification()}
       </div>
-      {renderErrorNotification()}
-    </div>
-  );
+    );
+  }
+  if (passwordReset) {
+    return <div>HI</div>;
+  }
 };
 
 export default Login;

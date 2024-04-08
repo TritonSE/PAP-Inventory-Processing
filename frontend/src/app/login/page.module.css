@@ -90,6 +90,9 @@
   text-align: center;
   padding-top: 30px;
   margin-bottom: 48px; /* Gap between Forgot password and Log In */
+
+  cursor: pointer;
+  user-select: none;
 }
 
 .loginButton {
