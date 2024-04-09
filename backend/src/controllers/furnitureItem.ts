@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+import createHttpError from "http-errors";
 import FurnitureItemModel from "src/models/furnitureItem";
 
 /**
@@ -32,4 +33,16 @@ export const createFurnitureItem: RequestHandler = async (req, res, next) => {
   }
 }
 
+export const deleteFurnitureItem: RequestHandler = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const deletedFurnitureItem = await FurnitureItemModel.findByIdAndDelete(id);
+    if (deletedFurnitureItem === null) {
+      throw createHttpError(404, "FurnitureItem not found at id " + id);
+    }
+    return res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+}
 
