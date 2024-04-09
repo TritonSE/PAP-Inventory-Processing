@@ -22,7 +22,7 @@
   color: var(--Accent-Blue-1, #102d5f);
 
   /* Desktop/H2 */
-  font-family: Lora;
+  font-family: var(--font-title);
   font-size: 24px;
   font-style: normal;
   font-weight: 700;
@@ -34,7 +34,7 @@
   color: var(--Neutral-Gray6, #484848);
 
   /* Desktop/Body 2 */
-  font-family: "Open Sans";
+  font-family: var(--font-open-sans);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -44,4 +44,10 @@
 .pfp {
   border-radius: 50%;
   margin-left: 22px;
+}
+
+.row_justify {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }

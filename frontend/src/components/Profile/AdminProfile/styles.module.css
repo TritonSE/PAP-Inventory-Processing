@@ -17,10 +17,17 @@
   flex-direction: row;
 }
 
+.row_justify {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .column {
   display: flex;
   flex-direction: column;
   gap: 32px;
+  width: 100%;
 }
 
 .info_column {
@@ -49,7 +56,7 @@
   color: var(--Dark-Gray, #484848);
 
   /* Desktop/Body 2 */
-  font-family: "Open Sans";
+  font-family: var(--font-open-sans);
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -60,7 +67,7 @@
   color: var(--Primary-Background-Dark, #232220);
 
   /* Desktop/Body 1 */
-  font-family: "Open Sans";
+  font-family: var(--font-open-sans);
   font-size: 20px;
   font-style: normal;
   font-weight: 400;

@@ -19,18 +19,20 @@ export function UserProfile({ name, email }: UserProps) {
         height={93}
       />
       {/* </div> */}
-      <div className={styles.info}>
-        <p className={styles.name}>{name}</p>
-        <p className={styles.email}>{email}</p>
+      <div className={styles.row_justify}>
+        <div className={styles.info}>
+          <p className={styles.name}>{name}</p>
+          <p className={styles.email}>{email}</p>
+        </div>
+        <Image
+          src="/ic_settings.svg"
+          alt="Internal Error"
+          // width={isMobile ? 100 : 155}
+          // height={isMobile ? 69 : 106}
+          width={18}
+          height={18}
+        />
       </div>
-      <Image
-        src="/ic_settings.svg"
-        alt="Internal Error"
-        // width={isMobile ? 100 : 155}
-        // height={isMobile ? 69 : 106}
-        width={18}
-        height={18}
-      />
     </div>
   );
 }

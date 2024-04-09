@@ -16,7 +16,7 @@
 
   /* gap: 32px; */
   /* Desktop/H1 */
-  font-family: Lora;
+  font-family: var(--font-title);
   /* font-size: 20px; */
   font-style: normal;
   font-weight: 700;
@@ -40,6 +40,7 @@
 .row {
   display: flex;
   flex-direction: row;
+  justify-content: space-between;
 }
 
 .column {

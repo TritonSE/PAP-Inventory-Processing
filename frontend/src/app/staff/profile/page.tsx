@@ -33,7 +33,7 @@ export default function Profile() {
         <h1 className={styles.title}>Account</h1>
         <h1 className={styles.subtitle}>User Profile</h1>
         {/* ACCOUNT INFO */}
-        <AdminProfile name="Justin Roberts" email="justineroberts@gmail.com"></AdminProfile>
+        <AdminProfile name="Justine Roberts" email="justineroberts@gmail.com"></AdminProfile>
 
         <div className={styles.row}>
           <h1 className={styles.subtitle}>Manage Users</h1>

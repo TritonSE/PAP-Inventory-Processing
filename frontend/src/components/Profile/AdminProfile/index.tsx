@@ -11,7 +11,7 @@ export function AdminProfile({ name, email }: AdminProps) {
   return (
     <div className={styles.admin}>
       <div className={styles.column}>
-        <div className={styles.row}>
+        <div className={styles.row_justify}>
           <h1 className={styles.subtitle}>Account Information</h1>
           <Image
             src="/ic_settings.svg"
