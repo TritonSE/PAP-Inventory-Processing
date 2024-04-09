@@ -22,11 +22,10 @@ export const getFurnitureItems: RequestHandler = async (req, res, next) => {
 
 export const createFurnitureItem: RequestHandler = async (req, res, next) => {
   try{
-    const furnitureItem = await FurnitureItemModel.create({
-      ...req.body,
-
-      
-    });
+    const furnitureItem = await FurnitureItemModel.create(
+      req.body
+    );
+    res.status(201).json(furnitureItem);
   }
   catch(error){
     next(error);
