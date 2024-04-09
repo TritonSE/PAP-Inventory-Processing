@@ -22,16 +22,13 @@ export const getFurnitureItems: RequestHandler = async (req, res, next) => {
 };
 
 export const createFurnitureItem: RequestHandler = async (req, res, next) => {
-  try{
-    const furnitureItem = await FurnitureItemModel.create(
-      req.body
-    );
+  try {
+    const furnitureItem = await FurnitureItemModel.create(req.body);
     res.status(201).json(furnitureItem);
-  }
-  catch(error){
+  } catch (error) {
     next(error);
   }
-}
+};
 
 export const deleteFurnitureItem: RequestHandler = async (req, res, next) => {
   try {
@@ -44,5 +41,4 @@ export const deleteFurnitureItem: RequestHandler = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
-
+};
