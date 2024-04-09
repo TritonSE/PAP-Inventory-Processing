@@ -19,3 +19,18 @@ export const getFurnitureItems: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+export const createFurnitureItem: RequestHandler = async (req, res, next) => {
+  try{
+    const furnitureItem = await FurnitureItemModel.create({
+      ...req.body,
+
+      
+    });
+  }
+  catch(error){
+    next(error);
+  }
+}
+
+
