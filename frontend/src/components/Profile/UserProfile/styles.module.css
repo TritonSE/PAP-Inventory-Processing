@@ -15,6 +15,7 @@
 .info {
   display: flex;
   flex-direction: column;
+  margin-left: 41px;
 }
 
 .name {
@@ -26,6 +27,7 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  margin-bottom: 14px;
 }
 
 .email {
@@ -41,4 +43,5 @@
 
 .pfp {
   border-radius: 50%;
+  margin-left: 22px;
 }

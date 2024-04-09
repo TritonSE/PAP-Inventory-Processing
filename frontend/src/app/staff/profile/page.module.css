@@ -1,6 +1,9 @@
+.page {
+  background-color: var(--color-background);
+}
 .main {
   padding: 64px;
-  padding-top: 128px;
+  /* padding-top: 105px; */
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;
@@ -11,7 +14,7 @@
   margin: 105px 120px 0;
   gap: 40px;
 
-  gap: 32px;
+  /* gap: 32px; */
   /* Desktop/H1 */
   font-family: Lora;
   /* font-size: 20px; */
@@ -20,9 +23,28 @@
   line-height: normal;
 }
 
+.admin {
+  display: flex;
+  flex-direction: row;
+  border-radius: 6px;
+  background: var(--Functional-Background, #f9f9f9);
+
+  display: flex;
+  padding: 26px 34px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  margin-bottom: 32px;
+}
+
 .row {
   display: flex;
   flex-direction: row;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
 }
 
 .title {

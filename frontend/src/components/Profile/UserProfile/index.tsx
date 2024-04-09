@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "@/components/UserProfile/styles.module.css";
+import styles from "@/components/Profile/UserProfile/styles.module.css";
 import Image from "next/image";
 import { User } from "firebase/auth";
 

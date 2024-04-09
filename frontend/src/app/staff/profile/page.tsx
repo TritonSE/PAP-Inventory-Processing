@@ -17,8 +17,9 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
-import { UserProfile } from "@/components/UserProfile";
+import { UserProfile } from "@/components/Profile/UserProfile";
 import { User } from "firebase/auth";
+import { AdminProfile } from "@/components/Profile/AdminProfile";
 
 export default function Profile() {
   const { isMobile, isTablet } = useScreenSizes();
@@ -32,6 +33,7 @@ export default function Profile() {
         <h1 className={styles.title}>Account</h1>
         <h1 className={styles.subtitle}>User Profile</h1>
         {/* ACCOUNT INFO */}
+        <AdminProfile name="Justin Roberts" email="justineroberts@gmail.com"></AdminProfile>
 
         <div className={styles.row}>
           <h1 className={styles.subtitle}>Manage Users</h1>
@@ -46,7 +48,7 @@ export default function Profile() {
           />
         </div>
 
-        <UserProfile name="Justin" email="j@gmail.com"></UserProfile>
+        <UserProfile name="Justin Timberlake" email="justintimberlake@gmail.com"></UserProfile>
       </div>
     </div>
   );
