@@ -7,6 +7,7 @@ import {
   sendVSRNotificationEmailToStaff,
 } from "src/services/emails";
 import validationErrorParser from "src/util/validationErrorParser";
+import ExcelJS from "exceljs";
 
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
@@ -156,3 +157,30 @@ export const deleteVSR: RequestHandler = async (req, res, next) => {
     next(error);
   }
 };
+
+const writeSpreadsheet = async (filename: string, data: entry[]) => {
+  const workbook = new ExcelJS.Workbook();
+
+  workbook.creator = "PAP Inventory System";
+  workbook.lastModifiedBy = "Bot";
+  //current date
+  workbook.created = new Date();
+  workbook.modified = new Date();
+  workbook.lastPrinted = new Date();
+
+  const worksheet = workbook.addWorksheet("New Sheet");
+
+  worksheet.columns = [
+    { header: "Id", key: "id" },
+    { header: "Name", key: "name" },
+    { header: "Age", key: "age" },
+  ];
+
+  for (let i = 0; i < data.length; i++) {
+    worksheet.addRow(data[i]);
+  }
+
+  await workbook.xlsx.writeFile(filename);
+};
+
+export const bulkExportVSR: RequestHandler = async (req, res, next) => {};

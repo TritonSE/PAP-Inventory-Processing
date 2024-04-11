@@ -24,5 +24,6 @@ router.put(
   VSRValidator.updateVSR,
   VSRController.updateVSR,
 );
+router.get("/bulk_export", requireSignedIn, requireStaffOrAdmin, VSRController.bulkExportVSRS);
 
 export default router;
