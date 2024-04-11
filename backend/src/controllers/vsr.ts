@@ -158,7 +158,7 @@ export const deleteVSR: RequestHandler = async (req, res, next) => {
   }
 };
 
-const writeSpreadsheet = async (filename: string, data: entry[]) => {
+const writeSpreadsheet = async (filename: string) => {
   const workbook = new ExcelJS.Workbook();
 
   workbook.creator = "PAP Inventory System";
@@ -170,17 +170,27 @@ const writeSpreadsheet = async (filename: string, data: entry[]) => {
 
   const worksheet = workbook.addWorksheet("New Sheet");
 
-  worksheet.columns = [
-    { header: "Id", key: "id" },
-    { header: "Name", key: "name" },
-    { header: "Age", key: "age" },
-  ];
+  const vsrs = await VSRModel.find();
 
-  for (let i = 0; i < data.length; i++) {
-    worksheet.addRow(data[i]);
+  //make worksheet.columns according to all elements in vsrs
+  const columns = Object.keys(vsrs[0]);
+  worksheet.columns = columns.map((column) => {
+    return { header: column, key: column, width: 20 };
+  });
+
+  for (let i = 0; i < vsrs.length; i++) {
+    worksheet.addRow(vsrs[i]);
   }
 
   await workbook.xlsx.writeFile(filename);
 };
 
-export const bulkExportVSR: RequestHandler = async (req, res, next) => {};
+export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
+  try {
+    const filename = "vsrs.xlsx";
+    await writeSpreadsheet(filename);
+    res.download(filename);
+  } catch (error) {
+    next(error);
+  }
+};
