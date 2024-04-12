@@ -187,6 +187,7 @@ const writeSpreadsheet = async (filename: string) => {
 
 export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
   try {
+    console.log("inside bulk export vsrs");
     const filename = "vsrs.xlsx";
     await writeSpreadsheet(filename);
     res.download(filename);

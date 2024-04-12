@@ -6,6 +6,7 @@ import * as VSRValidator from "src/validators/vsr";
 
 const router = express.Router();
 
+router.get("/bulk_export", requireSignedIn, requireStaffOrAdmin, VSRController.bulkExportVSRS);
 router.get("/", requireSignedIn, requireStaffOrAdmin, VSRController.getAllVSRS);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 router.get("/:id", requireSignedIn, requireStaffOrAdmin, VSRController.getVSR);
@@ -24,6 +25,5 @@ router.put(
   VSRValidator.updateVSR,
   VSRController.updateVSR,
 );
-router.get("/bulk_export", requireSignedIn, requireStaffOrAdmin, VSRController.bulkExportVSRS);
 
 export default router;

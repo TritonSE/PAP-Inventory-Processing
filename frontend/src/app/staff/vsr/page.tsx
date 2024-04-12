@@ -12,7 +12,7 @@ import { useMediaQuery } from "@mui/material";
 import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
 import { UserContext } from "@/contexts/userContext";
 import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
-import { VSR, getAllVSRs } from "@/api/VSRs";
+import { VSR, getAllVSRs, bulkExportVSRS } from "@/api/VSRs";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
@@ -21,6 +21,12 @@ import { Button } from "@/components/shared/Button";
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
   CANNOT_FETCH_VSRS_INTERNAL,
+  NONE,
+}
+
+enum VSRExportError {
+  CANNOT_EXPORT_VSRS_NO_INTERNET,
+  CANNOT_EXPORT_VSRS_INTERNAL,
   NONE,
 }
 
@@ -35,6 +41,7 @@ export default function VSRTableView() {
   const [loadingVsrs, setLoadingVsrs] = useState(true);
   const [vsrs, setVsrs] = useState<VSR[]>();
   const [tableError, setTableError] = useState(VSRTableError.NONE);
+  const [exportError, setExportError] = useState(VSRExportError.NONE);
 
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
@@ -133,6 +140,27 @@ export default function VSRTableView() {
     }
   };
 
+  const exportVSRs = () => {
+    if (!firebaseUser) {
+      return;
+    }
+
+    firebaseUser?.getIdToken().then((firebaseToken) => {
+      bulkExportVSRS(firebaseToken).then((result) => {
+        if (result.success) {
+          return;
+        } else {
+          if (result.error === "Failed to fetch") {
+            setExportError(VSRExportError.CANNOT_EXPORT_VSRS_NO_INTERNET);
+          } else {
+            console.error(`Error exporting VSRs: ${result.error}`);
+            setExportError(VSRExportError.CANNOT_EXPORT_VSRS_INTERNAL);
+          }
+        }
+      });
+    });
+  };
+
   return (
     <div className={styles.page}>
       <HeaderBar showLogoutButton />
@@ -182,7 +210,7 @@ export default function VSRTableView() {
               text="Export"
               hideTextOnMobile
               onClick={() => {
-                // TODO: implement exporting VSRs
+                exportVSRs();
               }}
             />
           </div>
