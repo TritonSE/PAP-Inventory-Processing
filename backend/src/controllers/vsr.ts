@@ -171,17 +171,23 @@ const writeSpreadsheet = async (filename: string) => {
   const worksheet = workbook.addWorksheet("New Sheet");
 
   const vsrs = await VSRModel.find();
+  const plainVsrs = vsrs.map((doc) => doc.toObject());
 
-  //make worksheet.columns according to all elements in vsrs
-  const columns = Object.keys(vsrs[0]);
-  worksheet.columns = columns.map((column) => {
-    return { header: column, key: column, width: 20 };
-  });
+  // Setup columns headers based on keys from the first object in the plainVsrs array
+  if (plainVsrs.length > 0) {
+    worksheet.columns = Object.keys(plainVsrs[0]).map((key) => ({
+      header: key,
+      key: key,
+      width: 20,
+    }));
 
-  for (let i = 0; i < vsrs.length; i++) {
-    worksheet.addRow(vsrs[i]);
+    // Add data rows to the worksheet
+    plainVsrs.forEach((item) => {
+      worksheet.addRow(item);
+    });
   }
 
+  // Write to file
   await workbook.xlsx.writeFile(filename);
 };
 
