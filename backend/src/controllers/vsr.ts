@@ -184,11 +184,33 @@ const writeSpreadsheet = async (filename: string) => {
     // Add data rows to the worksheet
     plainVsrs.forEach((item) => {
       worksheet.addRow(item);
-    });
-  }
 
-  // Write to file
-  await workbook.xlsx.writeFile(filename);
+      //cast each element in the row to a string
+
+      //for the row that was just added in the spreadsheet, if there are brackets surrounding any of the entries, remove them
+      if (worksheet.lastRow) {
+        worksheet.lastRow.eachCell((cell) => {
+          if (cell.value && !(typeof cell.value === "number")) {
+            cell.value = cell.value.toString();
+          }
+        });
+
+        worksheet.lastRow.eachCell((cell) => {
+          if (
+            cell.value &&
+            typeof cell.value == "string" &&
+            cell.value[0] === "[" &&
+            cell.value[cell.value.length - 1] === "]"
+          ) {
+            cell.value = cell.value.slice(1, -1);
+          }
+        });
+      }
+    });
+
+    // Write to file
+    await workbook.xlsx.writeFile(filename);
+  }
 };
 
 export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
