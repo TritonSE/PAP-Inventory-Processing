@@ -27,7 +27,7 @@ export default function Profile() {
   //   useRedirectToLoginIfNotSignedIn();
 
   return (
-    <div className={styles.page}>
+    <div>
       <HeaderBar showLogoutButton />
       <div className={styles.main}>
         <h1 className={styles.title}>Account</h1>

@@ -1,40 +1,26 @@
-.page {
+/* .page {
   background-color: var(--color-background);
-}
+  padding-bottom: 67px;
+  min-height: 100vh;
+} */
 .main {
   padding: 64px;
-  /* padding-top: 105px; */
+  padding-top: 105px;
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;
   color: var(--Accent-Blue-1, #102d5f);
   text-align: left;
 
-  /* justify-content: center; */
-  margin: 105px 120px 0;
+  padding: 105px 120px 0;
   gap: 40px;
 
   /* gap: 32px; */
   /* Desktop/H1 */
   font-family: var(--font-title);
-  /* font-size: 20px; */
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-}
-
-.admin {
-  display: flex;
-  flex-direction: row;
-  border-radius: 6px;
-  background: var(--Functional-Background, #f9f9f9);
-
-  display: flex;
-  padding: 26px 34px;
-  align-items: flex-start;
-  gap: 10px;
-  align-self: stretch;
-  margin-bottom: 32px;
 }
 
 .row {

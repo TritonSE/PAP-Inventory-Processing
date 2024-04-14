@@ -12,12 +12,6 @@
   margin-bottom: 32px;
 }
 
-.info {
-  display: flex;
-  flex-direction: column;
-  margin-left: 41px;
-}
-
 .name {
   color: var(--Accent-Blue-1, #102d5f);
 
@@ -50,4 +44,17 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.column_right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 41px;
 }
