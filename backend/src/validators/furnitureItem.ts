@@ -34,3 +34,10 @@ export const createFurnitureItem = [
   makeAllowMultipleValidator(),
   makeCategoryIndexValidator(),
 ];
+
+export const updateFurnitureItem = [
+  makeCategoryValidator(),
+  makeNameValidator(),
+  makeAllowMultipleValidator(),
+  makeCategoryIndexValidator(),
+];

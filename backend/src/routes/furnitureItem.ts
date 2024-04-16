@@ -8,6 +8,8 @@ const router = express.Router();
 router.get("/", FurnitureItemController.getFurnitureItems);
 router.post(
   "/",
+  requireSignedIn,
+  requireStaffOrAdmin,
   FurnitureItemValidator.createFurnitureItem,
   FurnitureItemController.createFurnitureItem,
 );
@@ -16,6 +18,13 @@ router.delete(
   requireSignedIn,
   requireStaffOrAdmin,
   FurnitureItemController.deleteFurnitureItem,
+);
+router.put(
+  "/:id",
+  requireSignedIn,
+  requireStaffOrAdmin,
+  FurnitureItemValidator.updateFurnitureItem,
+  FurnitureItemController.updateFurnitureItem,
 );
 
 export default router;
