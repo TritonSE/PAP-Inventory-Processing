@@ -44,6 +44,7 @@ export default function VSRTableView() {
   const [tableError, setTableError] = useState(VSRTableError.NONE);
   const [exportError, setExportError] = useState(VSRExportError.NONE);
   const [exportSuccess, setExportSucess] = useState(false);
+  const [loadingExport, setLoadingExport] = useState(false);
 
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
@@ -203,11 +204,11 @@ export default function VSRTableView() {
       return;
     }
 
+    setLoadingExport(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
       bulkExportVSRS(firebaseToken).then((result) => {
         if (result.success) {
           setExportSucess(true);
-          return;
         } else {
           if (result.error === "Failed to fetch") {
             setExportError(VSRExportError.CANNOT_EXPORT_VSRS_NO_INTERNET);
@@ -216,6 +217,7 @@ export default function VSRTableView() {
             setExportError(VSRExportError.CANNOT_EXPORT_VSRS_INTERNAL);
           }
         }
+        setLoadingExport(false);
       });
     });
   };
@@ -266,6 +268,7 @@ export default function VSRTableView() {
               outlined={false}
               iconPath="/upload.svg"
               iconAlt="Export"
+              loading={loadingExport}
               text="Export"
               hideTextOnMobile
               onClick={() => {
