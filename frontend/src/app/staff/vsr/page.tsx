@@ -18,6 +18,7 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
 import { SuccessNotification } from "@/components/shared/SuccessNotification";
+import { Playground } from "./Playground";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -289,6 +290,7 @@ export default function VSRTableView() {
             />
           )}
         </div>
+        <Playground />
       </div>
 
       {/* Error modals, success model, and delete modal */}
