@@ -18,7 +18,7 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
 import { SuccessNotification } from "@/components/shared/SuccessNotification";
-import { Playground } from "./Playground";
+import { Playground } from "@/app/staff/vsr/Playground";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
