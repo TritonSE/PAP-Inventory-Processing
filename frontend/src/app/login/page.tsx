@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from "@/app/login/page.module.css";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, getAuth, sendPasswordResetEmail } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
@@ -113,6 +113,19 @@ const Login = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  /**
+   * Prompts a link to be sent to the user with the given email
+   */
+  const sendResetLink: SubmitHandler<ILoginFormInput> = async (data) => {
+    sendPasswordResetEmail(auth, data.email)
+      .then(() => {
+        console.log("Password reset email sent!");
+      })
+      .catch((error) => {
+        console.error("Password reset email sending error: ", error);
+      });
   };
 
   // Move error notification higher up than usual
@@ -275,7 +288,74 @@ const Login = () => {
     );
   }
   if (passwordReset) {
-    return <div>HI</div>;
+    return (
+      <div className={styles.loginContainer}>
+        <Image
+          src="/Images/login_bg.png"
+          alt=""
+          layout="fill"
+          objectFit="cover"
+          priority
+          /* Inline styling due to using Image Component*/
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "30",
+            bottom: "0",
+          }}
+          className={styles.backgroundImage}
+        />
+        <div
+          style={{
+            position: "absolute",
+            top: "0",
+            left: "0",
+            right: "0",
+            bottom: "0",
+            background: "#232220D9",
+          }}
+        />
+        <div className={styles.loginBox}>
+          <div className={styles.logoContainer}>
+            <div className={styles.logoImage}>
+              <Image
+                src="/Images/LoginImage.png"
+                alt="Logo"
+                className={styles.image}
+                width={isMobile ? 130 : 190}
+                height={isMobile ? 60 : 90}
+              />
+            </div>
+          </div>
+          <div className={styles.welcomeText}>Reset Password</div>
+          <form onSubmit={handleSubmit(sendResetLink)} className={styles.loginForm}>
+            <div className={styles.inputGroup}>
+              <TextField
+                label="Email"
+                variant="outlined"
+                placeholder="e.g. johndoe@gmail.com"
+                {...register("email", {
+                  required: "Email is required",
+                })}
+                required={false}
+                error={!!errors.email}
+                helperText={errors.email?.message}
+              />
+            </div>
+            <Button
+              variant="primary"
+              outlined={false}
+              text="Send Link"
+              loading={loading}
+              type="submit"
+              className={`${styles.loginButton} ${isValid ? "" : styles.disabledButton}`}
+            />
+          </form>
+        </div>
+        {renderErrorNotification()}
+      </div>
+    );
   }
 };
 
