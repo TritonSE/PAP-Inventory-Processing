@@ -12,12 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteVSR = exports.updateVSR = exports.updateStatus = exports.createVSR = exports.getVSR = exports.getAllVSRS = void 0;
+exports.bulkExportVSRS = exports.deleteVSR = exports.updateVSR = exports.updateStatus = exports.createVSR = exports.getVSR = exports.getAllVSRS = void 0;
 const express_validator_1 = require("express-validator");
+const fs_1 = __importDefault(require("fs"));
 const http_errors_1 = __importDefault(require("http-errors"));
+const furnitureItem_1 = __importDefault(require("../models/furnitureItem"));
 const vsr_1 = __importDefault(require("../models/vsr"));
 const emails_1 = require("../services/emails");
 const validationErrorParser_1 = __importDefault(require("../util/validationErrorParser"));
+const exceljs_1 = __importDefault(require("exceljs"));
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
  * staff or admin permission.
@@ -142,3 +145,108 @@ const deleteVSR = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.deleteVSR = deleteVSR;
+/**
+ * Converts an entry in a VSR to a formatted string to write to the Excel spreadsheet
+ */
+const stringifyEntry = (entry) => {
+    if (!entry) {
+        return "";
+    }
+    if (Array.isArray(entry)) {
+        return entry.join(", ");
+    }
+    else {
+        return entry.toString();
+    }
+};
+/**
+ * Formats a VSR's selected furniture items as a string
+ */
+const stringifySelectedFurnitureItems = (selectedItems, allFurnitureItems) => {
+    if (!selectedItems) {
+        return "";
+    }
+    const itemIdsToItems = {};
+    for (const furnitureItem of allFurnitureItems) {
+        itemIdsToItems[furnitureItem._id.toString()] = furnitureItem;
+    }
+    return selectedItems
+        .map((selectedItem) => {
+        const furnitureItem = itemIdsToItems[selectedItem.furnitureItemId];
+        return furnitureItem ? `${furnitureItem.name}: ${selectedItem.quantity}` : "[unknown]";
+    })
+        .join(", ");
+};
+const writeSpreadsheet = (filename) => __awaiter(void 0, void 0, void 0, function* () {
+    const workbook = new exceljs_1.default.Workbook();
+    workbook.creator = "PAP Inventory System";
+    workbook.lastModifiedBy = "Bot";
+    //current date
+    workbook.created = new Date();
+    workbook.modified = new Date();
+    workbook.lastPrinted = new Date();
+    const worksheet = workbook.addWorksheet("New Sheet");
+    const vsrs = yield vsr_1.default.find();
+    const plainVsrs = vsrs.map((doc) => doc.toObject());
+    // Fields that we want to write to the spreadsheet. First is field name, second is display name.
+    const fieldsToWrite = [
+        ["name", "Name"],
+        ["gender", "Gender"],
+        ["age", "Age"],
+        ["maritalStatus", "Marital Status"],
+        ["spouseName", "Spouse Name"],
+        ["agesOfBoys", "Ages of boys"],
+        ["agesOfGirls", "Ages of girls"],
+        ["ethnicity", "Ethnicity"],
+        ["employmentStatus", "Employment Status"],
+        ["incomeLevel", "Income Level"],
+        ["sizeOfHome", "Size of Home"],
+        ["streetAddress", "Street Address"],
+        ["city", "City"],
+        ["state", "State"],
+        ["zipCode", "Zip Code"],
+        ["phoneNumber", "Phone Number"],
+        ["email", "Email Address"],
+        ["branch", "Branch"],
+        ["conflicts", "Conflicts"],
+        ["dischargeStatus", "Discharge Status"],
+        ["serviceConnected", "Service Connected"],
+        ["lastRank", "Last Rank"],
+        ["militaryID", "Military ID"],
+        ["petCompanion", "Pet Companion Desired"],
+        ["hearFrom", "Referral Source"],
+        ["selectedFurnitureItems", "Selected Furniture Items"],
+        ["additionalItems", "Additional Items"],
+        ["dateReceived", "Date Received"],
+        ["lastUpdated", "Last Updated"],
+        ["status", "Status"],
+    ];
+    worksheet.columns = fieldsToWrite.map((field) => ({
+        header: field[1],
+        key: field[0],
+        width: 20,
+    }));
+    const allFurnitureItems = yield furnitureItem_1.default.find();
+    // Add data rows to the worksheet
+    plainVsrs.forEach((vsr) => {
+        worksheet.addRow(fieldsToWrite.reduce((prev, field) => (Object.assign(Object.assign({}, prev), { [field[0]]: field[0] === "selectedFurnitureItems"
+                ? stringifySelectedFurnitureItems(vsr[field[0]], allFurnitureItems)
+                : stringifyEntry(vsr[field[0]]) })), {}));
+    });
+    // Write to file
+    yield workbook.xlsx.writeFile(filename);
+});
+const bulkExportVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const filename = "vsrs.xlsx";
+        yield writeSpreadsheet(filename);
+        res.download(filename, () => {
+            // Once the flie has been sent to the requestor, remove it from our filesystem
+            fs_1.default.unlinkSync(filename);
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.bulkExportVSRS = bulkExportVSRS;
