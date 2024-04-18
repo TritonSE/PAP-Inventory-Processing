@@ -398,9 +398,8 @@ const VeteranServiceRequest: React.FC = () => {
               to request what you require.
               <br></br>
               <br></br>
-              Upon submission, a copy of your VSR form will be sent to your email. We&apos;ll
-              promptly review it and respond via email as soon as possible. Remember to check your
-              spam folder if you don&apos;t receive a response within 48 business hours.
+              Upon submission, you will receive an email to schedule an appointment. Remember to
+              check your spam folder if you don&apos;t receive a response within 48 business hours.
               <br></br>
               <br></br>
               If you have any questions or concerns, send us an email at{" "}
