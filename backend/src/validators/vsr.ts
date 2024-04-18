@@ -190,10 +190,9 @@ const makeHearFromValidator = () =>
 
 const ALLOWED_STATUSES = [
   "Received",
-  "Appointment Scheduled",
   "Approved",
+  "Appointment Scheduled",
   "Complete",
-  "Resubmit",
   "No-show / Incomplete",
   "Archived",
 ];
