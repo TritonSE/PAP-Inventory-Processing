@@ -34,6 +34,11 @@ interface ILoginFormInput {
  */
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [sendLinkText, setSendLinkText] = useState("Send Link");
+  const [resetText, setResetText] = useState(
+    "Enter your email and we'll send you instructions on how to reset your password!",
+  );
+
   const [loading, setLoading] = useState(false);
   const [pageError, setPageError] = useState(LoginPageError.NONE);
 
@@ -122,6 +127,8 @@ const Login = () => {
     sendPasswordResetEmail(auth, data.email)
       .then(() => {
         console.log("Password reset email sent!");
+        setSendLinkText("Resend Link");
+        setResetText("Didn't receive an email?\nTry resending with the link below!");
       })
       .catch((error) => {
         console.error("Password reset email sending error: ", error);
@@ -321,9 +328,7 @@ const Login = () => {
             <Image src="/ic_arrowback.svg" width={24} height={24} alt={""} />
           </button>
           <div className={styles.resetText}>Reset Password</div>
-          <div className={styles.instructions}>
-            Enter your email and we&rsquo;ll send you instructions on how to reset your password!
-          </div>
+          <div className={styles.instructions}>{resetText} </div>
           <form onSubmit={handleSubmit(sendResetLink)} className={styles.loginForm}>
             <div className={styles.inputGroup}>
               <TextField
@@ -341,7 +346,7 @@ const Login = () => {
             <Button
               variant="primary"
               outlined={false}
-              text="Send Link"
+              text={sendLinkText}
               loading={loading}
               type="submit"
               className={`${styles.sendLinkButton} ${isValid ? "" : styles.disabledButton}`}
