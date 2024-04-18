@@ -1,6 +1,5 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Response } from "express";
 import { validationResult } from "express-validator";
-import fs from "fs";
 import createHttpError from "http-errors";
 import FurnitureItemModel, { FurnitureItem } from "src/models/furnitureItem";
 import VSRModel, { FurnitureInput, VSR } from "src/models/vsr";
@@ -205,7 +204,7 @@ const stringifySelectedFurnitureItems = (
     .join(", ");
 };
 
-const writeSpreadsheet = async (filename: string) => {
+const writeSpreadsheet = async (filename: string, res: Response) => {
   const workbook = new ExcelJS.Workbook();
 
   workbook.creator = "PAP Inventory System";
@@ -286,17 +285,19 @@ const writeSpreadsheet = async (filename: string) => {
   });
 
   // Write to file
-  await workbook.xlsx.writeFile(filename);
+  await workbook.xlsx.write(res);
 };
 
 export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
   try {
     const filename = "vsrs.xlsx";
-    await writeSpreadsheet(filename);
-    res.download(filename, () => {
-      // Once the flie has been sent to the requestor, remove it from our filesystem
-      fs.unlinkSync(filename);
+    // Set some headers on the response so the client knows that a file is attached
+    res.set({
+      "Content-Disposition": `attachment; filename="${filename}"`,
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
+
+    await writeSpreadsheet(filename, res);
   } catch (error) {
     next(error);
   }
