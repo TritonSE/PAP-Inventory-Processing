@@ -234,7 +234,6 @@ export async function bulkExportVSRS(firebaseToken: string): Promise<APIResult<n
     window.URL.revokeObjectURL(url);
     return { success: true, data: null };
   } catch (error) {
-    console.log(error);
     return handleAPIError(error);
   }
 }

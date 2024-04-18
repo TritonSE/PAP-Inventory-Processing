@@ -43,7 +43,7 @@ export default function VSRTableView() {
   const [vsrs, setVsrs] = useState<VSR[]>();
   const [tableError, setTableError] = useState(VSRTableError.NONE);
   const [exportError, setExportError] = useState(VSRExportError.NONE);
-  const [exportSuccess, setExportSucess] = useState(false);
+  const [exportSuccess, setExportSuccess] = useState(false);
   const [loadingExport, setLoadingExport] = useState(false);
 
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
@@ -204,11 +204,13 @@ export default function VSRTableView() {
       return;
     }
 
+    setExportSuccess(false);
+    setExportError(VSRExportError.NONE);
     setLoadingExport(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
       bulkExportVSRS(firebaseToken).then((result) => {
         if (result.success) {
-          setExportSucess(true);
+          setExportSuccess(true);
         } else {
           if (result.error === "Failed to fetch") {
             setExportError(VSRExportError.CANNOT_EXPORT_VSRS_NO_INTERNET);
@@ -271,9 +273,7 @@ export default function VSRTableView() {
               loading={loadingExport}
               text="Export"
               hideTextOnMobile
-              onClick={() => {
-                exportVSRs();
-              }}
+              onClick={exportVSRs}
             />
           </div>
         </div>
@@ -298,7 +298,7 @@ export default function VSRTableView() {
         actions={[
           {
             text: "Dismiss",
-            onClick: () => setExportSucess(false),
+            onClick: () => setExportSuccess(false),
           },
         ]}
       />
