@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.bulkExportVSRS = exports.deleteVSR = exports.updateVSR = exports.updateStatus = exports.createVSR = exports.getVSR = exports.getAllVSRS = void 0;
 const express_validator_1 = require("express-validator");
-const fs_1 = __importDefault(require("fs"));
 const http_errors_1 = __importDefault(require("http-errors"));
 const furnitureItem_1 = __importDefault(require("../models/furnitureItem"));
 const vsr_1 = __importDefault(require("../models/vsr"));
@@ -177,7 +176,7 @@ const stringifySelectedFurnitureItems = (selectedItems, allFurnitureItems) => {
     })
         .join(", ");
 };
-const writeSpreadsheet = (filename) => __awaiter(void 0, void 0, void 0, function* () {
+const writeSpreadsheet = (filename, res) => __awaiter(void 0, void 0, void 0, function* () {
     const workbook = new exceljs_1.default.Workbook();
     workbook.creator = "PAP Inventory System";
     workbook.lastModifiedBy = "Bot";
@@ -234,16 +233,17 @@ const writeSpreadsheet = (filename) => __awaiter(void 0, void 0, void 0, functio
                 : stringifyEntry(vsr[field[0]]) })), {}));
     });
     // Write to file
-    yield workbook.xlsx.writeFile(filename);
+    yield workbook.xlsx.write(res);
 });
 const bulkExportVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const filename = "vsrs.xlsx";
-        yield writeSpreadsheet(filename);
-        res.download(filename, () => {
-            // Once the flie has been sent to the requestor, remove it from our filesystem
-            fs_1.default.unlinkSync(filename);
+        // Set some headers on the response so the client knows that a file is attached
+        res.set({
+            "Content-Disposition": `attachment; filename="${filename}"`,
+            "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
+        yield writeSpreadsheet(filename, res);
     }
     catch (error) {
         next(error);
