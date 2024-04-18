@@ -867,7 +867,7 @@ const VeteranServiceRequest: React.FC = () => {
                           <TextField
                             label="Other"
                             type="text"
-                            placeholder="Please list"
+                            placeholder="Please specify"
                             name="otherConflict"
                             value={otherConflict}
                             onChange={(e) => {
@@ -1021,7 +1021,7 @@ const VeteranServiceRequest: React.FC = () => {
                           <TextField
                             label="Other"
                             type="text"
-                            placeholder="Enter"
+                            placeholder="Please specify"
                             name="otherSource"
                             value={otherHearFrom}
                             onChange={(e) => {
