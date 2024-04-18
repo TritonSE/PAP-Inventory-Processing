@@ -51,6 +51,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
       }
     }
     formProps.setValue("ethnicity", ethnicityChips);
+    formProps.setValue("form_ethnicity", vsr.ethnicity.length > 0 ? "full" : "");
     formProps.setValue("employment_status", vsr.employmentStatus);
     formProps.setValue("income_level", vsr.incomeLevel);
     formProps.setValue("size_of_home", vsr.sizeOfHome);
@@ -193,6 +194,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             title="Ethnicity"
             name="ethnicity"
             otherName="other_ethnicity"
+            formName="form_ethnicity"
             options={ethnicityOptions}
             allowMultiple
             formProps={formProps}

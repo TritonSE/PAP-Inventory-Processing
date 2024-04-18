@@ -33,6 +33,7 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
       }
     }
     formProps.setValue("conflicts", conflictChips);
+    formProps.setValue("form_conflicts", vsr.conflicts.length > 0 ? "full" : "");
     formProps.setValue("dischargeStatus", vsr.dischargeStatus);
     formProps.setValue("serviceConnected", vsr.serviceConnected);
     formProps.setValue("lastRank", vsr.lastRank);
@@ -63,6 +64,7 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
           <MultipleChoiceWithOtherInputDetail
             name="conflicts"
             otherName="other_conflicts"
+            formName="form_conflicts"
             title="Conflicts"
             formProps={formProps}
             options={conflictsOptions}
