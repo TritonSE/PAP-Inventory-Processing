@@ -150,7 +150,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
       <div className={styles.row}>
         {isEditing ? (
           <>
-            <ChildrenInput gender="boy" formProps={formProps} />
+            <ChildrenInput gender="boy" showAsterisks={false} formProps={formProps} />
           </>
         ) : (
           <>
@@ -167,7 +167,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
       <div className={styles.row}>
         {isEditing ? (
           <>
-            <ChildrenInput gender="girl" formProps={formProps} />
+            <ChildrenInput gender="girl" showAsterisks={false} formProps={formProps} />
           </>
         ) : (
           <>

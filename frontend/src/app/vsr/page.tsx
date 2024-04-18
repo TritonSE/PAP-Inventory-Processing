@@ -530,10 +530,10 @@ const VeteranServiceRequest: React.FC = () => {
 
                   <div className={`${styles.formRow} ${styles.desktopRowTabletColumn}`}>
                     <div className={styles.formRow}>
-                      <ChildrenInput gender="boy" formProps={formProps} />
+                      <ChildrenInput gender="boy" showAsterisks formProps={formProps} />
                     </div>
                     <div className={styles.formRow}>
-                      <ChildrenInput gender="girl" formProps={formProps} />
+                      <ChildrenInput gender="girl" showAsterisks formProps={formProps} />
                     </div>
                   </div>
                 </div>
