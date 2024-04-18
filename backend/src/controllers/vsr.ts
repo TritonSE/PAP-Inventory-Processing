@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
+import fs from "fs";
 import createHttpError from "http-errors";
 import FurnitureItemModel, { FurnitureItem } from "src/models/furnitureItem";
 import VSRModel, { FurnitureInput, VSR } from "src/models/vsr";
@@ -292,7 +293,10 @@ export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
   try {
     const filename = "vsrs.xlsx";
     await writeSpreadsheet(filename);
-    res.download(filename);
+    res.download(filename, () => {
+      // Once the flie has been sent to the requestor, remove it from our filesystem
+      fs.unlinkSync(filename);
+    });
   } catch (error) {
     next(error);
   }
