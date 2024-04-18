@@ -317,18 +317,13 @@ const Login = () => {
           }}
         />
         <div className={styles.loginBox}>
-          <div className={styles.logoContainer}>
-            <div className={styles.logoImage}>
-              <Image
-                src="/Images/LoginImage.png"
-                alt="Logo"
-                className={styles.image}
-                width={isMobile ? 130 : 190}
-                height={isMobile ? 60 : 90}
-              />
-            </div>
+          <button className={styles.toLogin} onClick={toggleReset}>
+            <Image src="/ic_arrowback.svg" width={24} height={24} alt={""} />
+          </button>
+          <div className={styles.resetText}>Reset Password</div>
+          <div className={styles.instructions}>
+            Enter your email and we&rsquo;ll send you instructions on how to reset your password!
           </div>
-          <div className={styles.welcomeText}>Reset Password</div>
           <form onSubmit={handleSubmit(sendResetLink)} className={styles.loginForm}>
             <div className={styles.inputGroup}>
               <TextField
@@ -349,7 +344,7 @@ const Login = () => {
               text="Send Link"
               loading={loading}
               type="submit"
-              className={`${styles.loginButton} ${isValid ? "" : styles.disabledButton}`}
+              className={`${styles.sendLinkButton} ${isValid ? "" : styles.disabledButton}`}
             />
           </form>
         </div>
