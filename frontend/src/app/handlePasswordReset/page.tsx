@@ -305,7 +305,7 @@ const PasswordReset: React.FC = () => {
             />
           </div>
           <div className={styles.rememberPassword} onClick={toggleReset}>
-            Remember Old Password?
+            <a href="/login">Remember Old Password?</a>
           </div>
           <Button
             variant="primary"
