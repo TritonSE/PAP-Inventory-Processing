@@ -1,13 +1,15 @@
 import { RequestHandler } from "express";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
-import VSRModel from "src/models/vsr";
+import FurnitureItemModel, { FurnitureItem } from "src/models/furnitureItem";
+import VSRModel, { FurnitureInput, VSR } from "src/models/vsr";
 import {
   sendVSRConfirmationEmailToVeteran,
   sendVSRNotificationEmailToStaff,
 } from "src/services/emails";
 import validationErrorParser from "src/util/validationErrorParser";
 import ExcelJS from "exceljs";
+import { ObjectId } from "mongodb";
 
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
@@ -158,11 +160,56 @@ export const deleteVSR: RequestHandler = async (req, res, next) => {
   }
 };
 
+/**
+ * Converts an entry in a VSR to a formatted string to write to the Excel spreadsheet
+ */
+const stringifyEntry = (
+  entry: string | number | string[] | number[] | boolean | Date | undefined,
+) => {
+  if (!entry) {
+    return "";
+  }
+
+  if (Array.isArray(entry)) {
+    return entry.join(", ");
+  } else {
+    return entry.toString();
+  }
+};
+
+type FurnitureItemEntry = FurnitureItem & { _id: ObjectId };
+
+/**
+ * Formats a VSR's selected furniture items as a string
+ */
+const stringifySelectedFurnitureItems = (
+  selectedItems: FurnitureInput[] | undefined,
+  allFurnitureItems: FurnitureItemEntry[],
+) => {
+  if (!selectedItems) {
+    return "";
+  }
+
+  const itemIdsToItems: Record<string, FurnitureItem> = {};
+
+  for (const furnitureItem of allFurnitureItems) {
+    itemIdsToItems[furnitureItem._id.toString()] = furnitureItem;
+  }
+
+  return selectedItems
+    .map((selectedItem) => {
+      const furnitureItem = itemIdsToItems[selectedItem.furnitureItemId];
+      return furnitureItem ? `${furnitureItem.name}: ${selectedItem.quantity}` : "[unknown]";
+    })
+    .join(", ");
+};
+
 const writeSpreadsheet = async (filename: string) => {
   const workbook = new ExcelJS.Workbook();
 
   workbook.creator = "PAP Inventory System";
   workbook.lastModifiedBy = "Bot";
+
   //current date
   workbook.created = new Date();
   workbook.modified = new Date();
@@ -173,49 +220,76 @@ const writeSpreadsheet = async (filename: string) => {
   const vsrs = await VSRModel.find();
   const plainVsrs = vsrs.map((doc) => doc.toObject());
 
-  // Setup columns headers based on keys from the first object in the plainVsrs array
-  if (plainVsrs.length > 0) {
-    worksheet.columns = Object.keys(plainVsrs[0]).map((key) => ({
-      header: key,
-      key: key,
-      width: 20,
-    }));
+  // Fields that we want to write to the spreadsheet. First is field name, second is display name.
+  const fieldsToWrite: [keyof VSR, string][] = [
+    ["name", "Name"],
+    ["gender", "Gender"],
+    ["age", "Age"],
+    ["maritalStatus", "Marital Status"],
+    ["spouseName", "Spouse Name"],
+    ["agesOfBoys", "Ages of boys"],
+    ["agesOfGirls", "Ages of girls"],
+    ["ethnicity", "Ethnicity"],
+    ["employmentStatus", "Employment Status"],
+    ["incomeLevel", "Income Level"],
+    ["sizeOfHome", "Size of Home"],
 
-    // Add data rows to the worksheet
-    plainVsrs.forEach((item) => {
-      worksheet.addRow(item);
+    ["streetAddress", "Street Address"],
+    ["city", "City"],
+    ["state", "State"],
+    ["zipCode", "Zip Code"],
+    ["phoneNumber", "Phone Number"],
+    ["email", "Email Address"],
+    ["branch", "Branch"],
+    ["conflicts", "Conflicts"],
+    ["dischargeStatus", "Discharge Status"],
+    ["serviceConnected", "Service Connected"],
+    ["lastRank", "Last Rank"],
+    ["militaryID", "Military ID"],
+    ["petCompanion", "Pet Companion Desired"],
+    ["hearFrom", "Referral Source"],
 
-      //cast each element in the row to a string
+    ["selectedFurnitureItems", "Selected Furniture Items"],
+    ["additionalItems", "Additional Items"],
 
-      //for the row that was just added in the spreadsheet, if there are brackets surrounding any of the entries, remove them
-      if (worksheet.lastRow) {
-        worksheet.lastRow.eachCell((cell) => {
-          if (cell.value && !(typeof cell.value === "number")) {
-            cell.value = cell.value.toString();
-          }
-        });
+    ["dateReceived", "Date Received"],
+    ["lastUpdated", "Last Updated"],
+    ["status", "Status"],
+  ];
 
-        worksheet.lastRow.eachCell((cell) => {
-          if (
-            cell.value &&
-            typeof cell.value == "string" &&
-            cell.value[0] === "[" &&
-            cell.value[cell.value.length - 1] === "]"
-          ) {
-            cell.value = cell.value.slice(1, -1);
-          }
-        });
-      }
-    });
+  worksheet.columns = fieldsToWrite.map((field) => ({
+    header: field[1],
+    key: field[0],
+    width: 20,
+  }));
 
-    // Write to file
-    await workbook.xlsx.writeFile(filename);
-  }
+  const allFurnitureItems = await FurnitureItemModel.find();
+
+  // Add data rows to the worksheet
+  plainVsrs.forEach((vsr) => {
+    worksheet.addRow(
+      fieldsToWrite.reduce(
+        (prev, field) => ({
+          ...prev,
+          [field[0]]:
+            field[0] === "selectedFurnitureItems"
+              ? stringifySelectedFurnitureItems(
+                  vsr[field[0]] as FurnitureInput[] | undefined,
+                  allFurnitureItems,
+                )
+              : stringifyEntry(vsr[field[0]]),
+        }),
+        {},
+      ),
+    );
+  });
+
+  // Write to file
+  await workbook.xlsx.writeFile(filename);
 };
 
 export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
   try {
-    console.log("inside bulk export vsrs");
     const filename = "vsrs.xlsx";
     await writeSpreadsheet(filename);
     res.download(filename);

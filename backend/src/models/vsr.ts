@@ -3,7 +3,7 @@ import { InferSchemaType, Schema, model } from "mongoose";
 /**
  * A schema for a single furniture item that a veteran can request
  */
-const furntitureInputSchema = new Schema({
+export const furntitureInputSchema = new Schema({
   // ID of the furniture item being required (Object ID for an instance of the furniture item model)
   furnitureItemId: { type: String, required: true },
 
@@ -55,6 +55,7 @@ const vsrSchema = new Schema({
   status: { type: String, required: true },
 });
 
-type VSR = InferSchemaType<typeof vsrSchema>;
+export type FurnitureInput = InferSchemaType<typeof furntitureInputSchema>;
+export type VSR = InferSchemaType<typeof vsrSchema>;
 
 export default model<VSR>("VSR", vsrSchema);
