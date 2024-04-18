@@ -154,7 +154,7 @@ export default function VSRTableView() {
             }}
             imageComponent={
               <Image
-                src="/errors.no_internet.svg"
+                src="/errors/no_internet.svg"
                 alt="No Internet"
                 width={isMobile ? 100 : isTablet ? 138 : 114}
                 height={isMobile ? 93 : isTablet ? 129 : 106}
