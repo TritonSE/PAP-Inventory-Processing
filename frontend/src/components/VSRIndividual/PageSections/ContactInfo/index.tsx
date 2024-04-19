@@ -7,7 +7,7 @@ import { TextInputDetail } from "@/components/VSRIndividual/FieldDetails/TextInp
 import { UseFormReturn } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { SelectInputDetail } from "@/components/VSRIndividual/FieldDetails/SelectInputDetail";
-import { genderOptions, stateOptions } from "@/constants/fieldOptions";
+import { stateOptions } from "@/constants/fieldOptions";
 
 export interface ContactInfoProps {
   vsr: VSR;
