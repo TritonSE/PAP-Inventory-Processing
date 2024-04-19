@@ -20,6 +20,7 @@ const vsr_1 = __importDefault(require("../models/vsr"));
 const emails_1 = require("../services/emails");
 const validationErrorParser_1 = __importDefault(require("../util/validationErrorParser"));
 const exceljs_1 = __importDefault(require("exceljs"));
+const mongodb_1 = require("mongodb");
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
  * staff or admin permission.
@@ -148,11 +149,14 @@ exports.deleteVSR = deleteVSR;
  * Converts an entry in a VSR to a formatted string to write to the Excel spreadsheet
  */
 const stringifyEntry = (entry) => {
-    if (!entry) {
+    if (entry === undefined || entry === null) {
         return "";
     }
     if (Array.isArray(entry)) {
         return entry.join(", ");
+    }
+    else if (typeof entry === "boolean") {
+        return entry ? "yes" : "no";
     }
     else {
         return entry.toString();
@@ -176,7 +180,7 @@ const stringifySelectedFurnitureItems = (selectedItems, allFurnitureItems) => {
     })
         .join(", ");
 };
-const writeSpreadsheet = (filename, res) => __awaiter(void 0, void 0, void 0, function* () {
+const writeSpreadsheet = (plainVsrs, res) => __awaiter(void 0, void 0, void 0, function* () {
     const workbook = new exceljs_1.default.Workbook();
     workbook.creator = "PAP Inventory System";
     workbook.lastModifiedBy = "Bot";
@@ -185,8 +189,6 @@ const writeSpreadsheet = (filename, res) => __awaiter(void 0, void 0, void 0, fu
     workbook.modified = new Date();
     workbook.lastPrinted = new Date();
     const worksheet = workbook.addWorksheet("New Sheet");
-    const vsrs = yield vsr_1.default.find();
-    const plainVsrs = vsrs.map((doc) => doc.toObject());
     // Fields that we want to write to the spreadsheet. First is field name, second is display name.
     const fieldsToWrite = [
         ["name", "Name"],
@@ -236,6 +238,7 @@ const writeSpreadsheet = (filename, res) => __awaiter(void 0, void 0, void 0, fu
     yield workbook.xlsx.write(res);
 });
 const bulkExportVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     try {
         const filename = "vsrs.xlsx";
         // Set some headers on the response so the client knows that a file is attached
@@ -243,7 +246,24 @@ const bulkExportVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             "Content-Disposition": `attachment; filename="${filename}"`,
             "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
-        yield writeSpreadsheet(filename, res);
+        let vsrs;
+        if (req.query.vsrIds && ((_a = req.query.vsrIds.length) !== null && _a !== void 0 ? _a : 0) > 0) {
+            // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
+            // with an _id in the vsrIds list
+            // Need to convert each ID string to an ObjectId object
+            const vsrObjectIds = (_b = req.query.vsrIds) === null || _b === void 0 ? void 0 : _b.split(",").map((_id) => new mongodb_1.ObjectId(_id));
+            vsrs = yield vsr_1.default.find({
+                _id: {
+                    $in: vsrObjectIds,
+                },
+            });
+        }
+        else {
+            // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
+            vsrs = yield vsr_1.default.find();
+        }
+        const plainVsrs = vsrs.map((doc) => doc.toObject());
+        yield writeSpreadsheet(plainVsrs, res);
     }
     catch (error) {
         next(error);
