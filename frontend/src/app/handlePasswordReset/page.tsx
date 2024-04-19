@@ -1,30 +1,18 @@
-// Login.tsx
+// HandlePasswordReset.tsx
 "use client";
 
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from "@/app/handlePasswordReset/page.module.css";
-import {
-  signInWithEmailAndPassword,
-  getAuth,
-  sendPasswordResetEmail,
-  verifyPasswordResetCode,
-  confirmPasswordReset,
-} from "firebase/auth";
+import { verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
-import { initializeApp } from "firebase/app";
-import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
 import { useEffect } from "react";
-import { getWhoAmI } from "@/api/Users";
 import { ErrorNotification } from "@/components/Errors/ErrorNotification";
-import { FirebaseError } from "firebase/app";
 import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconButton } from "@mui/material";
-import env from "@/util/validateEnv";
-import { GRID_COLUMN_MENU_SLOTS } from "@mui/x-data-grid";
 
 enum LoginPageError {
   NO_INTERNET,
@@ -51,8 +39,6 @@ const PasswordReset: React.FC = () => {
   useRedirectToHomeIfSignedIn();
 
   const { auth } = initFirebase();
-
-  const { isMobile } = useScreenSizes();
 
   const {
     handleSubmit,
@@ -93,22 +79,6 @@ const PasswordReset: React.FC = () => {
   }, []);
 
   /**
-   * Sends the user's Firebase token to the /api/user/whoami backend route,
-   * to ensure they are a valid user and we can retrieve their identity.
-   */
-  const sendTokenToBackend = async (token: string) => {
-    const res = await getWhoAmI(token);
-    if (!res.success) {
-      if (res.error === "Failed to fetch") {
-        setPageError(LoginPageError.NO_INTERNET);
-      } else {
-        console.error(`Cannot retrieve whoami: error ${res.error}`);
-        setPageError(LoginPageError.INTERNAL);
-      }
-    }
-  };
-
-  /**
    * Prompts a link to be sent to the user with the given email
    */
   const resetPassword: SubmitHandler<ILoginFormInput> = async (data) => {
@@ -125,6 +95,7 @@ const PasswordReset: React.FC = () => {
               confirmPasswordReset(auth, actionCode, data.newPassword)
                 .then((resp) => {
                   console.log("Password has been reset");
+                  window.location.href = "/login";
                 })
                 .catch((error) => {
                   console.error("Confirm password reset failed: " + error);

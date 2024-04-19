@@ -79,7 +79,7 @@
 
 .instructions {
   color: #000;
-  font-family: "Open Sans";
+  font-family: var(--font-open-sans);
   font-size: 20px;
   margin: 0px 128px 0px 128px;
   text-align: center;
