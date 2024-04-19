@@ -217,9 +217,13 @@ export async function updateVSR(
   }
 }
 
-export async function bulkExportVSRS(firebaseToken: string): Promise<APIResult<null>> {
+export async function bulkExportVSRS(
+  firebaseToken: string,
+  vsrIds: string[],
+): Promise<APIResult<null>> {
   try {
-    const response = await get("/api/vsr/bulk_export", createAuthHeader(firebaseToken));
+    const query = vsrIds.length === 0 ? "" : `?vsrIds=${vsrIds.join(",")}`;
+    const response = await get(`/api/vsr/bulk_export${query}`, createAuthHeader(firebaseToken));
     const blob = await response.blob();
 
     const url = window.URL.createObjectURL(blob);

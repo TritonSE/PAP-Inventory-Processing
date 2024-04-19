@@ -204,7 +204,7 @@ const stringifySelectedFurnitureItems = (
     .join(", ");
 };
 
-const writeSpreadsheet = async (filename: string, res: Response) => {
+const writeSpreadsheet = async (plainVsrs: VSR[], res: Response) => {
   const workbook = new ExcelJS.Workbook();
 
   workbook.creator = "PAP Inventory System";
@@ -216,9 +216,6 @@ const writeSpreadsheet = async (filename: string, res: Response) => {
   workbook.lastPrinted = new Date();
 
   const worksheet = workbook.addWorksheet("New Sheet");
-
-  const vsrs = await VSRModel.find();
-  const plainVsrs = vsrs.map((doc) => doc.toObject());
 
   // Fields that we want to write to the spreadsheet. First is field name, second is display name.
   const fieldsToWrite: [keyof VSR, string][] = [
@@ -297,7 +294,27 @@ export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    await writeSpreadsheet(filename, res);
+    let vsrs;
+
+    if (req.query.vsrIds && ((req.query.vsrIds.length ?? 0) as number) > 0) {
+      // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
+      // with an _id in the vsrIds list
+
+      // Need to convert each ID string to an ObjectId object
+      const vsrObjectIds = (req.query.vsrIds as string)?.split(",").map((_id) => new ObjectId(_id));
+      vsrs = await VSRModel.find({
+        _id: {
+          $in: vsrObjectIds,
+        },
+      });
+    } else {
+      // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
+      vsrs = await VSRModel.find();
+    }
+
+    const plainVsrs = vsrs.map((doc) => doc.toObject());
+
+    await writeSpreadsheet(plainVsrs, res);
   } catch (error) {
     next(error);
   }
