@@ -21,8 +21,6 @@ export const ContactInfo = ({ vsr, isEditing, formProps }: ContactInfoProps) => 
   useEffect(() => {
     formProps.setValue("phoneNumber", vsr.phoneNumber);
     formProps.setValue("email", vsr.email);
-    formProps.setValue("gender", vsr.gender);
-    formProps.setValue("age", vsr.age);
     formProps.setValue("streetAddress", vsr.streetAddress);
     formProps.setValue("city", vsr.city);
     formProps.setValue("zipCode", vsr.zipCode);
@@ -55,28 +53,6 @@ export const ContactInfo = ({ vsr, isEditing, formProps }: ContactInfoProps) => 
           />
         ) : (
           <SingleDetail title="Email Address" value={vsr.email} />
-        )}
-      </div>
-      <div className={styles.row}>
-        {isEditing ? (
-          <SelectInputDetail
-            name="gender"
-            title="Gender"
-            formProps={formProps}
-            options={genderOptions}
-          />
-        ) : (
-          <SingleDetail title="Gender" value={vsr.gender} />
-        )}
-        {isEditing ? (
-          <TextInputDetail
-            name="age"
-            title="Age"
-            formProps={formProps}
-            placeholder="Enter your age"
-          />
-        ) : (
-          <SingleDetail title="Age" value={vsr.age} />
         )}
       </div>
       {isEditing ? (

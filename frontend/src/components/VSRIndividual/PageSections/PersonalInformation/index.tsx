@@ -10,10 +10,10 @@ import { SelectInputDetail } from "@/components/VSRIndividual/FieldDetails/Selec
 import {
   employmentOptions,
   ethnicityOptions,
+  genderOptions,
   homeOptions,
   incomeOptions,
   maritalOptions,
-  stateOptions,
 } from "@/constants/fieldOptions";
 import { MultipleChoiceInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceInputDetail";
 import { MultipleChoiceWithOtherInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceWithOtherInputDetail";
@@ -31,10 +31,8 @@ export interface PersonalInformationProps {
 export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInformationProps) => {
   useEffect(() => {
     formProps.setValue("name", vsr.name);
-    formProps.setValue("streetAddress", vsr.streetAddress);
-    formProps.setValue("city", vsr.city);
-    formProps.setValue("zipCode", vsr.zipCode);
-    formProps.setValue("state", vsr.state);
+    formProps.setValue("gender", vsr.gender);
+    formProps.setValue("age", vsr.age);
     formProps.setValue("maritalStatus", vsr.maritalStatus);
     formProps.setValue("spouseName", vsr.spouseName ?? "");
     formProps.setValue("num_boys", vsr.agesOfBoys.length);
@@ -71,51 +69,27 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
           <SingleDetail title="Name" value={vsr.name} />
         )}
       </div>
-      {isEditing ? (
-        <>
-          <div className={styles.row}>
-            <TextInputDetail
-              name="streetAddress"
-              title="Street Address"
-              formProps={formProps}
-              placeholder="e.g. 1234 Baker Street"
-            />
-          </div>
-          <div className={styles.row}>
-            <TextInputDetail
-              name="city"
-              title="City"
-              formProps={formProps}
-              placeholder="e.g. San Diego"
-            />
-          </div>
-        </>
-      ) : (
-        <div className={styles.row}>
-          <SingleDetail title="Street Address" value={vsr.streetAddress} />
-          <SingleDetail title="City" value={vsr.city} />
-        </div>
-      )}
+
       <div className={styles.row}>
         {isEditing ? (
           <SelectInputDetail
-            name="state"
-            title="State"
+            name="gender"
+            title="Gender"
             formProps={formProps}
-            options={stateOptions}
+            options={genderOptions}
           />
         ) : (
-          <SingleDetail title="State" value={vsr.state} />
+          <SingleDetail title="Gender" value={vsr.gender} />
         )}
         {isEditing ? (
           <TextInputDetail
-            name="zipCode"
-            title="Zip Code"
+            name="age"
+            title="Age"
             formProps={formProps}
-            placeholder="e.g. 92092"
+            placeholder="Enter your age"
           />
         ) : (
-          <SingleDetail title="Zip Code" value={vsr.zipCode} />
+          <SingleDetail title="Age" value={vsr.age} />
         )}
       </div>
       <div className={styles.row}>
