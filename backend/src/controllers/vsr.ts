@@ -11,6 +11,8 @@ import validationErrorParser from "src/util/validationErrorParser";
 import ExcelJS from "exceljs";
 import { ObjectId } from "mongodb";
 
+type FurnitureItemEntry = FurnitureItem & { _id: ObjectId };
+
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
  * staff or admin permission.
@@ -178,8 +180,6 @@ const stringifyEntry = (
     return entry.toString();
   }
 };
-
-type FurnitureItemEntry = FurnitureItem & { _id: ObjectId };
 
 /**
  * Formats a VSR's selected furniture items as a string
