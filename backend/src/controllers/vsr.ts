@@ -296,7 +296,7 @@ export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    let vsrs;
+    let vsrs: VSR[];
 
     if (req.query.vsrIds && ((req.query.vsrIds.length ?? 0) as number) > 0) {
       // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
@@ -304,19 +304,19 @@ export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
 
       // Need to convert each ID string to an ObjectId object
       const vsrObjectIds = (req.query.vsrIds as string)?.split(",").map((_id) => new ObjectId(_id));
-      vsrs = await VSRModel.find({
-        _id: {
-          $in: vsrObjectIds,
-        },
-      });
+      vsrs = (
+        await VSRModel.find({
+          _id: {
+            $in: vsrObjectIds,
+          },
+        })
+      ).map((doc) => doc.toObject());
     } else {
       // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
-      vsrs = await VSRModel.find();
+      vsrs = (await VSRModel.find()).map((doc) => doc.toObject());
     }
 
-    const plainVsrs = vsrs.map((doc) => doc.toObject());
-
-    await writeSpreadsheet(plainVsrs, res);
+    await writeSpreadsheet(vsrs, res);
   } catch (error) {
     next(error);
   }

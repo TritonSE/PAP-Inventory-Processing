@@ -252,18 +252,17 @@ const bulkExportVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, fun
             // with an _id in the vsrIds list
             // Need to convert each ID string to an ObjectId object
             const vsrObjectIds = (_b = req.query.vsrIds) === null || _b === void 0 ? void 0 : _b.split(",").map((_id) => new mongodb_1.ObjectId(_id));
-            vsrs = yield vsr_1.default.find({
+            vsrs = (yield vsr_1.default.find({
                 _id: {
                     $in: vsrObjectIds,
                 },
-            });
+            })).map((doc) => doc.toObject());
         }
         else {
             // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
-            vsrs = yield vsr_1.default.find();
+            vsrs = (yield vsr_1.default.find()).map((doc) => doc.toObject());
         }
-        const plainVsrs = vsrs.map((doc) => doc.toObject());
-        yield writeSpreadsheet(plainVsrs, res);
+        yield writeSpreadsheet(vsrs, res);
     }
     catch (error) {
         next(error);
