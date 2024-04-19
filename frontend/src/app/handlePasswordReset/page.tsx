@@ -9,6 +9,7 @@ import {
   getAuth,
   sendPasswordResetEmail,
   verifyPasswordResetCode,
+  confirmPasswordReset,
 } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { initializeApp } from "firebase/app";
@@ -23,6 +24,7 @@ import TextField from "@/components/shared/input/TextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconButton } from "@mui/material";
 import env from "@/util/validateEnv";
+import { GRID_COLUMN_MENU_SLOTS } from "@mui/x-data-grid";
 
 enum LoginPageError {
   NO_INTERNET,
@@ -33,8 +35,8 @@ enum LoginPageError {
 }
 
 interface ILoginFormInput {
-  email: string;
-  password: string;
+  newPassword: string;
+  confirmPassword: string;
 }
 
 /**
@@ -64,18 +66,20 @@ const PasswordReset: React.FC = () => {
     setPasswordReset(!passwordReset);
   };
 
+  let urlParams: URLSearchParams, mode, actionCode: string | null;
+
   /**
    * Fetch URL params once page loads
    */
   useEffect(() => {
     console.log("Fetching reset info");
-    const urlParams = new URLSearchParams(window.location.search);
-    const mode = urlParams.get("mode");
-    const actionCode = urlParams.get("oobCode");
-    const firebaseConfig = env.NEXT_PUBLIC_FIREBASE_SETTINGS;
+    urlParams = new URLSearchParams(window.location.search);
+    mode = urlParams.get("mode");
+    actionCode = urlParams.get("oobCode");
+    // const firebaseConfig = env.NEXT_PUBLIC_FIREBASE_SETTINGS;
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
+    // const app = initializeApp(firebaseConfig);
+    // const auth = getAuth(app);
 
     console.log(actionCode);
     if (mode == "resetPassword") {
@@ -105,60 +109,36 @@ const PasswordReset: React.FC = () => {
   };
 
   /**
-   * Logs the user in using their entered email and password.
-   */
-  const onSubmit: SubmitHandler<ILoginFormInput> = async (data) => {
-    try {
-      setLoading(true);
-
-      // Sign in to Firebase
-      const userCredential = await signInWithEmailAndPassword(auth, data.email, data.password);
-
-      // Get token for user
-      const token = await userCredential.user?.getIdToken();
-      if (!token) {
-        console.error("JWT token not retrieved.");
-        setPageError(LoginPageError.INTERNAL);
-      } else {
-        // Once we have the token, send it to the /api/user/whoami backend route
-        await sendTokenToBackend(token);
-      }
-    } catch (error) {
-      console.error("Firebase login failed with error: ", error);
-
-      // See https://firebase.google.com/docs/auth/admin/errors for Firebase error codes
-      switch ((error as FirebaseError)?.code) {
-        case "auth/invalid-email":
-        case "auth/invalid-credentials":
-        case "auth/invalid-login-credentials":
-          setPageError(LoginPageError.INVALID_CREDENTIALS);
-          break;
-        case "auth/network-request-failed":
-          setPageError(LoginPageError.NO_INTERNET);
-          break;
-        case "auth/too-many-requests":
-          setPageError(LoginPageError.TOO_MANY_REQUESTS);
-          break;
-        default:
-          setPageError(LoginPageError.INTERNAL);
-          break;
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  /**
    * Prompts a link to be sent to the user with the given email
    */
-  const sendResetLink: SubmitHandler<ILoginFormInput> = async (data) => {
-    sendPasswordResetEmail(auth, data.email)
-      .then(() => {
-        console.log("Password reset email sent!");
-      })
-      .catch((error) => {
-        console.error("Password reset email sending error: ", error);
-      });
+  const resetPassword: SubmitHandler<ILoginFormInput> = async (data) => {
+    if (data.newPassword == data.confirmPassword) {
+      urlParams = new URLSearchParams(window.location.search);
+      mode = urlParams.get("mode");
+      actionCode = urlParams.get("oobCode");
+      console.log("Passwords are the same: " + data.newPassword + ", " + data.confirmPassword);
+      if (actionCode != null) {
+        verifyPasswordResetCode(auth, actionCode)
+          .then((email) => {
+            const accountEmail = email;
+            if (actionCode != null) {
+              confirmPasswordReset(auth, actionCode, data.newPassword)
+                .then((resp) => {
+                  console.log("Password has been reset");
+                })
+                .catch((error) => {
+                  console.error("Confirm password reset failed: " + error);
+                });
+            }
+          })
+          .catch((error) => {
+            console.error("Verify password reset code failed: " + error);
+          });
+      } else {
+        console.log("action code null");
+        // TODO: display error - passwords don't match
+      }
+    }
   };
 
   // Move error notification higher up than usual
@@ -252,18 +232,18 @@ const PasswordReset: React.FC = () => {
       <div className={styles.resetBox}>
         <div className={styles.resetText}>New Password</div>
         <div className={styles.instructions}>Set the new password for your account!</div>
-        <form onSubmit={handleSubmit(sendResetLink)} className={styles.resetForm}>
+        <form onSubmit={handleSubmit(resetPassword)} className={styles.resetForm}>
           <div className={styles.inputGroup}>
             <TextField
               label="New Password"
               variant="outlined"
               placeholder="Enter"
-              {...register("password", {
-                required: "Password is required",
+              {...register("newPassword", {
+                required: "New Password is required",
               })}
               required={false}
-              error={!!errors.password}
-              helperText={errors.password?.message}
+              error={!!errors.newPassword}
+              helperText={errors.newPassword?.message}
               type={passwordVisibleOne ? "text" : "password"}
               InputProps={{
                 endAdornment: (
@@ -283,12 +263,12 @@ const PasswordReset: React.FC = () => {
               label="Confirm New Password"
               variant="outlined"
               placeholder="Enter"
-              {...register("password", {
-                required: "Password is required",
+              {...register("confirmPassword", {
+                required: "Confirm Password is required",
               })}
               required={false}
-              error={!!errors.password}
-              helperText={errors.password?.message}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message}
               type={passwordVisibleTwo ? "text" : "password"}
               InputProps={{
                 endAdornment: (
