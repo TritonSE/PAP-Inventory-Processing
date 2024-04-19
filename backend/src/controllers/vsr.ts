@@ -166,12 +166,14 @@ export const deleteVSR: RequestHandler = async (req, res, next) => {
 const stringifyEntry = (
   entry: string | number | string[] | number[] | boolean | Date | undefined,
 ) => {
-  if (!entry) {
+  if (entry === undefined || entry === null) {
     return "";
   }
 
   if (Array.isArray(entry)) {
     return entry.join(", ");
+  } else if (typeof entry === "boolean") {
+    return entry ? "yes" : "no";
   } else {
     return entry.toString();
   }
