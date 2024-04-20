@@ -34,6 +34,7 @@ const PasswordReset: React.FC = () => {
   const [passwordVisibleOne, setPasswordVisibleOne] = useState(false);
   const [passwordVisibleTwo, setPasswordVisibleTwo] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [pageError, setPageError] = useState(LoginPageError.NONE);
 
   useRedirectToHomeIfSignedIn();
@@ -109,6 +110,8 @@ const PasswordReset: React.FC = () => {
         console.log("action code null");
         // TODO: display error - passwords don't match
       }
+    } else {
+      setError(true);
     }
   };
 
@@ -238,8 +241,8 @@ const PasswordReset: React.FC = () => {
                 required: "Confirm Password is required",
               })}
               required={false}
-              error={!!errors.confirmPassword}
-              helperText={errors.confirmPassword?.message}
+              error={error}
+              helperText={error ? "Passwords do not match" : errors.confirmPassword?.message}
               type={passwordVisibleTwo ? "text" : "password"}
               InputProps={{
                 endAdornment: (
