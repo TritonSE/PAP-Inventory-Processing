@@ -4,7 +4,11 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from "@/app/handlePasswordReset/page.module.css";
-import { verifyPasswordResetCode, confirmPasswordReset } from "firebase/auth";
+import {
+  verifyPasswordResetCode,
+  confirmPasswordReset,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
 import { useEffect } from "react";
@@ -91,12 +95,11 @@ const PasswordReset: React.FC = () => {
       if (actionCode != null) {
         verifyPasswordResetCode(auth, actionCode)
           .then((email) => {
-            const accountEmail = email;
             if (actionCode != null) {
               confirmPasswordReset(auth, actionCode, data.newPassword)
                 .then((resp) => {
                   console.log("Password has been reset");
-                  window.location.href = "/login";
+                  signInWithEmailAndPassword(auth, email, data.newPassword);
                 })
                 .catch((error) => {
                   console.error("Confirm password reset failed: " + error);
