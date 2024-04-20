@@ -15,6 +15,7 @@ import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconButton } from "@mui/material";
+import { SuccessNotification } from "@/components/shared/SuccessNotification";
 
 enum LoginPageError {
   NO_INTERNET,
@@ -55,6 +56,8 @@ const Login = () => {
   } = useForm<ILoginFormInput>();
 
   const [passwordReset, setPasswordReset] = useState(false);
+  const [updateStatusSuccessNotificationOpen, setUpdateStatusSuccessNotificationOpen] =
+    useState(false);
 
   const toggleReset = () => {
     setPasswordReset(!passwordReset);
@@ -127,6 +130,7 @@ const Login = () => {
     sendPasswordResetEmail(auth, data.email)
       .then(() => {
         console.log("Password reset email sent!");
+        setUpdateStatusSuccessNotificationOpen(true);
         setSendLinkText("Resend Link");
         setResetText("Didn't receive an email?\nTry resending with the link below!");
       })
@@ -354,6 +358,16 @@ const Login = () => {
           </form>
         </div>
         {renderErrorNotification()}
+        <SuccessNotification
+          isOpen={updateStatusSuccessNotificationOpen}
+          mainText={"Password Reset Link Sent"}
+          actions={[
+            {
+              text: "Dismiss",
+              onClick: () => setUpdateStatusSuccessNotificationOpen(false),
+            },
+          ]}
+        />
       </div>
     );
   }
