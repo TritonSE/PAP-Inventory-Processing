@@ -5,8 +5,9 @@ import Image from "next/image";
 
 export interface FurnitureItemSelectionProps {
   furnitureItem: FurnitureItem;
-  selection: FurnitureInput;
-  onChangeSelection: (newSelection: FurnitureInput) => unknown;
+  selection?: FurnitureInput;
+  onChangeSelection?: (newSelection: FurnitureInput) => unknown;
+  isActive: boolean;
 }
 
 /**
@@ -17,29 +18,36 @@ export const FurnitureItemSelection = ({
   furnitureItem,
   selection,
   onChangeSelection,
+  isActive,
 }: FurnitureItemSelectionProps) => {
   const handleChipClicked = () => {
-    if (selection.quantity === 0) {
-      incrementCount();
-    } else if (!furnitureItem.allowMultiple) {
-      onChangeSelection({ ...selection, quantity: 0 });
+    if (isActive) {
+      if (selection!.quantity === 0) {
+        incrementCount();
+      } else if (!furnitureItem.allowMultiple) {
+        onChangeSelection!({ ...selection!, quantity: 0 });
+      }
     }
   };
 
   const incrementCount = () => {
-    onChangeSelection({ ...selection, quantity: selection.quantity + 1 });
+    if (isActive) {
+      onChangeSelection!({ ...selection!, quantity: selection!.quantity + 1 });
+    }
   };
 
   const decrementCount = () => {
-    if (selection.quantity > 0) {
-      onChangeSelection({ ...selection, quantity: selection.quantity - 1 });
+    if (isActive) {
+      if (selection!.quantity > 0) {
+        onChangeSelection!({ ...selection!, quantity: selection!.quantity - 1 });
+      }
     }
   };
 
   return (
     <div
       className={`${styles.chip} ${
-        selection.quantity > 0 ? styles.chipSelected : styles.chipUnselected
+        selection && selection.quantity > 0 ? styles.chipSelected : styles.chipUnselected
       }`}
       onClick={handleChipClicked}
     >
@@ -57,7 +65,7 @@ export const FurnitureItemSelection = ({
             >
               <Image
                 className={`${styles.dec} ${
-                  selection.quantity > 0 ? styles.decSelected : styles.dec
+                  selection && selection.quantity > 0 ? styles.decSelected : styles.dec
                 }`}
                 src="/icon_minus.svg"
                 width={22}
@@ -65,7 +73,7 @@ export const FurnitureItemSelection = ({
                 alt="dropdown"
               />
             </button>
-            <span className={styles.quantityText}>{selection.quantity}</span>
+            <span className={styles.quantityText}>{selection?.quantity ?? 0}</span>
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -76,7 +84,7 @@ export const FurnitureItemSelection = ({
             >
               <Image
                 className={`${styles.inc} ${
-                  selection.quantity > 0 ? styles.incSelected : styles.inc
+                  selection && selection.quantity > 0 ? styles.incSelected : styles.inc
                 }`}
                 src="/icon_plus.svg"
                 width={22}

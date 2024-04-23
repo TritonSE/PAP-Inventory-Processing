@@ -1069,6 +1069,7 @@ const VeteranServiceRequest: React.FC = () => {
                           <div className={styles.chipContainer}>
                             {(items ?? []).map((furnitureItem) => (
                               <FurnitureItemSelection
+                                isActive
                                 key={furnitureItem._id}
                                 furnitureItem={furnitureItem}
                                 selection={
