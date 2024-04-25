@@ -57,4 +57,6 @@ const vsrSchema = new Schema({
 
 type VSR = InferSchemaType<typeof vsrSchema>;
 
+vsrSchema.index({ name: "text" });
+
 export default model<VSR>("VSR", vsrSchema);

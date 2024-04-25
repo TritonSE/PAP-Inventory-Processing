@@ -156,11 +156,20 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
   }
 }
 
-export async function getAllVSRs(firebaseToken: string): Promise<APIResult<VSR[]>> {
+export async function getAllVSRs(
+  firebaseToken: string,
+  search?: string,
+): Promise<APIResult<VSR[]>> {
   try {
-    const response = await get("/api/vsr", createAuthHeader(firebaseToken));
-    const json = (await response.json()) as VSRListJson;
-    return { success: true, data: json.vsrs.map(parseVSR) };
+    if (search) {
+      const response = await get(`/api/vsr?search=${search}`, createAuthHeader(firebaseToken));
+      const json = (await response.json()) as VSRListJson;
+      return { success: true, data: json.vsrs.map(parseVSR) };
+    } else {
+      const response = await get("/api/vsr", createAuthHeader(firebaseToken));
+      const json = (await response.json()) as VSRListJson;
+      return { success: true, data: json.vsrs.map(parseVSR) };
+    }
   } catch (error) {
     return handleAPIError(error);
   }

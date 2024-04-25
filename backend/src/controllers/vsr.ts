@@ -22,6 +22,15 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
   }
 };
 
+export const getAllVSRSBySearch: RequestHandler = async (req, res, next) => {
+  try {
+    const vsrs = await VSRModel.find({ $text: { $search: req.query.search as string } });
+    res.status(200).json({ vsrs });
+  } catch (error) {
+    next(error);
+  }
+};
+
 /**
  * Retrieves a single VSR by its ID. Requires the user to get signed in and have
  * staff or admin permission.
