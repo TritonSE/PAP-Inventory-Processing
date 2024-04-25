@@ -7,7 +7,6 @@ import * as VSRValidator from "src/validators/vsr";
 const router = express.Router();
 
 router.get("/", requireSignedIn, requireStaffOrAdmin, VSRController.getAllVSRS);
-router.get("/:search", VSRController.getAllVSRSBySearch);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 router.get("/:id", requireSignedIn, requireStaffOrAdmin, VSRController.getVSR);
 router.delete("/:id", requireSignedIn, requireAdmin, VSRController.deleteVSR);

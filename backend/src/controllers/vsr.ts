@@ -14,18 +14,23 @@ import validationErrorParser from "src/util/validationErrorParser";
  */
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
-    const vsrs = await VSRModel.find();
-
-    res.status(200).json({ vsrs });
-  } catch (error) {
-    next(error);
-  }
-};
-
-export const getAllVSRSBySearch: RequestHandler = async (req, res, next) => {
-  try {
-    const vsrs = await VSRModel.find({ $text: { $search: req.query.search as string } });
-    res.status(200).json({ vsrs });
+    if (req.query.search) {
+      const vsrs = await VSRModel.find({ $text: { $search: req.query.search as string } }).sort({
+        //by status in a particular order
+        status: 1,
+        //and then by name
+        name: 1,
+      });
+      res.status(200).json({ vsrs });
+    } else {
+      const vsrs = await VSRModel.find().sort({
+        //by status in a particular order
+        status: 1,
+        //and then by name
+        name: 1,
+      });
+      res.status(200).json({ vsrs });
+    }
   } catch (error) {
     next(error);
   }
