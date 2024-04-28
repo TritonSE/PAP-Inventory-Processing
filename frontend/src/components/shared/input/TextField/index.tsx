@@ -21,6 +21,7 @@ const TextField = forwardRef(
     return (
       <FormField label={label} required={required} error={error} helperText={helperText}>
         <MUITextField
+          {...props}
           ref={ref}
           fullWidth
           size="small"
@@ -29,9 +30,10 @@ const TextField = forwardRef(
           InputProps={{
             classes: {
               input: styles.input,
+              ...(props.InputProps?.classes ?? {}),
             },
+            ...(props.InputProps ?? {}),
           }}
-          {...props}
         />
       </FormField>
     );

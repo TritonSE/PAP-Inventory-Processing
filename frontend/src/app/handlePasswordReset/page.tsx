@@ -11,35 +11,43 @@ import {
 } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
-import { useEffect } from "react";
 import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconButton } from "@mui/material";
+import { useSearchParams } from "next/navigation";
+import { FirebaseError } from "firebase/app";
 
-enum LoginPageError {
+enum ResetPasswordPageError {
   NO_INTERNET,
   INVALID_CREDENTIALS,
+  UNKNOWN_MODE,
+  INVALID_CODE,
+  WEAK_PASSWORD,
   INTERNAL,
   TOO_MANY_REQUESTS,
   NONE,
 }
 
-interface ILoginFormInput {
+interface IResetPasswordFormInput {
   newPassword: string;
   confirmPassword: string;
 }
 
+const OOB_CODE_URL_PARAM = "oobCode";
+const MODE_URL_PARAM = "mode";
+const RESET_PASSWORD_MODE = "resetPassword";
+
 /**
- * The root Login page component.
+ * The root Reset Password page component.
  */
 const PasswordReset: React.FC = () => {
-  const [passwordVisibleOne, setPasswordVisibleOne] = useState(false);
-  const [passwordVisibleTwo, setPasswordVisibleTwo] = useState(false);
+  const [newPasswordVisible, setNewPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
-  const [pageError, setPageError] = useState(LoginPageError.NONE);
+  const [pageError, setPageError] = useState(ResetPasswordPageError.NONE);
+  const [pageErrorText, setPageErrorText] = useState("");
 
   useRedirectToHomeIfSignedIn();
 
@@ -49,72 +57,88 @@ const PasswordReset: React.FC = () => {
     handleSubmit,
     register,
     formState: { errors, isValid },
-  } = useForm<ILoginFormInput>();
+    watch,
+  } = useForm<IResetPasswordFormInput>();
 
-  const [passwordReset, setPasswordReset] = useState(false);
-
-  const toggleReset = () => {
-    setPasswordReset(!passwordReset);
-  };
-
-  let urlParams: URLSearchParams, mode, actionCode: string | null;
-
-  /**
-   * Fetch URL params once page loads
-   */
-  useEffect(() => {
-    console.log("Fetching reset info");
-    urlParams = new URLSearchParams(window.location.search);
-    mode = urlParams.get("mode");
-    actionCode = urlParams.get("oobCode");
-    // const firebaseConfig = env.NEXT_PUBLIC_FIREBASE_SETTINGS;
-
-    // const app = initializeApp(firebaseConfig);
-    // const auth = getAuth(app);
-
-    console.log(actionCode);
-    if (mode == "resetPassword") {
-      // verify email
-      if (actionCode != null) {
-        verifyPasswordResetCode(auth, actionCode).then((email) => {
-          console.log("Password reset code verified");
-        });
-      }
-    }
-  }, []);
+  const searchParams = useSearchParams();
 
   /**
    * Prompts a link to be sent to the user with the given email
    */
-  const resetPassword: SubmitHandler<ILoginFormInput> = async (data) => {
-    if (data.newPassword == data.confirmPassword) {
-      urlParams = new URLSearchParams(window.location.search);
-      mode = urlParams.get("mode");
-      actionCode = urlParams.get("oobCode");
-      console.log("Passwords are the same: " + data.newPassword + ", " + data.confirmPassword);
-      if (actionCode != null) {
-        verifyPasswordResetCode(auth, actionCode)
-          .then((email) => {
-            if (actionCode != null) {
-              confirmPasswordReset(auth, actionCode, data.newPassword)
-                .then((resp) => {
-                  console.log("Password has been reset");
-                  signInWithEmailAndPassword(auth, email, data.newPassword);
-                })
-                .catch((error) => {
-                  console.error("Confirm password reset failed: " + error);
-                });
-            }
-          })
-          .catch((error) => {
-            console.error("Verify password reset code failed: " + error);
-          });
-      } else {
-        console.log("action code null");
-        // TODO: display error - passwords don't match
+  const resetPassword: SubmitHandler<IResetPasswordFormInput> = async (data) => {
+    setLoading(true);
+
+    const mode = searchParams.get(MODE_URL_PARAM);
+
+    if (mode !== RESET_PASSWORD_MODE) {
+      setPageError(ResetPasswordPageError.UNKNOWN_MODE);
+      setLoading(false);
+      return;
+    }
+
+    const oobCode = searchParams.get(OOB_CODE_URL_PARAM);
+
+    let email;
+
+    try {
+      email = await verifyPasswordResetCode(auth, oobCode ?? "");
+    } catch (error) {
+      console.error(`Verifying password reset code ${oobCode} failed with error: `, error);
+
+      switch ((error as FirebaseError)?.code) {
+        case "auth/network-request-failed":
+          setPageError(ResetPasswordPageError.NO_INTERNET);
+          break;
+        case "auth/invalid-action-code":
+          setPageError(ResetPasswordPageError.INVALID_CODE);
+          break;
+        default:
+          setPageError(ResetPasswordPageError.INTERNAL);
+          break;
       }
-    } else {
-      setError(true);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await confirmPasswordReset(auth, oobCode ?? "", data.newPassword);
+    } catch (error) {
+      console.error("Password reset failed with error: ", error);
+
+      switch ((error as FirebaseError)?.code) {
+        case "auth/weak-password":
+          setPageError(ResetPasswordPageError.WEAK_PASSWORD);
+          setPageErrorText((error as FirebaseError)?.message);
+          break;
+        case "auth/network-request-failed":
+          setPageError(ResetPasswordPageError.NO_INTERNET);
+          break;
+        default:
+          setPageError(ResetPasswordPageError.INTERNAL);
+          break;
+      }
+      setLoading(false);
+      return;
+    }
+
+    try {
+      await signInWithEmailAndPassword(auth, email, data.newPassword);
+    } catch (error) {
+      console.error("Firebase login failed with error: ", error);
+
+      switch ((error as FirebaseError)?.code) {
+        case "auth/network-request-failed":
+          setPageError(ResetPasswordPageError.NO_INTERNET);
+          break;
+        case "auth/too-many-requests":
+          setPageError(ResetPasswordPageError.TOO_MANY_REQUESTS);
+          break;
+        default:
+          setPageError(ResetPasswordPageError.INTERNAL);
+          break;
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -129,47 +153,80 @@ const PasswordReset: React.FC = () => {
    */
   const renderErrorNotification = () => {
     switch (pageError) {
-      case LoginPageError.NO_INTERNET:
+      case ResetPasswordPageError.NO_INTERNET:
         return (
           <ErrorNotification
             isOpen
             mainText="No Internet Connection"
-            subText="Unable to login due to no internet connection. Please check your connection and try again."
+            subText="Unable to reset password due to no internet connection. Please check your connection and try again."
             actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
-      case LoginPageError.INVALID_CREDENTIALS:
+      case ResetPasswordPageError.INVALID_CREDENTIALS:
         return (
           <ErrorNotification
             isOpen
             mainText="Invalid Credentials"
-            subText="Invalid email and/or password, please try again."
+            subText="Invalid password, please try again."
             actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
-      case LoginPageError.TOO_MANY_REQUESTS:
+      case ResetPasswordPageError.UNKNOWN_MODE:
+        return (
+          <ErrorNotification
+            isOpen
+            mainText="Unknown Mode"
+            subText='Unknown value for "mode" URL parameter'
+            actionText="Dismiss"
+            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            style={errorNotificationStyles}
+          />
+        );
+      case ResetPasswordPageError.INVALID_CODE:
+        return (
+          <ErrorNotification
+            isOpen
+            mainText="Invalid Link"
+            subText="Invalid reset password link. Link may have expired."
+            actionText="Dismiss"
+            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            style={errorNotificationStyles}
+          />
+        );
+      case ResetPasswordPageError.WEAK_PASSWORD:
+        return (
+          <ErrorNotification
+            isOpen
+            mainText="Weak Password"
+            subText={`Password is too weak: ${pageErrorText}`}
+            actionText="Dismiss"
+            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            style={errorNotificationStyles}
+          />
+        );
+      case ResetPasswordPageError.TOO_MANY_REQUESTS:
         return (
           <ErrorNotification
             isOpen
             mainText="Too Many Requests"
-            subText="You have made too many login attempts. Please try again later."
+            subText="You have made too many reset password attempts. Please try again later."
             actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
-      case LoginPageError.INTERNAL:
+      case ResetPasswordPageError.INTERNAL:
         return (
           <ErrorNotification
             isOpen
             mainText="Internal Error"
-            subText="Something went wrong with logging in. Our team is working to fix it. Please try again later."
+            subText="Something went wrong with resetting your password. Our team is working to fix it. Please try again later."
             actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
@@ -221,13 +278,16 @@ const PasswordReset: React.FC = () => {
               required={false}
               error={!!errors.newPassword}
               helperText={errors.newPassword?.message}
-              type={passwordVisibleOne ? "text" : "password"}
+              type={newPasswordVisible ? "text" : "password"}
               InputProps={{
                 endAdornment: (
-                  <IconButton onClick={() => setPasswordVisibleOne((prevVisible) => !prevVisible)}>
+                  <IconButton
+                    onClick={() => setNewPasswordVisible((prevVisible) => !prevVisible)}
+                    className={styles.visibilityButton}
+                  >
                     <Image
-                      src={passwordVisibleOne ? "/ic_show.svg" : "/ic_hide.svg"}
-                      alt={passwordVisibleOne ? "Show" : "Hide"}
+                      src={newPasswordVisible ? "/ic_show.svg" : "/ic_hide.svg"}
+                      alt={newPasswordVisible ? "Show" : "Hide"}
                       width={17}
                       height={17}
                     />
@@ -242,17 +302,24 @@ const PasswordReset: React.FC = () => {
               placeholder="Enter"
               {...register("confirmPassword", {
                 required: "Confirm Password is required",
+                validate: {
+                  validate: (confirmPassword) =>
+                    confirmPassword === watch().newPassword || "Passwords do not match",
+                },
               })}
               required={false}
-              error={error}
-              helperText={error ? "Passwords do not match" : errors.confirmPassword?.message}
-              type={passwordVisibleTwo ? "text" : "password"}
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword?.message}
+              type={confirmPasswordVisible ? "text" : "password"}
               InputProps={{
                 endAdornment: (
-                  <IconButton onClick={() => setPasswordVisibleTwo((prevVisible) => !prevVisible)}>
+                  <IconButton
+                    onClick={() => setConfirmPasswordVisible((prevVisible) => !prevVisible)}
+                    className={styles.visibilityButton}
+                  >
                     <Image
-                      src={passwordVisibleTwo ? "/ic_show.svg" : "/ic_hide.svg"}
-                      alt={passwordVisibleTwo ? "Show" : "Hide"}
+                      src={confirmPasswordVisible ? "/ic_show.svg" : "/ic_hide.svg"}
+                      alt={confirmPasswordVisible ? "Show" : "Hide"}
                       width={17}
                       height={17}
                     />
@@ -261,8 +328,8 @@ const PasswordReset: React.FC = () => {
               }}
             />
           </div>
-          <div className={styles.rememberPassword} onClick={toggleReset}>
-            <a href="/login">Remember Old Password?</a>
+          <div className={styles.rememberPassword}>
+            <a href="/login">Remembered Old Password?</a>
           </div>
           <Button
             variant="primary"

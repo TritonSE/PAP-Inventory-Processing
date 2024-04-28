@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 15px;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -67,13 +68,6 @@
 }
 
 .resetText {
-  color: #000;
-  text-align: center;
-  font-family: Lora;
-  font-size: 40px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: normal;
   margin-top: 22px; /* Gap between Welcome and Name field */
 }
 
@@ -81,17 +75,18 @@
   color: #000;
   font-family: var(--font-open-sans);
   font-size: 20px;
-  margin: 0px 128px 0px 128px;
+  margin: 0px 128px;
   text-align: center;
   margin-top: 16px;
 }
 
 .loginForm {
-  width: 55%;
+  width: 80%;
   margin-top: 16px; /* Gap between Name and Password */
 }
 
 .inputGroup {
+  margin-bottom: 16px;
   padding-top: 6px;
 }
 
@@ -136,19 +131,15 @@
 }
 
 .sendLinkButton {
-  width: 100%;
-  height: 50px;
-  flex-shrink: 0;
-  text-align: center;
-  font-family: Lora;
-  font-size: 24px;
-  font-weight: 700;
   margin-top: 64px;
-  margin-bottom: 64px;
 }
 
 .disabledButton {
   background: grey !important;
+}
+
+.visibilityButton {
+  padding: 0;
 }
 
 /* tablet version */
@@ -163,6 +154,11 @@
     max-width: 500px;
   }
 
+  .instructions {
+    margin: 0px 32px;
+    font-size: 18px;
+  }
+
   .loginForm {
     margin-top: 32px; /* Gap between Name and Password */
   }
@@ -175,6 +171,10 @@
   .loginButton {
     font-size: 18px;
     font-weight: 600;
+  }
+
+  .sendLinkButton {
+    margin-top: 48px;
   }
 }
 
@@ -200,8 +200,13 @@
   }
 
   .welcomeText {
-    font-size: 40px;
+    font-size: 28px;
     margin-top: 17px; /* Gap between Welcome and Name field */
+  }
+
+  .instructions {
+    margin: 0;
+    font-size: 14px;
   }
 
   .loginForm {
@@ -219,5 +224,9 @@
 
   .loginButton {
     margin-bottom: 17px;
+  }
+
+  .sendLinkButton {
+    margin-top: 32px;
   }
 }

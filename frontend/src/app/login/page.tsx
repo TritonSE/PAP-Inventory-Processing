@@ -1,10 +1,11 @@
 // Login.tsx
 "use client";
 
+import emailValidator from "email-validator";
 import React, { useState } from "react";
 import Image from "next/image";
 import styles from "@/app/login/page.module.css";
-import { signInWithEmailAndPassword, getAuth, sendPasswordResetEmail } from "firebase/auth";
+import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
@@ -22,6 +23,7 @@ enum LoginPageError {
   INVALID_CREDENTIALS,
   INTERNAL,
   TOO_MANY_REQUESTS,
+  CANNOT_SEND_PASSWORD_RESET,
   NONE,
 }
 
@@ -104,6 +106,7 @@ const Login = () => {
       // See https://firebase.google.com/docs/auth/admin/errors for Firebase error codes
       switch ((error as FirebaseError)?.code) {
         case "auth/invalid-email":
+        case "auth/invalid-credential":
         case "auth/invalid-credentials":
         case "auth/invalid-login-credentials":
           setPageError(LoginPageError.INVALID_CREDENTIALS);
@@ -127,16 +130,21 @@ const Login = () => {
    * Prompts a link to be sent to the user with the given email
    */
   const sendResetLink: SubmitHandler<ILoginFormInput> = async (data) => {
-    sendPasswordResetEmail(auth, data.email)
-      .then(() => {
-        console.log("Password reset email sent!");
-        setUpdateStatusSuccessNotificationOpen(true);
-        setSendLinkText("Resend Link");
-        setResetText("Didn't receive an email?\nTry resending with the link below!");
-      })
-      .catch((error) => {
-        console.error("Password reset email sending error: ", error);
-      });
+    setLoading(true);
+    setUpdateStatusSuccessNotificationOpen(false);
+
+    try {
+      await sendPasswordResetEmail(auth, data.email);
+
+      setUpdateStatusSuccessNotificationOpen(true);
+      setSendLinkText("Resend Link");
+      setResetText("Didn't receive an email?\nTry resending with the button below!");
+    } catch (error) {
+      setPageError(LoginPageError.CANNOT_SEND_PASSWORD_RESET);
+      console.error(`Error resetting password: ${error}`);
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Move error notification higher up than usual
@@ -189,6 +197,17 @@ const Login = () => {
             isOpen
             mainText="Internal Error"
             subText="Something went wrong with logging in. Our team is working to fix it. Please try again later."
+            actionText="Dismiss"
+            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            style={errorNotificationStyles}
+          />
+        );
+      case LoginPageError.CANNOT_SEND_PASSWORD_RESET:
+        return (
+          <ErrorNotification
+            isOpen
+            mainText="Cannot reset password"
+            subText="Could not send password reset email, please try again."
             actionText="Dismiss"
             onActionClicked={() => setPageError(LoginPageError.NONE)}
             style={errorNotificationStyles}
@@ -249,6 +268,11 @@ const Login = () => {
                 placeholder="e.g. johndoe@gmail.com"
                 {...register("email", {
                   required: "Email is required",
+                  validate: {
+                    validate: (emailAddress) =>
+                      emailValidator.validate(emailAddress) ||
+                      "This field must be a valid email address",
+                  },
                 })}
                 required={false}
                 error={!!errors.email}
@@ -269,7 +293,10 @@ const Login = () => {
                 type={passwordVisible ? "text" : "password"}
                 InputProps={{
                   endAdornment: (
-                    <IconButton onClick={() => setPasswordVisible((prevVisible) => !prevVisible)}>
+                    <IconButton
+                      onClick={() => setPasswordVisible((prevVisible) => !prevVisible)}
+                      className={styles.visibilityButton}
+                    >
                       <Image
                         src={passwordVisible ? "/ic_show.svg" : "/ic_hide.svg"}
                         alt={passwordVisible ? "Show" : "Hide"}
@@ -331,7 +358,7 @@ const Login = () => {
           <button className={styles.toLogin} onClick={toggleReset}>
             <Image src="/ic_arrowback.svg" width={24} height={24} alt={""} />
           </button>
-          <div className={styles.resetText}>Reset Password</div>
+          <div className={`${styles.welcomeText} ${styles.resetText}`}>Reset Password</div>
           <div className={styles.instructions}>{resetText} </div>
           <form onSubmit={handleSubmit(sendResetLink)} className={styles.loginForm}>
             <div className={styles.inputGroup}>
@@ -341,6 +368,11 @@ const Login = () => {
                 placeholder="e.g. johndoe@gmail.com"
                 {...register("email", {
                   required: "Email is required",
+                  validate: {
+                    validate: (emailAddress) =>
+                      emailValidator.validate(emailAddress) ||
+                      "This field must be a valid email address",
+                  },
                 })}
                 required={false}
                 error={!!errors.email}
@@ -353,7 +385,9 @@ const Login = () => {
               text={sendLinkText}
               loading={loading}
               type="submit"
-              className={`${styles.sendLinkButton} ${isValid ? "" : styles.disabledButton}`}
+              className={`${styles.loginButton} ${styles.sendLinkButton} ${
+                isValid ? "" : styles.disabledButton
+              }`}
             />
           </form>
         </div>

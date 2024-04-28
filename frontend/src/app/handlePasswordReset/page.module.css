@@ -1,5 +1,3 @@
-/* Login.css */
-
 .resetContainer {
   position: relative;
   height: 100vh;
@@ -14,6 +12,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 15px;
   border-radius: 12px;
   background: #fff;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -29,7 +28,7 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
-  padding: 10px 0px 10px 0px;
+  padding: 10px 0px;
   margin-top: 64px; /* Gap between Welcome and Name field */
 }
 
@@ -43,7 +42,7 @@
 }
 
 .resetForm {
-  width: 55%;
+  width: 80%;
   margin-top: 16px; /* Gap between Name and Password */
 }
 
@@ -99,6 +98,10 @@
   background: grey !important;
 }
 
+.visibilityButton {
+  padding: 0;
+}
+
 /* tablet version */
 @media screen and (max-width: 850px) {
   .backgroundImage {
@@ -106,21 +109,17 @@
     object-position: 35% 10%;
   }
 
-  .loginBox {
+  .resetBox {
     width: 90%;
     max-width: 500px;
   }
 
-  .loginForm {
-    margin-top: 32px; /* Gap between Name and Password */
+  .instructions {
+    margin: 0px 32px;
+    font-size: 18px;
   }
 
-  .forgotPassword {
-    font-size: 12px;
-    margin-bottom: 38px; /* Gap between Forgot password and Log In */
-  }
-
-  .loginButton {
+  .confirmButton {
     font-size: 18px;
     font-weight: 600;
   }
@@ -133,39 +132,26 @@
     object-position: 35% 10%;
   }
 
-  .logoContainer {
-    padding: 10px;
-  }
-
-  .logoImage {
-    width: 130px;
-    height: 60px;
-  }
-
   .image {
     width: 130px;
     height: 60px;
   }
 
-  .welcomeText {
-    font-size: 40px;
+  .resetText {
+    font-size: 28px;
     margin-top: 17px; /* Gap between Welcome and Name field */
   }
 
-  .loginForm {
-    width: 100%;
+  .instructions {
+    margin: 0;
+    font-size: 14px;
   }
 
   .inputGroup {
     padding-top: 0;
   }
 
-  .forgotPassword {
-    padding-top: 16px;
-    margin-bottom: 32px; /* Gap between Forgot password and Log In */
-  }
-
-  .loginButton {
+  .confirmButton {
     margin-bottom: 17px;
   }
 }
