@@ -12,12 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteVSR = exports.updateVSR = exports.updateStatus = exports.createVSR = exports.getVSR = exports.getAllVSRS = void 0;
+exports.bulkExportVSRS = exports.deleteVSR = exports.updateVSR = exports.updateStatus = exports.createVSR = exports.getVSR = exports.getAllVSRS = void 0;
 const express_validator_1 = require("express-validator");
 const http_errors_1 = __importDefault(require("http-errors"));
+const furnitureItem_1 = __importDefault(require("../models/furnitureItem"));
 const vsr_1 = __importDefault(require("../models/vsr"));
 const emails_1 = require("../services/emails");
 const validationErrorParser_1 = __importDefault(require("../util/validationErrorParser"));
+const exceljs_1 = __importDefault(require("exceljs"));
+const mongodb_1 = require("mongodb");
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
  * staff or admin permission.
@@ -142,3 +145,127 @@ const deleteVSR = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.deleteVSR = deleteVSR;
+/**
+ * Converts an entry in a VSR to a formatted string to write to the Excel spreadsheet
+ */
+const stringifyEntry = (entry) => {
+    if (entry === undefined || entry === null) {
+        return "";
+    }
+    if (Array.isArray(entry)) {
+        return entry.join(", ");
+    }
+    else if (typeof entry === "boolean") {
+        return entry ? "yes" : "no";
+    }
+    else {
+        return entry.toString();
+    }
+};
+/**
+ * Formats a VSR's selected furniture items as a string
+ */
+const stringifySelectedFurnitureItems = (selectedItems, allFurnitureItems) => {
+    if (!selectedItems) {
+        return "";
+    }
+    const itemIdsToItems = {};
+    for (const furnitureItem of allFurnitureItems) {
+        itemIdsToItems[furnitureItem._id.toString()] = furnitureItem;
+    }
+    return selectedItems
+        .map((selectedItem) => {
+        const furnitureItem = itemIdsToItems[selectedItem.furnitureItemId];
+        return furnitureItem ? `${furnitureItem.name}: ${selectedItem.quantity}` : "[unknown]";
+    })
+        .join(", ");
+};
+const writeSpreadsheet = (plainVsrs, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const workbook = new exceljs_1.default.Workbook();
+    workbook.creator = "PAP Inventory System";
+    workbook.lastModifiedBy = "Bot";
+    //current date
+    workbook.created = new Date();
+    workbook.modified = new Date();
+    workbook.lastPrinted = new Date();
+    const worksheet = workbook.addWorksheet("New Sheet");
+    // Fields that we want to write to the spreadsheet. First is field name, second is display name.
+    const fieldsToWrite = [
+        ["name", "Name"],
+        ["gender", "Gender"],
+        ["age", "Age"],
+        ["maritalStatus", "Marital Status"],
+        ["spouseName", "Spouse Name"],
+        ["agesOfBoys", "Ages of boys"],
+        ["agesOfGirls", "Ages of girls"],
+        ["ethnicity", "Ethnicity"],
+        ["employmentStatus", "Employment Status"],
+        ["incomeLevel", "Income Level"],
+        ["sizeOfHome", "Size of Home"],
+        ["streetAddress", "Street Address"],
+        ["city", "City"],
+        ["state", "State"],
+        ["zipCode", "Zip Code"],
+        ["phoneNumber", "Phone Number"],
+        ["email", "Email Address"],
+        ["branch", "Branch"],
+        ["conflicts", "Conflicts"],
+        ["dischargeStatus", "Discharge Status"],
+        ["serviceConnected", "Service Connected"],
+        ["lastRank", "Last Rank"],
+        ["militaryID", "Military ID"],
+        ["petCompanion", "Pet Companion Desired"],
+        ["hearFrom", "Referral Source"],
+        ["selectedFurnitureItems", "Selected Furniture Items"],
+        ["additionalItems", "Additional Items"],
+        ["dateReceived", "Date Received"],
+        ["lastUpdated", "Last Updated"],
+        ["status", "Status"],
+    ];
+    worksheet.columns = fieldsToWrite.map((field) => ({
+        header: field[1],
+        key: field[0],
+        width: 20,
+    }));
+    const allFurnitureItems = yield furnitureItem_1.default.find();
+    // Add data rows to the worksheet
+    plainVsrs.forEach((vsr) => {
+        worksheet.addRow(fieldsToWrite.reduce((prev, field) => (Object.assign(Object.assign({}, prev), { [field[0]]: field[0] === "selectedFurnitureItems"
+                ? stringifySelectedFurnitureItems(vsr[field[0]], allFurnitureItems)
+                : stringifyEntry(vsr[field[0]]) })), {}));
+    });
+    // Write to file
+    yield workbook.xlsx.write(res);
+});
+const bulkExportVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
+    try {
+        const filename = "vsrs.xlsx";
+        // Set some headers on the response so the client knows that a file is attached
+        res.set({
+            "Content-Disposition": `attachment; filename="${filename}"`,
+            "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        });
+        let vsrs;
+        if (req.query.vsrIds && ((_a = req.query.vsrIds.length) !== null && _a !== void 0 ? _a : 0) > 0) {
+            // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
+            // with an _id in the vsrIds list
+            // Need to convert each ID string to an ObjectId object
+            const vsrObjectIds = (_b = req.query.vsrIds) === null || _b === void 0 ? void 0 : _b.split(",").map((_id) => new mongodb_1.ObjectId(_id));
+            vsrs = (yield vsr_1.default.find({
+                _id: {
+                    $in: vsrObjectIds,
+                },
+            })).map((doc) => doc.toObject());
+        }
+        else {
+            // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
+            vsrs = (yield vsr_1.default.find()).map((doc) => doc.toObject());
+        }
+        yield writeSpreadsheet(vsrs, res);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.bulkExportVSRS = bulkExportVSRS;

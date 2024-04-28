@@ -216,3 +216,28 @@ export async function updateVSR(
     return handleAPIError(error);
   }
 }
+
+export async function bulkExportVSRS(
+  firebaseToken: string,
+  vsrIds: string[],
+): Promise<APIResult<null>> {
+  try {
+    const query = vsrIds.length === 0 ? "" : `?vsrIds=${vsrIds.join(",")}`;
+    const response = await get(`/api/vsr/bulk_export${query}`, createAuthHeader(firebaseToken));
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+
+    link.setAttribute("download", "vsrs.xlsx");
+    document.body.appendChild(link);
+
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    return { success: true, data: null };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}

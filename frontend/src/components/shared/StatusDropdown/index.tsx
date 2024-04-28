@@ -20,20 +20,16 @@ export const STATUS_OPTIONS: StatusOption[] = [
     color: "#e6e6e6",
   },
   {
-    value: "Appointment Scheduled",
-    color: "#c5e1f6",
-  },
-  {
     value: "Approved",
     color: "#d7eebc",
   },
   {
-    value: "Complete",
-    color: "#bfe1f6",
+    value: "Appointment Scheduled",
+    color: "#c5e1f6",
   },
   {
-    value: "Resubmit",
-    color: "#fae69e",
+    value: "Complete",
+    color: "#bfe1f6",
   },
   {
     value: "No-show / Incomplete",
