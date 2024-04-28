@@ -11,6 +11,7 @@ import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { VSR } from "@/api/VSRs";
 import { StatusChip } from "@/components/shared/StatusChip";
+import { useMediaQuery } from "@mui/material";
 
 const formatDateReceived = (dateReceived: Date) => {
   // Return the empty string on a falsy date received, instead of defaulting to today's date
@@ -29,6 +30,9 @@ interface VSRTableProps {
 export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds }: VSRTableProps) {
   const { isMobile, isTablet } = useScreenSizes();
   const router = useRouter();
+
+  // Remove gap between columns on small screens so it will fit better
+  const columnsGap = useMediaQuery("@media screen and (max-width: 450px)") ? 0 : 32;
 
   // Define the columns to show in the table (some columns are hidden on smaller screens)
   const columns: GridColDef[] = React.useMemo(() => {
@@ -97,6 +101,21 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
       width: 100,
     });
 
+    /**
+     * Hacky solution to make the table fit: add a fake column with a width of
+     * columnsGap for each gap
+     */
+    result.push({
+      field: "phantom",
+      headerName: "",
+      type: "string",
+      flex: 1,
+      headerClassName: "header",
+      disableColumnMenu: true,
+      hideSortIcons: true,
+      width: columnsGap * (result.length - 1),
+    });
+
     return result;
   }, [isMobile, isTablet]);
 
@@ -104,9 +123,15 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
     <Box
       style={{ width: "100%" }}
       sx={{
+        ".MuiDataGrid-columnHeadersInner": {
+          backgroundColor: "var(--color-tse-accent-blue-1)",
+          "& div": {
+            // Spacing between the cells in the header
+            gap: `${columnsGap}px`,
+          },
+        },
         "& .header": {
           color: "rgba(247, 247, 247, 1)",
-          backgroundColor: "var(--color-tse-accent-blue-1)",
           // Customize color of checkboxes in header
           ".MuiCheckbox-root": {
             color: "white !important",
@@ -133,6 +158,10 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
           border: "none",
         },
         border: 0,
+        ".MuiDataGrid-row": {
+          // Spacing between the cells in the body
+          gap: `${columnsGap}px`,
+        },
         "& .odd": {
           backgroundColor: "var(--color-tse-neutral-gray-0)",
           "&:hover": {

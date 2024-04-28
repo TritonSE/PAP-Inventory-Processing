@@ -12,6 +12,7 @@ export interface IVSRFormInput {
   age: number;
   ethnicity: string[];
   other_ethnicity: string;
+  form_ethnicity: string;
   employment_status: string;
   income_level: string;
   size_of_home: string;
@@ -29,6 +30,7 @@ export interface IVSRFormInput {
   branch: string[];
   conflicts: string[];
   other_conflicts: string;
+  form_conflicts: string;
   dischargeStatus: string;
   serviceConnected: boolean;
   lastRank: string;
@@ -36,6 +38,7 @@ export interface IVSRFormInput {
   petCompanion: boolean;
   hearFrom: string;
   other_hearFrom: string;
+  form_hearFrom: string;
 
   selectedFurnitureItems: Record<string, FurnitureInput>;
   additionalItems: string;

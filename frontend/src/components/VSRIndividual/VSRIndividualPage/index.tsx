@@ -214,8 +214,13 @@ export const VSRIndividualPage = () => {
         outlined={false}
         text="Approve VSR"
         loading={loadingUpdateStatus}
-        className={styles.approveButton}
-        onClick={() => onUpdateVSRStatus("Approved")}
+        className={`${styles.approveButton} ${isEditing ? styles.disabledButton : ""}`}
+        onClick={() => {
+          if (!isEditing) {
+            onUpdateVSRStatus("Approved");
+          }
+        }}
+        disabled={isEditing}
       />
     ) : null;
 

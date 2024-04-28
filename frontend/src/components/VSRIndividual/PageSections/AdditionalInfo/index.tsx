@@ -24,6 +24,7 @@ export const AdditionalInfo = ({ vsr, isEditing, formProps }: AdditionalInfoProp
     const isHearFromChip = hearFromOptions.includes(vsr.hearFrom);
     formProps.setValue("hearFrom", isHearFromChip ? vsr.hearFrom : "");
     formProps.setValue("other_hearFrom", isHearFromChip ? "" : vsr.hearFrom);
+    formProps.setValue("form_hearFrom", vsr.hearFrom.length > 0 ? "full" : "");
   }, [vsr]);
 
   return (
@@ -39,6 +40,7 @@ export const AdditionalInfo = ({ vsr, isEditing, formProps }: AdditionalInfoProp
           <ListDetail
             title="Are you interested in a companionship animal (pet)?"
             values={[vsr.petCompanion ? "Yes" : "No"]}
+            isEmpty={false}
           />
         )}
       </div>
@@ -47,13 +49,14 @@ export const AdditionalInfo = ({ vsr, isEditing, formProps }: AdditionalInfoProp
           <MultipleChoiceWithOtherInputDetail
             name="hearFrom"
             otherName="other_hearFrom"
+            formName="form_hearFrom"
             title="How did you hear about us?"
             formProps={formProps}
             options={hearFromOptions}
             allowMultiple={false}
           />
         ) : (
-          <ListDetail title="How did you hear about us?" values={[vsr.hearFrom]} />
+          <ListDetail title="How did you hear about us?" values={[vsr.hearFrom]} isEmpty={false} />
         )}
       </div>
     </VSRIndividualAccordion>

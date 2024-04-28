@@ -5,12 +5,13 @@ import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail
 export interface ListDetailProps {
   title: string;
   values: string[];
+  isEmpty: boolean;
 }
 
 /**
  * A component that displays a list of values separated by commas on the VSR individual page.
  */
-export function ListDetail({ title, values }: ListDetailProps) {
+export function ListDetail({ title, values, isEmpty }: ListDetailProps) {
   const list = (
     <div className={styles.list}>
       {values.map((value, index) => (
@@ -20,7 +21,7 @@ export function ListDetail({ title, values }: ListDetailProps) {
       ))}
     </div>
   );
-  const noList = <div className={styles.noList}>N/A</div>;
+  const noList = <div className={styles.noList}>{values[0]}</div>;
 
-  return <FieldDetail title={title}>{values.includes("N/A") ? noList : list}</FieldDetail>;
+  return <FieldDetail title={title}>{isEmpty ? noList : list}</FieldDetail>;
 }

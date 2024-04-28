@@ -6,13 +6,14 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 
 interface ChildrenInputProps {
   gender: "boy" | "girl";
+  showAsterisks: boolean;
   formProps: UseFormReturn<ICreateVSRFormInput> | UseFormReturn<IEditVSRFormInput>;
 }
 
 /**
  * A component that renders the text fields to input the children of the given gender.
  */
-export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
+export const ChildrenInput = ({ gender, showAsterisks, formProps }: ChildrenInputProps) => {
   const numChildrenThisGender = formProps.watch()[`num_${gender}s`];
   const fieldInputName = `agesOf${gender[0].toUpperCase()}${gender.substring(1)}s` as
     | "agesOfBoys"
@@ -36,7 +37,7 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
               message: "This field must be a positive number less than 100",
             },
           })}
-          required
+          required={showAsterisks}
           error={!!formProps.formState.errors[`num_${gender}s`]}
           helperText={formProps.formState.errors[`num_${gender}s`]?.message}
         />
@@ -67,7 +68,7 @@ export const ChildrenInput = ({ gender, formProps }: ChildrenInputProps) => {
                 )}
                 error={!!formProps.formState.errors[fieldInputName]?.[index]}
                 helperText={formProps.formState.errors[fieldInputName]?.[index]?.message}
-                required
+                required={showAsterisks}
               />
             </div>
           ))}

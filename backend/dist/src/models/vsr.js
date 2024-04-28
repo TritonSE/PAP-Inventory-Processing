@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.furntitureInputSchema = void 0;
 const mongoose_1 = require("mongoose");
 /**
  * A schema for a single furniture item that a veteran can request
  */
-const furntitureInputSchema = new mongoose_1.Schema({
+exports.furntitureInputSchema = new mongoose_1.Schema({
     // ID of the furniture item being required (Object ID for an instance of the furniture item model)
     furnitureItemId: { type: String, required: true },
     // Quantity being requested by this veteran
@@ -43,7 +44,7 @@ const vsrSchema = new mongoose_1.Schema({
     petCompanion: { type: Boolean, required: true },
     hearFrom: { type: String, required: true },
     /** Page 3 of VSR */
-    selectedFurnitureItems: { type: [furntitureInputSchema], required: true },
+    selectedFurnitureItems: { type: [exports.furntitureInputSchema], required: true },
     additionalItems: { type: String, required: false },
     /** Fields that are created/updated automatically or on staff side */
     dateReceived: { type: Date, required: true },

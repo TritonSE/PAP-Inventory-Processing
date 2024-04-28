@@ -31,6 +31,7 @@ const VSRController = __importStar(require("../controllers/vsr"));
 const auth_1 = require("../middleware/auth");
 const VSRValidator = __importStar(require("../validators/vsr"));
 const router = express_1.default.Router();
+router.get("/bulk_export", auth_1.requireSignedIn, auth_1.requireStaffOrAdmin, VSRController.bulkExportVSRS);
 router.get("/", auth_1.requireSignedIn, auth_1.requireStaffOrAdmin, VSRController.getAllVSRS);
 router.post("/", VSRValidator.createVSR, VSRController.createVSR);
 router.get("/:id", auth_1.requireSignedIn, auth_1.requireStaffOrAdmin, VSRController.getVSR);

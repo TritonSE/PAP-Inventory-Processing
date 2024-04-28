@@ -10,10 +10,10 @@ import { SelectInputDetail } from "@/components/VSRIndividual/FieldDetails/Selec
 import {
   employmentOptions,
   ethnicityOptions,
+  genderOptions,
   homeOptions,
   incomeOptions,
   maritalOptions,
-  stateOptions,
 } from "@/constants/fieldOptions";
 import { MultipleChoiceInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceInputDetail";
 import { MultipleChoiceWithOtherInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceWithOtherInputDetail";
@@ -31,10 +31,8 @@ export interface PersonalInformationProps {
 export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInformationProps) => {
   useEffect(() => {
     formProps.setValue("name", vsr.name);
-    formProps.setValue("streetAddress", vsr.streetAddress);
-    formProps.setValue("city", vsr.city);
-    formProps.setValue("zipCode", vsr.zipCode);
-    formProps.setValue("state", vsr.state);
+    formProps.setValue("gender", vsr.gender);
+    formProps.setValue("age", vsr.age);
     formProps.setValue("maritalStatus", vsr.maritalStatus);
     formProps.setValue("spouseName", vsr.spouseName ?? "");
     formProps.setValue("num_boys", vsr.agesOfBoys.length);
@@ -51,6 +49,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
       }
     }
     formProps.setValue("ethnicity", ethnicityChips);
+    formProps.setValue("form_ethnicity", vsr.ethnicity.length > 0 ? "full" : "");
     formProps.setValue("employment_status", vsr.employmentStatus);
     formProps.setValue("income_level", vsr.incomeLevel);
     formProps.setValue("size_of_home", vsr.sizeOfHome);
@@ -70,51 +69,27 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
           <SingleDetail title="Name" value={vsr.name} />
         )}
       </div>
-      {isEditing ? (
-        <>
-          <div className={styles.row}>
-            <TextInputDetail
-              name="streetAddress"
-              title="Street Address"
-              formProps={formProps}
-              placeholder="e.g. 1234 Baker Street"
-            />
-          </div>
-          <div className={styles.row}>
-            <TextInputDetail
-              name="city"
-              title="City"
-              formProps={formProps}
-              placeholder="e.g. San Diego"
-            />
-          </div>
-        </>
-      ) : (
-        <div className={styles.row}>
-          <SingleDetail title="Street Address" value={vsr.streetAddress} />
-          <SingleDetail title="City" value={vsr.city} />
-        </div>
-      )}
+
       <div className={styles.row}>
         {isEditing ? (
           <SelectInputDetail
-            name="state"
-            title="State"
+            name="gender"
+            title="Gender"
             formProps={formProps}
-            options={stateOptions}
+            options={genderOptions}
           />
         ) : (
-          <SingleDetail title="State" value={vsr.state} />
+          <SingleDetail title="Gender" value={vsr.gender} />
         )}
         {isEditing ? (
           <TextInputDetail
-            name="zipCode"
-            title="Zip Code"
+            name="age"
+            title="Age"
             formProps={formProps}
-            placeholder="e.g. 92092"
+            placeholder="Enter your age"
           />
         ) : (
-          <SingleDetail title="Zip Code" value={vsr.zipCode} />
+          <SingleDetail title="Age" value={vsr.age} />
         )}
       </div>
       <div className={styles.row}>
@@ -127,7 +102,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             allowMultiple={false}
           />
         ) : (
-          <ListDetail title="Marital Status" values={[vsr.maritalStatus]} />
+          <ListDetail title="Marital Status" values={[vsr.maritalStatus]} isEmpty={false} />
         )}
       </div>
       {formProps.watch().maritalStatus === "Married" ? (
@@ -142,7 +117,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
           ) : (
             <SingleDetail
               title="Spouse's Name"
-              value={vsr.spouseName && vsr.spouseName.length > 0 ? vsr.spouseName : "N/A"}
+              value={vsr.spouseName && vsr.spouseName.length > 0 ? vsr.spouseName : "No spouse"}
             />
           )}
         </div>
@@ -150,7 +125,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
       <div className={styles.row}>
         {isEditing ? (
           <>
-            <ChildrenInput gender="boy" formProps={formProps} />
+            <ChildrenInput gender="boy" showAsterisks={false} formProps={formProps} />
           </>
         ) : (
           <>
@@ -158,8 +133,11 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             <SingleDetail
               title="Age(s)"
               value={
-                vsr.agesOfBoys && vsr.agesOfBoys.length > 0 ? vsr.agesOfBoys.join(", ") : "N/A"
+                vsr.agesOfBoys && vsr.agesOfBoys.length > 0
+                  ? vsr.agesOfBoys.join(", ")
+                  : "No male children"
               }
+              isEmpty={!(vsr.agesOfBoys && vsr.agesOfBoys.length > 0)}
             />
           </>
         )}
@@ -167,7 +145,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
       <div className={styles.row}>
         {isEditing ? (
           <>
-            <ChildrenInput gender="girl" formProps={formProps} />
+            <ChildrenInput gender="girl" showAsterisks={false} formProps={formProps} />
           </>
         ) : (
           <>
@@ -175,8 +153,11 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             <SingleDetail
               title="Age(s)"
               value={
-                vsr.agesOfGirls && vsr.agesOfGirls.length > 0 ? vsr.agesOfGirls.join(", ") : "N/A"
+                vsr.agesOfGirls && vsr.agesOfGirls.length > 0
+                  ? vsr.agesOfGirls.join(", ")
+                  : "No female children"
               }
+              isEmpty={!(vsr.agesOfGirls && vsr.agesOfGirls.length > 0)}
             />
           </>
         )}
@@ -187,6 +168,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             title="Ethnicity"
             name="ethnicity"
             otherName="other_ethnicity"
+            formName="form_ethnicity"
             options={ethnicityOptions}
             allowMultiple
             formProps={formProps}
@@ -194,7 +176,10 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
         ) : (
           <ListDetail
             title="Ethnicity"
-            values={vsr.ethnicity && vsr.ethnicity.length > 0 ? vsr.ethnicity : ["N/A"]}
+            values={
+              vsr.ethnicity && vsr.ethnicity.length > 0 ? vsr.ethnicity : ["No items selected"]
+            }
+            isEmpty={!(vsr.ethnicity && vsr.ethnicity.length > 0)}
           />
         )}
       </div>
@@ -208,7 +193,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             allowMultiple={false}
           />
         ) : (
-          <ListDetail title="Employment Status" values={[vsr.employmentStatus]} />
+          <ListDetail title="Employment Status" values={[vsr.employmentStatus]} isEmpty={false} />
         )}
       </div>
       <div className={styles.row}>
@@ -221,7 +206,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             allowMultiple={false}
           />
         ) : (
-          <ListDetail title="Income Level" values={[vsr.incomeLevel]} />
+          <ListDetail title="Income Level" values={[vsr.incomeLevel]} isEmpty={false} />
         )}
       </div>
       <div className={styles.row}>
@@ -234,7 +219,7 @@ export const PersonalInformation = ({ vsr, isEditing, formProps }: PersonalInfor
             allowMultiple={false}
           />
         ) : (
-          <ListDetail title="Size of Home" values={[vsr.sizeOfHome]} />
+          <ListDetail title="Size of Home" values={[vsr.sizeOfHome]} isEmpty={false} />
         )}
       </div>
     </VSRIndividualAccordion>

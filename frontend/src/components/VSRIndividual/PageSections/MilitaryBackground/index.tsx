@@ -33,6 +33,7 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
       }
     }
     formProps.setValue("conflicts", conflictChips);
+    formProps.setValue("form_conflicts", vsr.conflicts.length > 0 ? "full" : "");
     formProps.setValue("dischargeStatus", vsr.dischargeStatus);
     formProps.setValue("serviceConnected", vsr.serviceConnected);
     formProps.setValue("lastRank", vsr.lastRank);
@@ -53,7 +54,8 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
         ) : (
           <ListDetail
             title="Branch"
-            values={vsr.branch && vsr.branch.length > 0 ? vsr.branch : ["N/A"]}
+            values={vsr.branch && vsr.branch.length > 0 ? vsr.branch : ["No branch selected"]}
+            isEmpty={!(vsr.branch && vsr.branch.length > 0)}
           />
         )}
       </div>
@@ -62,6 +64,7 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
           <MultipleChoiceWithOtherInputDetail
             name="conflicts"
             otherName="other_conflicts"
+            formName="form_conflicts"
             title="Conflicts"
             formProps={formProps}
             options={conflictsOptions}
@@ -70,7 +73,10 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
         ) : (
           <ListDetail
             title="Conflicts"
-            values={vsr.conflicts && vsr.conflicts.length > 0 ? vsr.conflicts : ["N/A"]}
+            values={
+              vsr.conflicts && vsr.conflicts.length > 0 ? vsr.conflicts : ["No conflicts selected"]
+            }
+            isEmpty={!(vsr.conflicts && vsr.conflicts.length > 0)}
           />
         )}
       </div>
@@ -89,8 +95,9 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
             values={
               vsr.dischargeStatus && vsr.dischargeStatus.length > 0
                 ? [vsr.dischargeStatus]
-                : ["N/A"]
+                : ["No discharge status"]
             }
+            isEmpty={!(vsr.dischargeStatus && vsr.dischargeStatus.length > 0)}
           />
         )}
       </div>
@@ -102,7 +109,11 @@ export const MilitaryBackground = ({ vsr, isEditing, formProps }: MilitaryBackgr
             formProps={formProps}
           />
         ) : (
-          <ListDetail title="Service Connected" values={[vsr.serviceConnected ? "Yes" : "No"]} />
+          <ListDetail
+            title="Service Connected"
+            values={[vsr.serviceConnected ? "Yes" : "No"]}
+            isEmpty={false}
+          />
         )}
       </div>
       <div className={styles.row}>

@@ -89,7 +89,7 @@ describe("VSR Tests", () => {
   it("GET /api/vsr returns all submitted VSRs to admin", async () => {
     await Promise.all(Array(3).fill(null).map(createTestVSR));
 
-    const { testToken } = await signInAsRole(UserRole.STAFF);
+    const { testToken } = await signInAsRole(UserRole.ADMIN);
 
     const res = await request(app).get("/api/vsr").set("Authorization", `Bearer ${testToken}`);
     expect(res.statusCode).toBe(200);
@@ -356,5 +356,30 @@ describe("VSR Tests", () => {
     expect(currentVsr).not.toBeNull();
     expect(currentVsr!.name).toBe("Updated name");
     expect(currentVsr!.email).toBe("updatedemail@gmail.com");
+  });
+
+  it("GET /api/vsr/bulk_export requires user to be signed in", async () => {
+    const res = await request(app).get("/api/vsr/bulk_export");
+    expect(res.statusCode).toBe(401);
+  });
+
+  it("GET /api/vsr/bulk_export as staff with no VSRs in database", async () => {
+    const { testToken } = await signInAsRole(UserRole.STAFF);
+
+    const res = await request(app)
+      .get("/api/vsr/bulk_export")
+      .set("Authorization", `Bearer ${testToken}`);
+    expect(res.statusCode).toBe(200);
+  });
+
+  it("GET /api/vsr/bulk_export as staff with VSRs in database", async () => {
+    await Promise.all(Array(3).fill(null).map(createTestVSR));
+
+    const { testToken } = await signInAsRole(UserRole.STAFF);
+
+    const res = await request(app)
+      .get("/api/vsr/bulk_export")
+      .set("Authorization", `Bearer ${testToken}`);
+    expect(res.statusCode).toBe(200);
   });
 });
