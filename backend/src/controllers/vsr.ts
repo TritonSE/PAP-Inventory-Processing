@@ -15,20 +15,67 @@ import validationErrorParser from "src/util/validationErrorParser";
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
     if (req.query.search) {
-      const vsrs = await VSRModel.find({ $text: { $search: req.query.search as string } }).sort({
-        //by status in a particular order
-        status: 1,
-        //and then by name
-        name: 1,
-      });
+      // const vsrs = await VSRModel.find({ $text: { $search: req.query.search as string } }).sort({
+      //   //by status in a particular order
+      //   status: 1,
+      //   //and then by name
+      //   name: 1,
+      // });
+
+      const vsrs = await VSRModel.aggregate([
+        {
+          $match: { $text: { $search: req.query.search as string } },
+        },
+        {
+          $addFields: {
+            statusOrder: {
+              $switch: {
+                branches: [
+                  { case: { $eq: ["$status", "Received"] }, then: 1 },
+                  { case: { $eq: ["$status", "Approved"] }, then: 2 },
+                  { case: { $eq: ["$status", "Appointment Scheduled"] }, then: 3 },
+                  { case: { $eq: ["$status", "Complete"] }, then: 4 },
+                  { case: { $eq: ["$status", "No-show / Incomplete"] }, then: 5 },
+                  { case: { $eq: ["$status", "Archived"] }, then: 6 },
+                ],
+                default: 99,
+              },
+            },
+          },
+        },
+        { $sort: { statusOrder: 1, dateReceived: -1 } },
+      ]);
+
       res.status(200).json({ vsrs });
     } else {
-      const vsrs = await VSRModel.find().sort({
-        //by status in a particular order
-        status: 1,
-        //and then by name
-        name: 1,
-      });
+      // const vsrs = await VSRModel.find().sort({
+      //   //by status in a particular order
+      //   status: 1,
+      //   //and then by name
+      //   dateReceived: -1,
+      // });
+
+      const vsrs = await VSRModel.aggregate([
+        {
+          $addFields: {
+            statusOrder: {
+              $switch: {
+                branches: [
+                  { case: { $eq: ["$status", "Received"] }, then: 1 },
+                  { case: { $eq: ["$status", "Approved"] }, then: 2 },
+                  { case: { $eq: ["$status", "Appointment Scheduled"] }, then: 3 },
+                  { case: { $eq: ["$status", "Complete"] }, then: 4 },
+                  { case: { $eq: ["$status", "No-show / Incomplete"] }, then: 5 },
+                  { case: { $eq: ["$status", "Archived"] }, then: 6 },
+                ],
+                default: 99,
+              },
+            },
+          },
+        },
+        { $sort: { statusOrder: 1, dateReceived: -1 } },
+      ]);
+
       res.status(200).json({ vsrs });
     }
   } catch (error) {
