@@ -25,7 +25,7 @@
     "@testing-library/react": "^14.1.2",
     "email-validator": "^2.0.4",
     "envalid": "^8.0.0",
-    "firebase": "^10.6.0",
+    "firebase": "^10.11.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
     "moment": "^2.30.1",

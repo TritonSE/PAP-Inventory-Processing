@@ -146,6 +146,11 @@
   padding: 20px 24px;
 }
 
+.disabledButton {
+  background-color: grey !important;
+  cursor: unset;
+}
+
 .footer {
   height: 64px;
 }

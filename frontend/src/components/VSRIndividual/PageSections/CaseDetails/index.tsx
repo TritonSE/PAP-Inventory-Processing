@@ -40,10 +40,14 @@ export const CaseDetails = ({
       return <CircularProgress size={24} />;
     }
 
-    if (vsr.status === "Received" || vsr.status === undefined) {
+    if (vsr.status === "Received" || vsr.status === undefined || isEditing) {
       return (
         <StatusChip
-          status={STATUS_OPTIONS.find((statusOption) => statusOption.value === "Received")!}
+          status={
+            STATUS_OPTIONS.find(
+              (statusOption) => statusOption.value === (vsr.status ?? "Received"),
+            )!
+          }
         />
       );
     }
