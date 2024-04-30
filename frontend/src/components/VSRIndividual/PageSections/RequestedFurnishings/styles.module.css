@@ -14,3 +14,21 @@
   flex-wrap: wrap;
   gap: 16px;
 }
+
+.chip {
+  white-space: nowrap;
+  text-align: center;
+  font-family: "OpenSans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  border-radius: 64px;
+  border: 1px solid var(--Secondary-1, #102d5f);
+  background-color:#102d5f;
+}
+
+.chip:hover {
+  cursor: pointer;
+  background: #c7def1;
+}

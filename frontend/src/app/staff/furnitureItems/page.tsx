@@ -46,8 +46,15 @@ export default function furnitureItemTemplate() {
             categoryName="bedroom"
             categoryTitle="Bedroom"
           />
+          <EditTemplate
+            furnitureItems={furnitureCategoriesToItems?.kitchen ?? []}
+            categoryName="kitchen"
+            categoryTitle="Kitchen"
+          />
         </div>
       </div>
     </>
   );
 }
+
+// add more furniture items, such as bedroom

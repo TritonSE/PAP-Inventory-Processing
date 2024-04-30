@@ -26,8 +26,14 @@ export const EditTemplate = ({
               furnitureItem={furnitureItem}
             />
           ))}
+          <button className={styles.chip} onClick={() => {
+              console.log('Button clicked for furniture item:', categoryTitle);
+            }}>Edit Section</button>
         </div>
       </FieldDetail>
     </div>
   );
 };
+
+// The button is currently being styled by styles.chip, although its not completed
+// and I'm not sure that's where we want to style the button. and it doesn't do anything
