@@ -2,7 +2,7 @@
 
 import styles from "@/app/staff/vsr/page.module.css";
 import VSRTable from "@/components/VSRTable/VSRTable";
-import { SearchKeyword } from "@/components/VSRTable/SearchKeyword";
+import SearchKeyword from "@/components/VSRTable/SearchKeyword";
 import PageTitle from "@/components/VSRTable/PageTitle";
 import HeaderBar from "@/components/shared/HeaderBar";
 import Image from "next/image";
@@ -74,29 +74,6 @@ export default function VSRTableView() {
     fetchVSRs();
   }, [firebaseUser]);
 
-  const fetchSearchedVSRs = (input: string) => {
-    if (!firebaseUser) {
-      return;
-    }
-
-    setLoadingVsrs(true);
-    firebaseUser?.getIdToken().then((firebaseToken) => {
-      getAllVSRs(firebaseToken, input).then((result) => {
-        if (result.success) {
-          setVsrs(result.data);
-        } else {
-          if (result.error === "Failed to fetch") {
-            setTableError(VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET);
-          } else {
-            console.error(`Error retrieving VSRs: ${result.error}`);
-            setTableError(VSRTableError.CANNOT_FETCH_VSRS_INTERNAL);
-          }
-        }
-        setLoadingVsrs(false);
-      });
-    });
-  };
-
   /**
    * Renders an error modal corresponding to the page's error state, or renders
    * nothing if there is no error.
@@ -163,7 +140,7 @@ export default function VSRTableView() {
         <PageTitle />
         <div className={styles.button_row}>
           <div className={styles.row_left}>
-            {searchOnOwnRow ? null : <SearchKeyword fetchFunction={fetchSearchedVSRs} />}
+            {searchOnOwnRow ? null : <SearchKeyword />}
 
             <div className={styles.statusContainer}>
               <p className={styles.statusLabel}>Status:</p>
@@ -210,7 +187,7 @@ export default function VSRTableView() {
             />
           </div>
         </div>
-        {searchOnOwnRow ? <SearchKeyword fetchFunction={fetchSearchedVSRs} /> : null}
+        {searchOnOwnRow ? <SearchKeyword /> : null}
         <div className={styles.table}>
           {loadingVsrs ? (
             <LoadingScreen />
