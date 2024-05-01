@@ -14,6 +14,7 @@ import validationErrorParser from "src/util/validationErrorParser";
  */
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
+    let vsrs;
     if (req.query.search) {
       // const vsrs = await VSRModel.find({ $text: { $search: req.query.search as string } }).sort({
       //   //by status in a particular order
@@ -22,7 +23,7 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
       //   name: 1,
       // });
 
-      const vsrs = await VSRModel.aggregate([
+      vsrs = await VSRModel.aggregate([
         {
           $match: { $text: { $search: req.query.search as string } },
         },
@@ -45,8 +46,6 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
         },
         { $sort: { statusOrder: 1, dateReceived: -1 } },
       ]);
-
-      res.status(200).json({ vsrs });
     } else {
       // const vsrs = await VSRModel.find().sort({
       //   //by status in a particular order
@@ -55,7 +54,7 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
       //   dateReceived: -1,
       // });
 
-      const vsrs = await VSRModel.aggregate([
+      vsrs = await VSRModel.aggregate([
         {
           $addFields: {
             statusOrder: {
@@ -75,9 +74,34 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
         },
         { $sort: { statusOrder: 1, dateReceived: -1 } },
       ]);
-
-      res.status(200).json({ vsrs });
     }
+
+    if (req.query.status) {
+      vsrs = vsrs.filter((vsr) => vsr.status === req.query.status);
+    }
+
+    if (
+      req.query.incomeLevel &&
+      typeof req.query.incomeLevel === "string" &&
+      req.query.incomeLevel in ["50000", "25000", "12500", "0"]
+    ) {
+      const incomeMap: { [key: string]: string } = {
+        "50000": "$50,000 and above",
+        "25000": "$25,000 - $50,000",
+        "12500": "$12,500 - $25,000",
+        "0": "Below $12,500",
+      };
+
+      vsrs = vsrs.filter((vsr) => vsr.incomeLevel === incomeMap[req.query.incomeLevel as string]);
+    }
+
+    if (req.query.zipCode) {
+      //we expect a list of zipcodes
+      const zipCodes = req.query.zipCode as string[];
+      vsrs = vsrs.filter((vsr) => zipCodes.includes(vsr.zipCode.toString()));
+    }
+
+    res.status(200).json({ vsrs });
   } catch (error) {
     next(error);
   }
