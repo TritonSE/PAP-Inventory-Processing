@@ -8,11 +8,13 @@ import React, { useEffect, useState } from "react";
 
 export default function furnitureItemTemplate() {
   const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
-
+  const [editingCategory, setEditingCategory] = useState<string>();
   useEffect(() => {
     getFurnitureItems().then((result) => {
       if (result.success) {
         setFurnitureItems(result.data);
+      } else {
+        setFurnitureItems([]);
       }
     });
   }, []);
@@ -29,6 +31,14 @@ export default function furnitureItemTemplate() {
     [furnitureItems],
   );
 
+  const handleBeginEditing = (category: string) => {
+    setEditingCategory(category);
+  };
+
+  const handleFinishEditing = () => {
+    setEditingCategory(undefined);
+  };
+
   return (
     <>
       <HeaderBar showLogoutButton />
@@ -41,16 +51,48 @@ export default function furnitureItemTemplate() {
 
         <div className={styles.formContainer}>
           <h1 className={styles.sectionTitle}>Furnishings</h1>
-          <EditTemplate
-            furnitureItems={furnitureCategoriesToItems?.bedroom ?? []}
-            categoryName="bedroom"
-            categoryTitle="Bedroom"
-          />
-          <EditTemplate
-            furnitureItems={furnitureCategoriesToItems?.kitchen ?? []}
-            categoryName="kitchen"
-            categoryTitle="Kitchen"
-          />
+          <div className={styles.furnishings}>
+            {/* Possible way to render a series of EditTemplate components
+        {Object.entries(furnitureCategoriesToItems).map(([category, items]) => (
+        <EditTemplate
+          key={category}
+          furnitureItems={items}
+          categoryName={category}
+          categoryTitle={category[0].toUpperCase() + category.slice(1)}
+          isEditing={editingCategory === category}
+          isDisabled={editingCategory !== null && editingCategory !== category}
+          onBeginEditing={() => handleBeginEditing(category)}
+          onFinishEditing={handleFinishEditing}
+        />
+        ))}   
+        */}
+
+            <EditTemplate
+              furnitureItems={furnitureCategoriesToItems?.bedroom ?? []}
+              categoryName="bedroom"
+              categoryTitle="Bedroom"
+            />
+            <EditTemplate
+              furnitureItems={furnitureCategoriesToItems?.kitchen ?? []}
+              categoryName="kitchen"
+              categoryTitle="Kitchen"
+            />
+            <EditTemplate
+              furnitureItems={furnitureCategoriesToItems?.livingRoom ?? []}
+              categoryName="living room"
+              categoryTitle="Living Room"
+            />
+            <EditTemplate
+              furnitureItems={furnitureCategoriesToItems?.diningRoom ?? []}
+              categoryName="dining room"
+              categoryTitle="Dining Room"
+            />
+            <EditTemplate
+              furnitureItems={furnitureCategoriesToItems?.other ?? []}
+              categoryName="other"
+              categoryTitle="Other"
+            />
+          </div>
         </div>
       </div>
     </>

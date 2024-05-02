@@ -25,7 +25,7 @@
   line-height: normal;
   border-radius: 64px;
   border: 1px solid var(--Secondary-1, #102d5f);
-  background-color:#102d5f;
+  background-color: #102d5f;
 }
 
 .chip:hover {
