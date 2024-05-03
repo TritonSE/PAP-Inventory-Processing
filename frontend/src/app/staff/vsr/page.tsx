@@ -39,7 +39,9 @@ export default function VSRTableView() {
 
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
+
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
+  const [filteredZipCodes, setFilteredZipCodes] = useState<string[]>([]);
 
   useRedirectToLoginIfNotSignedIn();
 
@@ -48,27 +50,46 @@ export default function VSRTableView() {
   /**
    * Fetches the list of all VSRs from the backend and updates our vsrs state.
    */
-  const fetchVSRs = () => {
+  const fetchVSRs = (zipCodes = null) => {
     if (!firebaseUser) {
       return;
     }
 
-    setLoadingVsrs(true);
-    firebaseUser?.getIdToken().then((firebaseToken) => {
-      getAllVSRs(firebaseToken).then((result) => {
-        if (result.success) {
-          setVsrs(result.data);
-        } else {
-          if (result.error === "Failed to fetch") {
-            setTableError(VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET);
+    if (zipCodes !== null) {
+      setLoadingVsrs(true);
+      firebaseUser?.getIdToken().then((firebaseToken) => {
+        getAllVSRs(firebaseToken, zipCodes).then((result) => {
+          if (result.success) {
+            setVsrs(result.data);
           } else {
-            console.error(`Error retrieving VSRs: ${result.error}`);
-            setTableError(VSRTableError.CANNOT_FETCH_VSRS_INTERNAL);
+            if (result.error === "Failed to fetch") {
+              setTableError(VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET);
+            } else {
+              console.error(`Error retrieving VSRs: ${result.error}`);
+              setTableError(VSRTableError.CANNOT_FETCH_VSRS_INTERNAL);
+            }
           }
-        }
-        setLoadingVsrs(false);
+          setLoadingVsrs(false);
+        });
       });
-    });
+    } else {
+      setLoadingVsrs(true);
+      firebaseUser?.getIdToken().then((firebaseToken) => {
+        getAllVSRs(firebaseToken).then((result) => {
+          if (result.success) {
+            setVsrs(result.data);
+          } else {
+            if (result.error === "Failed to fetch") {
+              setTableError(VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET);
+            } else {
+              console.error(`Error retrieving VSRs: ${result.error}`);
+              setTableError(VSRTableError.CANNOT_FETCH_VSRS_INTERNAL);
+            }
+          }
+          setLoadingVsrs(false);
+        });
+      });
+    }
   };
 
   // Fetch the VSRs from the backend once the Firebase user loads.
@@ -197,10 +218,6 @@ export default function VSRTableView() {
                 onClick={() => setIsFilterModalOpen(true)}
               />
             )}
-            <FilterModal
-              isOpen={isFilterModalOpen}
-              onClose={() => setIsFilterModalOpen(false)}
-            ></FilterModal>
             <Button
               variant="primary"
               outlined={false}
@@ -238,6 +255,13 @@ export default function VSRTableView() {
           fetchVSRs();
         }}
         vsrIds={selectedVsrIds}
+      />
+      <FilterModal
+        isOpen={isFilterModalOpen}
+        onClose={() => setIsFilterModalOpen(false)}
+        onZipCodesEntered={(zipCodes: string[]) => {
+          setFilteredZipCodes(zipCodes);
+        }}
       />
     </div>
   );

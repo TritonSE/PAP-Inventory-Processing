@@ -22,3 +22,16 @@
   background: "none";
   cursor: "pointer";
 }
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+.button {
+  width: 100%;
+  padding: 12px 24px;
+  text-align: center;
+  font-family: "Lora";
+  font-size: 24px;
+  font-weight: 700;
+}

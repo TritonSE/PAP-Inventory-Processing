@@ -159,10 +159,15 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
 export async function getAllVSRs(
   firebaseToken: string,
   search?: string,
+  zipCodes?: string[],
 ): Promise<APIResult<VSR[]>> {
   try {
     if (search) {
       const response = await get(`/api/vsr?search=${search}`, createAuthHeader(firebaseToken));
+      const json = (await response.json()) as VSRListJson;
+      return { success: true, data: json.vsrs.map(parseVSR) };
+    } else if (zipCodes) {
+      const response = await get(`/api/vsr?zipCode=${zipCodes}`, createAuthHeader(firebaseToken));
       const json = (await response.json()) as VSRListJson;
       return { success: true, data: json.vsrs.map(parseVSR) };
     } else {
