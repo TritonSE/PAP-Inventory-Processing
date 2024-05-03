@@ -2,6 +2,7 @@
 
 import styles from "@/app/staff/vsr/page.module.css";
 import VSRTable from "@/components/VSRTable/VSRTable";
+import FilterModal from "@/components/VSRTable/FilterModal";
 import { SearchKeyword } from "@/components/VSRTable/SearchKeyword";
 import PageTitle from "@/components/VSRTable/PageTitle";
 import HeaderBar from "@/components/shared/HeaderBar";
@@ -38,6 +39,7 @@ export default function VSRTableView() {
 
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
+  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
 
   useRedirectToLoginIfNotSignedIn();
 
@@ -192,11 +194,13 @@ export default function VSRTableView() {
                 iconAlt="Filter"
                 text="Filter"
                 hideTextOnMobile
-                onClick={() => {
-                  // TODO: implement filtering
-                }}
+                onClick={() => setIsFilterModalOpen(true)}
               />
             )}
+            <FilterModal
+              isOpen={isFilterModalOpen}
+              onClose={() => setIsFilterModalOpen(false)}
+            ></FilterModal>
             <Button
               variant="primary"
               outlined={false}
