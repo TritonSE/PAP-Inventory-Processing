@@ -118,8 +118,9 @@ export const RequestedFurnishings = ({
                         : ""
                     }`,
                 )
-              : ["N/A"]
+              : ["No items selected"]
           }
+          isEmpty={!(selectedItemsForCategory && selectedItemsForCategory.length > 0)}
         />
       </div>
     );
@@ -141,8 +142,11 @@ export const RequestedFurnishings = ({
           <SingleDetail
             title="Additional Items:"
             value={
-              vsr.additionalItems && vsr.additionalItems.length > 0 ? vsr.additionalItems : "n/a"
+              vsr.additionalItems && vsr.additionalItems.length > 0
+                ? vsr.additionalItems
+                : "No items selected"
             }
+            isEmpty={!(vsr.additionalItems && vsr.additionalItems.length > 0)}
           />
         )}
       </div>

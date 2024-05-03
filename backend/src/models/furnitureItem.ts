@@ -17,6 +17,6 @@ const furnitureItemSchema = new Schema({
   categoryIndex: { type: Number, required: true },
 });
 
-type FurnitureItem = InferSchemaType<typeof furnitureItemSchema>;
+export type FurnitureItem = InferSchemaType<typeof furnitureItemSchema>;
 
 export default model<FurnitureItem>("FurnitureItem", furnitureItemSchema);

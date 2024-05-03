@@ -139,10 +139,9 @@ const makeHearFromValidator = () => (0, express_validator_1.body)("hearFrom")
     .withMessage("Referral source must be a string");
 const ALLOWED_STATUSES = [
     "Received",
-    "Appointment Scheduled",
     "Approved",
+    "Appointment Scheduled",
     "Complete",
-    "Resubmit",
     "No-show / Incomplete",
     "Archived",
 ];
