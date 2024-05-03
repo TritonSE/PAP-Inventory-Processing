@@ -48,7 +48,7 @@ export const Button = ({
   return (
     <button
       {...props}
-      className={`${styles.button} ${props.className ?? ""}`}
+      className={`${props.className ?? ""} ${styles.button}`}
       style={{
         backgroundColor: outlined ? "transparent" : mainColor,
         border: outlined ? `1px solid ${mainColor}` : "none",
