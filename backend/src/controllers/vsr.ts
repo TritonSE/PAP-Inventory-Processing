@@ -22,10 +22,12 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
       //   //and then by name
       //   name: 1,
       // });
+      const searchTerm = req.query.search as string;
+      const regex = new RegExp(searchTerm, "i");
 
       vsrs = await VSRModel.aggregate([
         {
-          $match: { $text: { $search: req.query.search as string } },
+          $match: { name: { $regex: regex } },
         },
         {
           $addFields: {
