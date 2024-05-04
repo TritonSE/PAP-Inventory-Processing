@@ -6,18 +6,13 @@ import { User } from "firebase/auth";
 export interface UserProps {
   name: string;
   email: string;
+  photoURL: string;
 }
-export function UserProfile({ name, email }: UserProps) {
+export function UserProfile({ name, email, photoURL }: UserProps) {
   return (
     <div className={styles.user}>
       <div className={styles.column}>
-        <Image
-          className={styles.pfp}
-          src="/Images/LoginImage.png"
-          alt="Internal Error"
-          width={93}
-          height={93}
-        />
+        <Image className={styles.pfp} src={photoURL} alt="Internal Error" width={93} height={93} />
       </div>
       <div className={styles.column_right}>
         <div className={styles.row_justify}>
