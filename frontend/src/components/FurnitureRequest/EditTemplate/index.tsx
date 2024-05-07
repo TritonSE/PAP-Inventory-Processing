@@ -1,7 +1,6 @@
 import styles from "@/components/VSRIndividual/PageSections/RequestedFurnishings/styles.module.css";
-import { FurnitureItem } from "@/api/FurnitureItems";
 import { useState } from "react";
-import { useMemo } from "react";
+import { FurnitureItem, getFurnitureItems, addFurnitureItem, updateFurnitureItem, deleteFurnitureItem } from "@/api/FurnitureItems";
 import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelection";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
 
@@ -14,6 +13,8 @@ export interface EditTemplateProps {
   onBeginEditing: () => void;
   onFinishEditing: () => void;
 }
+
+//Display components
 
 export const EditTemplate = ({
   furnitureItems,

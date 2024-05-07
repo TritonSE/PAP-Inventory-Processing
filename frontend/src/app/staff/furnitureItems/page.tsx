@@ -3,8 +3,10 @@ import HeaderBar from "@/components/shared/HeaderBar";
 import styles from "src/app/staff/furnitureItems/page.module.css";
 import { EditTemplate } from "@/components/FurnitureRequest/EditTemplate";
 import { useMemo } from "react";
-import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
+import { FurnitureItem, getFurnitureItems, addFurnitureItem, updateFurnitureItem, deleteFurnitureItem } from "@/api/FurnitureItems";
 import React, { useEffect, useState } from "react";
+import { ICreateVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
+
 
 export default function furnitureItemTemplate() {
   const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
@@ -33,11 +35,13 @@ export default function furnitureItemTemplate() {
 
   const handleBeginEditing = (category: string) => {
     setEditingCategory(category);
+    console.log(category);
   };
 
   const handleFinishEditing = () => {
     setEditingCategory(undefined);
   };
+
 
   return (
     <>
@@ -52,22 +56,23 @@ export default function furnitureItemTemplate() {
         <div className={styles.formContainer}>
           <h1 className={styles.sectionTitle}>Furnishings</h1>
           <div className={styles.furnishings}>
-            {/* Possible way to render a series of EditTemplate components
-        {Object.entries(furnitureCategoriesToItems).map(([category, items]) => (
+             
+        
+        {furnitureCategoriesToItems ? Object.entries(furnitureCategoriesToItems!).map(([category, items]) => (
         <EditTemplate
           key={category}
           furnitureItems={items}
           categoryName={category}
           categoryTitle={category[0].toUpperCase() + category.slice(1)}
           isEditing={editingCategory === category}
-          isDisabled={editingCategory !== null && editingCategory !== category}
+          isDisabled={editingCategory !== undefined && editingCategory !== category}
           onBeginEditing={() => handleBeginEditing(category)}
           onFinishEditing={handleFinishEditing}
         />
-        ))}   
-        */}
+        )): null}   
+      
 
-            <EditTemplate
+            {/* <EditTemplate
               furnitureItems={furnitureCategoriesToItems?.bedroom ?? []}
               categoryName="bedroom"
               categoryTitle="Bedroom"
@@ -91,7 +96,7 @@ export default function furnitureItemTemplate() {
               furnitureItems={furnitureCategoriesToItems?.other ?? []}
               categoryName="other"
               categoryTitle="Other"
-            />
+            /> */}
           </div>
         </div>
       </div>
