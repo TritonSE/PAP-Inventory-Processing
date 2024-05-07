@@ -160,7 +160,15 @@ export async function getAllVSRs(
   firebaseToken: string,
   search?: string,
   zipCodes?: string[],
+  income?: string,
 ): Promise<APIResult<VSR[]>> {
+  const incomeMap: { [key: string]: string } = {
+    "$50,001 and over": "50000",
+    "$25,001 - $50,000": "25000",
+    "$12,501 - $25,000": "12500",
+    "$12,500 and under": "0",
+  };
+
   try {
     if (search) {
       const response = await get(`/api/vsr?search=${search}`, createAuthHeader(firebaseToken));

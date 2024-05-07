@@ -5,6 +5,8 @@ import ReactDOM from "react-dom";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
+import MultipleChoice from "@/components/shared/input/MultipleChoice";
+import { incomeOptions } from "@/constants/fieldOptions";
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -16,6 +18,7 @@ const FilterModal = ({ isOpen, onClose, onZipCodesEntered }: FilterModalProps) =
   if (!isOpen) return null;
 
   const [zipCodes, setZipCodes] = useState<string[]>([]);
+  const [income, setIncome] = useState<string>("");
 
   const handleZipCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setZipCodes(e.target.value.split(",").map((zip) => zip.trim())); // Assuming zip codes are comma-separated
@@ -34,13 +37,25 @@ const FilterModal = ({ isOpen, onClose, onZipCodesEntered }: FilterModalProps) =
         onClose={onClose}
         title=""
         content={
-          <TextField
-            label="Zip Code(s)"
-            variant="outlined"
-            placeholder="e.g. 92093"
-            onChange={handleZipCodeChange}
-            required={false}
-          />
+          <div>
+            <MultipleChoice
+              label="Select a Category"
+              options={incomeOptions}
+              value={income}
+              onChange={(newValue: string | string[]) =>
+                setIncome(Array.isArray(newValue) ? newValue[0] : newValue)
+              }
+              required
+            ></MultipleChoice>
+            <br />
+            <TextField
+              label="Zip Code(s)"
+              variant="outlined"
+              placeholder="e.g. 92093"
+              onChange={handleZipCodeChange}
+              required={false}
+            />
+          </div>
         }
         bottomRow={
           <div className={styles.buttonContainer}>
