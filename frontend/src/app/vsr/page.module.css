@@ -54,6 +54,19 @@
   height: 100%;
 }
 
+.section {
+  display: flex;
+  background-color: white;
+  border-radius: 20px;
+  padding: 64px;
+  margin-top: 32px;
+  margin-left: 105px;
+  margin-right: 105px;
+  gap: 10px;
+  align-items: flex-start;
+  height: 100%;
+}
+
 .form {
   display: flex;
   flex-direction: column;

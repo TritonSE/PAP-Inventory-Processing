@@ -1,6 +1,6 @@
 "use client";
 import emailValidator from "email-validator";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler, RegisterOptions } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
@@ -34,6 +34,7 @@ import { ChildrenInput } from "@/components/shared/input/ChildrenInput";
 import { Button } from "@/components/shared/Button";
 import { ICreateVSRFormInput, IVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
+import { ListDetail, SingleDetail } from "@/components/VSRIndividual";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -75,7 +76,7 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [additionalItems, setAdditionalItems] = useState("");
 
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(4);
 
   const goToPage = (newPage: number) => {
     setPageNumber(newPage);
@@ -146,6 +147,79 @@ const VeteranServiceRequest: React.FC = () => {
 
   const { isMobile, isTablet } = useScreenSizes();
 
+  let createVSRRequest: CreateVSRRequest = {
+    name: "",
+    gender: "",
+    age: 0,
+    maritalStatus: "",
+    spouseName: "",
+    agesOfBoys: [],
+    agesOfGirls: [],
+    ethnicity: [],
+    employmentStatus: "",
+    incomeLevel: "",
+    sizeOfHome: "",
+    streetAddress: "",
+    city: "",
+    state: "",
+    zipCode: 0,
+    phoneNumber: "",
+    email: "",
+    branch: [],
+    conflicts: [],
+    dischargeStatus: "",
+    serviceConnected: false,
+    lastRank: "",
+    militaryID: 0,
+    selectedFurnitureItems: [],
+    additionalItems: "",
+    petCompanion: false,
+    hearFrom: "",
+  };
+  /*
+  const furnitureItemIdsToItems = useMemo(
+    () =>
+      ?.reduce(
+        (prevMap: Record<string, FurnitureItem>, curItem) => ({
+          ...prevMap,
+          [curItem._id]: curItem,
+        }),
+        {},
+      ) ?? {},
+    [furnitureItems],
+  );
+  
+    const findSelectedItemsByCategory = (category: string) => {
+    return Object.values(createVSRRequest.selectedFurnitureItems ?? {}).filter(
+      (selectedItem) =>
+        furnitureItemIdsToItems[selectedItem.furnitureItemId]?.category === category,
+    );
+  };
+  const renderItemsSection = (categoryTitle: string, categoryName: string) => {
+    const selectedItemsForCategory = findSelectedItemsByCategory(categoryName);
+
+    return (
+      <div className={styles.row}>
+        <ListDetail
+          title={categoryTitle}
+          values={
+            selectedItemsForCategory && selectedItemsForCategory.length > 0
+              ? selectedItemsForCategory.map(
+                  (selectedItem) =>
+                    `${furnitureItemIdsToItems[selectedItem.furnitureItemId].name} ${
+                      furnitureItemIdsToItems[selectedItem.furnitureItemId]?.allowMultiple
+                        ? ": " + selectedItem.quantity
+                        : ""
+                    }`,
+                )
+              : ["No items selected"]
+          }
+          isEmpty={!(selectedItemsForCategory && selectedItemsForCategory.length > 0)}
+        />
+      </div>
+    );
+  };
+*/
   // Execute when submit button is pressed
   const onSubmit: SubmitHandler<ICreateVSRFormInput> = async (data) => {
     if (loadingVsrSubmission) {
@@ -155,7 +229,7 @@ const VeteranServiceRequest: React.FC = () => {
 
     // Construct the request object
 
-    const createVSRRequest: CreateVSRRequest = {
+    createVSRRequest = {
       name: data.name,
       gender: data.gender,
       age: data.age,
@@ -250,7 +324,7 @@ const VeteranServiceRequest: React.FC = () => {
         variant="primary"
         outlined={false}
         loading={loadingVsrSubmission}
-        text={pageNumber === 3 ? "Submit" : "Next"}
+        text={pageNumber === 3 ? "Review" : "Next"}
         className={`${styles.bottomButton} ${isValid ? "" : styles.disabled}`}
         type="submit"
       />
@@ -1048,10 +1122,10 @@ const VeteranServiceRequest: React.FC = () => {
         {renderErrorModal()}
       </div>
     );
-  } else {
+  } else if (pageNumber == 3) {
     return (
       <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(incrementPageNumber)}>
           <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <div className={styles.formContainer}>
@@ -1121,6 +1195,221 @@ const VeteranServiceRequest: React.FC = () => {
           }}
         />
         {renderErrorModal()}
+      </div>
+    );
+  } else if (pageNumber == 4) {
+    return (
+      <div>
+        <HeaderBar showLogoutButton={false} />
+        <div className={styles.main}>
+          <h1 className={styles.title}>Veteran Service Request Form</h1>
+          <p className={styles.description}>
+            Please carefully review all your information before final submission. rephrase Id you
+            wold like to make any changes, simply click on “Edit Form”. Once you&apos;re done
+            reviewing, go ahead and submit.
+          </p>
+          <div className={styles.section}>
+            <div className={styles.subSec}>
+              <h1 className={styles.sectionTitle}>Personal Information</h1>
+              <SingleDetail title="Name" value={createVSRRequest ? createVSRRequest.name : "N/A"} />
+              <SingleDetail
+                title="Gender"
+                value={createVSRRequest ? createVSRRequest.gender : "N/A"}
+              />
+              <SingleDetail title="Age" value={createVSRRequest ? createVSRRequest.age : "N/A"} />
+              <ListDetail
+                title="Marital Status"
+                values={[createVSRRequest ? createVSRRequest.name : "N/A"]}
+                isEmpty={false}
+              />
+              <SingleDetail
+                title="Spouse's Name"
+                value={createVSRRequest ? createVSRRequest.name : "N/A"}
+              />
+              <p>Children under the age of 18:</p>
+              <SingleDetail
+                title="Number of Male Children"
+                value={createVSRRequest ? createVSRRequest.name : "N/A"}
+              />
+              <SingleDetail
+                title="Age(s) of Boy(s)"
+                value={createVSRRequest ? createVSRRequest.name : "N/A"}
+              />
+              <SingleDetail
+                title="Number of Female Children"
+                value={createVSRRequest ? createVSRRequest.name : "N/A"}
+              />
+              <SingleDetail
+                title="Age(s) of Girl(s)"
+                value={createVSRRequest ? createVSRRequest.name : "N/A"}
+              />
+              <ListDetail
+                title="Ethnicity"
+                values={createVSRRequest ? createVSRRequest.ethnicity : []}
+                isEmpty={false}
+              />
+              <ListDetail
+                title="Employment Status"
+                values={[createVSRRequest ? createVSRRequest.employmentStatus : "N/A"]}
+                isEmpty={false}
+              />
+              <ListDetail
+                title="Income Level"
+                values={[createVSRRequest ? createVSRRequest.incomeLevel : "N/A"]}
+                isEmpty={false}
+              />
+              <ListDetail
+                title="Size of Home"
+                values={[createVSRRequest ? createVSRRequest.sizeOfHome : "N/A"]}
+                isEmpty={false}
+              />
+            </div>
+            <Button
+              variant="primary"
+              outlined={true}
+              iconPath="/ic_edit.svg"
+              text="Edit Section"
+              className={styles.editSectionButton}
+              onClick={() => setPageNumber(1)}
+            />
+          </div>
+
+          <div className={styles.section}>
+            <div className={styles.subSec}>
+              <h1 className={styles.sectionTitle}>Contact Information</h1>
+              <SingleDetail
+                title="Street Address"
+                value={createVSRRequest ? createVSRRequest.streetAddress : "N/A"}
+              />
+              <SingleDetail title="City" value={createVSRRequest ? createVSRRequest.city : "N/A"} />
+              <SingleDetail
+                title="ZipCode"
+                value={createVSRRequest ? createVSRRequest.zipCode : "N/A"}
+              />
+              <SingleDetail
+                title="State"
+                value={createVSRRequest ? createVSRRequest.state : "N/A"}
+              />
+              <SingleDetail
+                title="Phone Number"
+                value={createVSRRequest ? createVSRRequest.phoneNumber : "N/A"}
+              />
+              <SingleDetail
+                title="Email Address"
+                value={createVSRRequest ? createVSRRequest.email : "N/A"}
+              />
+            </div>
+            <Button
+              variant="primary"
+              outlined={true}
+              iconPath="/ic_edit.svg"
+              text="Edit Section"
+              className={styles.editSectionButton}
+              onClick={() => setPageNumber(2)}
+            />
+          </div>
+
+          <div className={styles.section}>
+            <div className={styles.subSec}>
+              <h1 className={styles.sectionTitle}>Military Background</h1>
+              <ListDetail
+                title="Branch"
+                values={createVSRRequest ? createVSRRequest.branch : ["N/A"]}
+                isEmpty={false}
+              />
+              <ListDetail
+                title="Conflicts"
+                values={createVSRRequest ? createVSRRequest.conflicts : ["N/A"]}
+                isEmpty={false}
+              />{" "}
+              <ListDetail
+                title="Discharge Status"
+                values={[createVSRRequest ? createVSRRequest.dischargeStatus : "N/A"]}
+                isEmpty={false}
+              />
+              <ListDetail
+                title="Service Connected"
+                values={[createVSRRequest ? String(createVSRRequest.serviceConnected) : "N/A"]}
+                isEmpty={false}
+              />
+              <SingleDetail
+                title="Last Rank"
+                value={createVSRRequest ? createVSRRequest.lastRank : "N/A"}
+              />
+              <SingleDetail
+                title="Military ID Number"
+                value={createVSRRequest ? createVSRRequest.militaryID : "N/A"}
+              />
+            </div>
+            <Button
+              variant="primary"
+              outlined={true}
+              iconPath="/ic_edit.svg"
+              text="Edit Section"
+              className={styles.editSectionButton}
+              onClick={() => setPageNumber(2)}
+            />
+          </div>
+
+          <div className={styles.section}>
+            <div className={styles.subSec}>
+              <h1 className={styles.sectionTitle}>Additional Information</h1>
+              <ListDetail
+                title="Are you interested in a companionship animal (pet)?"
+                values={[createVSRRequest ? String(createVSRRequest.petCompanion) : "N/A"]}
+                isEmpty={false}
+              />
+              <ListDetail
+                title="How did you hear about us?"
+                values={[createVSRRequest ? String(createVSRRequest.hearFrom) : "N/A"]}
+                isEmpty={false}
+              />
+            </div>
+            <Button
+              variant="primary"
+              outlined={true}
+              iconPath="/ic_edit.svg"
+              text="Edit Section"
+              className={styles.editSectionButton}
+              onClick={() => setPageNumber(2)}
+            />
+          </div>
+
+          <div className={styles.section}>
+            <div className={styles.subSec}>
+              <h1 className={styles.sectionTitle}>Furnishings</h1>
+            </div>
+            <Button
+              variant="primary"
+              outlined={true}
+              iconPath="/ic_edit.svg"
+              text="Edit Section"
+              className={styles.editSectionButton}
+              onClick={() => setPageNumber(3)}
+            />
+          </div>
+
+          <div className={styles.footer}></div>
+          <ConfirmVSRSubmissionModal
+            isOpen={confirmSubmissionModalOpen}
+            onClose={() => {
+              setConfirmSubmissionModalOpen(false);
+              goToPage(1);
+
+              // Reset all form fields after submission
+              reset();
+              setSelectedEthnicities([]);
+              setOtherEthnicity("");
+              setSelectedConflicts([]);
+              setOtherConflict("");
+              setSelectedHearFrom("");
+              setOtherHearFrom("");
+              setSelectedFurnitureItems({});
+              setAdditionalItems("");
+            }}
+          />
+          {renderErrorModal()}
+        </div>
       </div>
     );
   }
