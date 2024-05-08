@@ -1,6 +1,6 @@
 .main {
-  padding: 64px;
-  padding-top: 128px;
+  padding: 120px;
+  padding-top: 105px;
   background-color: #eceff3;
   display: flex;
   flex-direction: column;
@@ -60,11 +60,23 @@
   border-radius: 20px;
   padding: 64px;
   margin-top: 32px;
-  margin-left: 105px;
-  margin-right: 105px;
   gap: 10px;
   align-items: flex-start;
   height: 100%;
+}
+
+.subRow {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.subRow > .rowDetail {
+  flex: 1;
+}
+
+.rowSpacer {
+  width: 64px;
 }
 
 .form {
