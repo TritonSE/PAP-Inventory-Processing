@@ -76,7 +76,7 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [additionalItems, setAdditionalItems] = useState("");
 
-  const [pageNumber, setPageNumber] = useState(4);
+  const [pageNumber, setPageNumber] = useState(1);
 
   const goToPage = (newPage: number) => {
     setPageNumber(newPage);
@@ -147,89 +147,42 @@ const VeteranServiceRequest: React.FC = () => {
 
   const { isMobile, isTablet } = useScreenSizes();
 
-  let createVSRRequest: CreateVSRRequest = {
-    name: "",
-    gender: "",
-    age: 0,
-    maritalStatus: "",
-    spouseName: "",
-    agesOfBoys: [],
-    agesOfGirls: [],
-    ethnicity: [],
-    employmentStatus: "",
-    incomeLevel: "",
-    sizeOfHome: "",
-    streetAddress: "",
-    city: "",
-    state: "",
-    zipCode: 0,
-    phoneNumber: "",
-    email: "",
-    branch: [],
-    conflicts: [],
-    dischargeStatus: "",
-    serviceConnected: false,
-    lastRank: "",
-    militaryID: 0,
-    selectedFurnitureItems: [],
-    additionalItems: "",
-    petCompanion: false,
-    hearFrom: "",
-  };
-  /*
-  const furnitureItemIdsToItems = useMemo(
-    () =>
-      ?.reduce(
-        (prevMap: Record<string, FurnitureItem>, curItem) => ({
-          ...prevMap,
-          [curItem._id]: curItem,
-        }),
-        {},
-      ) ?? {},
-    [furnitureItems],
-  );
-  
-    const findSelectedItemsByCategory = (category: string) => {
-    return Object.values(createVSRRequest.selectedFurnitureItems ?? {}).filter(
-      (selectedItem) =>
-        furnitureItemIdsToItems[selectedItem.furnitureItemId]?.category === category,
-    );
-  };
-  const renderItemsSection = (categoryTitle: string, categoryName: string) => {
-    const selectedItemsForCategory = findSelectedItemsByCategory(categoryName);
+  const [completeVSR, setCompleteVSR] = useState<CreateVSRRequest>();
 
-    return (
-      <div className={styles.row}>
-        <ListDetail
-          title={categoryTitle}
-          values={
-            selectedItemsForCategory && selectedItemsForCategory.length > 0
-              ? selectedItemsForCategory.map(
-                  (selectedItem) =>
-                    `${furnitureItemIdsToItems[selectedItem.furnitureItemId].name} ${
-                      furnitureItemIdsToItems[selectedItem.furnitureItemId]?.allowMultiple
-                        ? ": " + selectedItem.quantity
-                        : ""
-                    }`,
-                )
-              : ["No items selected"]
-          }
-          isEmpty={!(selectedItemsForCategory && selectedItemsForCategory.length > 0)}
-        />
-      </div>
-    );
-  };
-*/
-  // Execute when submit button is pressed
-  const onSubmit: SubmitHandler<ICreateVSRFormInput> = async (data) => {
-    if (loadingVsrSubmission) {
-      return;
-    }
-    setLoadingVsrSubmission(true);
+  // let createVSRRequest: CreateVSRRequest = {
+  //   name: "",
+  //   gender: "",
+  //   age: 0,
+  //   maritalStatus: "",
+  //   spouseName: "",
+  //   agesOfBoys: [],
+  //   agesOfGirls: [],
+  //   ethnicity: [],
+  //   employmentStatus: "",
+  //   incomeLevel: "",
+  //   sizeOfHome: "",
+  //   streetAddress: "",
+  //   city: "",
+  //   state: "",
+  //   zipCode: 0,
+  //   phoneNumber: "",
+  //   email: "",
+  //   branch: [],
+  //   conflicts: [],
+  //   dischargeStatus: "",
+  //   serviceConnected: false,
+  //   lastRank: "",
+  //   militaryID: 0,
+  //   selectedFurnitureItems: [],
+  //   additionalItems: "",
+  //   petCompanion: false,
+  //   hearFrom: "",
+  // };
 
-    // Construct the request object
-
-    createVSRRequest = {
+  // Create vsr object when reviewing
+  const onReview: SubmitHandler<ICreateVSRFormInput> = async (data) => {
+    console.log("REVIEWING...");
+    const createVSR = {
       name: data.name,
       gender: data.gender,
       age: data.age,
@@ -269,19 +222,31 @@ const VeteranServiceRequest: React.FC = () => {
       ),
       additionalItems,
     };
+    setCompleteVSR(createVSR);
+    goToPage(pageNumber + 1);
+  };
+
+  // Execute when submit button is pressed
+  const onSubmit: SubmitHandler<ICreateVSRFormInput> = async (data) => {
+    if (loadingVsrSubmission) {
+      return;
+    }
+    setLoadingVsrSubmission(true);
 
     // Send request to backend
-    const response = await createVSR(createVSRRequest);
+    if (completeVSR != undefined) {
+      const response = await createVSR(completeVSR);
 
-    // Handle success/error
-    if (response.success) {
-      setConfirmSubmissionModalOpen(true);
-    } else {
-      if (response.error === "Failed to fetch") {
-        setVsrFormError(VSRFormError.CANNOT_SUBMIT_NO_INTERNET);
+      // Handle success/error
+      if (response.success) {
+        setConfirmSubmissionModalOpen(true);
       } else {
-        setVsrFormError(VSRFormError.CANNOT_SUBMIT_INTERNAL);
-        console.error(`Cannot submit VSR, error ${response.error}`);
+        if (response.error === "Failed to fetch") {
+          setVsrFormError(VSRFormError.CANNOT_SUBMIT_NO_INTERNET);
+        } else {
+          setVsrFormError(VSRFormError.CANNOT_SUBMIT_INTERNAL);
+          console.error(`Cannot submit VSR, error ${response.error}`);
+        }
       }
     }
     setLoadingVsrSubmission(false);
@@ -1125,7 +1090,7 @@ const VeteranServiceRequest: React.FC = () => {
   } else if (pageNumber == 3) {
     return (
       <div>
-        <form onSubmit={handleSubmit(incrementPageNumber)}>
+        <form onSubmit={handleSubmit(onReview)}>
           <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
             <div className={styles.formContainer}>
@@ -1198,6 +1163,9 @@ const VeteranServiceRequest: React.FC = () => {
       </div>
     );
   } else if (pageNumber == 4) {
+    if (completeVSR != undefined) {
+      console.log("HERE: " + completeVSR.selectedFurnitureItems);
+    }
     return (
       <div>
         <HeaderBar showLogoutButton={false} />
@@ -1211,73 +1179,73 @@ const VeteranServiceRequest: React.FC = () => {
           <div className={styles.section}>
             <div className={styles.subSec}>
               <h1 className={styles.sectionTitle}>Personal Information</h1>
-              <SingleDetail title="Name" value={createVSRRequest ? createVSRRequest.name : "N/A"} />
+              <SingleDetail title="Name" value={completeVSR ? completeVSR.name : "N/A"} />
               <div className={styles.subRow}>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Gender"
-                  value={createVSRRequest ? createVSRRequest.gender : "N/A"}
+                  value={completeVSR ? completeVSR.gender : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Age"
-                  value={createVSRRequest ? createVSRRequest.age : "N/A"}
+                  value={completeVSR ? completeVSR.age : "N/A"}
                 />
               </div>
               <ListDetail
                 title="Marital Status"
-                values={[createVSRRequest ? createVSRRequest.name : "N/A"]}
+                values={[completeVSR ? completeVSR.maritalStatus : "N/A"]}
                 isEmpty={false}
               />
               <SingleDetail
                 title="Spouse's Name"
-                value={createVSRRequest ? createVSRRequest.name : "N/A"}
+                value={completeVSR ? completeVSR.spouseName : "N/A"}
               />
               <p>Children under the age of 18:</p>
               <div className={styles.subRow}>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Number of Male Children"
-                  value={createVSRRequest ? createVSRRequest.name : "N/A"}
+                  value={completeVSR ? completeVSR.agesOfBoys.length : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Age(s) of Boy(s)"
-                  value={createVSRRequest ? createVSRRequest.name : "N/A"}
+                  value={completeVSR ? completeVSR.agesOfBoys : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Number of Female Children"
-                  value={createVSRRequest ? createVSRRequest.name : "N/A"}
+                  value={completeVSR ? completeVSR.agesOfGirls.length : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Age(s) of Girl(s)"
-                  value={createVSRRequest ? createVSRRequest.name : "N/A"}
+                  value={completeVSR ? completeVSR.agesOfGirls : "N/A"}
                 />
               </div>
               <ListDetail
                 title="Ethnicity"
-                values={createVSRRequest ? createVSRRequest.ethnicity : []}
+                values={completeVSR ? completeVSR.ethnicity : []}
                 isEmpty={false}
               />
               <ListDetail
                 title="Employment Status"
-                values={[createVSRRequest ? createVSRRequest.employmentStatus : "N/A"]}
+                values={[completeVSR ? completeVSR.employmentStatus : "N/A"]}
                 isEmpty={false}
               />
               <ListDetail
                 title="Income Level"
-                values={[createVSRRequest ? createVSRRequest.incomeLevel : "N/A"]}
+                values={[completeVSR ? completeVSR.incomeLevel : "N/A"]}
                 isEmpty={false}
               />
               <ListDetail
                 title="Size of Home"
-                values={[createVSRRequest ? createVSRRequest.sizeOfHome : "N/A"]}
+                values={[completeVSR ? completeVSR.sizeOfHome : "N/A"]}
                 isEmpty={false}
               />
             </div>
@@ -1298,35 +1266,32 @@ const VeteranServiceRequest: React.FC = () => {
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Street Address"
-                  value={createVSRRequest ? createVSRRequest.streetAddress : "N/A"}
+                  value={completeVSR ? completeVSR.streetAddress : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="City"
-                  value={createVSRRequest ? createVSRRequest.city : "N/A"}
+                  value={completeVSR ? completeVSR.city : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="ZipCode"
-                  value={createVSRRequest ? createVSRRequest.zipCode : "N/A"}
+                  value={completeVSR ? completeVSR.zipCode : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="State"
-                  value={createVSRRequest ? createVSRRequest.state : "N/A"}
+                  value={completeVSR ? completeVSR.state : "N/A"}
                 />
               </div>
               <SingleDetail
                 title="Phone Number"
-                value={createVSRRequest ? createVSRRequest.phoneNumber : "N/A"}
+                value={completeVSR ? completeVSR.phoneNumber : "N/A"}
               />
-              <SingleDetail
-                title="Email Address"
-                value={createVSRRequest ? createVSRRequest.email : "N/A"}
-              />
+              <SingleDetail title="Email Address" value={completeVSR ? completeVSR.email : "N/A"} />
             </div>
             <Button
               variant="primary"
@@ -1343,37 +1308,35 @@ const VeteranServiceRequest: React.FC = () => {
               <h1 className={styles.sectionTitle}>Military Background</h1>
               <ListDetail
                 title="Branch"
-                values={createVSRRequest ? createVSRRequest.branch : ["N/A"]}
+                values={completeVSR ? completeVSR.branch : ["N/A"]}
                 isEmpty={false}
               />
               <ListDetail
                 title="Conflicts"
-                values={createVSRRequest ? createVSRRequest.conflicts : ["N/A"]}
+                values={completeVSR ? completeVSR.conflicts : ["N/A"]}
                 isEmpty={false}
               />{" "}
               <ListDetail
                 title="Discharge Status"
-                values={[createVSRRequest ? createVSRRequest.dischargeStatus : "N/A"]}
+                values={[completeVSR ? completeVSR.dischargeStatus : "N/A"]}
                 isEmpty={false}
               />
               <ListDetail
                 title="Service Connected"
-                values={[
-                  createVSRRequest ? (createVSRRequest.serviceConnected ? "Yes" : "No") : "N/A",
-                ]}
+                values={[completeVSR ? (completeVSR.serviceConnected ? "Yes" : "No") : "N/A"]}
                 isEmpty={false}
               />
               <div className={styles.subRow}>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Last Rank"
-                  value={createVSRRequest ? createVSRRequest.lastRank : "N/A"}
+                  value={completeVSR ? completeVSR.lastRank : "N/A"}
                 />
                 <div className={styles.rowSpacer}></div>
                 <SingleDetail
                   className={styles.rowDetail}
                   title="Military ID Number"
-                  value={createVSRRequest ? createVSRRequest.militaryID : "N/A"}
+                  value={completeVSR ? completeVSR.militaryID : "N/A"}
                 />
               </div>
             </div>
@@ -1392,12 +1355,12 @@ const VeteranServiceRequest: React.FC = () => {
               <h1 className={styles.sectionTitle}>Additional Information</h1>
               <ListDetail
                 title="Are you interested in a companionship animal (pet)?"
-                values={[createVSRRequest ? (createVSRRequest.petCompanion ? "Yes" : "No") : "N/A"]}
+                values={[completeVSR ? (completeVSR.petCompanion ? "Yes" : "No") : "N/A"]}
                 isEmpty={false}
               />
               <ListDetail
                 title="How did you hear about us?"
-                values={[createVSRRequest ? String(createVSRRequest.hearFrom) : "N/A"]}
+                values={[completeVSR ? String(completeVSR.hearFrom) : "N/A"]}
                 isEmpty={false}
               />
             </div>
@@ -1421,7 +1384,12 @@ const VeteranServiceRequest: React.FC = () => {
                   Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
                     <div className={styles.furnitureItemsSection} key={category}>
                       <ListDetail
-                        title={category.charAt(0).toUpperCase() + category.slice(1) + ":"}
+                        title={
+                          category
+                            .split(" ")
+                            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                            .join(" ") + ":"
+                        }
                         values={(items ?? [])
                           .filter((furnitureItem) => selectedFurnitureItems[furnitureItem._id])
                           .map((furnitureItem) => {
