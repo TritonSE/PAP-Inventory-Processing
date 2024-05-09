@@ -170,19 +170,29 @@ export async function getAllVSRs(
   };
 
   try {
+    let url_string = ``;
+    url_string = `/api/vsr`;
     if (search) {
-      const response = await get(`/api/vsr?search=${search}`, createAuthHeader(firebaseToken));
-      const json = (await response.json()) as VSRListJson;
-      return { success: true, data: json.vsrs.map(parseVSR) };
-    } else if (zipCodes) {
-      const response = await get(`/api/vsr?zipCode=${zipCodes}`, createAuthHeader(firebaseToken));
-      const json = (await response.json()) as VSRListJson;
-      return { success: true, data: json.vsrs.map(parseVSR) };
-    } else {
-      const response = await get("/api/vsr", createAuthHeader(firebaseToken));
-      const json = (await response.json()) as VSRListJson;
-      return { success: true, data: json.vsrs.map(parseVSR) };
+      url_string += `?search=${search}`;
     }
+    if (zipCodes) {
+      if (search) {
+        url_string += `&zipCode=${zipCodes}`;
+      } else {
+        url_string += `?zipCode=${zipCodes}`;
+      }
+    }
+    if (income) {
+      if (search || zipCodes) {
+        url_string += `&incomeLevel=${incomeMap[income]}`;
+      } else {
+        url_string += `?incomeLevel=${incomeMap[income]}`;
+      }
+    }
+
+    const response = await get(url_string, createAuthHeader(firebaseToken));
+    const json = (await response.json()) as VSRListJson;
+    return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
     return handleAPIError(error);
   }

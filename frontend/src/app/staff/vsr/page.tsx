@@ -41,7 +41,9 @@ export default function VSRTableView() {
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filteredZipCodes, setFilteredZipCodes] = useState<string[]>([]);
+  const [filteredZipCodes, setFilteredZipCodes] = useState<string[] | undefined>(undefined);
+  const [filteredIncome, setFilteredIncome] = useState<string | undefined>(undefined);
+  const [search, setSearch] = useState<string | undefined>(undefined);
 
   useRedirectToLoginIfNotSignedIn();
 
@@ -50,61 +52,16 @@ export default function VSRTableView() {
   /**
    * Fetches the list of all VSRs from the backend and updates our vsrs state.
    */
-  const fetchVSRs = (zipCodes = null) => {
+  const fetchVSRs = (search?: string, zipCodes?: string[], income?: string) => {
     if (!firebaseUser) {
       return;
     }
 
-    if (zipCodes !== null) {
-      setLoadingVsrs(true);
-      firebaseUser?.getIdToken().then((firebaseToken) => {
-        getAllVSRs(firebaseToken, zipCodes).then((result) => {
-          if (result.success) {
-            setVsrs(result.data);
-          } else {
-            if (result.error === "Failed to fetch") {
-              setTableError(VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET);
-            } else {
-              console.error(`Error retrieving VSRs: ${result.error}`);
-              setTableError(VSRTableError.CANNOT_FETCH_VSRS_INTERNAL);
-            }
-          }
-          setLoadingVsrs(false);
-        });
-      });
-    } else {
-      setLoadingVsrs(true);
-      firebaseUser?.getIdToken().then((firebaseToken) => {
-        getAllVSRs(firebaseToken).then((result) => {
-          if (result.success) {
-            setVsrs(result.data);
-          } else {
-            if (result.error === "Failed to fetch") {
-              setTableError(VSRTableError.CANNOT_FETCH_VSRS_NO_INTERNET);
-            } else {
-              console.error(`Error retrieving VSRs: ${result.error}`);
-              setTableError(VSRTableError.CANNOT_FETCH_VSRS_INTERNAL);
-            }
-          }
-          setLoadingVsrs(false);
-        });
-      });
-    }
-  };
-
-  // Fetch the VSRs from the backend once the Firebase user loads.
-  useEffect(() => {
-    fetchVSRs();
-  }, [firebaseUser]);
-
-  const fetchSearchedVSRs = (input: string) => {
-    if (!firebaseUser) {
-      return;
-    }
+    console.log(filteredIncome);
 
     setLoadingVsrs(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
-      getAllVSRs(firebaseToken, input).then((result) => {
+      getAllVSRs(firebaseToken, search, zipCodes, income).then((result) => {
         if (result.success) {
           setVsrs(result.data);
         } else {
@@ -119,6 +76,11 @@ export default function VSRTableView() {
       });
     });
   };
+
+  // Fetch the VSRs from the backend once the Firebase user loads.
+  useEffect(() => {
+    fetchVSRs();
+  }, [firebaseUser]);
 
   /**
    * Renders an error modal corresponding to the page's error state, or renders
@@ -186,7 +148,14 @@ export default function VSRTableView() {
         <PageTitle />
         <div className={styles.button_row}>
           <div className={styles.row_left}>
-            {searchOnOwnRow ? null : <SearchKeyword fetchFunction={fetchSearchedVSRs} />}
+            {searchOnOwnRow ? null : (
+              <SearchKeyword
+                onUpdate={(search: string) => {
+                  setSearch(search);
+                  fetchVSRs(search, filteredZipCodes, filteredIncome);
+                }}
+              />
+            )}
 
             <div className={styles.statusContainer}>
               <p className={styles.statusLabel}>Status:</p>
@@ -231,7 +200,7 @@ export default function VSRTableView() {
             />
           </div>
         </div>
-        {searchOnOwnRow ? <SearchKeyword fetchFunction={fetchSearchedVSRs} /> : null}
+        {/* {searchOnOwnRow ? <SearchKeyword onUpdate={fetchSearchedVSRs} /> : null} */}
         <div className={styles.table}>
           {loadingVsrs ? (
             <LoadingScreen />
@@ -259,8 +228,10 @@ export default function VSRTableView() {
       <FilterModal
         isOpen={isFilterModalOpen}
         onClose={() => setIsFilterModalOpen(false)}
-        onZipCodesEntered={(zipCodes: string[]) => {
+        onInputEntered={(zipCodes: string[] | undefined, incomeLevel: string | undefined) => {
           setFilteredZipCodes(zipCodes);
+          setFilteredIncome(incomeLevel);
+          fetchVSRs(search, zipCodes, incomeLevel);
         }}
       />
     </div>

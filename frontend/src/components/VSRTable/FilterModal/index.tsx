@@ -1,7 +1,5 @@
 import styles from "@/components/VSRTable/FilterModal/styles.module.css";
 import { useState } from "react";
-import Image from "next/image";
-import ReactDOM from "react-dom";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
@@ -11,10 +9,10 @@ import { incomeOptions } from "@/constants/fieldOptions";
 interface FilterModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onZipCodesEntered: (zipCodes: string[]) => void;
+  onInputEntered: (zipCodes: string[] | undefined, incomeLevel: string | undefined) => void;
 }
 
-const FilterModal = ({ isOpen, onClose, onZipCodesEntered }: FilterModalProps) => {
+const FilterModal = ({ isOpen, onClose, onInputEntered }: FilterModalProps) => {
   if (!isOpen) return null;
 
   const [zipCodes, setZipCodes] = useState<string[]>([]);
@@ -26,7 +24,7 @@ const FilterModal = ({ isOpen, onClose, onZipCodesEntered }: FilterModalProps) =
 
   const handleApplyFilter = () => {
     // Pass the entered zip codes to the parent component when the user applies the filter
-    onZipCodesEntered(zipCodes);
+    onInputEntered(zipCodes, income);
     onClose(); // Close the modal
   };
 
