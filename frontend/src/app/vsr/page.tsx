@@ -1153,9 +1153,9 @@ const VeteranServiceRequest: React.FC = () => {
           <div className={styles.main}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>
-              Please carefully review all your information before final submission. rephrase Id you
-              wold like to make any changes, simply click on “Edit Form”. Once you&apos;re done
-              reviewing, go ahead and submit.
+              Please carefully review all your information before submitting. If you would like to
+              make any changes, simply click the “Edit Form“ button in the corresponding section.
+              Once you&apos;re done reviewing, click “Submit“.
             </p>
             <div className={styles.section}>
               <div className={styles.subSec}>
