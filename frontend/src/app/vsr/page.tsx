@@ -76,7 +76,7 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [additionalItems, setAdditionalItems] = useState("");
 
-  const [pageNumber, setPageNumber] = useState(4);
+  const [pageNumber, setPageNumber] = useState(1);
 
   const goToPage = (newPage: number) => {
     setPageNumber(newPage);
@@ -1242,7 +1242,7 @@ const VeteranServiceRequest: React.FC = () => {
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Age(s) of Boy(s)"
-                    value={completeVSR ? completeVSR.agesOfBoys : "N/A"}
+                    value={completeVSR ? completeVSR.agesOfBoys.join(", ") : "N/A"}
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
