@@ -204,12 +204,16 @@ export default function VSRTableView() {
         <div className={styles.table}>
           {loadingVsrs ? (
             <LoadingScreen />
-          ) : (
+          ) : vsrs?.length !== 0 ? (
             <VSRTable
               vsrs={vsrs ?? []}
               selectedVsrIds={selectedVsrIds}
               onChangeSelectedVsrIds={setSelectedVsrIds}
             />
+          ) : (
+            <div className={styles.noVsrs}>
+              <p>No VSRs found.</p>
+            </div>
           )}
         </div>
       </div>
