@@ -1,6 +1,6 @@
 "use client";
 import emailValidator from "email-validator";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "src/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler, RegisterOptions } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
@@ -197,7 +197,7 @@ const VeteranServiceRequest: React.FC = () => {
   };
 
   // Execute when submit button is pressed
-  const onSubmit: SubmitHandler<ICreateVSRFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<ICreateVSRFormInput> = async () => {
     if (loadingVsrSubmission) {
       return;
     }
