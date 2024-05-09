@@ -76,7 +76,7 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [additionalItems, setAdditionalItems] = useState("");
 
-  const [pageNumber, setPageNumber] = useState(1);
+  const [pageNumber, setPageNumber] = useState(4);
 
   const goToPage = (newPage: number) => {
     setPageNumber(newPage);
@@ -267,6 +267,19 @@ const VeteranServiceRequest: React.FC = () => {
   const renderBackButton = () => {
     return pageNumber === 1 ? (
       <div className={styles.bottomButton} />
+    ) : pageNumber === 4 ? (
+      <Button
+        variant="primary"
+        outlined
+        text="Back to Edit"
+        className={styles.bottomButton}
+        onClick={decrementPageNumber}
+        /**
+         * We need to set type="button" because the default, type="submit", would cause
+         * this button to be triggered when the user presses enter on any input field.
+         */
+        type="button"
+      />
     ) : (
       <Button
         variant="primary"
@@ -289,7 +302,7 @@ const VeteranServiceRequest: React.FC = () => {
         variant="primary"
         outlined={false}
         loading={loadingVsrSubmission}
-        text={pageNumber === 3 ? "Review" : "Next"}
+        text={pageNumber === 3 ? "Review" : pageNumber === 4 ? "Submit" : "Next"}
         className={`${styles.bottomButton} ${isValid ? "" : styles.disabled}`}
         type="submit"
       />
@@ -454,7 +467,7 @@ const VeteranServiceRequest: React.FC = () => {
               </p>
             </div>
 
-            <div className={styles.formContainer}>
+            <div id="personalInformation" className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
                   <h1 className={styles.sectionTitle}>Personal Information</h1>
@@ -702,7 +715,7 @@ const VeteranServiceRequest: React.FC = () => {
         <form onSubmit={handleSubmit(incrementPageNumber)}>
           <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
-            <div className={styles.formContainer}>
+            <div id="contactInformation" className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
                   <h1 className={styles.sectionTitle}>Contact Information</h1>
@@ -850,7 +863,7 @@ const VeteranServiceRequest: React.FC = () => {
               </div>
             </div>
 
-            <div className={styles.formContainer}>
+            <div id="militaryBackground" className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
                   <h1 className={styles.sectionTitle}>Military Background</h1>
@@ -1008,7 +1021,7 @@ const VeteranServiceRequest: React.FC = () => {
               </div>
             </div>
 
-            <div className={styles.formContainer}>
+            <div id="additionalInformation" className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
                   <h1 className={styles.sectionTitle}>Additional Information</h1>
@@ -1093,7 +1106,7 @@ const VeteranServiceRequest: React.FC = () => {
         <form onSubmit={handleSubmit(onReview)}>
           <HeaderBar showLogoutButton={false} />
           <div className={styles.main}>
-            <div className={styles.formContainer}>
+            <div id="furnishings" className={styles.formContainer}>
               <div className={styles.form}>
                 <div className={styles.subSec}>
                   <div className={styles.sectionTitle}>Furnishings</div>
@@ -1163,277 +1176,330 @@ const VeteranServiceRequest: React.FC = () => {
       </div>
     );
   } else if (pageNumber == 4) {
-    if (completeVSR != undefined) {
-      console.log("HERE: " + completeVSR.selectedFurnitureItems);
-    }
     return (
       <div>
-        <HeaderBar showLogoutButton={false} />
-        <div className={styles.main}>
-          <h1 className={styles.title}>Veteran Service Request Form</h1>
-          <p className={styles.description}>
-            Please carefully review all your information before final submission. rephrase Id you
-            wold like to make any changes, simply click on “Edit Form”. Once you&apos;re done
-            reviewing, go ahead and submit.
-          </p>
-          <div className={styles.section}>
-            <div className={styles.subSec}>
-              <h1 className={styles.sectionTitle}>Personal Information</h1>
-              <SingleDetail title="Name" value={completeVSR ? completeVSR.name : "N/A"} />
-              <div className={styles.subRow}>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Gender"
-                  value={completeVSR ? completeVSR.gender : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Age"
-                  value={completeVSR ? completeVSR.age : "N/A"}
-                />
-              </div>
-              <ListDetail
-                title="Marital Status"
-                values={[completeVSR ? completeVSR.maritalStatus : "N/A"]}
-                isEmpty={false}
-              />
-              <SingleDetail
-                title="Spouse's Name"
-                value={completeVSR ? completeVSR.spouseName : "N/A"}
-              />
-              <p>Children under the age of 18:</p>
-              <div className={styles.subRow}>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Number of Male Children"
-                  value={completeVSR ? completeVSR.agesOfBoys.length : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Age(s) of Boy(s)"
-                  value={completeVSR ? completeVSR.agesOfBoys : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Number of Female Children"
-                  value={completeVSR ? completeVSR.agesOfGirls.length : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Age(s) of Girl(s)"
-                  value={completeVSR ? completeVSR.agesOfGirls : "N/A"}
-                />
-              </div>
-              <ListDetail
-                title="Ethnicity"
-                values={completeVSR ? completeVSR.ethnicity : []}
-                isEmpty={false}
-              />
-              <ListDetail
-                title="Employment Status"
-                values={[completeVSR ? completeVSR.employmentStatus : "N/A"]}
-                isEmpty={false}
-              />
-              <ListDetail
-                title="Income Level"
-                values={[completeVSR ? completeVSR.incomeLevel : "N/A"]}
-                isEmpty={false}
-              />
-              <ListDetail
-                title="Size of Home"
-                values={[completeVSR ? completeVSR.sizeOfHome : "N/A"]}
-                isEmpty={false}
-              />
-            </div>
-            <Button
-              variant="primary"
-              outlined={true}
-              iconPath="/ic_edit.svg"
-              text="Edit Section"
-              className={styles.editSectionButton}
-              onClick={() => setPageNumber(1)}
-            />
-          </div>
-
-          <div className={styles.section}>
-            <div className={styles.subSec}>
-              <h1 className={styles.sectionTitle}>Contact Information</h1>
-              <div className={styles.subRow}>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Street Address"
-                  value={completeVSR ? completeVSR.streetAddress : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="City"
-                  value={completeVSR ? completeVSR.city : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="ZipCode"
-                  value={completeVSR ? completeVSR.zipCode : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="State"
-                  value={completeVSR ? completeVSR.state : "N/A"}
-                />
-              </div>
-              <SingleDetail
-                title="Phone Number"
-                value={completeVSR ? completeVSR.phoneNumber : "N/A"}
-              />
-              <SingleDetail title="Email Address" value={completeVSR ? completeVSR.email : "N/A"} />
-            </div>
-            <Button
-              variant="primary"
-              outlined={true}
-              iconPath="/ic_edit.svg"
-              text="Edit Section"
-              className={styles.editSectionButton}
-              onClick={() => setPageNumber(2)}
-            />
-          </div>
-
-          <div className={styles.section}>
-            <div className={styles.subSec}>
-              <h1 className={styles.sectionTitle}>Military Background</h1>
-              <ListDetail
-                title="Branch"
-                values={completeVSR ? completeVSR.branch : ["N/A"]}
-                isEmpty={false}
-              />
-              <ListDetail
-                title="Conflicts"
-                values={completeVSR ? completeVSR.conflicts : ["N/A"]}
-                isEmpty={false}
-              />{" "}
-              <ListDetail
-                title="Discharge Status"
-                values={[completeVSR ? completeVSR.dischargeStatus : "N/A"]}
-                isEmpty={false}
-              />
-              <ListDetail
-                title="Service Connected"
-                values={[completeVSR ? (completeVSR.serviceConnected ? "Yes" : "No") : "N/A"]}
-                isEmpty={false}
-              />
-              <div className={styles.subRow}>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Last Rank"
-                  value={completeVSR ? completeVSR.lastRank : "N/A"}
-                />
-                <div className={styles.rowSpacer}></div>
-                <SingleDetail
-                  className={styles.rowDetail}
-                  title="Military ID Number"
-                  value={completeVSR ? completeVSR.militaryID : "N/A"}
-                />
-              </div>
-            </div>
-            <Button
-              variant="primary"
-              outlined={true}
-              iconPath="/ic_edit.svg"
-              text="Edit Section"
-              className={styles.editSectionButton}
-              onClick={() => setPageNumber(2)}
-            />
-          </div>
-
-          <div className={styles.section}>
-            <div className={styles.subSec}>
-              <h1 className={styles.sectionTitle}>Additional Information</h1>
-              <ListDetail
-                title="Are you interested in a companionship animal (pet)?"
-                values={[completeVSR ? (completeVSR.petCompanion ? "Yes" : "No") : "N/A"]}
-                isEmpty={false}
-              />
-              <ListDetail
-                title="How did you hear about us?"
-                values={[completeVSR ? String(completeVSR.hearFrom) : "N/A"]}
-                isEmpty={false}
-              />
-            </div>
-            <Button
-              variant="primary"
-              outlined={true}
-              iconPath="/ic_edit.svg"
-              text="Edit Section"
-              className={styles.editSectionButton}
-              onClick={() => setPageNumber(2)}
-            />
-          </div>
-
-          <div className={styles.section}>
-            <div className={styles.subSec}>
-              <h1 className={styles.sectionTitle}>Furnishings</h1>
-              <div>
-                {loadingFurnitureItems ? (
-                  <LoadingScreen />
-                ) : (
-                  Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
-                    <div className={styles.furnitureItemsSection} key={category}>
-                      <ListDetail
-                        title={
-                          category
-                            .split(" ")
-                            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                            .join(" ") + ":"
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <HeaderBar showLogoutButton={false} />
+          <div className={styles.main}>
+            <h1 className={styles.title}>Veteran Service Request Form</h1>
+            <p className={styles.description}>
+              Please carefully review all your information before final submission. rephrase Id you
+              wold like to make any changes, simply click on “Edit Form”. Once you&apos;re done
+              reviewing, go ahead and submit.
+            </p>
+            <div className={styles.section}>
+              <div className={styles.subSec}>
+                <div className={styles.sectionHeaderRow}>
+                  <h1 className={styles.sectionTitle}>Personal Information</h1>
+                  <Button
+                    variant="primary"
+                    outlined={true}
+                    iconPath="/ic_edit.svg"
+                    text="Edit Section"
+                    className={styles.editSectionButton}
+                    onClick={() => {
+                      setPageNumber(1);
+                      setTimeout(() => {
+                        const element = document.getElementById("personalInformation");
+                        if (element) {
+                          element.scrollIntoView({ behavior: "auto", block: "start" });
                         }
-                        values={(items ?? [])
-                          .filter((furnitureItem) => selectedFurnitureItems[furnitureItem._id])
-                          .map((furnitureItem) => {
-                            const selection = selectedFurnitureItems[furnitureItem._id];
-                            return furnitureItem.name + ": " + selection.quantity;
-                          })}
-                        isEmpty={false}
-                      />
-                    </div>
-                  ))
-                )}
+                      }, 100);
+                    }}
+                  />
+                </div>
+                <SingleDetail title="Name" value={completeVSR ? completeVSR.name : "N/A"} />
+                <div className={styles.subRow}>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Gender"
+                    value={completeVSR ? completeVSR.gender : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Age"
+                    value={completeVSR ? completeVSR.age : "N/A"}
+                  />
+                </div>
+                <ListDetail
+                  title="Marital Status"
+                  values={[completeVSR ? completeVSR.maritalStatus : "N/A"]}
+                  isEmpty={false}
+                />
+                <SingleDetail
+                  title="Spouse's Name"
+                  value={completeVSR ? completeVSR.spouseName : "N/A"}
+                />
+                <p className={styles.sectionHeader}>Children under the age of 18:</p>
+                <div className={styles.subRow}>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Number of Male Children"
+                    value={completeVSR ? completeVSR.agesOfBoys.length : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Age(s) of Boy(s)"
+                    value={completeVSR ? completeVSR.agesOfBoys : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Number of Female Children"
+                    value={completeVSR ? completeVSR.agesOfGirls.length : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Age(s) of Girl(s)"
+                    value={completeVSR ? completeVSR.agesOfGirls : "N/A"}
+                  />
+                </div>
+                <ListDetail
+                  title="Ethnicity"
+                  values={completeVSR ? completeVSR.ethnicity : []}
+                  isEmpty={false}
+                />
+                <ListDetail
+                  title="Employment Status"
+                  values={[completeVSR ? completeVSR.employmentStatus : "N/A"]}
+                  isEmpty={false}
+                />
+                <ListDetail
+                  title="Income Level"
+                  values={[completeVSR ? completeVSR.incomeLevel : "N/A"]}
+                  isEmpty={false}
+                />
+                <ListDetail
+                  title="Size of Home"
+                  values={[completeVSR ? completeVSR.sizeOfHome : "N/A"]}
+                  isEmpty={false}
+                />
               </div>
             </div>
-            <Button
-              variant="primary"
-              outlined={true}
-              iconPath="/ic_edit.svg"
-              text="Edit Section"
-              className={styles.editSectionButton}
-              onClick={() => setPageNumber(3)}
+
+            <div className={styles.section}>
+              <div className={styles.subSec}>
+                <div className={styles.sectionHeaderRow}>
+                  <h1 className={styles.sectionTitle}>Contact Information</h1>
+                  <Button
+                    variant="primary"
+                    outlined={true}
+                    iconPath="/ic_edit.svg"
+                    text="Edit Section"
+                    className={styles.editSectionButton}
+                    onClick={() => {
+                      setPageNumber(2);
+                      setTimeout(() => {
+                        const element = document.getElementById("contactInformation");
+                        if (element) {
+                          element.scrollIntoView({ behavior: "auto", block: "start" });
+                        }
+                      }, 100);
+                    }}
+                  />
+                </div>
+                <div className={styles.subRow}>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Street Address"
+                    value={completeVSR ? completeVSR.streetAddress : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="City"
+                    value={completeVSR ? completeVSR.city : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="ZipCode"
+                    value={completeVSR ? completeVSR.zipCode : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="State"
+                    value={completeVSR ? completeVSR.state : "N/A"}
+                  />
+                </div>
+                <SingleDetail
+                  title="Phone Number"
+                  value={completeVSR ? completeVSR.phoneNumber : "N/A"}
+                />
+                <SingleDetail
+                  title="Email Address"
+                  value={completeVSR ? completeVSR.email : "N/A"}
+                />
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <div className={styles.subSec}>
+                <div className={styles.sectionHeaderRow}>
+                  <h1 className={styles.sectionTitle}>Military Background</h1>
+                  <Button
+                    variant="primary"
+                    outlined={true}
+                    iconPath="/ic_edit.svg"
+                    text="Edit Section"
+                    className={styles.editSectionButton}
+                    onClick={() => {
+                      setPageNumber(2);
+                      setTimeout(() => {
+                        const element = document.getElementById("militaryBackground");
+                        if (element) {
+                          element.scrollIntoView({ behavior: "auto", block: "start" });
+                        }
+                      }, 100);
+                    }}
+                  />
+                </div>
+                <ListDetail
+                  title="Branch"
+                  values={completeVSR ? completeVSR.branch : ["N/A"]}
+                  isEmpty={false}
+                />
+                <ListDetail
+                  title="Conflicts"
+                  values={completeVSR ? completeVSR.conflicts : ["N/A"]}
+                  isEmpty={false}
+                />{" "}
+                <ListDetail
+                  title="Discharge Status"
+                  values={[completeVSR ? completeVSR.dischargeStatus : "N/A"]}
+                  isEmpty={false}
+                />
+                <ListDetail
+                  title="Service Connected"
+                  values={[completeVSR ? (completeVSR.serviceConnected ? "Yes" : "No") : "N/A"]}
+                  isEmpty={false}
+                />
+                <div className={styles.subRow}>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Last Rank"
+                    value={completeVSR ? completeVSR.lastRank : "N/A"}
+                  />
+                  <div className={styles.rowSpacer}></div>
+                  <SingleDetail
+                    className={styles.rowDetail}
+                    title="Military ID Number"
+                    value={completeVSR ? completeVSR.militaryID : "N/A"}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <div className={styles.subSec}>
+                <div className={styles.sectionHeaderRow}>
+                  <h1 className={styles.sectionTitle}>Additional Information</h1>
+                  <Button
+                    variant="primary"
+                    outlined={true}
+                    iconPath="/ic_edit.svg"
+                    text="Edit Section"
+                    className={styles.editSectionButton}
+                    onClick={() => {
+                      setPageNumber(2);
+                      setTimeout(() => {
+                        const element = document.getElementById("additionalInformation");
+                        if (element) {
+                          element.scrollIntoView({ behavior: "auto", block: "start" });
+                        }
+                      }, 100);
+                    }}
+                  />
+                </div>
+                <ListDetail
+                  title="Are you interested in a companionship animal (pet)?"
+                  values={[completeVSR ? (completeVSR.petCompanion ? "Yes" : "No") : "N/A"]}
+                  isEmpty={false}
+                />
+                <ListDetail
+                  title="How did you hear about us?"
+                  values={[completeVSR ? String(completeVSR.hearFrom) : "N/A"]}
+                  isEmpty={false}
+                />
+              </div>
+            </div>
+
+            <div className={styles.section}>
+              <div className={styles.subSec}>
+                <div className={styles.sectionHeaderRow}>
+                  <h1 className={styles.sectionTitle}>Furnishings</h1>
+                  <Button
+                    variant="primary"
+                    outlined={true}
+                    iconPath="/ic_edit.svg"
+                    text="Edit Section"
+                    className={styles.editSectionButton}
+                    onClick={() => {
+                      setPageNumber(3);
+                      setTimeout(() => {
+                        const element = document.getElementById("furnishings");
+                        if (element) {
+                          element.scrollIntoView({ behavior: "auto", block: "start" });
+                        }
+                      }, 100);
+                    }}
+                  />
+                </div>
+                <div>
+                  {loadingFurnitureItems ? (
+                    <LoadingScreen />
+                  ) : (
+                    Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
+                      <div className={styles.furnitureItemsSection} key={category}>
+                        <ListDetail
+                          title={
+                            category
+                              .split(" ")
+                              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                              .join(" ") + ":"
+                          }
+                          values={(items ?? [])
+                            .filter((furnitureItem) => selectedFurnitureItems[furnitureItem._id])
+                            .map((furnitureItem) => {
+                              const selection = selectedFurnitureItems[furnitureItem._id];
+                              return furnitureItem.name + ": " + selection.quantity;
+                            })}
+                          isEmpty={false}
+                        />
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {renderBottomRow()}
+            <div className={styles.footer}></div>
+            <ConfirmVSRSubmissionModal
+              isOpen={confirmSubmissionModalOpen}
+              onClose={() => {
+                setConfirmSubmissionModalOpen(false);
+                goToPage(1);
+
+                // Reset all form fields after submission
+                reset();
+                setSelectedEthnicities([]);
+                setOtherEthnicity("");
+                setSelectedConflicts([]);
+                setOtherConflict("");
+                setSelectedHearFrom("");
+                setOtherHearFrom("");
+                setSelectedFurnitureItems({});
+                setAdditionalItems("");
+              }}
             />
+            {renderErrorModal()}
           </div>
-
-          <div className={styles.footer}></div>
-          <ConfirmVSRSubmissionModal
-            isOpen={confirmSubmissionModalOpen}
-            onClose={() => {
-              setConfirmSubmissionModalOpen(false);
-              goToPage(1);
-
-              // Reset all form fields after submission
-              reset();
-              setSelectedEthnicities([]);
-              setOtherEthnicity("");
-              setSelectedConflicts([]);
-              setOtherConflict("");
-              setSelectedHearFrom("");
-              setOtherHearFrom("");
-              setSelectedFurnitureItems({});
-              setAdditionalItems("");
-            }}
-          />
-          {renderErrorModal()}
-        </div>
+        </form>
       </div>
     );
   }

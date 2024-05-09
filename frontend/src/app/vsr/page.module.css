@@ -22,7 +22,7 @@
 .description {
   color: #000;
   /* Desktop/Body 1 */
-  font-family: "Open Sans";
+  font-family: "OpenSans";
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -36,7 +36,7 @@
 
 .fieldsMarked {
   color: #000;
-  font-family: "Open Sans";
+  font-family: "OpenSans";
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -59,7 +59,6 @@
   background-color: white;
   border-radius: 20px;
   padding: 64px;
-  margin-top: 32px;
   gap: 10px;
   align-items: flex-start;
   height: 100%;
@@ -95,6 +94,12 @@
   align-self: flex-start;
 }
 
+.sectionHeaderRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
 .sectionTitle {
   color: var(--Accent-Blue-1, #102d5f);
   /* Desktop/H2 */
@@ -125,7 +130,7 @@
   gap: 4px;
   font-size: 16px;
   color: var(--Light-Gray, #818181);
-  font-family: "Open Sans";
+  font-family: "OpenSans";
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -255,6 +260,7 @@
 
   .sectionHeader {
     font-size: 14px;
+    font-family: "OpenSans";
   }
 
   .desktopRowTabletColumn {
