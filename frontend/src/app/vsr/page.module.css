@@ -34,6 +34,11 @@
   text-decoration-line: underline;
 }
 
+.italicText {
+  font-style: italic;
+  color: #818181;
+}
+
 .fieldsMarked {
   color: #000;
   font-family: "OpenSans";

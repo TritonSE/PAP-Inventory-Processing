@@ -149,36 +149,6 @@ const VeteranServiceRequest: React.FC = () => {
 
   const [completeVSR, setCompleteVSR] = useState<CreateVSRRequest>();
 
-  // let createVSRRequest: CreateVSRRequest = {
-  //   name: "",
-  //   gender: "",
-  //   age: 0,
-  //   maritalStatus: "",
-  //   spouseName: "",
-  //   agesOfBoys: [],
-  //   agesOfGirls: [],
-  //   ethnicity: [],
-  //   employmentStatus: "",
-  //   incomeLevel: "",
-  //   sizeOfHome: "",
-  //   streetAddress: "",
-  //   city: "",
-  //   state: "",
-  //   zipCode: 0,
-  //   phoneNumber: "",
-  //   email: "",
-  //   branch: [],
-  //   conflicts: [],
-  //   dischargeStatus: "",
-  //   serviceConnected: false,
-  //   lastRank: "",
-  //   militaryID: 0,
-  //   selectedFurnitureItems: [],
-  //   additionalItems: "",
-  //   petCompanion: false,
-  //   hearFrom: "",
-  // };
-
   // Create vsr object when reviewing
   const onReview: SubmitHandler<ICreateVSRFormInput> = async (data) => {
     console.log("REVIEWING...");
@@ -1208,74 +1178,117 @@ const VeteranServiceRequest: React.FC = () => {
                     }}
                   />
                 </div>
-                <SingleDetail title="Name" value={completeVSR ? completeVSR.name : "N/A"} />
+                <SingleDetail
+                  title="Name"
+                  value={
+                    completeVSR ? completeVSR.name : <span className={styles.italicText}>N/A</span>
+                  }
+                />
                 <div className={styles.subRow}>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Gender"
-                    value={completeVSR ? completeVSR.gender : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.gender
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Age"
-                    value={completeVSR ? completeVSR.age : "N/A"}
+                    value={
+                      completeVSR ? completeVSR.age : <span className={styles.italicText}>N/A</span>
+                    }
                   />
                 </div>
                 <ListDetail
                   title="Marital Status"
                   values={[completeVSR ? completeVSR.maritalStatus : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.maritalStatus}
                 />
                 <SingleDetail
                   title="Spouse's Name"
-                  value={completeVSR ? completeVSR.spouseName : "N/A"}
+                  value={
+                    completeVSR ? (
+                      completeVSR.spouseName
+                    ) : (
+                      <span className={styles.italicText}>N/A</span>
+                    )
+                  }
                 />
                 <p className={styles.sectionHeader}>Children under the age of 18:</p>
                 <div className={styles.subRow}>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Number of Male Children"
-                    value={completeVSR ? completeVSR.agesOfBoys.length : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.agesOfBoys.length
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Age(s) of Boy(s)"
-                    value={completeVSR ? completeVSR.agesOfBoys.join(", ") : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.agesOfBoys.join(", ")
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Number of Female Children"
-                    value={completeVSR ? completeVSR.agesOfGirls.length : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.agesOfGirls.length
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Age(s) of Girl(s)"
-                    value={completeVSR ? completeVSR.agesOfGirls : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.agesOfGirls
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                 </div>
                 <ListDetail
                   title="Ethnicity"
                   values={completeVSR ? completeVSR.ethnicity : []}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.ethnicity}
                 />
                 <ListDetail
                   title="Employment Status"
                   values={[completeVSR ? completeVSR.employmentStatus : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.employmentStatus}
                 />
                 <ListDetail
                   title="Income Level"
                   values={[completeVSR ? completeVSR.incomeLevel : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.incomeLevel}
                 />
                 <ListDetail
                   title="Size of Home"
                   values={[completeVSR ? completeVSR.sizeOfHome : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.sizeOfHome}
                 />
               </div>
             </div>
@@ -1305,34 +1318,66 @@ const VeteranServiceRequest: React.FC = () => {
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Street Address"
-                    value={completeVSR ? completeVSR.streetAddress : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.streetAddress
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="City"
-                    value={completeVSR ? completeVSR.city : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.city
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="ZipCode"
-                    value={completeVSR ? completeVSR.zipCode : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.zipCode
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="State"
-                    value={completeVSR ? completeVSR.state : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.state
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                 </div>
                 <SingleDetail
                   title="Phone Number"
-                  value={completeVSR ? completeVSR.phoneNumber : "N/A"}
+                  value={
+                    completeVSR ? (
+                      completeVSR.phoneNumber
+                    ) : (
+                      <span className={styles.italicText}>N/A</span>
+                    )
+                  }
                 />
                 <SingleDetail
                   title="Email Address"
-                  value={completeVSR ? completeVSR.email : "N/A"}
+                  value={
+                    completeVSR ? completeVSR.email : <span className={styles.italicText}>N/A</span>
+                  }
                 />
               </div>
             </div>
@@ -1361,34 +1406,46 @@ const VeteranServiceRequest: React.FC = () => {
                 <ListDetail
                   title="Branch"
                   values={completeVSR ? completeVSR.branch : ["N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.branch}
                 />
                 <ListDetail
                   title="Conflicts"
                   values={completeVSR ? completeVSR.conflicts : ["N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.conflicts}
                 />{" "}
                 <ListDetail
                   title="Discharge Status"
                   values={[completeVSR ? completeVSR.dischargeStatus : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.dischargeStatus}
                 />
                 <ListDetail
                   title="Service Connected"
                   values={[completeVSR ? (completeVSR.serviceConnected ? "Yes" : "No") : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.serviceConnected}
                 />
                 <div className={styles.subRow}>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Last Rank"
-                    value={completeVSR ? completeVSR.lastRank : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.lastRank
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                   <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Military ID Number"
-                    value={completeVSR ? completeVSR.militaryID : "N/A"}
+                    value={
+                      completeVSR ? (
+                        completeVSR.militaryID
+                      ) : (
+                        <span className={styles.italicText}>N/A</span>
+                      )
+                    }
                   />
                 </div>
               </div>
@@ -1418,12 +1475,12 @@ const VeteranServiceRequest: React.FC = () => {
                 <ListDetail
                   title="Are you interested in a companionship animal (pet)?"
                   values={[completeVSR ? (completeVSR.petCompanion ? "Yes" : "No") : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.petCompanion}
                 />
                 <ListDetail
                   title="How did you hear about us?"
                   values={[completeVSR ? String(completeVSR.hearFrom) : "N/A"]}
-                  isEmpty={false}
+                  isEmpty={!completeVSR || !completeVSR.hearFrom}
                 />
               </div>
             </div>
@@ -1468,7 +1525,11 @@ const VeteranServiceRequest: React.FC = () => {
                               const selection = selectedFurnitureItems[furnitureItem._id];
                               return furnitureItem.name + ": " + selection.quantity;
                             })}
-                          isEmpty={false}
+                          isEmpty={
+                            (items ?? []).filter(
+                              (furnitureItem) => selectedFurnitureItems[furnitureItem._id],
+                            ).length === 0
+                          }
                         />
                       </div>
                     ))
