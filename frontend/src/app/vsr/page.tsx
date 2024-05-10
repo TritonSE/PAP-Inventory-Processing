@@ -151,7 +151,6 @@ const VeteranServiceRequest: React.FC = () => {
 
   // Create vsr object when reviewing
   const onReview: SubmitHandler<ICreateVSRFormInput> = async (data) => {
-    console.log("REVIEWING...");
     const createVSR = {
       name: data.name,
       gender: data.gender,
