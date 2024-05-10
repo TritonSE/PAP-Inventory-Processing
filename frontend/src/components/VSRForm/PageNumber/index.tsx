@@ -11,7 +11,7 @@ export interface PageNumberProps {
 const PageNumber = ({ pageNum }: PageNumberProps) => {
   return (
     <div className={styles.pageNumber}>
-      <p>{pageNum < 4 ? pageNum + "of 3" : ""}</p>
+      <p>{pageNum < 4 ? pageNum + " of 3" : ""}</p>
     </div>
   );
 };
