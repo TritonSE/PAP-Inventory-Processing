@@ -189,9 +189,11 @@ export async function getAllVSRs(
         url_string += `?incomeLevel=${incomeMap[income]}`;
       }
     }
+    console.log(url_string);
 
     const response = await get(url_string, createAuthHeader(firebaseToken));
     const json = (await response.json()) as VSRListJson;
+    console.log(url_string);
     return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
     return handleAPIError(error);

@@ -57,8 +57,6 @@ export default function VSRTableView() {
       return;
     }
 
-    console.log(filteredIncome);
-
     setLoadingVsrs(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
       getAllVSRs(firebaseToken, search, zipCodes, income).then((result) => {

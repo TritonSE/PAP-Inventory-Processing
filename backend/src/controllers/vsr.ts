@@ -83,18 +83,27 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
     }
 
     if (
-      req.query.incomeLevel &&
-      typeof req.query.incomeLevel === "string" &&
-      req.query.incomeLevel in ["50000", "25000", "12500", "0"]
+      req.query.incomeLevel
+      // &&
+      // typeof req.query.incomeLevel === "string" &&
+      // req.query.incomeLevel in ["50000", "25000", "12500", "0"]
     ) {
+      /*
+      "$12,500 and under",
+  "$12,501 - $25,000",
+  "$25,001 - $50,000",
+  "$50,001 and over",
+      */
       const incomeMap: { [key: string]: string } = {
-        "50000": "$50,000 and above",
-        "25000": "$25,000 - $50,000",
-        "12500": "$12,500 - $25,000",
-        "0": "Below $12,500",
+        "50000": "$50,001 and over",
+        "25000": "$25,001 - $50,000",
+        "12500": "$12,501 - $25,000",
+        "0": "$12,500 and under",
       };
 
-      vsrs = vsrs.filter((vsr) => vsr.incomeLevel === incomeMap[req.query.incomeLevel as string]);
+      vsrs = vsrs.filter((vsr) => {
+        return vsr.incomeLevel === incomeMap[req.query.incomeLevel as string];
+      });
     }
 
     if (req.query.zipCode) {
