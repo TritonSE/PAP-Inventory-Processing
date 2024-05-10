@@ -108,7 +108,7 @@ export const getAllVSRS: RequestHandler = async (req, res, next) => {
 
     if (req.query.zipCode) {
       //we expect a list of zipcodes
-      const zipCodes = req.query.zipCode as string[];
+      const zipCodes = (req.query.zipCode as string).split(",").map((zip) => zip.trim());
       vsrs = vsrs.filter((vsr) => zipCodes.includes(vsr.zipCode.toString()));
     }
 
