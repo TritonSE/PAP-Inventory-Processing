@@ -1131,25 +1131,6 @@ const VeteranServiceRequest: React.FC = () => {
             {renderBottomRow()}
           </div>
         </form>
-        <div className={styles.footer}></div>
-        <ConfirmVSRSubmissionModal
-          isOpen={confirmSubmissionModalOpen}
-          onClose={() => {
-            setConfirmSubmissionModalOpen(false);
-            goToPage(1);
-
-            // Reset all form fields after submission
-            reset();
-            setSelectedEthnicities([]);
-            setOtherEthnicity("");
-            setSelectedConflicts([]);
-            setOtherConflict("");
-            setSelectedHearFrom("");
-            setOtherHearFrom("");
-            setSelectedFurnitureItems({});
-            setAdditionalItems("");
-          }}
-        />
         {renderErrorModal()}
       </div>
     );
@@ -1514,6 +1495,7 @@ const VeteranServiceRequest: React.FC = () => {
                 setOtherHearFrom("");
                 setSelectedFurnitureItems({});
                 setAdditionalItems("");
+                setCompleteVSR(undefined);
               }}
             />
             {renderErrorModal()}
