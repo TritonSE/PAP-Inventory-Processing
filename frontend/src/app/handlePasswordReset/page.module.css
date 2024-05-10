@@ -1,12 +1,10 @@
-/* Login.css */
-
-.loginContainer {
+.resetContainer {
   position: relative;
   height: 100vh;
   margin: 0;
 }
 
-.loginBox {
+.resetBox {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -22,40 +20,7 @@
   max-width: 580px;
 }
 
-.toLogin {
-  cursor: pointer;
-  background-color: #fff;
-  color: #d9d9d9;
-  margin-left: 31px;
-  margin-top: 24px;
-  border: none;
-  align-self: flex-start;
-}
-
-.logoContainer {
-  position: absolute;
-  top: -65px;
-  display: inline-flex;
-  padding: 15px;
-  align-items: flex-start;
-  gap: 10px;
-  border-radius: 12px;
-  background: #fff;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-}
-
-.logoImage {
-  background: lightgray no-repeat;
-  width: 190px;
-  height: 90px;
-}
-
-.image {
-  width: 190px;
-  height: 90px;
-}
-
-.welcomeText {
+.resetText {
   color: #000;
   text-align: center;
   font-family: Lora;
@@ -63,31 +28,30 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+  padding: 10px 0px;
   margin-top: 64px; /* Gap between Welcome and Name field */
-  padding: 10px;
-}
-
-.resetText {
-  margin-top: 22px; /* Gap between Welcome and Name field */
 }
 
 .instructions {
   color: #000;
   font-family: var(--font-open-sans);
   font-size: 20px;
-  margin: 0px 128px;
+  margin: 0px 128px 0px 128px;
   text-align: center;
   margin-top: 16px;
 }
 
-.loginForm {
+.resetForm {
   width: 80%;
   margin-top: 16px; /* Gap between Name and Password */
 }
 
 .inputGroup {
-  margin-bottom: 16px;
   padding-top: 6px;
+}
+
+.spacer {
+  margin-bottom: 16px;
 }
 
 .label {
@@ -104,7 +68,7 @@
   border-radius: 4px;
 }
 
-.forgotPassword {
+.rememberPassword {
   color: #4274f4;
 
   font-size: 16px;
@@ -112,14 +76,14 @@
   font-weight: 400;
   line-height: normal;
   text-align: center;
-  padding-top: 30px;
-  margin-bottom: 48px; /* Gap between Forgot password and Log In */
+  padding-top: 22px;
+  margin-bottom: 64px; /* Gap between Forgot password and Log In */
 
   cursor: pointer;
   user-select: none;
 }
 
-.loginButton {
+.confirmButton {
   width: 100%;
   height: 50px;
   flex-shrink: 0;
@@ -127,11 +91,7 @@
   font-family: Lora;
   font-size: 24px;
   font-weight: 700;
-  margin-bottom: 49px;
-}
-
-.sendLinkButton {
-  margin-top: 64px;
+  margin-bottom: 56px;
 }
 
 .disabledButton {
@@ -149,7 +109,7 @@
     object-position: 35% 10%;
   }
 
-  .loginBox {
+  .resetBox {
     width: 90%;
     max-width: 500px;
   }
@@ -159,22 +119,9 @@
     font-size: 18px;
   }
 
-  .loginForm {
-    margin-top: 32px; /* Gap between Name and Password */
-  }
-
-  .forgotPassword {
-    font-size: 12px;
-    margin-bottom: 38px; /* Gap between Forgot password and Log In */
-  }
-
-  .loginButton {
+  .confirmButton {
     font-size: 18px;
     font-weight: 600;
-  }
-
-  .sendLinkButton {
-    margin-top: 48px;
   }
 }
 
@@ -185,21 +132,12 @@
     object-position: 35% 10%;
   }
 
-  .logoContainer {
-    padding: 10px;
-  }
-
-  .logoImage {
-    width: 130px;
-    height: 60px;
-  }
-
   .image {
     width: 130px;
     height: 60px;
   }
 
-  .welcomeText {
+  .resetText {
     font-size: 28px;
     margin-top: 17px; /* Gap between Welcome and Name field */
   }
@@ -209,24 +147,11 @@
     font-size: 14px;
   }
 
-  .loginForm {
-    width: 100%;
-  }
-
   .inputGroup {
     padding-top: 0;
   }
 
-  .forgotPassword {
-    padding-top: 16px;
-    margin-bottom: 32px; /* Gap between Forgot password and Log In */
-  }
-
-  .loginButton {
+  .confirmButton {
     margin-bottom: 17px;
-  }
-
-  .sendLinkButton {
-    margin-top: 32px;
   }
 }
