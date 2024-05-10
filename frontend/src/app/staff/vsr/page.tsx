@@ -44,6 +44,7 @@ export default function VSRTableView() {
   const [filteredZipCodes, setFilteredZipCodes] = useState<string[] | undefined>(undefined);
   const [filteredIncome, setFilteredIncome] = useState<string | undefined>(undefined);
   const [search, setSearch] = useState<string | undefined>(undefined);
+  const [status, setStatus] = useState<string | undefined>(undefined);
 
   useRedirectToLoginIfNotSignedIn();
 
@@ -52,14 +53,14 @@ export default function VSRTableView() {
   /**
    * Fetches the list of all VSRs from the backend and updates our vsrs state.
    */
-  const fetchVSRs = (search?: string, zipCodes?: string[], income?: string) => {
+  const fetchVSRs = (search?: string, zipCodes?: string[], income?: string, status?: string) => {
     if (!firebaseUser) {
       return;
     }
 
     setLoadingVsrs(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
-      getAllVSRs(firebaseToken, search, zipCodes, income).then((result) => {
+      getAllVSRs(firebaseToken, search, zipCodes, income, status).then((result) => {
         if (result.success) {
           setVsrs(result.data);
         } else {
@@ -150,7 +151,7 @@ export default function VSRTableView() {
               <SearchKeyword
                 onUpdate={(search: string) => {
                   setSearch(search);
-                  fetchVSRs(search, filteredZipCodes, filteredIncome);
+                  fetchVSRs(search, filteredZipCodes, filteredIncome, status);
                 }}
               />
             )}
@@ -158,7 +159,13 @@ export default function VSRTableView() {
             <div className={styles.statusContainer}>
               <p className={styles.statusLabel}>Status:</p>
               <div className={styles.statusWrapper}>
-                <StatusDropdown value="Received" />
+                <StatusDropdown
+                  value="Received"
+                  onChanged={(value: string) => {
+                    setStatus(value);
+                    fetchVSRs(search, filteredZipCodes, filteredIncome, value);
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -233,7 +240,7 @@ export default function VSRTableView() {
         onInputEntered={(zipCodes: string[] | undefined, incomeLevel: string | undefined) => {
           setFilteredZipCodes(zipCodes);
           setFilteredIncome(incomeLevel);
-          fetchVSRs(search, zipCodes, incomeLevel);
+          fetchVSRs(search, zipCodes, incomeLevel, status);
         }}
       />
     </div>

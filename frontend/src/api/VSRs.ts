@@ -161,6 +161,7 @@ export async function getAllVSRs(
   search?: string,
   zipCodes?: string[],
   income?: string,
+  status?: string,
 ): Promise<APIResult<VSR[]>> {
   const incomeMap: { [key: string]: string } = {
     "$50,001 and over": "50000",
@@ -189,7 +190,13 @@ export async function getAllVSRs(
         url_string += `?incomeLevel=${incomeMap[income]}`;
       }
     }
-    console.log(url_string);
+    if (status) {
+      if (search || zipCodes || income) {
+        url_string += `&status=${status}`;
+      } else {
+        url_string += `?status=${status}`;
+      }
+    }
 
     const response = await get(url_string, createAuthHeader(firebaseToken));
     const json = (await response.json()) as VSRListJson;
