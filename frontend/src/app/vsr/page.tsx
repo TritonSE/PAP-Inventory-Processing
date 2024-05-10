@@ -237,24 +237,11 @@ const VeteranServiceRequest: React.FC = () => {
   const renderBackButton = () => {
     return pageNumber === 1 ? (
       <div className={styles.bottomButton} />
-    ) : pageNumber === 4 ? (
-      <Button
-        variant="primary"
-        outlined
-        text="Back to Edit"
-        className={styles.bottomButton}
-        onClick={decrementPageNumber}
-        /**
-         * We need to set type="button" because the default, type="submit", would cause
-         * this button to be triggered when the user presses enter on any input field.
-         */
-        type="button"
-      />
     ) : (
       <Button
         variant="primary"
         outlined
-        text="Back"
+        text={pageNumber === 4 ? "Back to Editing" : "Back"}
         className={styles.bottomButton}
         onClick={decrementPageNumber}
         /**
@@ -404,10 +391,32 @@ const VeteranServiceRequest: React.FC = () => {
     }
   };
 
+  const renderEditSectionButton = (sectionId: string, sectionPageNumber: number) => {
+    return (
+      <Button
+        variant="primary"
+        outlined
+        iconPath="/ic_edit.svg"
+        text="Edit Section"
+        className={styles.editSectionButton}
+        onClick={() => {
+          setPageNumber(sectionPageNumber);
+          setTimeout(() => {
+            const element = document.getElementById(sectionId);
+            if (element) {
+              element.scrollIntoView({ behavior: "auto", block: "start" });
+            }
+          }, 100);
+        }}
+        hideTextOnMobile
+      />
+    );
+  };
+
   /**
    * Render different fields based on current page number
    */
-  if (pageNumber == 1) {
+  if (pageNumber === 1) {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
@@ -1070,7 +1079,7 @@ const VeteranServiceRequest: React.FC = () => {
         {renderErrorModal()}
       </div>
     );
-  } else if (pageNumber == 3) {
+  } else if (pageNumber === 3) {
     return (
       <div>
         <form onSubmit={handleSubmit(onReview)}>
@@ -1107,7 +1116,7 @@ const VeteranServiceRequest: React.FC = () => {
                         </div>
                       ))
                     )}
-                    <div className={styles.section}>
+                    <div className={styles.furnitureItemsSection}>
                       <TextField
                         label="Identify other necessary items"
                         helperText="**We do not offer cleaning supplies"
@@ -1145,12 +1154,12 @@ const VeteranServiceRequest: React.FC = () => {
         {renderErrorModal()}
       </div>
     );
-  } else if (pageNumber == 4) {
+  } else if (pageNumber === 4) {
     return (
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
           <HeaderBar showLogoutButton={false} />
-          <div className={styles.main}>
+          <div className={`${styles.main} ${styles.mainReview}`}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>
               Please carefully review all your information before submitting. If you would like to
@@ -1161,22 +1170,7 @@ const VeteranServiceRequest: React.FC = () => {
               <div className={styles.subSec}>
                 <div className={styles.sectionHeaderRow}>
                   <h1 className={styles.sectionTitle}>Personal Information</h1>
-                  <Button
-                    variant="primary"
-                    outlined={true}
-                    iconPath="/ic_edit.svg"
-                    text="Edit Section"
-                    className={styles.editSectionButton}
-                    onClick={() => {
-                      setPageNumber(1);
-                      setTimeout(() => {
-                        const element = document.getElementById("personalInformation");
-                        if (element) {
-                          element.scrollIntoView({ behavior: "auto", block: "start" });
-                        }
-                      }, 100);
-                    }}
-                  />
+                  {renderEditSectionButton("personalInformation", 1)}
                 </div>
                 <SingleDetail
                   title="Name"
@@ -1184,7 +1178,7 @@ const VeteranServiceRequest: React.FC = () => {
                     completeVSR ? completeVSR.name : <span className={styles.italicText}>N/A</span>
                   }
                 />
-                <div className={styles.subRow}>
+                <div className={`${styles.formRow} ${styles.alwaysRow}`}>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Gender"
@@ -1196,7 +1190,6 @@ const VeteranServiceRequest: React.FC = () => {
                       )
                     }
                   />
-                  <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Age"
@@ -1221,54 +1214,56 @@ const VeteranServiceRequest: React.FC = () => {
                   }
                 />
                 <p className={styles.sectionHeader}>Children under the age of 18:</p>
-                <div className={styles.subRow}>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="Number of Male Children"
-                    value={
-                      completeVSR ? (
-                        completeVSR.agesOfBoys.length
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
-                  <div className={styles.rowSpacer}></div>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="Age(s) of Boy(s)"
-                    value={
-                      completeVSR ? (
-                        completeVSR.agesOfBoys.join(", ")
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
-                  <div className={styles.rowSpacer}></div>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="Number of Female Children"
-                    value={
-                      completeVSR ? (
-                        completeVSR.agesOfGirls.length
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
-                  <div className={styles.rowSpacer}></div>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="Age(s) of Girl(s)"
-                    value={
-                      completeVSR ? (
-                        completeVSR.agesOfGirls
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
+
+                <div className={`${styles.formRow} ${styles.desktopRowTabletColumn}`}>
+                  <div className={`${styles.formRow} ${styles.alwaysRow}`}>
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="Number of Male Children"
+                      value={
+                        completeVSR ? (
+                          completeVSR.agesOfBoys.length
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="Age(s) of Boy(s)"
+                      value={
+                        completeVSR ? (
+                          completeVSR.agesOfBoys.join(", ")
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                  </div>
+                  <div className={`${styles.formRow} ${styles.alwaysRow}`}>
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="Number of Female Children"
+                      value={
+                        completeVSR ? (
+                          completeVSR.agesOfGirls.length
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="Age(s) of Girl(s)"
+                      value={
+                        completeVSR ? (
+                          completeVSR.agesOfGirls.join(", ")
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                  </div>
                 </div>
                 <ListDetail
                   title="Ethnicity"
@@ -1297,71 +1292,57 @@ const VeteranServiceRequest: React.FC = () => {
               <div className={styles.subSec}>
                 <div className={styles.sectionHeaderRow}>
                   <h1 className={styles.sectionTitle}>Contact Information</h1>
-                  <Button
-                    variant="primary"
-                    outlined={true}
-                    iconPath="/ic_edit.svg"
-                    text="Edit Section"
-                    className={styles.editSectionButton}
-                    onClick={() => {
-                      setPageNumber(2);
-                      setTimeout(() => {
-                        const element = document.getElementById("contactInformation");
-                        if (element) {
-                          element.scrollIntoView({ behavior: "auto", block: "start" });
-                        }
-                      }, 100);
-                    }}
-                  />
+                  {renderEditSectionButton("contactInformation", 2)}
                 </div>
-                <div className={styles.subRow}>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="Street Address"
-                    value={
-                      completeVSR ? (
-                        completeVSR.streetAddress
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
-                  <div className={styles.rowSpacer}></div>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="City"
-                    value={
-                      completeVSR ? (
-                        completeVSR.city
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
-                  <div className={styles.rowSpacer}></div>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="ZipCode"
-                    value={
-                      completeVSR ? (
-                        completeVSR.zipCode
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
-                  <div className={styles.rowSpacer}></div>
-                  <SingleDetail
-                    className={styles.rowDetail}
-                    title="State"
-                    value={
-                      completeVSR ? (
-                        completeVSR.state
-                      ) : (
-                        <span className={styles.italicText}>N/A</span>
-                      )
-                    }
-                  />
+                <div className={styles.formRow}>
+                  <div className={`${styles.formRow} ${styles.alwaysRow}`}>
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="Street Address"
+                      value={
+                        completeVSR ? (
+                          completeVSR.streetAddress
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="City"
+                      value={
+                        completeVSR ? (
+                          completeVSR.city
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                  </div>
+                  <div className={`${styles.formRow} ${styles.alwaysRow}`}>
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="Zip Code"
+                      value={
+                        completeVSR ? (
+                          completeVSR.zipCode
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                    <SingleDetail
+                      className={styles.rowDetail}
+                      title="State"
+                      value={
+                        completeVSR ? (
+                          completeVSR.state
+                        ) : (
+                          <span className={styles.italicText}>N/A</span>
+                        )
+                      }
+                    />
+                  </div>
                 </div>
                 <SingleDetail
                   title="Phone Number"
@@ -1386,22 +1367,7 @@ const VeteranServiceRequest: React.FC = () => {
               <div className={styles.subSec}>
                 <div className={styles.sectionHeaderRow}>
                   <h1 className={styles.sectionTitle}>Military Background</h1>
-                  <Button
-                    variant="primary"
-                    outlined={true}
-                    iconPath="/ic_edit.svg"
-                    text="Edit Section"
-                    className={styles.editSectionButton}
-                    onClick={() => {
-                      setPageNumber(2);
-                      setTimeout(() => {
-                        const element = document.getElementById("militaryBackground");
-                        if (element) {
-                          element.scrollIntoView({ behavior: "auto", block: "start" });
-                        }
-                      }, 100);
-                    }}
-                  />
+                  {renderEditSectionButton("militaryBackground", 2)}
                 </div>
                 <ListDetail
                   title="Branch"
@@ -1421,9 +1387,13 @@ const VeteranServiceRequest: React.FC = () => {
                 <ListDetail
                   title="Service Connected"
                   values={[completeVSR ? (completeVSR.serviceConnected ? "Yes" : "No") : "N/A"]}
-                  isEmpty={!completeVSR || !completeVSR.serviceConnected}
+                  isEmpty={
+                    !completeVSR ||
+                    completeVSR.serviceConnected === null ||
+                    completeVSR.serviceConnected === undefined
+                  }
                 />
-                <div className={styles.subRow}>
+                <div className={styles.formRow}>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Last Rank"
@@ -1435,7 +1405,6 @@ const VeteranServiceRequest: React.FC = () => {
                       )
                     }
                   />
-                  <div className={styles.rowSpacer}></div>
                   <SingleDetail
                     className={styles.rowDetail}
                     title="Military ID Number"
@@ -1455,27 +1424,16 @@ const VeteranServiceRequest: React.FC = () => {
               <div className={styles.subSec}>
                 <div className={styles.sectionHeaderRow}>
                   <h1 className={styles.sectionTitle}>Additional Information</h1>
-                  <Button
-                    variant="primary"
-                    outlined={true}
-                    iconPath="/ic_edit.svg"
-                    text="Edit Section"
-                    className={styles.editSectionButton}
-                    onClick={() => {
-                      setPageNumber(2);
-                      setTimeout(() => {
-                        const element = document.getElementById("additionalInformation");
-                        if (element) {
-                          element.scrollIntoView({ behavior: "auto", block: "start" });
-                        }
-                      }, 100);
-                    }}
-                  />
+                  {renderEditSectionButton("additionalInformation", 2)}
                 </div>
                 <ListDetail
                   title="Are you interested in a companionship animal (pet)?"
                   values={[completeVSR ? (completeVSR.petCompanion ? "Yes" : "No") : "N/A"]}
-                  isEmpty={!completeVSR || !completeVSR.petCompanion}
+                  isEmpty={
+                    !completeVSR ||
+                    completeVSR.petCompanion === null ||
+                    completeVSR.petCompanion === undefined
+                  }
                 />
                 <ListDetail
                   title="How did you hear about us?"
@@ -1489,51 +1447,52 @@ const VeteranServiceRequest: React.FC = () => {
               <div className={styles.subSec}>
                 <div className={styles.sectionHeaderRow}>
                   <h1 className={styles.sectionTitle}>Furnishings</h1>
-                  <Button
-                    variant="primary"
-                    outlined={true}
-                    iconPath="/ic_edit.svg"
-                    text="Edit Section"
-                    className={styles.editSectionButton}
-                    onClick={() => {
-                      setPageNumber(3);
-                      setTimeout(() => {
-                        const element = document.getElementById("furnishings");
-                        if (element) {
-                          element.scrollIntoView({ behavior: "auto", block: "start" });
-                        }
-                      }, 100);
-                    }}
-                  />
+                  {renderEditSectionButton("furnishings", 3)}
                 </div>
                 <div>
                   {loadingFurnitureItems ? (
                     <LoadingScreen />
                   ) : (
-                    Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => (
-                      <div className={styles.furnitureItemsSection} key={category}>
-                        <ListDetail
-                          title={
-                            category
-                              .split(" ")
-                              .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                              .join(" ") + ":"
-                          }
-                          values={(items ?? [])
-                            .filter((furnitureItem) => selectedFurnitureItems[furnitureItem._id])
-                            .map((furnitureItem) => {
-                              const selection = selectedFurnitureItems[furnitureItem._id];
-                              return furnitureItem.name + ": " + selection.quantity;
-                            })}
-                          isEmpty={
-                            (items ?? []).filter(
-                              (furnitureItem) => selectedFurnitureItems[furnitureItem._id],
-                            ).length === 0
-                          }
-                        />
-                      </div>
-                    ))
+                    Object.entries(furnitureCategoriesToItems ?? {}).map(([category, items]) => {
+                      const itemsForCategory =
+                        items?.filter(
+                          (furnitureItem) => selectedFurnitureItems[furnitureItem._id],
+                        ) ?? [];
+
+                      return (
+                        <div className={styles.furnitureItemsSection} key={category}>
+                          <ListDetail
+                            title={
+                              category
+                                .split(" ")
+                                .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                                .join(" ") + ":"
+                            }
+                            values={
+                              itemsForCategory.length > 0
+                                ? itemsForCategory.map((furnitureItem) => {
+                                    const selection = selectedFurnitureItems[furnitureItem._id];
+                                    return furnitureItem.name + ": " + selection.quantity;
+                                  })
+                                : ["No items selected"]
+                            }
+                            isEmpty={!itemsForCategory || itemsForCategory.length === 0}
+                          />
+                        </div>
+                      );
+                    })
                   )}
+                  <SingleDetail
+                    title="Additional Items:"
+                    value={
+                      completeVSR?.additionalItems && completeVSR.additionalItems.length > 0
+                        ? completeVSR.additionalItems
+                        : "No items selected"
+                    }
+                    isEmpty={
+                      !(completeVSR?.additionalItems && completeVSR.additionalItems.length > 0)
+                    }
+                  />
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 .main {
   padding: 120px;
-  padding-top: 105px;
+  padding-top: 128px;
   background-color: #eceff3;
   display: flex;
   flex-direction: column;
@@ -15,6 +15,10 @@
   line-height: normal;
 }
 
+.mainReview {
+  padding-top: 105px;
+}
+
 .title {
   font-size: 40px;
 }
@@ -22,7 +26,7 @@
 .description {
   color: #000;
   /* Desktop/Body 1 */
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   font-size: 20px;
   font-style: normal;
   font-weight: 400;
@@ -41,7 +45,7 @@
 
 .fieldsMarked {
   color: #000;
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   font-size: 16px;
   font-style: normal;
   font-weight: 400;
@@ -67,20 +71,6 @@
   gap: 10px;
   align-items: flex-start;
   height: 100%;
-}
-
-.subRow {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-}
-
-.subRow > .rowDetail {
-  flex: 1;
-}
-
-.rowSpacer {
-  width: 64px;
 }
 
 .form {
@@ -123,6 +113,10 @@
   align-items: start;
 }
 
+.formRow > .rowDetail {
+  flex: 1;
+}
+
 .desktopRowTabletColumn {
   flex-direction: row;
 }
@@ -135,7 +129,7 @@
   gap: 4px;
   font-size: 16px;
   color: var(--Light-Gray, #818181);
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -177,7 +171,7 @@
   flex: 1 0 0;
   font-size: 16px;
   color: var(--Light-Gray, #818181);
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -232,6 +226,11 @@
   background-color: grey !important;
 }
 
+.editSectionButton {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 /* tablet version */
 @media screen and (max-width: 850px) {
   .main {
@@ -239,8 +238,16 @@
     padding-top: 64px;
   }
 
+  .mainReview {
+    padding-top: 64px;
+  }
+
   .title {
     font-size: 36px;
+  }
+
+  .furnitureItemsSection {
+    margin-bottom: 32px;
   }
 
   .description {
@@ -255,6 +262,10 @@
     padding: 48px 32px;
   }
 
+  .section {
+    padding: 48px 32px;
+  }
+
   .sectionTitle {
     font-size: 28px;
   }
@@ -265,7 +276,7 @@
 
   .sectionHeader {
     font-size: 14px;
-    font-family: "OpenSans";
+    font-family: "Open Sans";
   }
 
   .desktopRowTabletColumn {
@@ -308,12 +319,20 @@
     padding: 32px 16px;
   }
 
+  .section {
+    padding: 32px 16px;
+  }
+
   .sectionTitle {
     font-size: 20px;
   }
 
   .formRow {
     flex-direction: column;
+  }
+
+  .alwaysRow {
+    flex-direction: row;
   }
 
   .sectionHeader {
@@ -324,6 +343,10 @@
   .bottomRow {
     gap: 32px;
     flex-direction: column;
+  }
+
+  .bottomButton {
+    font-size: 18px;
   }
 
   .furnitureItemsSectionLabel {
