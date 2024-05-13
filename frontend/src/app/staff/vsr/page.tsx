@@ -271,7 +271,9 @@ export default function VSRTableView() {
               iconPath="/upload.svg"
               iconAlt="Export"
               loading={loadingExport}
-              text="Export"
+              text={
+                selectedVsrIds.length === 0 ? "Export All" : `Export (${selectedVsrIds.length})`
+              }
               hideTextOnMobile
               onClick={exportVSRs}
             />
