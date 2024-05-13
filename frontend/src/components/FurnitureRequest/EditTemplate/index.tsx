@@ -1,6 +1,12 @@
 import styles from "@/components/FurnitureRequest/EditTemplate/styles.module.css";
 import { useState } from "react";
-import { FurnitureItem, getFurnitureItems, addFurnitureItem, updateFurnitureItem, deleteFurnitureItem } from "@/api/FurnitureItems";
+import {
+  FurnitureItem,
+  getFurnitureItems,
+  addFurnitureItem,
+  updateFurnitureItem,
+  deleteFurnitureItem,
+} from "@/api/FurnitureItems";
 import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelection";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
 
@@ -47,49 +53,72 @@ export const EditTemplate = ({
   return (
     <div className={styles.row}>
       <FieldDetail title={categoryTitle}>
-        <div className={styles.chipContainer}>
-          {furnitureItems.map((furnitureItem) => (
-            <FurnitureItemSelection
-              isActive={false}
-              key={furnitureItem._id}
-              furnitureItem={furnitureItem}
-            />
-          ))}
-          <button
-            className={styles.chip}
-            onClick={isEditing ? onFinishEditing : onBeginEditing}
-            disabled={isDisabled}
-          >
-            {isEditing ? "Save Changes" : "Edit Section"}
-          </button>
-          <button
-            className={styles.chip}
-            onClick={handleAddNewItem}
-            disabled={isDisabled || isEditing}
-          >
-            Add New Item
-          </button>
-          {isAddingNewItem && (
-            <div>
-              <label>Item Name</label>
-              <br/>
-              <input
-                type="text"
-                id="itemName"
-                placeholder="Enter Item Name"
-              />
-              <br/>
-
-              <input
-                type="checkbox"
-                id="checkBox"
-              />
-              <label>Multiple Quantities</label>
+        {isEditing ? (
+          <>
+            <div className={styles.chipContainer}>
+              {furnitureItems.map((furnitureItem) => (
+                <FurnitureItemSelection
+                  isActive={false}
+                  key={furnitureItem._id}
+                  furnitureItem={furnitureItem}
+                />
+              ))}
             </div>
-          )}
-        </div>
+
+            <p> Please Select a Tag to Delete or Start Editing</p>
+            <button
+              className={styles.chip}
+              onClick={handleAddNewItem}
+              disabled={isDisabled || isEditing}
+            >
+              Add New Option
+            </button>
+
+            <button
+              className={styles.chip}
+              //Need onClick
+              disabled={isDisabled || isEditing}
+            >
+              Delete Tag
+            </button>
+
+            <button
+              className={styles.chip}
+              onClick={isEditing ? onFinishEditing : onBeginEditing}
+              disabled={isDisabled}
+            >
+              Save Changes
+            </button>
+
+            <button
+              className={styles.chip}
+              onClick={isEditing ? onFinishEditing : onBeginEditing}
+              disabled={isDisabled}
+            >
+              Discard Edits
+            </button>
+          </>
+        ) : (
+          <>
+            <div className={styles.chipContainer}>
+              {furnitureItems.map((furnitureItem) => (
+                <FurnitureItemSelection
+                  isActive={false}
+                  key={furnitureItem._id}
+                  furnitureItem={furnitureItem}
+                />
+              ))}
+            </div>
+            <button
+              className={styles.chip}
+              onClick={isEditing ? onFinishEditing : onBeginEditing}
+              disabled={isDisabled}
+            >
+              Edit Section
+            </button>
+          </>
+        )}
       </FieldDetail>
     </div>
   );
 };
-// Create a conditional such that if  isAddingNewItem is true, render the text field, mutliple quantities, etc
