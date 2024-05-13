@@ -1,4 +1,4 @@
-import styles from "@/components/VSRIndividual/PageSections/RequestedFurnishings/styles.module.css";
+import styles from "@/components/FurnitureRequest/EditTemplate/styles.module.css";
 import { useState } from "react";
 import { FurnitureItem, getFurnitureItems, addFurnitureItem, updateFurnitureItem, deleteFurnitureItem } from "@/api/FurnitureItems";
 import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelection";
@@ -37,6 +37,7 @@ export const EditTemplate = ({
 
   const handleAddNewItem = () => {
     setIsAddingNewItem(true);
+    
   };
 
   const handleFinishAddNewItem = () => {
@@ -68,16 +69,27 @@ export const EditTemplate = ({
           >
             Add New Item
           </button>
+          {isAddingNewItem && (
+            <div>
+              <label>Item Name</label>
+              <br/>
+              <input
+                type="text"
+                id="itemName"
+                placeholder="Enter Item Name"
+              />
+              <br/>
+
+              <input
+                type="checkbox"
+                id="checkBox"
+              />
+              <label>Multiple Quantities</label>
+            </div>
+          )}
         </div>
       </FieldDetail>
     </div>
   );
 };
-
-// The button is currently being styled by styles.chip, although its not completed
-// and I'm not sure that's where we want to style the button. and it doesn't do anything
-
-//const[isEditing, setIsEditing] = useState(false);
-//const handleEditClick = () => {
-//  setIsEditing(current => !current);
-//              console.log('Button clicked for furniture item:', categoryTitle); }}>Edit Section</button>
+// Create a conditional such that if  isAddingNewItem is true, render the text field, mutliple quantities, etc
