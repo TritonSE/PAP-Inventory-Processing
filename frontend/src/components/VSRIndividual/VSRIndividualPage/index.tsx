@@ -25,6 +25,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
+import { useMediaQuery } from "@mui/material";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -68,6 +69,7 @@ export const VSRIndividualPage = () => {
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
+  const useColumn = useMediaQuery("@media screen and (max-width: 1000px)");
 
   /**
    * Callback triggered when form edits are submitted
@@ -522,13 +524,6 @@ export const VSRIndividualPage = () => {
                 onUpdateVSRStatus={onUpdateVSRStatus}
               ></CaseDetails>
               <div className={styles.otherDetails}>
-                {isTablet ? renderApproveButton() : null}
-                <div className={styles.personalInfo}>
-                  <ContactInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                  <PersonalInformation vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                  <MilitaryBackground vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                  <AdditionalInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                </div>
                 <div className={styles.rightColumn}>
                   {loadingFurnitureItems ? (
                     <LoadingScreen />
@@ -540,10 +535,17 @@ export const VSRIndividualPage = () => {
                       formProps={formProps}
                     />
                   )}
-                  {isTablet ? null : (
+                  {useColumn ? null : (
                     <div className={styles.finalActions}>{renderApproveButton()}</div>
                   )}
                 </div>
+                <div className={styles.personalInfo}>
+                  <ContactInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <PersonalInformation vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <MilitaryBackground vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <AdditionalInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                </div>
+                {useColumn ? renderApproveButton() : null}
               </div>
             </div>
             <div className={styles.footer}></div>
