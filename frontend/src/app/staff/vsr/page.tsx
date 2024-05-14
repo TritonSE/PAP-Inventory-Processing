@@ -17,7 +17,7 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -294,15 +294,11 @@ export default function VSRTableView() {
       </div>
 
       {/* Error modals, success model, and delete modal */}
-      <SuccessNotification
+      <NotificationBanner
+        variant="success"
         isOpen={exportSuccess}
         mainText="VSRs Exported Successfully"
-        actions={[
-          {
-            text: "Dismiss",
-            onClick: () => setExportSuccess(false),
-          },
-        ]}
+        onDismissClicked={() => setExportSuccess(false)}
       />
       {renderErrorModal()}
       {renderExportErrorModal()}

@@ -11,13 +11,13 @@ import {
 } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
-import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconButton } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { FirebaseError } from "firebase/app";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
 
 enum ResetPasswordPageError {
   NO_INTERNET,
@@ -155,78 +155,78 @@ const PasswordReset: React.FC = () => {
     switch (pageError) {
       case ResetPasswordPageError.NO_INTERNET:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="No Internet Connection"
             subText="Unable to reset password due to no internet connection. Please check your connection and try again."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            onDismissClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case ResetPasswordPageError.INVALID_CREDENTIALS:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Invalid Credentials"
             subText="Invalid password, please try again."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            onDismissClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case ResetPasswordPageError.UNKNOWN_MODE:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Unknown Mode"
             subText='Unknown value for "mode" URL parameter'
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            onDismissClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case ResetPasswordPageError.INVALID_CODE:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Invalid Link"
             subText="Invalid reset password link. Link may have expired."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            onDismissClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case ResetPasswordPageError.WEAK_PASSWORD:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Weak Password"
             subText={`Password is too weak: ${pageErrorText}`}
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            onDismissClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case ResetPasswordPageError.TOO_MANY_REQUESTS:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Too Many Requests"
             subText="You have made too many reset password attempts. Please try again later."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            onDismissClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case ResetPasswordPageError.INTERNAL:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Internal Error"
             subText="Something went wrong with resetting your password. Our team is working to fix it. Please try again later."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(ResetPasswordPageError.NONE)}
+            onDismissClicked={() => setPageError(ResetPasswordPageError.NONE)}
             style={errorNotificationStyles}
           />
         );

@@ -15,8 +15,7 @@ import { useParams, useRouter } from "next/navigation";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import HeaderBar from "@/components/shared/HeaderBar";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
-import { ErrorNotification } from "@/components/Errors/ErrorNotification";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import { UserContext } from "@/contexts/userContext";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
@@ -555,32 +554,24 @@ export const VSRIndividualPage = () => {
 
       {/* Success, error, and delete modals/notifications */}
       {renderErrorModal()}
-      <SuccessNotification
+      <NotificationBanner
+        variant={previousVSRStatus === null ? "undone" : "success"}
         isOpen={updateStatusSuccessNotificationOpen}
         mainText={
-          previousVSRStatus === null ? "Undo Successful" : "VSR Status Successfully Updated"
+          previousVSRStatus === null
+            ? "Changes Have Been Undone"
+            : "VSR Status Successfully Updated"
         }
-        actions={[
-          ...(previousVSRStatus === null
-            ? []
-            : [
-                {
-                  text: "Undo",
-                  onClick: onUndoVSRStatusUpdate,
-                },
-              ]),
-          {
-            text: "Dismiss",
-            onClick: () => setUpdateStatusSuccessNotificationOpen(false),
-          },
-        ]}
+        showUndo={previousVSRStatus !== null}
+        onDismissClicked={() => setUpdateStatusSuccessNotificationOpen(false)}
+        onUndoClicked={onUndoVSRStatusUpdate}
       />
-      <ErrorNotification
+      <NotificationBanner
+        variant="error"
         isOpen={updateStatusErrorNotificationOpen}
         mainText="Unable to Update VSR Status"
         subText="An error occurred, please check your internet connection or try again later"
-        actionText="Dismiss"
-        onActionClicked={() => setUpdateStatusErrorNotificationOpen(false)}
+        onDismissClicked={() => setUpdateStatusErrorNotificationOpen(false)}
       />
       <DeleteVSRsModal
         isOpen={deleteVsrModalOpen}
@@ -655,22 +646,18 @@ export const VSRIndividualPage = () => {
           </div>
         }
       />
-      <SuccessNotification
+      <NotificationBanner
+        variant="success"
         isOpen={editSuccessNotificationOpen}
-        mainText={"Changes Saved Successfully"}
-        actions={[
-          {
-            text: "Dismiss",
-            onClick: () => setEditSuccessNotificationOpen(false),
-          },
-        ]}
+        mainText="Changes Saved Successfully"
+        onDismissClicked={() => setEditSuccessNotificationOpen(false)}
       />
-      <ErrorNotification
+      <NotificationBanner
+        variant="error"
         isOpen={editErrorNotificationOpen}
         mainText="Unable to Save Changes"
         subText="An error occurred, please check your internet connection or try again later"
-        actionText="Dismiss"
-        onActionClicked={() => setEditErrorNotificationOpen(false)}
+        onDismissClicked={() => setEditErrorNotificationOpen(false)}
       />
     </>
   );

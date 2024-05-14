@@ -2,8 +2,7 @@ import { deleteVSR } from "@/api/VSRs";
 import styles from "@/components/shared/DeleteVSRsModal/styles.module.css";
 import { UserContext } from "@/contexts/userContext";
 import { useContext, useState } from "react";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
-import { ErrorNotification } from "@/components/Errors/ErrorNotification";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 
@@ -99,17 +98,18 @@ export const DeleteVSRsModal = ({ isOpen, onClose, afterDelete, vsrIds }: Delete
           </div>
         }
       />
-      <SuccessNotification
+      <NotificationBanner
+        variant="success"
         isOpen={successNotificationOpen}
         mainText="VSR(s) Deleted Successfully"
-        actions={[{ text: "Dismiss", onClick: () => setSuccessNotificationOpen(false) }]}
+        onDismissClicked={() => setSuccessNotificationOpen(false)}
       />
-      <ErrorNotification
+      <NotificationBanner
+        variant="error"
         isOpen={errorNotificationOpen}
         mainText="Unable to Delete VSR(s)"
         subText="There was an error deleting the VSR(s). Please try again later."
-        actionText="Dismiss"
-        onActionClicked={() => setErrorNotificationOpen(false)}
+        onDismissClicked={() => setErrorNotificationOpen(false)}
       />
     </>
   );
