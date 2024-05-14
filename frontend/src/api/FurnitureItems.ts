@@ -9,6 +9,13 @@ export interface FurnitureItem {
   categoryIndex: number;
 }
 
+export interface CreateFurnitureItem {
+  category: string;
+  name: string;
+  allowMultiple: boolean;
+  categoryIndex: number;
+}
+
 export async function getFurnitureItems(): Promise<APIResult<FurnitureItem[]>> {
   try {
     const response = await get(`/api/furnitureItems`);
@@ -20,7 +27,7 @@ export async function getFurnitureItems(): Promise<APIResult<FurnitureItem[]>> {
 }
 
 export async function addFurnitureItem(
-  furnitureItem: FurnitureItem,
+  furnitureItem: CreateFurnitureItem,
   firebaseToken: string,
 ): Promise<APIResult<FurnitureItem>> {
   try {

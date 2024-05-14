@@ -11,8 +11,8 @@ import { StatusDropdown } from "@/components/shared/StatusDropdown";
 import { useMediaQuery } from "@mui/material";
 import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
 import { UserContext } from "@/contexts/userContext";
-import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
-import { VSR, getAllVSRs, bulkExportVSRS } from "@/api/VSRs";
+import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
+import { VSR, getAllVSRs, bulkExportVSRS, deleteVSR } from "@/api/VSRs";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
@@ -48,6 +48,9 @@ export default function VSRTableView() {
 
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
+  const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
 
   useRedirectToLoginIfNotSignedIn();
 
@@ -83,6 +86,41 @@ export default function VSRTableView() {
   useEffect(() => {
     fetchVSRs();
   }, [firebaseUser]);
+
+  const onDelete = async () => {
+    if (loadingDelete || !firebaseUser) {
+      return;
+    }
+
+    setSuccessNotificationOpen(false);
+    setErrorNotificationOpen(false);
+    setLoadingDelete(true);
+
+    try {
+      const firebaseToken = await firebaseUser.getIdToken();
+      if (!firebaseToken) {
+        setLoadingDelete(false);
+        return;
+      }
+
+      await Promise.all(selectedVsrIds.map(vsrId => deleteVSR(vsrId, firebaseToken).then((res) => {
+        if (res.success) {
+          return Promise.resolve();
+        } else {
+          return Promise.reject(res.error);
+        }
+      })))
+        setSuccessNotificationOpen(true);
+        setSelectedVsrIds([]);
+        fetchVSRs();
+    } catch (error) {
+      console.error(`Error deleting VSR(s): ${error}`);
+      setErrorNotificationOpen(true);
+    } finally {
+      setLoadingDelete(false);
+      setDeleteVsrModalOpen(false);
+    }
+  };
 
   /**
    * Renders an error modal corresponding to the page's error state, or renders
@@ -304,14 +342,23 @@ export default function VSRTableView() {
       />
       {renderErrorModal()}
       {renderExportErrorModal()}
-      <DeleteVSRsModal
+      <ConfirmDeleteModal
         isOpen={deleteVsrModalOpen}
         onClose={() => setDeleteVsrModalOpen(false)}
-        afterDelete={() => {
-          setSelectedVsrIds([]);
-          fetchVSRs();
-        }}
-        vsrIds={selectedVsrIds}
+        title="Delete VSR(s)"
+        content={
+          <>
+            {"Deleted VSR’s "}
+            <span style={{ fontWeight: 700 }}>cannot</span>
+            {" be recovered. Are you sure you’d like to delete the selected VSR forms ("}
+            {1}
+            {")?"}
+          </>
+        }
+        cancelText="Cancel"
+        confirmText="Delete VSR(s)"
+        onConfirm={onDelete}
+        buttonLoading={loadingDelete}
       />
     </div>
   );

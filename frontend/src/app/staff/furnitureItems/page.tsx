@@ -17,6 +17,10 @@ export default function furnitureItemTemplate() {
   const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
   const [editingCategory, setEditingCategory] = useState<string>();
   useEffect(() => {
+    fetchFurnitureItems();
+  }, []);
+
+  const fetchFurnitureItems = () => {
     getFurnitureItems().then((result) => {
       if (result.success) {
         setFurnitureItems(result.data);
@@ -24,7 +28,7 @@ export default function furnitureItemTemplate() {
         setFurnitureItems([]);
       }
     });
-  }, []);
+  }
 
   const furnitureCategoriesToItems = useMemo(
     () =>
@@ -45,6 +49,7 @@ export default function furnitureItemTemplate() {
 
   const handleFinishEditing = () => {
     setEditingCategory(undefined);
+    fetchFurnitureItems();
   };
 
   return (

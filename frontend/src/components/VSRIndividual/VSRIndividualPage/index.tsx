@@ -10,7 +10,14 @@ import {
 } from "@/components/VSRIndividual";
 import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 import Image from "next/image";
-import { type VSR, getVSR, updateVSRStatus, UpdateVSRRequest, updateVSR } from "@/api/VSRs";
+import {
+  type VSR,
+  getVSR,
+  updateVSRStatus,
+  UpdateVSRRequest,
+  updateVSR,
+  deleteVSR,
+} from "@/api/VSRs";
 import { useParams, useRouter } from "next/navigation";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
@@ -20,7 +27,7 @@ import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { UserContext } from "@/contexts/userContext";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
-import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
+import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { BaseModal } from "@/components/shared/BaseModal";
@@ -66,6 +73,9 @@ export const VSRIndividualPage = () => {
   const [loadingEdit, setLoadingEdit] = useState(false);
 
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
+  const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
 
@@ -171,6 +181,43 @@ export const VSRIndividualPage = () => {
       setUpdateStatusErrorNotificationOpen(true);
     }
     setLoadingUpdateStatus(false);
+  };
+
+  const onDelete = async () => {
+    if (loadingDelete || !firebaseUser) {
+      return;
+    }
+
+    setSuccessNotificationOpen(false);
+    setErrorNotificationOpen(false);
+    setLoadingDelete(true);
+
+    try {
+      const firebaseToken = await firebaseUser.getIdToken();
+      if (!firebaseToken) {
+        setLoadingDelete(false);
+        return;
+      }
+
+      await deleteVSR(vsr._id, firebaseToken).then((res) => {
+        if (res.success) {
+          return Promise.resolve();
+        } else {
+          return Promise.reject(res.error);
+        }
+      }),
+        setSuccessNotificationOpen(true);
+      // Redirect user to dashboard after deleting VSR, but give them some time to see the success message first
+      setTimeout(() => {
+        router.push("/staff/vsr");
+      }, 1000);
+    } catch (error) {
+      console.error(`Error deleting VSR(s): ${error}`);
+      setErrorNotificationOpen(true);
+    } finally {
+      setLoadingDelete(false);
+      setDeleteVsrModalOpen(false);
+    }
   };
 
   /**
@@ -580,16 +627,23 @@ export const VSRIndividualPage = () => {
         actionText="Dismiss"
         onActionClicked={() => setUpdateStatusErrorNotificationOpen(false)}
       />
-      <DeleteVSRsModal
+      <ConfirmDeleteModal
         isOpen={deleteVsrModalOpen}
         onClose={() => setDeleteVsrModalOpen(false)}
-        afterDelete={() => {
-          // Redirect user to dashboard after deleting VSR, but give them some time to see the success message first
-          setTimeout(() => {
-            router.push("/staff/vsr");
-          }, 1000);
-        }}
-        vsrIds={[vsr._id]}
+        title="Delete VSR(s)"
+        content={
+          <>
+            {"Deleted VSR’s "}
+            <span style={{ fontWeight: 700 }}>cannot</span>
+            {" be recovered. Are you sure you’d like to delete the selected VSR forms ("}
+            {1}
+            {")?"}
+          </>
+        }
+        cancelText="Cancel"
+        confirmText="Delete VSR(s)"
+        onConfirm={onDelete}
+        buttonLoading={loadingDelete}
       />
       <BaseModal
         isOpen={discardEditsConfirmationModalOpen}
@@ -669,6 +723,19 @@ export const VSRIndividualPage = () => {
         subText="An error occurred, please check your internet connection or try again later"
         actionText="Dismiss"
         onActionClicked={() => setEditErrorNotificationOpen(false)}
+      />
+
+      <SuccessNotification
+        isOpen={successNotificationOpen}
+        mainText="VSR(s) Deleted Successfully"
+        actions={[{ text: "Dismiss", onClick: () => setSuccessNotificationOpen(false) }]}
+      />
+      <ErrorNotification
+        isOpen={errorNotificationOpen}
+        mainText="Unable to Delete VSR(s)"
+        subText="There was an error deleting the VSR(s). Please try again later."
+        actionText="Dismiss"
+        onActionClicked={() => setErrorNotificationOpen(false)}
       />
     </>
   );

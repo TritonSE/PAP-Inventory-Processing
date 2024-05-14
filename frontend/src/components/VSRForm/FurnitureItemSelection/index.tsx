@@ -8,6 +8,7 @@ export interface FurnitureItemSelectionProps {
   selection?: FurnitureInput;
   onChangeSelection?: (newSelection: FurnitureInput) => unknown;
   isActive: boolean;
+  onChipClicked?: () => unknown;
 }
 
 /**
@@ -19,6 +20,7 @@ export const FurnitureItemSelection = ({
   selection,
   onChangeSelection,
   isActive,
+  onChipClicked
 }: FurnitureItemSelectionProps) => {
   const handleChipClicked = () => {
     if (isActive) {
@@ -28,11 +30,17 @@ export const FurnitureItemSelection = ({
         onChangeSelection!({ ...selection!, quantity: 0 });
       }
     }
+    else{
+      onChipClicked?.()
+    }
   };
 
   const incrementCount = () => {
     if (isActive) {
       onChangeSelection!({ ...selection!, quantity: selection!.quantity + 1 });
+    }
+    else{
+      onChipClicked?.()
     }
   };
 
@@ -41,6 +49,9 @@ export const FurnitureItemSelection = ({
       if (selection!.quantity > 0) {
         onChangeSelection!({ ...selection!, quantity: selection!.quantity - 1 });
       }
+    }
+    else{
+      onChipClicked?.()
     }
   };
 
