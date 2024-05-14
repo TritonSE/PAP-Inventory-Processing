@@ -93,11 +93,19 @@
   .chip {
     font-size: 14px;
   }
+
+  .chipContent {
+    padding: 7px 16px;
+  }
 }
 
 /* mobile version */
 @media screen and (max-width: 550px) {
   .chip {
     font-size: 12px;
+  }
+
+  .chipContent {
+    padding: 6px 16px;
   }
 }

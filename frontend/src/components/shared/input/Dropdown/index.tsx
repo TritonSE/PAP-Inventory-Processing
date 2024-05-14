@@ -46,9 +46,12 @@ const Dropdown = ({
           }
           sx={{
             ".MuiSelect-select": {
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
               padding: "6px 12px",
               minHeight: "unset !important",
-              height: isMobile ? 16 : isTablet ? 19 : 22,
+              height: `${isMobile ? 16 : isTablet ? 19 : 22}px !important`,
             },
           }}
           MenuProps={{
