@@ -70,6 +70,13 @@
   width: 100%;
 }
 
+.filterChips {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  margin: 0 0 16px;
+}
+
 /* shrink the margins at a screen size larger than tablet to avoid overflow */
 @media screen and (max-width: 1150px) {
   .column {

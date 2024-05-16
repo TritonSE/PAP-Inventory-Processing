@@ -1,0 +1,11 @@
+.filterChip {
+  border-radius: 64px;
+  border: 1px solid var(--Secondary-1, #102d5f);
+  background: #102d5f;
+  padding: 8px 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex: 1 0 0;
+  align-self: stretch;
+}

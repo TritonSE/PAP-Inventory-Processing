@@ -18,6 +18,7 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
+import FilterChip from "@/components/VSRTable/FilterChip";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -206,6 +207,35 @@ export default function VSRTableView() {
           </div>
         </div>
         {/* {searchOnOwnRow ? <SearchKeyword onUpdate={fetchSearchedVSRs} /> : null} */}
+
+        <span className={styles.filterChips}>
+          <p>Applied Filters: </p>
+          {filteredZipCodes?.map((zipCode) => (
+            <FilterChip
+              label={"Zip Code: " + zipCode}
+              key={zipCode}
+              onDelete={function (): void {
+                setFilteredZipCodes(filteredZipCodes?.filter((z) => z !== zipCode));
+                fetchVSRs(
+                  search,
+                  filteredZipCodes?.filter((z) => z !== zipCode),
+                  filteredIncome,
+                  status,
+                );
+              }}
+            />
+          ))}
+          {filteredIncome ? (
+            <FilterChip
+              label={filteredIncome}
+              onDelete={function (): void {
+                setFilteredIncome(undefined);
+                fetchVSRs(search, filteredZipCodes, undefined, status);
+              }}
+            />
+          ) : null}
+        </span>
+
         <div className={styles.table}>
           {loadingVsrs ? (
             <LoadingScreen />

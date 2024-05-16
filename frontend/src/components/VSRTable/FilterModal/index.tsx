@@ -68,7 +68,7 @@ const FilterModal = ({ isOpen, onClose, onInputEntered, onResetFilters }: Filter
               variant="error"
               outlined
               text="Reset Selection"
-              onClick={handleApplyFilter}
+              onClick={handleReset}
               className={styles.button}
             />
             <Button
