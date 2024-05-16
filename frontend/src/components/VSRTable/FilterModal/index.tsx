@@ -5,14 +5,16 @@ import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
 import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import { incomeOptions } from "@/constants/fieldOptions";
+import { on } from "events";
 
 interface FilterModalProps {
   isOpen: boolean;
   onClose: () => void;
   onInputEntered: (zipCodes: string[] | undefined, incomeLevel: string | undefined) => void;
+  onResetFilters: () => void;
 }
 
-const FilterModal = ({ isOpen, onClose, onInputEntered }: FilterModalProps) => {
+const FilterModal = ({ isOpen, onClose, onInputEntered, onResetFilters }: FilterModalProps) => {
   if (!isOpen) return null;
 
   const [zipCodes, setZipCodes] = useState<string[]>([]);
@@ -25,6 +27,11 @@ const FilterModal = ({ isOpen, onClose, onInputEntered }: FilterModalProps) => {
   const handleApplyFilter = () => {
     // Pass the entered zip codes to the parent component when the user applies the filter
     onInputEntered(zipCodes, income);
+    onClose(); // Close the modal
+  };
+
+  const handleReset = () => {
+    onResetFilters();
     onClose(); // Close the modal
   };
 
@@ -61,7 +68,7 @@ const FilterModal = ({ isOpen, onClose, onInputEntered }: FilterModalProps) => {
               variant="error"
               outlined
               text="Reset Selection"
-              onClick={onClose}
+              onClick={handleApplyFilter}
               className={styles.button}
             />
             <Button

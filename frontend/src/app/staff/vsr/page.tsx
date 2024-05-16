@@ -236,11 +236,18 @@ export default function VSRTableView() {
       />
       <FilterModal
         isOpen={isFilterModalOpen}
-        onClose={() => setIsFilterModalOpen(false)}
+        onClose={() => {
+          setIsFilterModalOpen(false);
+        }}
         onInputEntered={(zipCodes: string[] | undefined, incomeLevel: string | undefined) => {
           setFilteredZipCodes(zipCodes);
           setFilteredIncome(incomeLevel);
           fetchVSRs(search, zipCodes, incomeLevel, status);
+        }}
+        onResetFilters={() => {
+          setFilteredZipCodes(undefined);
+          setFilteredIncome(undefined);
+          fetchVSRs(search, undefined, undefined, status);
         }}
       />
     </div>
