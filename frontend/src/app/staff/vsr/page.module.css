@@ -73,8 +73,22 @@
 .filterChips {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 16px;
   margin: 0 0 16px;
+}
+
+.appliedText {
+  display: flex;
+  width: 138px;
+  flex-direction: column;
+  justify-content: center;
+  align-self: stretch;
+  color: #222;
+  font-family: "Open Sans";
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
 /* shrink the margins at a screen size larger than tablet to avoid overflow */

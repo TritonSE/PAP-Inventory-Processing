@@ -1,11 +1,29 @@
 .filterChip {
-  border-radius: 64px;
-  border: 1px solid var(--Secondary-1, #102d5f);
-  background: #102d5f;
-  padding: 8px 16px;
+  display: flex;
+  height: 40px;
+  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   gap: 8px;
-  flex: 1 0 0;
+  border-radius: 64px;
+  border: 1px solid var(--Secondary-1, #102d5f);
+  background: var(--Secondary-1, #102d5f);
   align-self: stretch;
+  padding: 8px 16px;
+}
+
+.filterText {
+  color: #fff;
+  text-align: center;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.deleteButton {
+  cursor: pointer;
+  border: none !important;
+  background: transparent;
 }
