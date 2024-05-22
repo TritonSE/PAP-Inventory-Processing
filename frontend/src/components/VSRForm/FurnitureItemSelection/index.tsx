@@ -20,7 +20,7 @@ export const FurnitureItemSelection = ({
   selection,
   onChangeSelection,
   isActive,
-  onChipClicked
+  onChipClicked,
 }: FurnitureItemSelectionProps) => {
   const handleChipClicked = () => {
     if (isActive) {
@@ -29,18 +29,16 @@ export const FurnitureItemSelection = ({
       } else if (!furnitureItem.allowMultiple) {
         onChangeSelection!({ ...selection!, quantity: 0 });
       }
-    }
-    else{
-      onChipClicked?.()
+    } else {
+      onChipClicked?.();
     }
   };
 
   const incrementCount = () => {
     if (isActive) {
       onChangeSelection!({ ...selection!, quantity: selection!.quantity + 1 });
-    }
-    else{
-      onChipClicked?.()
+    } else {
+      onChipClicked?.();
     }
   };
 
@@ -49,9 +47,8 @@ export const FurnitureItemSelection = ({
       if (selection!.quantity > 0) {
         onChangeSelection!({ ...selection!, quantity: selection!.quantity - 1 });
       }
-    }
-    else{
-      onChipClicked?.()
+    } else {
+      onChipClicked?.();
     }
   };
 

@@ -22,7 +22,16 @@ interface ConfirmDeleteModalProps {
  * A modal that asks the user to confirm whether they want to delete one or more
  * VSRs, and then deletes them if they confirm that they want to.
  */
-export const ConfirmDeleteModal = ({ isOpen, onClose, title, content, cancelText, confirmText, buttonLoading, onConfirm}: ConfirmDeleteModalProps) => {
+export const ConfirmDeleteModal = ({
+  isOpen,
+  onClose,
+  title,
+  content,
+  cancelText,
+  confirmText,
+  buttonLoading,
+  onConfirm,
+}: ConfirmDeleteModalProps) => {
   return (
     <>
       <BaseModal
@@ -50,7 +59,6 @@ export const ConfirmDeleteModal = ({ isOpen, onClose, title, content, cancelText
           </div>
         }
       />
-
     </>
   );
 };

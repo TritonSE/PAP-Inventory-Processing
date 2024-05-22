@@ -103,16 +103,20 @@ export default function VSRTableView() {
         return;
       }
 
-      await Promise.all(selectedVsrIds.map(vsrId => deleteVSR(vsrId, firebaseToken).then((res) => {
-        if (res.success) {
-          return Promise.resolve();
-        } else {
-          return Promise.reject(res.error);
-        }
-      })))
-        setSuccessNotificationOpen(true);
-        setSelectedVsrIds([]);
-        fetchVSRs();
+      await Promise.all(
+        selectedVsrIds.map((vsrId) =>
+          deleteVSR(vsrId, firebaseToken).then((res) => {
+            if (res.success) {
+              return Promise.resolve();
+            } else {
+              return Promise.reject(res.error);
+            }
+          }),
+        ),
+      );
+      setSuccessNotificationOpen(true);
+      setSelectedVsrIds([]);
+      fetchVSRs();
     } catch (error) {
       console.error(`Error deleting VSR(s): ${error}`);
       setErrorNotificationOpen(true);

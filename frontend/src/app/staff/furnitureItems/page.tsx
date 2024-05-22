@@ -28,7 +28,7 @@ export default function furnitureItemTemplate() {
         setFurnitureItems([]);
       }
     });
-  }
+  };
 
   const furnitureCategoriesToItems = useMemo(
     () =>

@@ -12,8 +12,10 @@ import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelect
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
 import TextField from "@/components/shared/input/TextField";
 import { UserContext } from "@/contexts/userContext";
+3;
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
+import { Button } from "@/components/shared/Button";
 
 export interface EditTemplateProps {
   furnitureItems: FurnitureItem[];
@@ -63,9 +65,9 @@ export const EditTemplate = ({
     setEditingItemId(null);
   };
 
-  const onDelete = async() => {
+  const onDelete = async () => {
     const firebaseToken = await firebaseUser?.getIdToken();
-    if (!firebaseToken || editingItemId===null) {
+    if (!firebaseToken || editingItemId === null) {
       return;
     }
     const response = await deleteFurnitureItem(editingItemId, firebaseToken);
@@ -75,7 +77,7 @@ export const EditTemplate = ({
       console.error(`Cannot delete Furniture Item. Error: ${response.error}`);
     }
     setConfirmDeleteModal(false);
-  }
+  };
 
   const handleAddNewItem = () => {
     setIsAddingNewItem(true);
@@ -99,11 +101,9 @@ export const EditTemplate = ({
       } else {
         console.error(`Cannot create Furniture Item. Error: ${response.error}`);
       }
-    }
-
-    else if (editingItemId !== null){
+    } else if (editingItemId !== null) {
       const furnitureItem = getFurnitureItemById(editingItemId);
-      if(furnitureItem===null){
+      if (furnitureItem === null) {
         return; //Put error here instead
       }
       const editFurnitureItem: FurnitureItem = {
@@ -111,13 +111,17 @@ export const EditTemplate = ({
         category: categoryName,
         name: itemName,
         allowMultiple: allowMultiple,
-        categoryIndex: furnitureItem.categoryIndex
-      }
+        categoryIndex: furnitureItem.categoryIndex,
+      };
       const firebaseToken = await firebaseUser?.getIdToken();
       if (!firebaseToken) {
         return;
       }
-      const response = await updateFurnitureItem(furnitureItem._id, editFurnitureItem, firebaseToken);
+      const response = await updateFurnitureItem(
+        furnitureItem._id,
+        editFurnitureItem,
+        firebaseToken,
+      );
       if (response.success) {
         onFinishEditing();
       } else {
@@ -125,32 +129,36 @@ export const EditTemplate = ({
       }
     }
 
-
     setEditingItemId(null);
     setIsAddingNewItem(false);
   };
 
   return (
-    <div className={styles.row}>
-      {isEditing ? <p> Please Select a Tag to Delete or Start Editing</p> : null}
+    <div className={`${styles.row} ${isEditing ? styles.boxShadow : ""}`}>
+      {isEditing ? (
+        <p className={styles.selectTag}> Select a Tag to edit or add new option</p>
+      ) : null}
       <FieldDetail title={categoryTitle}>
+        <div className={styles.chipContainer}>
+          {furnitureItems.map((furnitureItem) => (
+            <FurnitureItemSelection
+              isActive={false}
+              key={furnitureItem._id}
+              furnitureItem={furnitureItem}
+              onChipClicked={() => {
+                if (isEditing) {
+                  handleStartEditItem(furnitureItem._id);
+                }
+              }}
+            />
+          ))}
+        </div>
+
         {isEditing ? (
           <>
-            <div className={styles.chipContainer}>
-              {furnitureItems.map((furnitureItem) => (
-                <FurnitureItemSelection
-                  isActive={false}
-                  key={furnitureItem._id}
-                  furnitureItem={furnitureItem}
-                  onChipClicked={() => {
-                    handleStartEditItem(furnitureItem._id);
-                  }}
-                />
-              ))}
-            </div>
-
             {isAddingNewItem || editingItemId !== null ? (
               <>
+                <div className={styles.spacer} />
                 <TextField
                   label="Item Name"
                   variant="outlined"
@@ -172,48 +180,52 @@ export const EditTemplate = ({
               </>
             ) : null}
 
-            <button className={styles.chip} onClick={handleAddNewItem} disabled={isDisabled}>
-              Add New Option
-            </button>
+            <div className={styles.buttonsRow}>
+              <button className={styles.chip} onClick={handleAddNewItem} disabled={isDisabled}>
+                Add New Option
+              </button>
 
-            <button
-              className={styles.chip}
-              onClick={e => setConfirmDeleteModal(true)}
-              disabled={isDisabled}
-            >
-              Delete Tag
-            </button>
+              <button
+                className={styles.chip}
+                onClick={(e) => setConfirmDeleteModal(true)}
+                disabled={isDisabled}
+              >
+                Delete Tag
+              </button>
 
-            <button className={styles.chip} onClick={handleSaveChanges} disabled={isDisabled}>
-              Save Changes
-            </button>
+              <button className={styles.chip} onClick={handleSaveChanges} disabled={isDisabled}>
+                Save Changes
+              </button>
 
-            <button
-              className={styles.chip}
-              onClick={isEditing ? onFinishEditing : onBeginEditing}
-              disabled={isDisabled}
-            >
-              Discard Edits
-            </button>
+              <button
+                className={styles.chip}
+                onClick={isEditing ? onFinishEditing : onBeginEditing}
+                disabled={isDisabled}
+              >
+                Discard Edits
+              </button>
+            </div>
           </>
         ) : (
           <>
-            <div className={styles.chipContainer}>
-              {furnitureItems.map((furnitureItem) => (
-                <FurnitureItemSelection
-                  isActive={false}
-                  key={furnitureItem._id}
-                  furnitureItem={furnitureItem}
-                />
-              ))}
-            </div>
-            <button
+            {/* <button
               className={styles.chip}
               onClick={isEditing ? onFinishEditing : onBeginEditing}
               disabled={isDisabled}
             >
               Edit Section
-            </button>
+            </button> */}
+            <Button
+              className={styles.editButton}
+              variant="primary"
+              outlined={false}
+              iconPath="/ic_edit_light.svg"
+              iconAlt="Edit"
+              text="Edit Section"
+              hideTextOnMobile
+              onClick={isEditing ? onFinishEditing : onBeginEditing}
+              disabled={isDisabled}
+            />
           </>
         )}
       </FieldDetail>
