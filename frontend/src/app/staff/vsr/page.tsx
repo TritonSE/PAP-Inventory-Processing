@@ -13,16 +13,23 @@ import { useMediaQuery } from "@mui/material";
 import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
 import { UserContext } from "@/contexts/userContext";
 import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
-import { VSR, getAllVSRs } from "@/api/VSRs";
+import { VSR, getAllVSRs, bulkExportVSRS } from "@/api/VSRs";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
 import FilterChip from "@/components/VSRTable/FilterChip";
+import { SuccessNotification } from "@/components/shared/SuccessNotification";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
   CANNOT_FETCH_VSRS_INTERNAL,
+  NONE,
+}
+
+enum VSRExportError {
+  CANNOT_EXPORT_VSRS_NO_INTERNET,
+  CANNOT_EXPORT_VSRS_INTERNAL,
   NONE,
 }
 
@@ -37,6 +44,9 @@ export default function VSRTableView() {
   const [loadingVsrs, setLoadingVsrs] = useState(true);
   const [vsrs, setVsrs] = useState<VSR[]>();
   const [tableError, setTableError] = useState(VSRTableError.NONE);
+  const [exportError, setExportError] = useState(VSRExportError.NONE);
+  const [exportSuccess, setExportSuccess] = useState(false);
+  const [loadingExport, setLoadingExport] = useState(false);
 
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
@@ -141,6 +151,87 @@ export default function VSRTableView() {
     }
   };
 
+  const renderExportErrorModal = () => {
+    switch (exportError) {
+      case VSRExportError.CANNOT_EXPORT_VSRS_NO_INTERNET:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setExportError(VSRExportError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/no_internet.svg"
+                alt="No Internet"
+                width={isMobile ? 100 : isTablet ? 138 : 114}
+                height={isMobile ? 93 : isTablet ? 129 : 106}
+              />
+            }
+            title="No Internet Connection"
+            content="Unable to export VSRs due to no internet connection. Please check your connection and try again"
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setExportError(VSRExportError.NONE);
+              exportVSRs();
+            }}
+          />
+        );
+
+      case VSRExportError.CANNOT_EXPORT_VSRS_INTERNAL:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setExportError(VSRExportError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/500_internal_error.svg"
+                alt="Internal Error"
+                width={isMobile ? 100 : 155}
+                height={isMobile ? 69 : 106}
+              />
+            }
+            title="Internal Error"
+            content="Something went wrong with exporting the VSRs. Our team is working to fix it. Please try again later."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setExportError(VSRExportError.NONE);
+              exportVSRs();
+            }}
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  const exportVSRs = () => {
+    if (!firebaseUser) {
+      return;
+    }
+
+    setExportSuccess(false);
+    setExportError(VSRExportError.NONE);
+    setLoadingExport(true);
+    firebaseUser?.getIdToken().then((firebaseToken) => {
+      bulkExportVSRS(firebaseToken, selectedVsrIds).then((result) => {
+        if (result.success) {
+          setExportSuccess(true);
+        } else {
+          if (result.error === "Failed to fetch") {
+            setExportError(VSRExportError.CANNOT_EXPORT_VSRS_NO_INTERNET);
+          } else {
+            console.error(`Error exporting VSRs: ${result.error}`);
+            setExportError(VSRExportError.CANNOT_EXPORT_VSRS_INTERNAL);
+          }
+        }
+        setLoadingExport(false);
+      });
+    });
+  };
+
   return (
     <div className={styles.page}>
       <HeaderBar showLogoutButton />
@@ -203,11 +294,10 @@ export default function VSRTableView() {
               outlined={false}
               iconPath="/upload.svg"
               iconAlt="Export"
+              loading={loadingExport}
               text="Export"
               hideTextOnMobile
-              onClick={() => {
-                // TODO: implement exporting VSRs
-              }}
+              onClick={exportVSRs}
             />
           </div>
         </div>
@@ -258,8 +348,19 @@ export default function VSRTableView() {
         </div>
       </div>
 
-      {/* Error modal and delete modal */}
+      {/* Error modals, success model, and delete modal */}
+      <SuccessNotification
+        isOpen={exportSuccess}
+        mainText="VSRs Exported Successfully"
+        actions={[
+          {
+            text: "Dismiss",
+            onClick: () => setExportSuccess(false),
+          },
+        ]}
+      />
       {renderErrorModal()}
+      {renderExportErrorModal()}
       <DeleteVSRsModal
         isOpen={deleteVsrModalOpen}
         onClose={() => setDeleteVsrModalOpen(false)}

@@ -1,12 +1,17 @@
-import { RequestHandler } from "express";
+import { RequestHandler, Response } from "express";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
-import VSRModel from "src/models/vsr";
+import FurnitureItemModel, { FurnitureItem } from "src/models/furnitureItem";
+import VSRModel, { FurnitureInput, VSR } from "src/models/vsr";
 import {
   sendVSRConfirmationEmailToVeteran,
   sendVSRNotificationEmailToStaff,
 } from "src/services/emails";
 import validationErrorParser from "src/util/validationErrorParser";
+import ExcelJS from "exceljs";
+import { ObjectId } from "mongodb";
+
+type FurnitureItemEntry = FurnitureItem & { _id: ObjectId };
 
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
@@ -248,6 +253,166 @@ export const deleteVSR: RequestHandler = async (req, res, next) => {
       throw createHttpError(404, "VSR not found at id " + id);
     }
     return res.status(204).send();
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Converts an entry in a VSR to a formatted string to write to the Excel spreadsheet
+ */
+const stringifyEntry = (
+  entry: string | number | string[] | number[] | boolean | Date | undefined,
+) => {
+  if (entry === undefined || entry === null) {
+    return "";
+  }
+
+  if (Array.isArray(entry)) {
+    return entry.join(", ");
+  } else if (typeof entry === "boolean") {
+    return entry ? "yes" : "no";
+  } else {
+    return entry.toString();
+  }
+};
+
+/**
+ * Formats a VSR's selected furniture items as a string
+ */
+const stringifySelectedFurnitureItems = (
+  selectedItems: FurnitureInput[] | undefined,
+  allFurnitureItems: FurnitureItemEntry[],
+) => {
+  if (!selectedItems) {
+    return "";
+  }
+
+  const itemIdsToItems: Record<string, FurnitureItem> = {};
+
+  for (const furnitureItem of allFurnitureItems) {
+    itemIdsToItems[furnitureItem._id.toString()] = furnitureItem;
+  }
+
+  return selectedItems
+    .map((selectedItem) => {
+      const furnitureItem = itemIdsToItems[selectedItem.furnitureItemId];
+      return furnitureItem ? `${furnitureItem.name}: ${selectedItem.quantity}` : "[unknown]";
+    })
+    .join(", ");
+};
+
+const writeSpreadsheet = async (plainVsrs: VSR[], res: Response) => {
+  const workbook = new ExcelJS.Workbook();
+
+  workbook.creator = "PAP Inventory System";
+  workbook.lastModifiedBy = "Bot";
+
+  //current date
+  workbook.created = new Date();
+  workbook.modified = new Date();
+  workbook.lastPrinted = new Date();
+
+  const worksheet = workbook.addWorksheet("New Sheet");
+
+  // Fields that we want to write to the spreadsheet. First is field name, second is display name.
+  const fieldsToWrite: [keyof VSR, string][] = [
+    ["name", "Name"],
+    ["gender", "Gender"],
+    ["age", "Age"],
+    ["maritalStatus", "Marital Status"],
+    ["spouseName", "Spouse Name"],
+    ["agesOfBoys", "Ages of boys"],
+    ["agesOfGirls", "Ages of girls"],
+    ["ethnicity", "Ethnicity"],
+    ["employmentStatus", "Employment Status"],
+    ["incomeLevel", "Income Level"],
+    ["sizeOfHome", "Size of Home"],
+
+    ["streetAddress", "Street Address"],
+    ["city", "City"],
+    ["state", "State"],
+    ["zipCode", "Zip Code"],
+    ["phoneNumber", "Phone Number"],
+    ["email", "Email Address"],
+    ["branch", "Branch"],
+    ["conflicts", "Conflicts"],
+    ["dischargeStatus", "Discharge Status"],
+    ["serviceConnected", "Service Connected"],
+    ["lastRank", "Last Rank"],
+    ["militaryID", "Military ID"],
+    ["petCompanion", "Pet Companion Desired"],
+    ["hearFrom", "Referral Source"],
+
+    ["selectedFurnitureItems", "Selected Furniture Items"],
+    ["additionalItems", "Additional Items"],
+
+    ["dateReceived", "Date Received"],
+    ["lastUpdated", "Last Updated"],
+    ["status", "Status"],
+  ];
+
+  worksheet.columns = fieldsToWrite.map((field) => ({
+    header: field[1],
+    key: field[0],
+    width: 20,
+  }));
+
+  const allFurnitureItems = await FurnitureItemModel.find();
+
+  // Add data rows to the worksheet
+  plainVsrs.forEach((vsr) => {
+    worksheet.addRow(
+      fieldsToWrite.reduce(
+        (prev, field) => ({
+          ...prev,
+          [field[0]]:
+            field[0] === "selectedFurnitureItems"
+              ? stringifySelectedFurnitureItems(
+                  vsr[field[0]] as FurnitureInput[] | undefined,
+                  allFurnitureItems,
+                )
+              : stringifyEntry(vsr[field[0]]),
+        }),
+        {},
+      ),
+    );
+  });
+
+  // Write to file
+  await workbook.xlsx.write(res);
+};
+
+export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
+  try {
+    const filename = "vsrs.xlsx";
+    // Set some headers on the response so the client knows that a file is attached
+    res.set({
+      "Content-Disposition": `attachment; filename="${filename}"`,
+      "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+
+    let vsrs: VSR[];
+
+    if (req.query.vsrIds && ((req.query.vsrIds.length ?? 0) as number) > 0) {
+      // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
+      // with an _id in the vsrIds list
+
+      // Need to convert each ID string to an ObjectId object
+      const vsrObjectIds = (req.query.vsrIds as string)?.split(",").map((_id) => new ObjectId(_id));
+      vsrs = (
+        await VSRModel.find({
+          _id: {
+            $in: vsrObjectIds,
+          },
+        })
+      ).map((doc) => doc.toObject());
+    } else {
+      // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
+      vsrs = (await VSRModel.find()).map((doc) => doc.toObject());
+    }
+
+    await writeSpreadsheet(vsrs, res);
   } catch (error) {
     next(error);
   }
