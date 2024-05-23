@@ -24,6 +24,7 @@ import { SuccessNotification } from "@/components/shared/SuccessNotification";
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
   CANNOT_FETCH_VSRS_INTERNAL,
+  ZIPCODE_INVALID,
   NONE,
 }
 
@@ -139,6 +140,30 @@ export default function VSRTableView() {
             }
             title="Internal Error"
             content="Something went wrong with retrieving the VSRs. Our team is working to fix it. Please try again later."
+            buttonText="Try Again"
+            onButtonClicked={() => {
+              setTableError(VSRTableError.NONE);
+              fetchVSRs();
+            }}
+          />
+        );
+      case VSRTableError.ZIPCODE_INVALID:
+        return (
+          <VSRErrorModal
+            isOpen
+            onClose={() => {
+              setTableError(VSRTableError.NONE);
+            }}
+            imageComponent={
+              <Image
+                src="/errors/500_internal_error.svg"
+                alt="Internal Error"
+                width={isMobile ? 100 : 155}
+                height={isMobile ? 69 : 106}
+              />
+            }
+            title="Zip Code Formatting Error"
+            content="Each zip code must be exactly 5 digits long. Please correct the zip code and try again."
             buttonText="Try Again"
             onButtonClicked={() => {
               setTableError(VSRTableError.NONE);
@@ -376,6 +401,15 @@ export default function VSRTableView() {
           setIsFilterModalOpen(false);
         }}
         onInputEntered={(zipCodes: string[] | undefined, incomeLevel: string | undefined) => {
+          console.log(zipCodes);
+          if (zipCodes) {
+            for (let i = 0; i < zipCodes.length; i++) {
+              if (zipCodes[i].length != 5) {
+                setTableError(VSRTableError.ZIPCODE_INVALID);
+                return;
+              }
+            }
+          }
           setFilteredZipCodes(zipCodes);
           setFilteredIncome(incomeLevel);
           fetchVSRs(search, zipCodes, incomeLevel, status);
