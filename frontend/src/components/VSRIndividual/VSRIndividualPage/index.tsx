@@ -10,7 +10,14 @@ import {
 } from "@/components/VSRIndividual";
 import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 import Image from "next/image";
-import { type VSR, getVSR, updateVSRStatus, UpdateVSRRequest, updateVSR } from "@/api/VSRs";
+import {
+  type VSR,
+  getVSR,
+  updateVSRStatus,
+  UpdateVSRRequest,
+  updateVSR,
+  exportVSRPDF,
+} from "@/api/VSRs";
 import { useParams, useRouter } from "next/navigation";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
@@ -64,6 +71,10 @@ export const VSRIndividualPage = () => {
   const [editSuccessNotificationOpen, setEditSuccessNotificationOpen] = useState(false);
   const [editErrorNotificationOpen, setEditErrorNotificationOpen] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
+
+  const [downloadSuccessNotificationOpen, setDownloadSuccessNotificationOpen] = useState(false);
+  const [downloadErrorNotificationOpen, setDownloadErrorNotificationOpen] = useState(false);
+  const [loadingDownload, setLoadingDownload] = useState(false);
 
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
@@ -205,6 +216,26 @@ export const VSRIndividualPage = () => {
     setLoadingUpdateStatus(false);
   };
 
+  const onDownloadClicked = async () => {
+    if (!firebaseUser) {
+      return;
+    }
+
+    setDownloadSuccessNotificationOpen(false);
+    setDownloadErrorNotificationOpen(false);
+    setLoadingDownload(true);
+    const firebaseToken = await firebaseUser.getIdToken();
+    const result = await exportVSRPDF(firebaseToken, vsr._id);
+
+    if (result.success) {
+      setDownloadSuccessNotificationOpen(true);
+    } else {
+      console.error(`Error downloading VSR PDF: ${result.error}`);
+      setEditErrorNotificationOpen(true);
+    }
+    setLoadingDownload(false);
+  };
+
   /**
    * Conditionally renders the "Approve" button on the page, if the VSR's status is "Received"
    */
@@ -279,12 +310,11 @@ export const VSRIndividualPage = () => {
               variant="primary"
               outlined={false}
               iconPath="/ic_upload.svg"
-              iconAlt="Export"
-              text="Export"
+              iconAlt="Download"
+              loading={loadingDownload}
+              text="Download"
               hideTextOnMobile
-              onClick={() => {
-                // TODO: implement VSR export feature
-              }}
+              onClick={onDownloadClicked}
             />
           </>
         )}
@@ -658,6 +688,20 @@ export const VSRIndividualPage = () => {
         mainText="Unable to Save Changes"
         subText="An error occurred, please check your internet connection or try again later"
         onDismissClicked={() => setEditErrorNotificationOpen(false)}
+      />
+
+      <NotificationBanner
+        variant="success"
+        isOpen={downloadSuccessNotificationOpen}
+        mainText="Downloaded Successfully"
+        onDismissClicked={() => setDownloadSuccessNotificationOpen(false)}
+      />
+      <NotificationBanner
+        variant="error"
+        isOpen={downloadErrorNotificationOpen}
+        mainText="Unable to Download PDF"
+        subText="An error occurred, please check your internet connection or try again later"
+        onDismissClicked={() => setDownloadErrorNotificationOpen(false)}
       />
     </>
   );
