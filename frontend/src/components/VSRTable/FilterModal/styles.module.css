@@ -43,18 +43,6 @@
   margin: 0 0 16px;
 }
 
-.zipCodeContainer {
-  display: flex;
-  flex-direction: row;
-  gap: 32px;
-  align-items: flex-end;
-}
-
-.enterButton {
-  width: 20%;
-  padding: 12px 24px;
-  text-align: center;
-  font-family: "Lora";
-  font-size: 18px;
-  font-weight: 700;
+.disabled {
+  background-color: grey !important;
 }
