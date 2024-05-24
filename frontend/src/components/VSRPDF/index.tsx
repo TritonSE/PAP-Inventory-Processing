@@ -204,20 +204,24 @@ export const VSRPDF = ({ vsr, furnitureItems }: VSRPDFProps) => {
     </View>
   );
 
-  const renderTextField = (fieldName: string, fieldValue: string | number) =>
-    renderField(fieldName, <Text style={styles.fieldContents}>{fieldValue}</Text>);
+  const renderTextField = (fieldName: string, fieldValue: string | number | null | undefined) =>
+    renderField(fieldName, <Text style={styles.fieldContents}>{fieldValue ?? "N/A"}</Text>);
 
   const renderChipField = (fieldName: string, chip: string | number | string[]) =>
     renderField(
       fieldName,
-      <>
-        <View style={styles.filledChip}>
-          <Text style={styles.chipText}>{Array.isArray(chip) ? chip[0] : chip}</Text>
-        </View>
-        {Array.isArray(chip) && chip.length > 1 ? (
-          <Text style={styles.italicText}>+{chip.length - 1} more</Text>
-        ) : null}
-      </>,
+      Array.isArray(chip) && chip.length === 0 ? (
+        <Text style={styles.fieldContents}>N/A</Text>
+      ) : (
+        <>
+          <View style={styles.filledChip}>
+            <Text style={styles.chipText}>{Array.isArray(chip) ? chip[0] : chip}</Text>
+          </View>
+          {Array.isArray(chip) && chip.length > 1 ? (
+            <Text style={styles.italicText}>+{chip.length - 1} more</Text>
+          ) : null}
+        </>
+      ),
     );
 
   const renderFurnitureItemChip = (furnitureItem: FurnitureItem, selectedQuantity: number) => (
@@ -288,7 +292,7 @@ export const VSRPDF = ({ vsr, furnitureItems }: VSRPDFProps) => {
 
           <View style={styles.fullWidthRow}>
             {renderChipField("Marital Status", vsr.maritalStatus)}
-            {renderTextField("Spouse's Name", vsr.spouseName || "N/A")}
+            {renderTextField("Spouse's Name", vsr.spouseName)}
           </View>
 
           <Text style={styles.fieldLabel}>Children Under the Age of 18:</Text>
