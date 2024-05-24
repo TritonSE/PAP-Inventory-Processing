@@ -1,11 +1,11 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import styles from "@/components/shared/HeaderBar/styles.module.css";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { signOut } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { Button } from "@/components/shared/Button";
-import { NotificationBanner } from "../NotificationBanner";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import styles from "@/components/shared/HeaderBar/styles.module.css";
 
 interface HeaderBarProps {
   showLogoutButton: boolean;

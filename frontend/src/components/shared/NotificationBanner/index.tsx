@@ -1,8 +1,8 @@
-import styles from "@/components/shared/NotificationBanner/styles.module.css";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { Portal } from "@mui/material";
 import Image from "next/image";
 import { CSSProperties } from "react";
+import styles from "@/components/shared/NotificationBanner/styles.module.css";
 
 interface NotificationBannerProps {
   variant: "success" | "undone" | "error";

@@ -1,9 +1,8 @@
 // HandlePasswordReset.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import Image from "next/image";
-import styles from "@/app/handlePasswordReset/page.module.css";
 import {
   verifyPasswordResetCode,
   confirmPasswordReset,
@@ -18,6 +17,8 @@ import { IconButton } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { FirebaseError } from "firebase/app";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import { LoadingScreen } from "@/components/shared/LoadingScreen";
+import styles from "@/app/handlePasswordReset/page.module.css";
 
 enum ResetPasswordPageError {
   NO_INTERNET,
@@ -346,4 +347,12 @@ const PasswordReset: React.FC = () => {
   );
 };
 
-export default PasswordReset;
+const PasswordResetPage = () => {
+  return (
+    <Suspense fallback={<LoadingScreen />}>
+      <PasswordReset />
+    </Suspense>
+  );
+};
+
+export default PasswordResetPage;

@@ -4,7 +4,6 @@
 import emailValidator from "email-validator";
 import React, { useState } from "react";
 import Image from "next/image";
-import styles from "@/app/login/page.module.css";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
@@ -16,6 +15,7 @@ import TextField from "@/components/shared/input/TextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconButton } from "@mui/material";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import styles from "@/app/login/page.module.css";
 
 enum LoginPageError {
   NO_INTERNET,

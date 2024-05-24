@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "@/app/staff/vsr/page.module.css";
 import VSRTable from "@/components/VSRTable/VSRTable";
 import SearchKeyword from "@/components/VSRTable/SearchKeyword";
 import PageTitle from "@/components/VSRTable/PageTitle";
@@ -18,6 +17,7 @@ import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import styles from "@/app/staff/vsr/page.module.css";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,

@@ -1,7 +1,6 @@
 "use client";
 import emailValidator from "email-validator";
 import React, { useEffect, useState } from "react";
-import styles from "@/app/vsr/page.module.css";
 import { useForm, Controller, SubmitHandler, RegisterOptions } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
 import MultipleChoice from "@/components/shared/input/MultipleChoice";
@@ -35,6 +34,7 @@ import { Button } from "@/components/shared/Button";
 import { ICreateVSRFormInput, IVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 import { ListDetail, SingleDetail } from "@/components/VSRIndividual";
+import styles from "@/app/vsr/page.module.css";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,

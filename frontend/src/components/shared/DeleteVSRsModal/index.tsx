@@ -1,10 +1,10 @@
 import { deleteVSR } from "@/api/VSRs";
-import styles from "@/components/shared/DeleteVSRsModal/styles.module.css";
 import { UserContext } from "@/contexts/userContext";
 import { useContext, useState } from "react";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
+import styles from "@/components/shared/DeleteVSRsModal/styles.module.css";
 
 interface DeleteVSRsModalProps {
   isOpen: boolean;

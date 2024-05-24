@@ -8,7 +8,6 @@ import {
   AdditionalInfo,
   RequestedFurnishings,
 } from "@/components/VSRIndividual";
-import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 import Image from "next/image";
 import {
   type VSR,
@@ -32,6 +31,7 @@ import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 import { useMediaQuery } from "@mui/material";
+import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
