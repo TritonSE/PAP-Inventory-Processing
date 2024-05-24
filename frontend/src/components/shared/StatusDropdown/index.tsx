@@ -16,7 +16,7 @@ export interface StatusOption {
  */
 export const STATUS_OPTIONS: StatusOption[] = [
   {
-    value: "Any",
+    value: "All Statuses",
     color: "#ffffff",
   },
   {

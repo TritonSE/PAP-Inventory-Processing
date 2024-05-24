@@ -6,7 +6,6 @@ import TextField from "@/components/shared/input/TextField";
 import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import { incomeOptions } from "@/constants/fieldOptions";
 import FilterChip from "@/components/VSRTable/FilterChip";
-import { on } from "events";
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -85,6 +84,7 @@ const FilterModal = ({ isOpen, onClose, onInputEntered, onResetFilters }: Filter
               <TextField
                 label="Zip Code(s)"
                 variant="outlined"
+                type="number"
                 placeholder="e.g. 92093"
                 onChange={handleZipCodeChange}
                 onKeyDown={handleKeyDown}

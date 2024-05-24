@@ -252,9 +252,9 @@ export default function VSRTableView() {
               <p className={styles.statusLabel}>Status:</p>
               <div className={styles.statusWrapper}>
                 <StatusDropdown
-                  value="Any"
+                  value="All Statuses"
                   onChanged={(value: string) => {
-                    if (value === "Any") {
+                    if (value === "All Statuses") {
                       setStatus(undefined);
                       fetchVSRs(search, filteredZipCodes, filteredIncome, undefined);
                     } else {
