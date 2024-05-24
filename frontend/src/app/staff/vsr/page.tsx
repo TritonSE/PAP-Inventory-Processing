@@ -410,7 +410,10 @@ export default function VSRTableView() {
               }
             }
           }
-          setFilteredZipCodes(zipCodes);
+          //add zipCodes to filteredZipCodes and zipcodes
+          const combinedZipCodes = [...(filteredZipCodes ?? []), ...(zipCodes ?? [])];
+
+          setFilteredZipCodes(combinedZipCodes);
           setFilteredIncome(incomeLevel);
           fetchVSRs(search, zipCodes, incomeLevel, status);
         }}
