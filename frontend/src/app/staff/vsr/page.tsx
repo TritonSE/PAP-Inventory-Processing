@@ -277,9 +277,9 @@ export default function VSRTableView() {
               <p className={styles.statusLabel}>Status:</p>
               <div className={styles.statusWrapper}>
                 <StatusDropdown
-                  value="Any"
+                  value="All Statuses"
                   onChanged={(value: string) => {
-                    if (value === "Any") {
+                    if (value === "All Statuses") {
                       setStatus(undefined);
                       fetchVSRs(search, filteredZipCodes, filteredIncome, undefined);
                     } else {
@@ -329,7 +329,9 @@ export default function VSRTableView() {
         {/* {searchOnOwnRow ? <SearchKeyword onUpdate={fetchSearchedVSRs} /> : null} */}
 
         <span className={styles.filterChips}>
-          <p className={styles.appliedText}>Applied Filters: </p>
+          {(filteredZipCodes && filteredZipCodes.length > 0) || filteredIncome ? (
+            <p className={styles.appliedText}>Applied Filters: </p>
+          ) : null}
           {filteredZipCodes?.map((zipCode) => (
             <FilterChip
               label={"Zip Code: " + zipCode}

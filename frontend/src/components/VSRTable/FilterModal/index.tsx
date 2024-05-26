@@ -6,7 +6,6 @@ import TextField from "@/components/shared/input/TextField";
 import MultipleChoice from "@/components/shared/input/MultipleChoice";
 import { incomeOptions } from "@/constants/fieldOptions";
 import FilterChip from "@/components/VSRTable/FilterChip";
-import { on } from "events";
 
 interface FilterModalProps {
   isOpen: boolean;
@@ -56,13 +55,6 @@ const FilterModal = ({ isOpen, onClose, onInputEntered, onResetFilters }: Filter
     }
   };
 
-  const handleZipCodeEnter = () => {
-    if (currentZipCode.trim()) {
-      setZipCodes((prevZipCodes) => [...prevZipCodes, currentZipCode.trim()]);
-      setCurrentZipCode(""); // Clear the text field after adding the zipcode
-    }
-  };
-
   return (
     <>
       <BaseModal
@@ -81,24 +73,16 @@ const FilterModal = ({ isOpen, onClose, onInputEntered, onResetFilters }: Filter
               required
             ></MultipleChoice>
             <br />
-            <div className={styles.zipCodeContainer}>
-              <TextField
-                label="Zip Code(s)"
-                variant="outlined"
-                placeholder="e.g. 92093"
-                onChange={handleZipCodeChange}
-                onKeyDown={handleKeyDown}
-                value={currentZipCode}
-                required={false}
-              />
-              <Button
-                variant="primary"
-                outlined={false}
-                text="Enter"
-                onClick={handleZipCodeEnter}
-                className={styles.enterButton}
-              />
-            </div>
+            <TextField
+              label="Zip Code(s)"
+              variant="outlined"
+              type="number"
+              placeholder="e.g. 92093"
+              onChange={handleZipCodeChange}
+              onKeyDown={handleKeyDown}
+              value={currentZipCode}
+              required={false}
+            />
             <br />
             <div className={styles.filterChips}>
               {zipCodes?.map((zipCode) => (
@@ -127,7 +111,9 @@ const FilterModal = ({ isOpen, onClose, onInputEntered, onResetFilters }: Filter
               outlined={false}
               text="Apply Filters"
               onClick={handleApplyFilter}
-              className={styles.button}
+              className={`${styles.button} ${
+                zipCodes.length > 0 || currentZipCode !== "" || income !== "" ? "" : styles.disabled
+              }`}
             />
           </div>
         }
