@@ -19,86 +19,39 @@ type FurnitureItemEntry = FurnitureItem & { _id: ObjectId };
  */
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
-    let vsrs;
-    if (req.query.search) {
-      // const vsrs = await VSRModel.find({ $text: { $search: req.query.search as string } }).sort({
-      //   //by status in a particular order
-      //   status: 1,
-      //   //and then by name
-      //   name: 1,
-      // });
-      const searchTerm = req.query.search as string;
-      const regex = new RegExp(searchTerm, "i");
-
-      vsrs = await VSRModel.aggregate([
-        {
-          $match: { name: { $regex: regex } },
-        },
-        {
-          $addFields: {
-            statusOrder: {
-              $switch: {
-                branches: [
-                  { case: { $eq: ["$status", "Received"] }, then: 1 },
-                  { case: { $eq: ["$status", "Approved"] }, then: 2 },
-                  { case: { $eq: ["$status", "Appointment Scheduled"] }, then: 3 },
-                  { case: { $eq: ["$status", "Complete"] }, then: 4 },
-                  { case: { $eq: ["$status", "No-show / Incomplete"] }, then: 5 },
-                  { case: { $eq: ["$status", "Archived"] }, then: 6 },
-                ],
-                default: 99,
-              },
+    let vsrs = await VSRModel.aggregate([
+      ...(req.query.search
+        ? [
+            {
+              $match: { name: { $regex: new RegExp(req.query.search as string) } },
+            },
+          ]
+        : []),
+      {
+        $addFields: {
+          statusOrder: {
+            $switch: {
+              branches: [
+                { case: { $eq: ["$status", "Received"] }, then: 1 },
+                { case: { $eq: ["$status", "Approved"] }, then: 2 },
+                { case: { $eq: ["$status", "Appointment Scheduled"] }, then: 3 },
+                { case: { $eq: ["$status", "Complete"] }, then: 4 },
+                { case: { $eq: ["$status", "No-show / Incomplete"] }, then: 5 },
+                { case: { $eq: ["$status", "Archived"] }, then: 6 },
+              ],
+              default: 99,
             },
           },
         },
-        { $sort: { statusOrder: 1, dateReceived: -1 } },
-      ]);
-    } else {
-      // const vsrs = await VSRModel.find().sort({
-      //   //by status in a particular order
-      //   status: 1,
-      //   //and then by name
-      //   dateReceived: -1,
-      // });
-
-      vsrs = await VSRModel.aggregate([
-        {
-          $addFields: {
-            statusOrder: {
-              $switch: {
-                branches: [
-                  { case: { $eq: ["$status", "Received"] }, then: 1 },
-                  { case: { $eq: ["$status", "Approved"] }, then: 2 },
-                  { case: { $eq: ["$status", "Appointment Scheduled"] }, then: 3 },
-                  { case: { $eq: ["$status", "Complete"] }, then: 4 },
-                  { case: { $eq: ["$status", "No-show / Incomplete"] }, then: 5 },
-                  { case: { $eq: ["$status", "Archived"] }, then: 6 },
-                ],
-                default: 99,
-              },
-            },
-          },
-        },
-        { $sort: { statusOrder: 1, dateReceived: -1 } },
-      ]);
-    }
+      },
+      { $sort: { statusOrder: 1, dateReceived: -1 } },
+    ]);
 
     if (req.query.status) {
       vsrs = vsrs.filter((vsr) => vsr.status === req.query.status);
     }
 
-    if (
-      req.query.incomeLevel
-      // &&
-      // typeof req.query.incomeLevel === "string" &&
-      // req.query.incomeLevel in ["50000", "25000", "12500", "0"]
-    ) {
-      /*
-      "$12,500 and under",
-  "$12,501 - $25,000",
-  "$25,001 - $50,000",
-  "$50,001 and over",
-      */
+    if (req.query.incomeLevel) {
       const incomeMap: { [key: string]: string } = {
         "50000": "$50,001 and over",
         "25000": "$25,001 - $50,000",

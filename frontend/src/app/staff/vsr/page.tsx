@@ -52,11 +52,13 @@ export default function VSRTableView() {
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
 
-  const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filteredZipCodes, setFilteredZipCodes] = useState<string[] | undefined>(undefined);
-  const [filteredIncome, setFilteredIncome] = useState<string | undefined>(undefined);
-  const [search, setSearch] = useState<string | undefined>(undefined);
-  const [status, setStatus] = useState<string | undefined>(undefined);
+  const [filterModalAnchorElement, setFilterModalAnchorElement] = useState<HTMLElement | null>(
+    null,
+  );
+  const [filteredZipCodes, setFilteredZipCodes] = useState<string[]>();
+  const [filteredIncome, setFilteredIncome] = useState<string>();
+  const [search, setSearch] = useState<string>();
+  const [status, setStatus] = useState<string>();
 
   useRedirectToLoginIfNotSignedIn();
 
@@ -65,14 +67,14 @@ export default function VSRTableView() {
   /**
    * Fetches the list of all VSRs from the backend and updates our vsrs state.
    */
-  const fetchVSRs = (search?: string, zipCodes?: string[], income?: string, status?: string) => {
+  const fetchVSRs = () => {
     if (!firebaseUser) {
       return;
     }
 
     setLoadingVsrs(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
-      getAllVSRs(firebaseToken, search, zipCodes, income, status).then((result) => {
+      getAllVSRs(firebaseToken, search, filteredZipCodes, filteredIncome, status).then((result) => {
         if (result.success) {
           setVsrs(result.data);
         } else {
@@ -91,7 +93,7 @@ export default function VSRTableView() {
   // Fetch the VSRs from the backend once the Firebase user loads.
   useEffect(() => {
     fetchVSRs();
-  }, [firebaseUser]);
+  }, [firebaseUser, search, filteredZipCodes, filteredIncome, status]);
 
   /**
    * Renders an error modal corresponding to the page's error state, or renders
@@ -257,6 +259,8 @@ export default function VSRTableView() {
     });
   };
 
+  const renderSearchBar = () => <SearchKeyword onUpdate={setSearch} />;
+
   return (
     <div className={styles.page}>
       <HeaderBar showLogoutButton />
@@ -264,14 +268,7 @@ export default function VSRTableView() {
         <PageTitle />
         <div className={styles.button_row}>
           <div className={styles.row_left}>
-            {searchOnOwnRow ? null : (
-              <SearchKeyword
-                onUpdate={(search: string) => {
-                  setSearch(search);
-                  fetchVSRs(search, filteredZipCodes, filteredIncome, status);
-                }}
-              />
-            )}
+            {searchOnOwnRow ? null : renderSearchBar()}
 
             <div className={styles.statusContainer}>
               <p className={styles.statusLabel}>Status:</p>
@@ -279,14 +276,9 @@ export default function VSRTableView() {
                 <StatusDropdown
                   value="All Statuses"
                   onChanged={(value: string) => {
-                    if (value === "All Statuses") {
-                      setStatus(undefined);
-                      fetchVSRs(search, filteredZipCodes, filteredIncome, undefined);
-                    } else {
-                      setStatus(value);
-                      fetchVSRs(search, filteredZipCodes, filteredIncome, value);
-                    }
+                    setStatus(value === "All Statuses" ? undefined : value);
                   }}
+                  includeAllStatuses
                 />
               </div>
             </div>
@@ -311,7 +303,7 @@ export default function VSRTableView() {
                 iconAlt="Filter"
                 text="Filter"
                 hideTextOnMobile
-                onClick={() => setIsFilterModalOpen(true)}
+                onClick={(e) => setFilterModalAnchorElement(e.target as HTMLElement)}
               />
             )}
             <Button
@@ -328,37 +320,32 @@ export default function VSRTableView() {
             />
           </div>
         </div>
-        {/* {searchOnOwnRow ? <SearchKeyword onUpdate={fetchSearchedVSRs} /> : null} */}
+        {searchOnOwnRow ? renderSearchBar() : null}
 
-        <span className={styles.filterChips}>
-          {(filteredZipCodes && filteredZipCodes.length > 0) || filteredIncome ? (
+        {(filteredZipCodes && filteredZipCodes.length > 0) || filteredIncome ? (
+          <div className={styles.appliedFiltersContainer}>
             <p className={styles.appliedText}>Applied Filters: </p>
-          ) : null}
-          {filteredZipCodes?.map((zipCode) => (
-            <FilterChip
-              label={"Zip Code: " + zipCode}
-              key={zipCode}
-              onDelete={function (): void {
-                setFilteredZipCodes(filteredZipCodes?.filter((z) => z !== zipCode));
-                fetchVSRs(
-                  search,
-                  filteredZipCodes?.filter((z) => z !== zipCode),
-                  filteredIncome,
-                  status,
-                );
-              }}
-            />
-          ))}
-          {filteredIncome ? (
-            <FilterChip
-              label={filteredIncome}
-              onDelete={function (): void {
-                setFilteredIncome(undefined);
-                fetchVSRs(search, filteredZipCodes, undefined, status);
-              }}
-            />
-          ) : null}
-        </span>
+            <span className={styles.filterChips}>
+              {filteredZipCodes?.map((zipCode) => (
+                <FilterChip
+                  label={"Zip Code: " + zipCode}
+                  key={zipCode}
+                  onDelete={() => {
+                    setFilteredZipCodes(filteredZipCodes?.filter((z) => z !== zipCode));
+                  }}
+                />
+              ))}
+              {filteredIncome ? (
+                <FilterChip
+                  label={filteredIncome}
+                  onDelete={() => {
+                    setFilteredIncome(undefined);
+                  }}
+                />
+              ) : null}
+            </span>
+          </div>
+        ) : null}
 
         <div className={styles.table}>
           {loadingVsrs ? (
@@ -396,31 +383,19 @@ export default function VSRTableView() {
         vsrIds={selectedVsrIds}
       />
       <FilterModal
-        isOpen={isFilterModalOpen}
+        anchorElement={filterModalAnchorElement}
         onClose={() => {
-          setIsFilterModalOpen(false);
+          setFilterModalAnchorElement(null);
         }}
+        initialZipCodes={filteredZipCodes ?? []}
+        initialIncomeLevel={filteredIncome ?? ""}
         onInputEntered={(zipCodes: string[] | undefined, incomeLevel: string | undefined) => {
-          console.log(zipCodes);
-          if (zipCodes) {
-            for (let i = 0; i < zipCodes.length; i++) {
-              if (zipCodes[i].length != 5) {
-                setTableError(VSRTableError.ZIPCODE_INVALID);
-                return;
-              }
-            }
-          }
-          //add zipCodes to filteredZipCodes and zipcodes
-          const combinedZipCodes = [...(filteredZipCodes ?? []), ...(zipCodes ?? [])];
-
-          setFilteredZipCodes(combinedZipCodes);
+          setFilteredZipCodes(zipCodes);
           setFilteredIncome(incomeLevel);
-          fetchVSRs(search, zipCodes, incomeLevel, status);
         }}
         onResetFilters={() => {
           setFilteredZipCodes(undefined);
           setFilteredIncome(undefined);
-          fetchVSRs(search, undefined, undefined, status);
         }}
       />
     </div>

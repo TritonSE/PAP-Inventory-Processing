@@ -1,32 +1,28 @@
-.overlay {
-  position: "fixed";
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: "rgba(0, 0, 0, 0.7)";
-  display: "flex";
-  align-items: "center";
-  justify-content: "center";
+.root {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.2);
+  padding: 16px;
+  gap: 32px;
+  max-width: 410px;
+  margin-top: 12px;
 }
-.modal {
-  background-color: "#fff";
-  padding: "20px";
-  border-radius: "5px";
-  width: "300px";
-  box-shadow: "0 4px 6px rgba(0, 0, 0, 0.1)";
-}
+
 .closeButton {
   float: "right";
   border: "none";
   background: "none";
   cursor: "pointer";
 }
+
 .buttonContainer {
   display: flex;
   flex-direction: row;
-  gap: 32px;
+  gap: 16px;
 }
+
 .button {
   width: 100%;
   padding: 12px 24px;
@@ -40,9 +36,31 @@
   display: flex;
   flex-direction: row;
   gap: 16px;
-  margin: 0 0 16px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .disabled {
   background-color: grey !important;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .root {
+    max-width: calc(100vw - 96px);
+    margin-left: 48px;
+    margin-top: 8px;
+  }
+
+  .buttonContainer {
+    gap: 32px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .root {
+    max-width: calc(100vw - 48px);
+    margin-left: 24px;
+  }
 }

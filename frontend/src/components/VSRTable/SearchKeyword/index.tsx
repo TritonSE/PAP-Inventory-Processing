@@ -1,6 +1,7 @@
 import styles from "@/components/VSRTable/SearchKeyword/styles.module.css";
 import Image from "next/image";
-import React, { useState } from "react";
+import React from "react";
+import { debounce } from "@mui/material";
 
 /**
  * A component for the Search input above the VSR table.
@@ -11,14 +12,6 @@ interface SearchProps {
 }
 
 export const SearchKeyword = ({ onUpdate }: SearchProps) => {
-  const [searchInput, setSearchInput] = useState("");
-
-  const handleInputChange = (event: { target: { value: string } }) => {
-    const input = event.target.value;
-    setSearchInput(input);
-    onUpdate(input);
-  };
-
   return (
     <div className={styles.search}>
       {/* image */}
@@ -26,8 +19,7 @@ export const SearchKeyword = ({ onUpdate }: SearchProps) => {
       <input
         className={styles.searchInput}
         placeholder="Search Keyword..."
-        value={searchInput}
-        onChange={handleInputChange}
+        onChange={debounce((e) => onUpdate(e.target.value), 250)}
       />
     </div>
   );

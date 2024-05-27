@@ -1,7 +1,6 @@
 .filterChip {
   display: flex;
   height: 40px;
-  /* flex-direction: column; */
   justify-content: center;
   align-items: center;
   gap: 8px;
@@ -23,7 +22,30 @@
 }
 
 .deleteButton {
+  display: flex;
   cursor: pointer;
   border: none !important;
   background: transparent;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .filterChip {
+    height: 36px;
+  }
+
+  .filterText {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .filterChip {
+    height: 30px;
+  }
+
+  .filterText {
+    font-size: 12px;
+  }
 }

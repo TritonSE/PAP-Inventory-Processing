@@ -170,37 +170,26 @@ export async function getAllVSRs(
     "$12,500 and under": "0",
   };
 
-  try {
-    let url_string = ``;
-    url_string = `/api/vsr`;
-    if (search) {
-      url_string += `?search=${search}`;
-    }
-    if (zipCodes) {
-      if (search) {
-        url_string += `&zipCode=${zipCodes}`;
-      } else {
-        url_string += `?zipCode=${zipCodes}`;
-      }
-    }
-    if (income) {
-      if (search || zipCodes) {
-        url_string += `&incomeLevel=${incomeMap[income]}`;
-      } else {
-        url_string += `?incomeLevel=${incomeMap[income]}`;
-      }
-    }
-    if (status) {
-      if (search || zipCodes || income) {
-        url_string += `&status=${status}`;
-      } else {
-        url_string += `?status=${status}`;
-      }
-    }
+  const searchParams = new URLSearchParams();
+  if (search) {
+    searchParams.set("search", search);
+  }
+  if (zipCodes) {
+    searchParams.set("zipCode", zipCodes.join(", "));
+  }
+  if (income) {
+    searchParams.set("incomeLevel", incomeMap[income]);
+  }
+  if (status) {
+    searchParams.set("status", status);
+  }
 
-    const response = await get(url_string, createAuthHeader(firebaseToken));
+  const searchParamsString = searchParams.toString();
+  const urlString = `/api/vsr${searchParamsString ? "?" + searchParamsString : ""}`;
+
+  try {
+    const response = await get(urlString, createAuthHeader(firebaseToken));
     const json = (await response.json()) as VSRListJson;
-    console.log(url_string);
     return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
     return handleAPIError(error);

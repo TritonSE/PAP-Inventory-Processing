@@ -19,7 +19,6 @@ const requireSignedIn = async (req: PAPRequest, res: Response, next: NextFunctio
   const authHeader = req.headers.authorization;
   // Token shoud be "Bearer: <token>"
   const token = authHeader?.split("Bearer ")[1];
-
   if (!token) {
     return res
       .status(AuthError.TOKEN_NOT_IN_HEADER.status)
@@ -72,7 +71,6 @@ const requireAdmin = async (req: PAPRequest, res: Response, next: NextFunction) 
   if (!user || user.role !== UserRole.ADMIN) {
     return res.status(AuthError.NOT_ADMIN.status).send(AuthError.NOT_ADMIN.displayMessage(true));
   }
-
   return next();
 };
 
