@@ -1,6 +1,5 @@
 "use client";
 
-import styles from "@/app/staff/vsr/page.module.css";
 import VSRTable from "@/components/VSRTable/VSRTable";
 import SearchKeyword from "@/components/VSRTable/SearchKeyword";
 import PageTitle from "@/components/VSRTable/PageTitle";
@@ -17,7 +16,8 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import styles from "@/app/staff/vsr/page.module.css";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -271,7 +271,9 @@ export default function VSRTableView() {
               iconPath="/upload.svg"
               iconAlt="Export"
               loading={loadingExport}
-              text="Export"
+              text={
+                selectedVsrIds.length === 0 ? "Export All" : `Export (${selectedVsrIds.length})`
+              }
               hideTextOnMobile
               onClick={exportVSRs}
             />
@@ -292,15 +294,11 @@ export default function VSRTableView() {
       </div>
 
       {/* Error modals, success model, and delete modal */}
-      <SuccessNotification
+      <NotificationBanner
+        variant="success"
         isOpen={exportSuccess}
         mainText="VSRs Exported Successfully"
-        actions={[
-          {
-            text: "Dismiss",
-            onClick: () => setExportSuccess(false),
-          },
-        ]}
+        onDismissClicked={() => setExportSuccess(false)}
       />
       {renderErrorModal()}
       {renderExportErrorModal()}

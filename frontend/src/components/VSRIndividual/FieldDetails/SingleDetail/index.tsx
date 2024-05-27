@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
-import styles from "@/components/VSRIndividual/FieldDetails/SingleDetail/styles.module.css";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
+import styles from "@/components/VSRIndividual/FieldDetails/SingleDetail/styles.module.css";
 
 export interface SingleDetailProps {
   title: string;

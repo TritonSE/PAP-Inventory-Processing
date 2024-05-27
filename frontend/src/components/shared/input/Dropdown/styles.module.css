@@ -20,3 +20,17 @@
   color: var(--Dark-Gray, #484848);
   opacity: 0.5;
 }
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .placeholder {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .placeholder {
+    font-size: 12px;
+  }
+}

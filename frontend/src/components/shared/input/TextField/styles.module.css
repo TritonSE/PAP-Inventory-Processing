@@ -8,29 +8,3 @@
   font-weight: 300;
   line-height: normal;
 }
-
-.input {
-  height: 22px;
-  padding: 6px 12px;
-}
-
-.input::placeholder {
-  font-size: 16px;
-  font-style: italic;
-  font-weight: 300;
-  color: var(--Dark-Gray, #484848);
-}
-
-/* tablet version */
-@media screen and (max-width: 850px) {
-  .input {
-    height: 19px;
-  }
-}
-
-/* mobile version */
-@media screen and (max-width: 550px) {
-  .input {
-    height: 16px;
-  }
-}

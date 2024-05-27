@@ -4,19 +4,18 @@
 import emailValidator from "email-validator";
 import React, { useState } from "react";
 import Image from "next/image";
-import styles from "@/app/login/page.module.css";
 import { signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { useRedirectToHomeIfSignedIn } from "@/hooks/useRedirection";
 import { getWhoAmI } from "@/api/Users";
-import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { FirebaseError } from "firebase/app";
 import { Button } from "@/components/shared/Button";
 import TextField from "@/components/shared/input/TextField";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IconButton } from "@mui/material";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import styles from "@/app/login/page.module.css";
 
 enum LoginPageError {
   NO_INTERNET,
@@ -58,8 +57,7 @@ const Login = () => {
   } = useForm<ILoginFormInput>();
 
   const [passwordReset, setPasswordReset] = useState(false);
-  const [updateStatusSuccessNotificationOpen, setUpdateStatusSuccessNotificationOpen] =
-    useState(false);
+  const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
 
   const toggleReset = () => {
     setPasswordReset(!passwordReset);
@@ -131,12 +129,12 @@ const Login = () => {
    */
   const sendResetLink: SubmitHandler<ILoginFormInput> = async (data) => {
     setLoading(true);
-    setUpdateStatusSuccessNotificationOpen(false);
+    setSuccessNotificationOpen(false);
 
     try {
       await sendPasswordResetEmail(auth, data.email);
 
-      setUpdateStatusSuccessNotificationOpen(true);
+      setSuccessNotificationOpen(true);
       setSendLinkText("Resend Link");
       setResetText("Didn't receive an email?\nTry resending with the button below!");
     } catch (error) {
@@ -160,56 +158,56 @@ const Login = () => {
     switch (pageError) {
       case LoginPageError.NO_INTERNET:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="No Internet Connection"
             subText="Unable to login due to no internet connection. Please check your connection and try again."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onDismissClicked={() => setPageError(LoginPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case LoginPageError.INVALID_CREDENTIALS:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Invalid Credentials"
             subText="Invalid email and/or password, please try again."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onDismissClicked={() => setPageError(LoginPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case LoginPageError.TOO_MANY_REQUESTS:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Too Many Requests"
             subText="You have made too many login attempts. Please try again later."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onDismissClicked={() => setPageError(LoginPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case LoginPageError.INTERNAL:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Internal Error"
             subText="Something went wrong with logging in. Our team is working to fix it. Please try again later."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onDismissClicked={() => setPageError(LoginPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
       case LoginPageError.CANNOT_SEND_PASSWORD_RESET:
         return (
-          <ErrorNotification
+          <NotificationBanner
+            variant="error"
             isOpen
             mainText="Cannot reset password"
             subText="Could not send password reset email, please try again."
-            actionText="Dismiss"
-            onActionClicked={() => setPageError(LoginPageError.NONE)}
+            onDismissClicked={() => setPageError(LoginPageError.NONE)}
             style={errorNotificationStyles}
           />
         );
@@ -392,15 +390,11 @@ const Login = () => {
           </form>
         </div>
         {renderErrorNotification()}
-        <SuccessNotification
-          isOpen={updateStatusSuccessNotificationOpen}
-          mainText={"Password Reset Link Sent"}
-          actions={[
-            {
-              text: "Dismiss",
-              onClick: () => setUpdateStatusSuccessNotificationOpen(false),
-            },
-          ]}
+        <NotificationBanner
+          variant="success"
+          isOpen={successNotificationOpen}
+          mainText="Password Reset Link Sent"
+          onDismissClicked={() => setSuccessNotificationOpen(false)}
         />
       </div>
     );

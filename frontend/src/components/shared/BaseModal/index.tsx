@@ -1,7 +1,7 @@
-import styles from "@/components/shared/BaseModal/styles.module.css";
 import { Modal } from "@mui/material";
 import Image from "next/image";
 import { ReactElement } from "react";
+import styles from "@/components/shared/BaseModal/styles.module.css";
 
 interface BaseModalProps {
   isOpen: boolean;

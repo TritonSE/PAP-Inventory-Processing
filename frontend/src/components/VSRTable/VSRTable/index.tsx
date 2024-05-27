@@ -11,11 +11,25 @@ import { STATUS_OPTIONS } from "@/components/shared/StatusDropdown";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { VSR } from "@/api/VSRs";
 import { StatusChip } from "@/components/shared/StatusChip";
-import { useMediaQuery } from "@mui/material";
+import { Checkbox, CheckboxProps } from "@mui/material";
 
 const formatDateReceived = (dateReceived: Date) => {
   // Return the empty string on a falsy date received, instead of defaulting to today's date
   return dateReceived ? moment(dateReceived).format("MMMM D, YYYY") : "";
+};
+
+/**
+ * Custom checkbox component to render in the table, used to customize checkbox size
+ */
+const CustomCheckbox = (props: CheckboxProps) => {
+  const { isMobile } = useScreenSizes();
+
+  return (
+    <Checkbox
+      {...props}
+      style={{ ...props.style, transform: `scale(${isMobile ? "0.625" : "1"})` }}
+    />
+  );
 };
 
 interface VSRTableProps {
@@ -32,19 +46,44 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
   const router = useRouter();
 
   // Remove gap between columns on small screens so it will fit better
-  const columnsGap = useMediaQuery("@media screen and (max-width: 450px)") ? 0 : 32;
+  const columnsGap = isMobile ? 12 : isTablet ? 16 : 32;
+
+  const createFakeColumn = (fieldIndex: number) => ({
+    field: `phantom${fieldIndex}`,
+    headerName: "",
+    type: "string",
+    headerClassName: "header fakeHeader",
+    cellClassName: "fakeCell",
+    disableColumnMenu: true,
+    hideSortIcons: true,
+    width: columnsGap,
+    minWidth: columnsGap,
+    maxWidth: columnsGap,
+  });
 
   // Define the columns to show in the table (some columns are hidden on smaller screens)
   const columns: GridColDef[] = React.useMemo(() => {
-    const result = [
+    const firstFakeWidth = isMobile ? 8 : 20;
+    const checkboxWidth = isMobile ? 20 : isTablet ? 32 : 72;
+
+    const result: GridColDef[] = [
+      {
+        ...createFakeColumn(0),
+        width: firstFakeWidth,
+        minWidth: firstFakeWidth,
+        maxWidth: firstFakeWidth,
+      },
       {
         ...GRID_CHECKBOX_SELECTION_COL_DEF,
-        width: 72,
-        headerClassName: "header",
+        width: checkboxWidth,
+        minWidth: checkboxWidth,
+        maxWidth: checkboxWidth,
+        headerClassName: "header fakeHeader",
       },
     ];
+    result.push(createFakeColumn(1));
 
-    if (!isMobile) {
+    if (!isTablet) {
       result.push({
         field: "militaryID",
         headerName: "Military ID (Last 4)",
@@ -55,6 +94,7 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
         hideSortIcons: true,
         width: 100,
       });
+      result.push(createFakeColumn(2));
     }
 
     result.push({
@@ -66,6 +106,7 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
       hideSortIcons: true,
       width: 100,
     });
+    result.push(createFakeColumn(3));
 
     if (!isTablet) {
       result.push({
@@ -80,6 +121,7 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
         valueFormatter: (params) => formatDateReceived(params?.value),
         width: 100,
       });
+      result.push(createFakeColumn(4));
     }
 
     result.push({
@@ -101,21 +143,6 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
       width: 100,
     });
 
-    /**
-     * Hacky solution to make the table fit: add a fake column with a width of
-     * columnsGap for each gap
-     */
-    result.push({
-      field: "phantom",
-      headerName: "",
-      type: "string",
-      flex: 1,
-      headerClassName: "header",
-      disableColumnMenu: true,
-      hideSortIcons: true,
-      width: columnsGap * (result.length - 1),
-    });
-
     return result;
   }, [isMobile, isTablet]);
 
@@ -123,18 +150,24 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
     <Box
       style={{ width: "100%" }}
       sx={{
+        ".fakeHeader": {
+          padding: "0px !important",
+        },
+        ".fakeCell": {
+          padding: "0px !important",
+        },
         ".MuiDataGrid-columnHeadersInner": {
           backgroundColor: "var(--color-tse-accent-blue-1)",
-          "& div": {
-            // Spacing between the cells in the header
-            gap: `${columnsGap}px`,
-          },
+        },
+        ".MuiDataGrid-columnHeaderTitleContainerContent": {
+          justifyContent: "center",
         },
         "& .header": {
           color: "rgba(247, 247, 247, 1)",
           // Customize color of checkboxes in header
           ".MuiCheckbox-root": {
             color: "white !important",
+            padding: isMobile ? "2.5px" : "4px",
           },
           // Customize styles of text in header
           ".MuiDataGrid-columnHeaderTitle": {
@@ -158,10 +191,6 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
           border: "none",
         },
         border: 0,
-        ".MuiDataGrid-row": {
-          // Spacing between the cells in the body
-          gap: `${columnsGap}px`,
-        },
         "& .odd": {
           backgroundColor: "var(--color-tse-neutral-gray-0)",
           "&:hover": {
@@ -199,10 +228,12 @@ export default function VSRTable({ vsrs, selectedVsrIds, onChangeSelectedVsrIds 
         // Customize color of checkboxes
         "& .MuiCheckbox-root": {
           color: "#0C2B35 !important",
+          padding: isMobile ? "2.5px" : "4px",
         },
       }}
     >
       <DataGrid
+        slots={{ baseCheckbox: CustomCheckbox }}
         rows={
           // Each row needs a unique "id" property; we can use the MongoDB "_id" for this
           vsrs?.map((vsr) => ({

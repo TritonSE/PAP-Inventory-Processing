@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "@/components/shared/StatusDropdown/styles.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Image from "next/image";
 import { StatusChip } from "@/components/shared/StatusChip";
+import styles from "@/components/shared/StatusDropdown/styles.module.css";
 
 export interface StatusOption {
   value: string;

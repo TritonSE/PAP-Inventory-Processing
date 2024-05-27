@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styles from "@/components/VSRIndividual/PageSections/PersonalInformation/styles.module.css";
 import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
@@ -18,6 +17,7 @@ import {
 import { MultipleChoiceInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceInputDetail";
 import { MultipleChoiceWithOtherInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceWithOtherInputDetail";
 import { ChildrenInput } from "@/components/shared/input/ChildrenInput";
+import styles from "@/components/VSRIndividual/PageSections/PersonalInformation/styles.module.css";
 
 export interface PersonalInformationProps {
   vsr: VSR;

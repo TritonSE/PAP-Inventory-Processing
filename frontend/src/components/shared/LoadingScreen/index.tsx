@@ -1,6 +1,6 @@
-import styles from "@/components/shared/LoadingScreen/styles.module.css";
 import { CircularProgress } from "@mui/material";
 import { CSSProperties } from "react";
+import styles from "@/components/shared/LoadingScreen/styles.module.css";
 
 interface LoadingScreenProps {
   style?: CSSProperties;

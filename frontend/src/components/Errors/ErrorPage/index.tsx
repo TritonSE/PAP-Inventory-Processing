@@ -1,5 +1,5 @@
-import styles from "@/components/Errors/ErrorPage/styles.module.css";
 import { ReactNode } from "react";
+import styles from "@/components/Errors/ErrorPage/styles.module.css";
 
 interface ErrorPageProps {
   imageComponent: ReactNode;

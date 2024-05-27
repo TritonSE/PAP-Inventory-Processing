@@ -1,8 +1,8 @@
-import styles from "@/components/VSRForm/VSRErrorModal/styles.module.css";
 import { Modal } from "@mui/material";
 import { ReactNode } from "react";
 import Image from "next/image";
 import { Button } from "@/components/shared/Button";
+import styles from "@/components/VSRForm/VSRErrorModal/styles.module.css";
 
 export interface VSRErrorModalProps {
   isOpen: boolean;
