@@ -51,8 +51,8 @@ export default function VSRTableView() {
   const [selectedVsrIds, setSelectedVsrIds] = useState<string[]>([]);
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
-  const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
-  const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
+  const [deleteSuccessNotificationOpen, setDeleteSuccessNotificationOpen] = useState(false);
+  const [deleteErrorNotificationOpen, setDeleteErrorNotificationOpen] = useState(false);
 
   const [filterModalAnchorElement, setFilterModalAnchorElement] = useState<HTMLElement | null>(
     null,
@@ -102,8 +102,8 @@ export default function VSRTableView() {
       return;
     }
 
-    setSuccessNotificationOpen(false);
-    setErrorNotificationOpen(false);
+    setDeleteSuccessNotificationOpen(false);
+    setDeleteErrorNotificationOpen(false);
     setLoadingDelete(true);
 
     try {
@@ -124,12 +124,12 @@ export default function VSRTableView() {
           }),
         ),
       );
-      setSuccessNotificationOpen(true);
+      setDeleteSuccessNotificationOpen(true);
       setSelectedVsrIds([]);
       fetchVSRs();
     } catch (error) {
       console.error(`Error deleting VSR(s): ${error}`);
-      setErrorNotificationOpen(true);
+      setDeleteErrorNotificationOpen(true);
     } finally {
       setLoadingDelete(false);
       setDeleteVsrModalOpen(false);
@@ -414,6 +414,20 @@ export default function VSRTableView() {
         confirmText="Delete VSR(s)"
         onConfirm={onDelete}
         buttonLoading={loadingDelete}
+      />
+
+      <NotificationBanner
+        variant="success"
+        isOpen={deleteSuccessNotificationOpen}
+        mainText="VSR(s) Deleted Successfully"
+        onDismissClicked={() => setDeleteSuccessNotificationOpen(false)}
+      />
+      <NotificationBanner
+        variant="error"
+        isOpen={deleteErrorNotificationOpen}
+        mainText="Unable to Delete VSR(s)"
+        subText="There was an error deleting the VSR(s). Please try again later."
+        onDismissClicked={() => setDeleteErrorNotificationOpen(false)}
       />
       <FilterModal
         anchorElement={filterModalAnchorElement}

@@ -2,7 +2,6 @@ import styles from "@/components/FurnitureRequest/EditTemplate/styles.module.css
 import { useContext, useState } from "react";
 import {
   FurnitureItem,
-  getFurnitureItems,
   addFurnitureItem,
   updateFurnitureItem,
   deleteFurnitureItem,
@@ -41,7 +40,7 @@ export const EditTemplate = ({
   const [isAddingNewItem, setIsAddingNewItem] = useState(false);
   const [editingItemId, setEditingItemId] = useState<string | null>(null);
   const [itemName, setItemName] = useState("");
-  const { firebaseUser, papUser } = useContext(UserContext);
+  const { firebaseUser } = useContext(UserContext);
   const [allowMultiple, setAllowMultiple] = useState(false);
   const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
 
@@ -59,10 +58,6 @@ export const EditTemplate = ({
     setEditingItemId(itemId);
     setItemName(furnitureItem?.name ?? "");
     setAllowMultiple(furnitureItem?.allowMultiple ?? false);
-  };
-
-  const handleStopEditItem = () => {
-    setEditingItemId(null);
   };
 
   const onDelete = async () => {
@@ -173,7 +168,7 @@ export const EditTemplate = ({
                   control={
                     <Checkbox
                       checked={allowMultiple}
-                      onChange={(e, checked) => setAllowMultiple(checked)}
+                      onChange={(_, checked) => setAllowMultiple(checked)}
                     />
                   }
                 />
@@ -187,7 +182,7 @@ export const EditTemplate = ({
 
               <button
                 className={styles.chip}
-                onClick={(e) => setConfirmDeleteModal(true)}
+                onClick={() => setConfirmDeleteModal(true)}
                 disabled={isDisabled}
               >
                 Delete Tag
@@ -208,13 +203,6 @@ export const EditTemplate = ({
           </>
         ) : (
           <>
-            {/* <button
-              className={styles.chip}
-              onClick={isEditing ? onFinishEditing : onBeginEditing}
-              disabled={isDisabled}
-            >
-              Edit Section
-            </button> */}
             <Button
               className={styles.editButton}
               variant="primary"
