@@ -1,5 +1,5 @@
 .main {
-  padding: 64px;
+  padding: 120px;
   padding-top: 128px;
   background-color: #eceff3;
   display: flex;
@@ -13,6 +13,10 @@
   font-style: normal;
   font-weight: 700;
   line-height: normal;
+}
+
+.mainReview {
+  padding-top: 105px;
 }
 
 .title {
@@ -32,6 +36,11 @@
 .emailLink {
   font-style: italic;
   text-decoration-line: underline;
+}
+
+.italicText {
+  font-style: italic;
+  color: #818181;
 }
 
 .fieldsMarked {
@@ -54,6 +63,16 @@
   height: 100%;
 }
 
+.section {
+  display: flex;
+  background-color: white;
+  border-radius: 20px;
+  padding: 64px;
+  gap: 10px;
+  align-items: flex-start;
+  height: 100%;
+}
+
 .form {
   display: flex;
   flex-direction: column;
@@ -68,6 +87,12 @@
   flex-direction: column;
   gap: 32px;
   align-self: flex-start;
+}
+
+.sectionHeaderRow {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
 }
 
 .sectionTitle {
@@ -86,6 +111,10 @@
   flex-direction: row;
   gap: 64px;
   align-items: start;
+}
+
+.formRow > .rowDetail {
+  flex: 1;
 }
 
 .desktopRowTabletColumn {
@@ -142,7 +171,7 @@
   flex: 1 0 0;
   font-size: 16px;
   color: var(--Light-Gray, #818181);
-  font-family: "OpenSans";
+  font-family: "Open Sans";
   font-style: normal;
   font-weight: 400;
   line-height: normal;
@@ -197,6 +226,11 @@
   background-color: grey !important;
 }
 
+.editSectionButton {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 /* tablet version */
 @media screen and (max-width: 850px) {
   .main {
@@ -204,8 +238,16 @@
     padding-top: 64px;
   }
 
+  .mainReview {
+    padding-top: 64px;
+  }
+
   .title {
     font-size: 36px;
+  }
+
+  .furnitureItemsSection {
+    margin-bottom: 32px;
   }
 
   .description {
@@ -220,6 +262,10 @@
     padding: 48px 32px;
   }
 
+  .section {
+    padding: 48px 32px;
+  }
+
   .sectionTitle {
     font-size: 28px;
   }
@@ -230,6 +276,7 @@
 
   .sectionHeader {
     font-size: 14px;
+    font-family: "Open Sans";
   }
 
   .desktopRowTabletColumn {
@@ -272,12 +319,20 @@
     padding: 32px 16px;
   }
 
+  .section {
+    padding: 32px 16px;
+  }
+
   .sectionTitle {
     font-size: 20px;
   }
 
   .formRow {
     flex-direction: column;
+  }
+
+  .alwaysRow {
+    flex-direction: row;
   }
 
   .sectionHeader {
@@ -288,6 +343,10 @@
   .bottomRow {
     gap: 32px;
     flex-direction: column;
+  }
+
+  .bottomButton {
+    font-size: 18px;
   }
 
   .furnitureItemsSectionLabel {

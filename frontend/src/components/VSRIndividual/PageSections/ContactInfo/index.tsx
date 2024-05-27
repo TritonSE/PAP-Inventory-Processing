@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styles from "@/components/VSRIndividual/PageSections/ContactInfo/styles.module.css";
 import { SingleDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
@@ -8,6 +7,7 @@ import { UseFormReturn } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { SelectInputDetail } from "@/components/VSRIndividual/FieldDetails/SelectInputDetail";
 import { stateOptions } from "@/constants/fieldOptions";
+import styles from "@/components/VSRIndividual/PageSections/ContactInfo/styles.module.css";
 
 export interface ContactInfoProps {
   vsr: VSR;

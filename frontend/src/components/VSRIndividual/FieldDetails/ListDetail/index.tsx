@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "@/components/VSRIndividual/FieldDetails/ListDetail/styles.module.css";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
+import styles from "@/components/VSRIndividual/FieldDetails/ListDetail/styles.module.css";
 
 export interface ListDetailProps {
   title: string;

@@ -58,4 +58,6 @@ const vsrSchema = new Schema({
 export type FurnitureInput = InferSchemaType<typeof furntitureInputSchema>;
 export type VSR = InferSchemaType<typeof vsrSchema>;
 
+vsrSchema.index({ name: "text" });
+
 export default model<VSR>("VSR", vsrSchema);

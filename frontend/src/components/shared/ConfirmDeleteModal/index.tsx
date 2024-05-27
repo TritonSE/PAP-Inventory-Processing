@@ -1,9 +1,5 @@
-import { deleteVSR } from "@/api/VSRs";
 import styles from "@/components/shared/ConfirmDeleteModal/styles.module.css";
-import { UserContext } from "@/contexts/userContext";
-import { ReactElement, ReactNode, useContext, useState } from "react";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
-import { ErrorNotification } from "@/components/Errors/ErrorNotification";
+import { ReactElement } from "react";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 

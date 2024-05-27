@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import styles from "@/components/shared/StatusDropdown/styles.module.css";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import Image from "next/image";
 import { StatusChip } from "@/components/shared/StatusChip";
+import styles from "@/components/shared/StatusDropdown/styles.module.css";
 
 export interface StatusOption {
   value: string;
@@ -42,15 +42,24 @@ export const STATUS_OPTIONS: StatusOption[] = [
 ];
 
 /**
+ * A special status-like option for all statuses
+ */
+export const ALL_STATUSES_OPTION: StatusOption = {
+  value: "All Statuses",
+  color: "transparent",
+};
+
+/**
  * An input component that displays a dropdown menu with all available status
  * options and enables the user to select a status.
  */
 export interface StatusDropdownProps {
   value: string;
   onChanged?: (value: string) => void;
+  includeAllStatuses: boolean;
 }
 
-export function StatusDropdown({ value, onChanged }: StatusDropdownProps) {
+export function StatusDropdown({ value, onChanged, includeAllStatuses }: StatusDropdownProps) {
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -132,11 +141,13 @@ export function StatusDropdown({ value, onChanged }: StatusDropdownProps) {
           }}
           IconComponent={DropdownIcon}
         >
-          {...STATUS_OPTIONS.map((status) => (
-            <MenuItem key={status.value} value={status.value}>
-              <StatusChip status={status} />
-            </MenuItem>
-          ))}
+          {...(includeAllStatuses ? [ALL_STATUSES_OPTION] : [])
+            .concat(STATUS_OPTIONS)
+            .map((status) => (
+              <MenuItem key={status.value} value={status.value}>
+                <StatusChip status={status} />
+              </MenuItem>
+            ))}
         </Select>
       </FormControl>
     </div>

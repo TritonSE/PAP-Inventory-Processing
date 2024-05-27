@@ -8,7 +8,6 @@ import {
   AdditionalInfo,
   RequestedFurnishings,
 } from "@/components/VSRIndividual";
-import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 import Image from "next/image";
 import {
   type VSR,
@@ -17,13 +16,13 @@ import {
   UpdateVSRRequest,
   updateVSR,
   deleteVSR,
+  exportVSRPDF,
 } from "@/api/VSRs";
 import { useParams, useRouter } from "next/navigation";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import HeaderBar from "@/components/shared/HeaderBar";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
-import { ErrorNotification } from "@/components/Errors/ErrorNotification";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import { UserContext } from "@/contexts/userContext";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
@@ -32,6 +31,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
+import { useMediaQuery } from "@mui/material";
+import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -72,12 +73,17 @@ export const VSRIndividualPage = () => {
   const [editErrorNotificationOpen, setEditErrorNotificationOpen] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
 
+  const [downloadSuccessNotificationOpen, setDownloadSuccessNotificationOpen] = useState(false);
+  const [downloadErrorNotificationOpen, setDownloadErrorNotificationOpen] = useState(false);
+  const [loadingDownload, setLoadingDownload] = useState(false);
+
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
   const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
+  const useColumn = useMediaQuery("@media screen and (max-width: 1000px)");
 
   /**
    * Callback triggered when form edits are submitted
@@ -251,6 +257,26 @@ export const VSRIndividualPage = () => {
     setLoadingUpdateStatus(false);
   };
 
+  const onDownloadClicked = async () => {
+    if (!firebaseUser) {
+      return;
+    }
+
+    setDownloadSuccessNotificationOpen(false);
+    setDownloadErrorNotificationOpen(false);
+    setLoadingDownload(true);
+    const firebaseToken = await firebaseUser.getIdToken();
+    const result = await exportVSRPDF(firebaseToken, vsr._id);
+
+    if (result.success) {
+      setDownloadSuccessNotificationOpen(true);
+    } else {
+      console.error(`Error downloading VSR PDF: ${result.error}`);
+      setEditErrorNotificationOpen(true);
+    }
+    setLoadingDownload(false);
+  };
+
   /**
    * Conditionally renders the "Approve" button on the page, if the VSR's status is "Received"
    */
@@ -325,12 +351,11 @@ export const VSRIndividualPage = () => {
               variant="primary"
               outlined={false}
               iconPath="/ic_upload.svg"
-              iconAlt="Export"
-              text="Export"
+              iconAlt="Download"
+              loading={loadingDownload}
+              text="Download"
               hideTextOnMobile
-              onClick={() => {
-                // TODO: implement VSR export feature
-              }}
+              onClick={onDownloadClicked}
             />
           </>
         )}
@@ -569,13 +594,6 @@ export const VSRIndividualPage = () => {
                 onUpdateVSRStatus={onUpdateVSRStatus}
               ></CaseDetails>
               <div className={styles.otherDetails}>
-                {isTablet ? renderApproveButton() : null}
-                <div className={styles.personalInfo}>
-                  <ContactInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                  <PersonalInformation vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                  <MilitaryBackground vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                  <AdditionalInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
-                </div>
                 <div className={styles.rightColumn}>
                   {loadingFurnitureItems ? (
                     <LoadingScreen />
@@ -587,10 +605,17 @@ export const VSRIndividualPage = () => {
                       formProps={formProps}
                     />
                   )}
-                  {isTablet ? null : (
+                  {useColumn ? null : (
                     <div className={styles.finalActions}>{renderApproveButton()}</div>
                   )}
                 </div>
+                <div className={styles.personalInfo}>
+                  <ContactInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <PersonalInformation vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <MilitaryBackground vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                  <AdditionalInfo vsr={vsr} isEditing={isEditing} formProps={formProps} />
+                </div>
+                {useColumn ? renderApproveButton() : null}
               </div>
             </div>
             <div className={styles.footer}></div>
@@ -600,32 +625,24 @@ export const VSRIndividualPage = () => {
 
       {/* Success, error, and delete modals/notifications */}
       {renderErrorModal()}
-      <SuccessNotification
+      <NotificationBanner
+        variant={previousVSRStatus === null ? "undone" : "success"}
         isOpen={updateStatusSuccessNotificationOpen}
         mainText={
-          previousVSRStatus === null ? "Undo Successful" : "VSR Status Successfully Updated"
+          previousVSRStatus === null
+            ? "Changes Have Been Undone"
+            : "VSR Status Successfully Updated"
         }
-        actions={[
-          ...(previousVSRStatus === null
-            ? []
-            : [
-                {
-                  text: "Undo",
-                  onClick: onUndoVSRStatusUpdate,
-                },
-              ]),
-          {
-            text: "Dismiss",
-            onClick: () => setUpdateStatusSuccessNotificationOpen(false),
-          },
-        ]}
+        showUndo={previousVSRStatus !== null}
+        onDismissClicked={() => setUpdateStatusSuccessNotificationOpen(false)}
+        onUndoClicked={onUndoVSRStatusUpdate}
       />
-      <ErrorNotification
+      <NotificationBanner
+        variant="error"
         isOpen={updateStatusErrorNotificationOpen}
         mainText="Unable to Update VSR Status"
         subText="An error occurred, please check your internet connection or try again later"
-        actionText="Dismiss"
-        onActionClicked={() => setUpdateStatusErrorNotificationOpen(false)}
+        onDismissClicked={() => setUpdateStatusErrorNotificationOpen(false)}
       />
       <ConfirmDeleteModal
         isOpen={deleteVsrModalOpen}
@@ -707,35 +724,45 @@ export const VSRIndividualPage = () => {
           </div>
         }
       />
-      <SuccessNotification
+      <NotificationBanner
+        variant="success"
         isOpen={editSuccessNotificationOpen}
-        mainText={"Changes Saved Successfully"}
-        actions={[
-          {
-            text: "Dismiss",
-            onClick: () => setEditSuccessNotificationOpen(false),
-          },
-        ]}
+        mainText="Changes Saved Successfully"
+        onDismissClicked={() => setEditSuccessNotificationOpen(false)}
       />
-      <ErrorNotification
+      <NotificationBanner
+        variant="error"
         isOpen={editErrorNotificationOpen}
         mainText="Unable to Save Changes"
         subText="An error occurred, please check your internet connection or try again later"
-        actionText="Dismiss"
-        onActionClicked={() => setEditErrorNotificationOpen(false)}
+        onDismissClicked={() => setEditErrorNotificationOpen(false)}
       />
 
-      <SuccessNotification
+      <NotificationBanner
+        variant="success"
+        isOpen={downloadSuccessNotificationOpen}
+        mainText="Downloaded Successfully"
+        onDismissClicked={() => setDownloadSuccessNotificationOpen(false)}
+      />
+      <NotificationBanner
+        variant="error"
+        isOpen={downloadErrorNotificationOpen}
+        mainText="Unable to Download PDF"
+        subText="An error occurred, please check your internet connection or try again later"
+        onDismissClicked={() => setDownloadErrorNotificationOpen(false)}
+      />
+      <NotificationBanner
+        variant="success"
         isOpen={successNotificationOpen}
         mainText="VSR(s) Deleted Successfully"
-        actions={[{ text: "Dismiss", onClick: () => setSuccessNotificationOpen(false) }]}
+        onDismissClicked={() => setSuccessNotificationOpen(false)}
       />
-      <ErrorNotification
+      <NotificationBanner
+        variant="error"
         isOpen={errorNotificationOpen}
         mainText="Unable to Delete VSR(s)"
         subText="There was an error deleting the VSR(s). Please try again later."
-        actionText="Dismiss"
-        onActionClicked={() => setErrorNotificationOpen(false)}
+        onDismissClicked={() => setErrorNotificationOpen(false)}
       />
     </>
   );

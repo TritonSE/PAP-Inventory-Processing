@@ -1,4 +1,3 @@
-import styles from "@/components/VSRIndividual/PageSections/RequestedFurnishings/styles.module.css";
 import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
@@ -9,6 +8,7 @@ import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { TextInputDetail } from "@/components/VSRIndividual/FieldDetails/TextInputDetail";
 import { FurnitureItemSelection } from "@/components/VSRForm/FurnitureItemSelection";
 import { FieldDetail } from "@/components/VSRIndividual/FieldDetails/FieldDetail";
+import styles from "@/components/VSRIndividual/PageSections/RequestedFurnishings/styles.module.css";
 
 export interface RequestedFurnishingsProps {
   vsr: VSR;

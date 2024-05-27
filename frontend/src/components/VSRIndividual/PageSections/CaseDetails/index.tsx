@@ -1,4 +1,3 @@
-import styles from "@/components/VSRIndividual/PageSections/CaseDetails/styles.module.css";
 import { SingleDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import moment from "moment";
@@ -7,6 +6,7 @@ import { STATUS_OPTIONS, StatusDropdown } from "@/components/shared/StatusDropdo
 import { StatusChip } from "@/components/shared/StatusChip";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { CircularProgress } from "@mui/material";
+import styles from "@/components/VSRIndividual/PageSections/CaseDetails/styles.module.css";
 
 export interface CaseDetailsProp {
   vsr: VSR;
@@ -55,6 +55,7 @@ export const CaseDetails = ({
       <StatusDropdown
         onChanged={onUpdateVSRStatus}
         value={vsr.status != undefined ? vsr.status : "Received"}
+        includeAllStatuses={false}
       />
     );
   };

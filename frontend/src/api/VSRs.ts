@@ -156,9 +156,39 @@ export async function createVSR(vsr: CreateVSRRequest): Promise<APIResult<VSR>> 
   }
 }
 
-export async function getAllVSRs(firebaseToken: string): Promise<APIResult<VSR[]>> {
+const incomeMap: { [key: string]: string } = {
+  "$50,001 and over": "50000",
+  "$25,001 - $50,000": "25000",
+  "$12,501 - $25,000": "12500",
+  "$12,500 and under": "0",
+};
+
+export async function getAllVSRs(
+  firebaseToken: string,
+  search?: string,
+  zipCodes?: string[],
+  income?: string,
+  status?: string,
+): Promise<APIResult<VSR[]>> {
+  const searchParams = new URLSearchParams();
+  if (search) {
+    searchParams.set("search", search);
+  }
+  if (zipCodes) {
+    searchParams.set("zipCode", zipCodes.join(", "));
+  }
+  if (income) {
+    searchParams.set("incomeLevel", incomeMap[income]);
+  }
+  if (status) {
+    searchParams.set("status", status);
+  }
+
+  const searchParamsString = searchParams.toString();
+  const urlString = `/api/vsr${searchParamsString ? "?" + searchParamsString : ""}`;
+
   try {
-    const response = await get("/api/vsr", createAuthHeader(firebaseToken));
+    const response = await get(urlString, createAuthHeader(firebaseToken));
     const json = (await response.json()) as VSRListJson;
     return { success: true, data: json.vsrs.map(parseVSR) };
   } catch (error) {
@@ -220,17 +250,65 @@ export async function updateVSR(
 export async function bulkExportVSRS(
   firebaseToken: string,
   vsrIds: string[],
+  search?: string,
+  zipCodes?: string[],
+  income?: string,
+  status?: string,
 ): Promise<APIResult<null>> {
+  const searchParams = new URLSearchParams();
+  if (search) {
+    searchParams.set("search", search);
+  }
+  if (zipCodes) {
+    searchParams.set("zipCode", zipCodes.join(", "));
+  }
+  if (income) {
+    searchParams.set("incomeLevel", incomeMap[income]);
+  }
+  if (status) {
+    searchParams.set("status", status);
+  }
+
+  if (vsrIds && vsrIds.length > 0) {
+    searchParams.set("vsrIds", vsrIds.join(","));
+  }
+
+  const searchParamsString = searchParams.toString();
+  const urlString = `/api/vsr/bulk_export${searchParamsString ? "?" + searchParamsString : ""}`;
+
   try {
-    const query = vsrIds.length === 0 ? "" : `?vsrIds=${vsrIds.join(",")}`;
-    const response = await get(`/api/vsr/bulk_export${query}`, createAuthHeader(firebaseToken));
+    const response = await get(urlString, createAuthHeader(firebaseToken));
     const blob = await response.blob();
 
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
 
-    link.setAttribute("download", "vsrs.xlsx");
+    link.setAttribute("download", `vsrs_${new Date().toISOString()}.xlsx`);
+    document.body.appendChild(link);
+
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    return { success: true, data: null };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}
+
+export async function exportVSRPDF(firebaseToken: string, vsrId: string): Promise<APIResult<null>> {
+  try {
+    // Note: we need to fetch from the frontend API, not the backend API
+    const response = await fetch(`/api/vsr/pdf?id=${vsrId}`, {
+      headers: createAuthHeader(firebaseToken),
+    });
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+
+    link.setAttribute("download", `vsr_${vsrId}_${new Date().toISOString()}.pdf`);
     document.body.appendChild(link);
 
     link.click();

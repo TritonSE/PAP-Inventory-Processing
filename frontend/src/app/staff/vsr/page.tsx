@@ -1,8 +1,8 @@
 "use client";
 
-import styles from "@/app/staff/vsr/page.module.css";
 import VSRTable from "@/components/VSRTable/VSRTable";
-import SearchKeyword from "@/components/VSRTable/SearchKeyword";
+import FilterModal from "@/components/VSRTable/FilterModal";
+import { SearchKeyword } from "@/components/VSRTable/SearchKeyword";
 import PageTitle from "@/components/VSRTable/PageTitle";
 import HeaderBar from "@/components/shared/HeaderBar";
 import Image from "next/image";
@@ -17,7 +17,9 @@ import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { Button } from "@/components/shared/Button";
-import { SuccessNotification } from "@/components/shared/SuccessNotification";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import FilterChip from "@/components/VSRTable/FilterChip";
+import styles from "@/app/staff/vsr/page.module.css";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -52,6 +54,14 @@ export default function VSRTableView() {
   const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
   const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
 
+  const [filterModalAnchorElement, setFilterModalAnchorElement] = useState<HTMLElement | null>(
+    null,
+  );
+  const [filteredZipCodes, setFilteredZipCodes] = useState<string[]>();
+  const [filteredIncome, setFilteredIncome] = useState<string>();
+  const [search, setSearch] = useState<string>();
+  const [status, setStatus] = useState<string>();
+
   useRedirectToLoginIfNotSignedIn();
 
   const atLeastOneRowSelected = selectedVsrIds.length > 0;
@@ -66,7 +76,7 @@ export default function VSRTableView() {
 
     setLoadingVsrs(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
-      getAllVSRs(firebaseToken).then((result) => {
+      getAllVSRs(firebaseToken, search, filteredZipCodes, filteredIncome, status).then((result) => {
         if (result.success) {
           setVsrs(result.data);
         } else {
@@ -85,7 +95,7 @@ export default function VSRTableView() {
   // Fetch the VSRs from the backend once the Firebase user loads.
   useEffect(() => {
     fetchVSRs();
-  }, [firebaseUser]);
+  }, [firebaseUser, search, filteredZipCodes, filteredIncome, status]);
 
   const onDelete = async () => {
     if (loadingDelete || !firebaseUser) {
@@ -250,7 +260,14 @@ export default function VSRTableView() {
     setExportError(VSRExportError.NONE);
     setLoadingExport(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
-      bulkExportVSRS(firebaseToken, selectedVsrIds).then((result) => {
+      bulkExportVSRS(
+        firebaseToken,
+        selectedVsrIds,
+        search,
+        filteredZipCodes,
+        filteredIncome,
+        status,
+      ).then((result) => {
         if (result.success) {
           setExportSuccess(true);
         } else {
@@ -266,6 +283,8 @@ export default function VSRTableView() {
     });
   };
 
+  const renderSearchBar = () => <SearchKeyword onUpdate={setSearch} />;
+
   return (
     <div className={styles.page}>
       <HeaderBar showLogoutButton />
@@ -273,12 +292,18 @@ export default function VSRTableView() {
         <PageTitle />
         <div className={styles.button_row}>
           <div className={styles.row_left}>
-            {searchOnOwnRow ? null : <SearchKeyword />}
+            {searchOnOwnRow ? null : renderSearchBar()}
 
             <div className={styles.statusContainer}>
               <p className={styles.statusLabel}>Status:</p>
               <div className={styles.statusWrapper}>
-                <StatusDropdown value="Received" />
+                <StatusDropdown
+                  value="All Statuses"
+                  onChanged={(value: string) => {
+                    setStatus(value === "All Statuses" ? undefined : value);
+                  }}
+                  includeAllStatuses
+                />
               </div>
             </div>
           </div>
@@ -302,9 +327,7 @@ export default function VSRTableView() {
                 iconAlt="Filter"
                 text="Filter"
                 hideTextOnMobile
-                onClick={() => {
-                  // TODO: implement filtering
-                }}
+                onClick={(e) => setFilterModalAnchorElement(e.target as HTMLElement)}
               />
             )}
             <Button
@@ -313,36 +336,64 @@ export default function VSRTableView() {
               iconPath="/upload.svg"
               iconAlt="Export"
               loading={loadingExport}
-              text="Export"
+              text={
+                selectedVsrIds.length === 0 ? "Export All" : `Export (${selectedVsrIds.length})`
+              }
               hideTextOnMobile
               onClick={exportVSRs}
             />
           </div>
         </div>
-        {searchOnOwnRow ? <SearchKeyword /> : null}
+        {searchOnOwnRow ? renderSearchBar() : null}
+
+        {(filteredZipCodes && filteredZipCodes.length > 0) || filteredIncome ? (
+          <div className={styles.appliedFiltersContainer}>
+            <p className={styles.appliedText}>Applied Filters: </p>
+            <span className={styles.filterChips}>
+              {filteredZipCodes?.map((zipCode) => (
+                <FilterChip
+                  label={"Zip Code: " + zipCode}
+                  key={zipCode}
+                  onDelete={() => {
+                    setFilteredZipCodes(filteredZipCodes?.filter((z) => z !== zipCode));
+                  }}
+                />
+              ))}
+              {filteredIncome ? (
+                <FilterChip
+                  label={filteredIncome}
+                  onDelete={() => {
+                    setFilteredIncome(undefined);
+                  }}
+                />
+              ) : null}
+            </span>
+          </div>
+        ) : null}
+
         <div className={styles.table}>
           {loadingVsrs ? (
             <LoadingScreen />
-          ) : (
+          ) : vsrs?.length !== 0 ? (
             <VSRTable
               vsrs={vsrs ?? []}
               selectedVsrIds={selectedVsrIds}
               onChangeSelectedVsrIds={setSelectedVsrIds}
             />
+          ) : (
+            <div className={styles.noVsrs}>
+              <p>No VSRs found.</p>
+            </div>
           )}
         </div>
       </div>
 
       {/* Error modals, success model, and delete modal */}
-      <SuccessNotification
+      <NotificationBanner
+        variant="success"
         isOpen={exportSuccess}
         mainText="VSRs Exported Successfully"
-        actions={[
-          {
-            text: "Dismiss",
-            onClick: () => setExportSuccess(false),
-          },
-        ]}
+        onDismissClicked={() => setExportSuccess(false)}
       />
       {renderErrorModal()}
       {renderExportErrorModal()}
@@ -363,6 +414,22 @@ export default function VSRTableView() {
         confirmText="Delete VSR(s)"
         onConfirm={onDelete}
         buttonLoading={loadingDelete}
+      />
+      <FilterModal
+        anchorElement={filterModalAnchorElement}
+        onClose={() => {
+          setFilterModalAnchorElement(null);
+        }}
+        initialZipCodes={filteredZipCodes ?? []}
+        initialIncomeLevel={filteredIncome ?? ""}
+        onInputEntered={(zipCodes: string[] | undefined, incomeLevel: string | undefined) => {
+          setFilteredZipCodes(zipCodes);
+          setFilteredIncome(incomeLevel);
+        }}
+        onResetFilters={() => {
+          setFilteredZipCodes(undefined);
+          setFilteredIncome(undefined);
+        }}
       />
     </div>
   );

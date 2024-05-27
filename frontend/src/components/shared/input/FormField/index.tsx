@@ -1,5 +1,5 @@
-import styles from "@/components/shared/input/FormField/styles.module.css";
 import { ReactNode } from "react";
+import styles from "@/components/shared/input/FormField/styles.module.css";
 
 export interface FormFieldProps {
   label: string;
