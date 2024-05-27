@@ -68,7 +68,6 @@ export const VSRIndividualPage = () => {
   const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
 
   const [discardEditsConfirmationModalOpen, setDiscardEditsConfirmationModalOpen] = useState(false);
-  const [saveEditsConfirmationModalOpen, setSaveEditsConfirmationModalOpen] = useState(false);
   const [editSuccessNotificationOpen, setEditSuccessNotificationOpen] = useState(false);
   const [editErrorNotificationOpen, setEditErrorNotificationOpen] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
@@ -321,7 +320,7 @@ export const VSRIndividualPage = () => {
               iconAlt="Check"
               text="Save Changes"
               hideTextOnMobile
-              onClick={() => setSaveEditsConfirmationModalOpen(true)}
+              onClick={(e) => handleSubmit(onSubmitEdits)(e)}
             />
           </>
         ) : (
@@ -694,36 +693,6 @@ export const VSRIndividualPage = () => {
       />
 
       {/* Modals & notifications for saving changes to VSR */}
-      <BaseModal
-        isOpen={saveEditsConfirmationModalOpen}
-        onClose={() => setSaveEditsConfirmationModalOpen(false)}
-        title="Save Changes"
-        content="Would you like to save your changes?"
-        bottomRow={
-          <div className={styles.modalBottomRow}>
-            <Button
-              variant="primary"
-              outlined
-              text="Keep Editing"
-              className={styles.modalButton}
-              onClick={() => setSaveEditsConfirmationModalOpen(false)}
-              style={{ width: "100%" }}
-            />
-            <Button
-              variant="primary"
-              outlined={false}
-              text="Save Changes"
-              className={styles.modalButton}
-              onClick={(e) => {
-                // Close the confirmation modal to enable user to see any errors on the form
-                setSaveEditsConfirmationModalOpen(false);
-                handleSubmit(onSubmitEdits)(e);
-              }}
-              style={{ width: "100%" }}
-            />
-          </div>
-        }
-      />
       <NotificationBanner
         variant="success"
         isOpen={editSuccessNotificationOpen}
