@@ -1,8 +1,8 @@
 import React from "react";
-import styles from "@/components/shared/input/Dropdown/styles.module.css";
 import { FormControl, Select, MenuItem, SelectChangeEvent } from "@mui/material";
 import { FormField } from "@/components/shared/input/FormField";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
+import styles from "@/components/shared/input/Dropdown/styles.module.css";
 
 export interface DropDownProps {
   label: string;
@@ -46,9 +46,12 @@ const Dropdown = ({
           }
           sx={{
             ".MuiSelect-select": {
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
               padding: "6px 12px",
               minHeight: "unset !important",
-              height: isMobile ? 16 : isTablet ? 19 : 22,
+              height: `${isMobile ? 16 : isTablet ? 19 : 22}px !important`,
             },
           }}
           MenuProps={{

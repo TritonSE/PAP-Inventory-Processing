@@ -1,6 +1,6 @@
-import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
 import { FormField } from "@/components/shared/input/FormField";
 import { StyledChip } from "@/components/shared/input/StyledChip";
+import styles from "@/components/shared/input/MultipleChoice/styles.module.css";
 
 export interface MultipleChoiceProps {
   label: string;

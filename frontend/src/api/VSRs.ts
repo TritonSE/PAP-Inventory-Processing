@@ -282,3 +282,27 @@ export async function bulkExportVSRS(
     return handleAPIError(error);
   }
 }
+
+export async function exportVSRPDF(firebaseToken: string, vsrId: string): Promise<APIResult<null>> {
+  try {
+    // Note: we need to fetch from the frontend API, not the backend API
+    const response = await fetch(`/api/vsr/pdf?id=${vsrId}`, {
+      headers: createAuthHeader(firebaseToken),
+    });
+    const blob = await response.blob();
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+
+    link.setAttribute("download", `vsr_${vsrId}_${new Date().toISOString()}.pdf`);
+    document.body.appendChild(link);
+
+    link.click();
+
+    window.URL.revokeObjectURL(url);
+    return { success: true, data: null };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+}

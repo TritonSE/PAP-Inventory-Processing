@@ -1,8 +1,8 @@
-import styles from "@/components/shared/input/ChildrenInput/styles.module.css";
 import { UseFormReturn } from "react-hook-form";
 import TextField from "@/components/shared/input/TextField";
 import { ICreateVSRFormInput, IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
+import styles from "@/components/shared/input/ChildrenInput/styles.module.css";
 
 interface ChildrenInputProps {
   gender: "boy" | "girl";

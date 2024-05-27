@@ -1,11 +1,11 @@
 import Image from "next/image";
 import React, { useState } from "react";
-import styles from "@/components/shared/HeaderBar/styles.module.css";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { signOut } from "firebase/auth";
 import { initFirebase } from "@/firebase/firebase";
-import { ErrorNotification } from "@/components/Errors/ErrorNotification";
 import { Button } from "@/components/shared/Button";
+import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import styles from "@/components/shared/HeaderBar/styles.module.css";
 
 interface HeaderBarProps {
   showLogoutButton: boolean;
@@ -44,12 +44,12 @@ const HeaderBar = ({ showLogoutButton }: HeaderBarProps) => {
           onClick={logout}
         />
       ) : null}
-      <ErrorNotification
+      <NotificationBanner
+        variant="error"
         isOpen={errorNotificationOpen}
         mainText="Unable to Logout"
         subText="An error occurred while signing out, please check your internet connection or try again later"
-        actionText="Dismiss"
-        onActionClicked={() => setErrorNotificationOpen(false)}
+        onDismissClicked={() => setErrorNotificationOpen(false)}
       />
     </div>
   );

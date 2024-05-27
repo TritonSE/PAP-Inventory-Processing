@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styles from "@/components/VSRIndividual/PageSections/AdditionalInfo/styles.module.css";
 import { ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
@@ -8,6 +7,7 @@ import { UseFormReturn } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
 import { MultipleChoiceWithOtherInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceWithOtherInputDetail";
 import { hearFromOptions } from "@/constants/fieldOptions";
+import styles from "@/components/VSRIndividual/PageSections/AdditionalInfo/styles.module.css";
 
 export interface AdditionalInfoProps {
   vsr: VSR;

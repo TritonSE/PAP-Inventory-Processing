@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import styles from "@/components/VSRIndividual/PageSections/MilitaryBackground/styles.module.css";
 import { SingleDetail, ListDetail } from "@/components/VSRIndividual";
 import { type VSR } from "@/api/VSRs";
 import { VSRIndividualAccordion } from "@/components/VSRIndividual/VSRIndividualAccordion";
@@ -10,6 +9,7 @@ import { MultipleChoiceInputDetail } from "@/components/VSRIndividual/FieldDetai
 import { MultipleChoiceWithOtherInputDetail } from "@/components/VSRIndividual/FieldDetails/MultipleChoiceWithOtherInputDetail";
 import { BinaryChoiceInputDetail } from "@/components/VSRIndividual/FieldDetails/BinaryChoiceInputDetail";
 import { TextInputDetail } from "@/components/VSRIndividual/FieldDetails/TextInputDetail";
+import styles from "@/components/VSRIndividual/PageSections/MilitaryBackground/styles.module.css";
 
 export interface MilitaryBackgroundProps {
   vsr: VSR;
