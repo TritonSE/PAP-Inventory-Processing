@@ -7,6 +7,7 @@ import {
   sendVSRConfirmationEmailToVeteran,
   sendVSRNotificationEmailToStaff,
 } from "src/services/emails";
+import { retrieveVSRs } from "src/services/vsrs";
 import validationErrorParser from "src/util/validationErrorParser";
 import ExcelJS from "exceljs";
 import { ObjectId } from "mongodb";
@@ -19,56 +20,13 @@ type FurnitureItemEntry = FurnitureItem & { _id: ObjectId };
  */
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
-    let vsrs = await VSRModel.aggregate([
-      ...(req.query.search
-        ? [
-            {
-              $match: { name: { $regex: new RegExp(req.query.search as string) } },
-            },
-          ]
-        : []),
-      {
-        $addFields: {
-          statusOrder: {
-            $switch: {
-              branches: [
-                { case: { $eq: ["$status", "Received"] }, then: 1 },
-                { case: { $eq: ["$status", "Approved"] }, then: 2 },
-                { case: { $eq: ["$status", "Appointment Scheduled"] }, then: 3 },
-                { case: { $eq: ["$status", "Complete"] }, then: 4 },
-                { case: { $eq: ["$status", "No-show / Incomplete"] }, then: 5 },
-                { case: { $eq: ["$status", "Archived"] }, then: 6 },
-              ],
-              default: 99,
-            },
-          },
-        },
-      },
-      { $sort: { statusOrder: 1, dateReceived: -1 } },
-    ]);
-
-    if (req.query.status) {
-      vsrs = vsrs.filter((vsr) => vsr.status === req.query.status);
-    }
-
-    if (req.query.incomeLevel) {
-      const incomeMap: { [key: string]: string } = {
-        "50000": "$50,001 and over",
-        "25000": "$25,001 - $50,000",
-        "12500": "$12,501 - $25,000",
-        "0": "$12,500 and under",
-      };
-
-      vsrs = vsrs.filter((vsr) => {
-        return vsr.incomeLevel === incomeMap[req.query.incomeLevel as string];
-      });
-    }
-
-    if (req.query.zipCode) {
-      //we expect a list of zipcodes
-      const zipCodes = (req.query.zipCode as string).split(",").map((zip) => zip.trim());
-      vsrs = vsrs.filter((vsr) => zipCodes.includes(vsr.zipCode.toString()));
-    }
+    const vsrs = await retrieveVSRs(
+      req.query.search as string | undefined,
+      req.query.status as string | undefined,
+      req.query.incomeLevel as string | undefined,
+      req.query.zipCode ? (req.query.zipCode as string).split(",") : undefined,
+      undefined,
+    );
 
     res.status(200).json({ vsrs });
   } catch (error) {
@@ -338,32 +296,20 @@ const writeSpreadsheet = async (plainVsrs: VSR[], res: Response) => {
 
 export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
   try {
-    const filename = "vsrs.xlsx";
+    const filename = `vsrs_${new Date().toISOString()}.xlsx`;
     // Set some headers on the response so the client knows that a file is attached
     res.set({
       "Content-Disposition": `attachment; filename="${filename}"`,
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    let vsrs: VSR[];
-
-    if (req.query.vsrIds && ((req.query.vsrIds.length ?? 0) as number) > 0) {
-      // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
-      // with an _id in the vsrIds list
-
-      // Need to convert each ID string to an ObjectId object
-      const vsrObjectIds = (req.query.vsrIds as string)?.split(",").map((_id) => new ObjectId(_id));
-      vsrs = (
-        await VSRModel.find({
-          _id: {
-            $in: vsrObjectIds,
-          },
-        })
-      ).map((doc) => doc.toObject());
-    } else {
-      // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
-      vsrs = (await VSRModel.find()).map((doc) => doc.toObject());
-    }
+    const vsrs = await retrieveVSRs(
+      req.query.search as string | undefined,
+      req.query.status as string | undefined,
+      req.query.incomeLevel as string | undefined,
+      req.query.zipCode ? (req.query.zipCode as string).split(",") : undefined,
+      req.query.vsrIds ? (req.query.vsrIds as string).split(",") : undefined,
+    );
 
     await writeSpreadsheet(vsrs, res);
   } catch (error) {

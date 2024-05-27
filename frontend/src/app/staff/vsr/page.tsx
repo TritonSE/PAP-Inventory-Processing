@@ -243,7 +243,14 @@ export default function VSRTableView() {
     setExportError(VSRExportError.NONE);
     setLoadingExport(true);
     firebaseUser?.getIdToken().then((firebaseToken) => {
-      bulkExportVSRS(firebaseToken, selectedVsrIds).then((result) => {
+      bulkExportVSRS(
+        firebaseToken,
+        selectedVsrIds,
+        search,
+        filteredZipCodes,
+        filteredIncome,
+        status,
+      ).then((result) => {
         if (result.success) {
           setExportSuccess(true);
         } else {
