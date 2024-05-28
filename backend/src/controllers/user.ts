@@ -5,6 +5,10 @@ import UserModel, { DisplayUser, UserRole } from "src/models/user";
 import { validationResult } from "express-validator";
 import validationErrorParser from "src/util/validationErrorParser";
 import createHttpError from "http-errors";
+import {
+  sendOwnPasswordChangedNotificationEmail,
+  sendPasswordChangedEmailToAdmin,
+} from "src/services/emails";
 
 /**
  * Retrieves data about the current user (their MongoDB ID, Firebase UID, and role).
@@ -99,7 +103,25 @@ export const changeUserPassword: RequestHandler = async (req, res, next) => {
       password,
     });
 
+    await sendPasswordChangedEmailToAdmin(updatedUser.email!);
+
     res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Sends an email to notify the user that their password has been reset.
+ */
+export const notifyResetPassword: RequestHandler = async (req: PAPRequest, res, next) => {
+  try {
+    const { userUid } = req;
+    const firebaseUser = await firebaseAuth.getUser(userUid!);
+    await sendOwnPasswordChangedNotificationEmail(firebaseUser.email!);
+    await sendPasswordChangedEmailToAdmin(firebaseUser.email!);
+
+    res.status(204).send();
   } catch (error) {
     next(error);
   }

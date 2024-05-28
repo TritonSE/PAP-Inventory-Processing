@@ -19,6 +19,7 @@ import { FirebaseError } from "firebase/app";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import styles from "@/app/handlePasswordReset/page.module.css";
+import { notifyResetPassword } from "@/api/Users";
 
 enum ResetPasswordPageError {
   NO_INTERNET,
@@ -123,7 +124,12 @@ const PasswordReset: React.FC = () => {
     }
 
     try {
-      await signInWithEmailAndPassword(auth, email, data.newPassword);
+      const { user } = await signInWithEmailAndPassword(auth, email, data.newPassword);
+      const firebaseToken = await user.getIdToken();
+      const result = await notifyResetPassword(firebaseToken);
+      if (!result.success) {
+        console.error(`Notifying user of password reset failed with error ${result.error}`);
+      }
     } catch (error) {
       console.error("Firebase login failed with error: ", error);
 

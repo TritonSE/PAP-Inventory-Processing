@@ -62,6 +62,15 @@ export const changeUserPassword = async (
   }
 };
 
+export const notifyResetPassword = async (firebaseToken: string): Promise<APIResult<null>> => {
+  try {
+    await post("/api/user/notifyResetPassword", {}, createAuthHeader(firebaseToken));
+    return { success: true, data: null };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+};
+
 export const deleteUser = async (uid: string, firebaseToken: string): Promise<APIResult<null>> => {
   try {
     await httpDelete(`/api/user/${uid}`, createAuthHeader(firebaseToken));

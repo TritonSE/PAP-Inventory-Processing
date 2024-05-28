@@ -1,5 +1,6 @@
 import "dotenv/config";
 import nodemailer from "nodemailer";
+import Mail from "nodemailer/lib/mailer";
 import env from "src/util/validateEnv";
 
 const trimmedFrontendUrl = env.FRONTEND_ORIGIN.replace(
@@ -7,6 +8,23 @@ const trimmedFrontendUrl = env.FRONTEND_ORIGIN.replace(
   /\/$/gi,
   "",
 );
+
+const sendEmail = async (options: Mail.Options) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: env.EMAIL_USER,
+      pass: env.EMAIL_APP_PASSWORD,
+    },
+  });
+
+  const mailOptions = {
+    from: env.EMAIL_USER,
+    ...options,
+  };
+
+  await transporter.sendMail(mailOptions);
+};
 
 /**
  * Sends a notification email to PAP staff when a VSR is submitted.
@@ -20,22 +38,11 @@ const sendVSRNotificationEmailToStaff = async (name: string, email: string, id: 
   const EMAIL_SUBJECT = "New VSR Submitted";
   const EMAIL_BODY = `A new VSR was submitted by ${name} from ${email}. You can view it at ${trimmedFrontendUrl}/staff/vsr/${id}`;
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: env.EMAIL_USER,
-      pass: env.EMAIL_APP_PASSWORD,
-    },
-  });
-
-  const mailOptions = {
-    from: env.EMAIL_USER,
+  await sendEmail({
     to: env.EMAIL_NOTIFICATIONS_RECIPIENT,
     subject: EMAIL_SUBJECT,
     text: EMAIL_BODY,
-  };
-
-  await transporter.sendMail(mailOptions);
+  });
 };
 
 /**
@@ -112,16 +119,7 @@ const sendVSRConfirmationEmailToVeteran = async (name: string, email: string) =>
   <p>Instagram patriotsandpaws</p>\
   `;
 
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: env.EMAIL_USER,
-      pass: env.EMAIL_APP_PASSWORD,
-    },
-  });
-
-  const mailOptions = {
-    from: env.EMAIL_USER,
+  await sendEmail({
     to: email,
     subject: EMAIL_SUBJECT,
     html: EMAIL_HTML,
@@ -132,9 +130,34 @@ const sendVSRConfirmationEmailToVeteran = async (name: string, email: string) =>
         cid: "pap_logo.png",
       },
     ],
-  };
-
-  await transporter.sendMail(mailOptions);
+  });
 };
 
-export { sendVSRNotificationEmailToStaff, sendVSRConfirmationEmailToVeteran };
+const sendOwnPasswordChangedNotificationEmail = async (email: string) => {
+  const EMAIL_SUBJECT = "PAP Application Password Change Confirmation";
+  const EMAIL_BODY = `Your password for the ${email} account has been changed.`;
+
+  await sendEmail({
+    to: email,
+    subject: EMAIL_SUBJECT,
+    text: EMAIL_BODY,
+  });
+};
+
+const sendPasswordChangedEmailToAdmin = async (email: string) => {
+  const EMAIL_SUBJECT = "PAP Application Password Change Notification";
+  const EMAIL_BODY = `The password for the ${email} account has been changed.`;
+
+  await sendEmail({
+    to: env.EMAIL_NOTIFICATIONS_RECIPIENT,
+    subject: EMAIL_SUBJECT,
+    text: EMAIL_BODY,
+  });
+};
+
+export {
+  sendVSRNotificationEmailToStaff,
+  sendVSRConfirmationEmailToVeteran,
+  sendOwnPasswordChangedNotificationEmail,
+  sendPasswordChangedEmailToAdmin,
+};

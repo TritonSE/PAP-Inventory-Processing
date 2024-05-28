@@ -1,6 +1,6 @@
 import express from "express";
 
-import { requireAdmin, requireSignedIn } from "src/middleware/auth";
+import { requireAdmin, requireSignedIn, requireStaffOrAdmin } from "src/middleware/auth";
 import * as UserController from "src/controllers/user";
 import * as UserValidator from "src/validators/user";
 
@@ -21,6 +21,12 @@ router.patch(
   requireAdmin,
   UserValidator.changeUserPassword,
   UserController.changeUserPassword,
+);
+router.post(
+  "/notifyResetPassword",
+  requireSignedIn,
+  requireStaffOrAdmin,
+  UserController.notifyResetPassword,
 );
 router.delete("/:uid", requireSignedIn, requireAdmin, UserController.deleteUser);
 
