@@ -1,36 +1,37 @@
-import emailValidator from "email-validator";
 import Image from "next/image";
 import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { BaseModal } from "@/components/shared/BaseModal";
-import { CreateUserRequest, createUser } from "@/api/Users";
+import { changeUserPassword } from "@/api/Users";
 import { UserContext } from "@/contexts/userContext";
-import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import TextField from "@/components/shared/input/TextField";
 import { IconButton } from "@mui/material";
 import { Button } from "@/components/shared/Button";
-import styles from "@/components/Profile/CreateUserModal/styles.module.css";
+import styles from "@/components/Profile/ChangePasswordModal/styles.module.css";
 
-interface ICreateUserFormInput {
-  name: string;
-  email: string;
+interface IChangePasswordFormInput {
   password: string;
   confirmPassword: string;
 }
 
-interface CreateUserModalProps {
+interface ChangePasswordModalProps {
   isOpen: boolean;
   onClose: () => unknown;
-  afterCreateUser: () => unknown;
+  uid: string;
+  afterChangePassword: () => unknown;
 }
 
-export const CreateUserModal = ({ isOpen, onClose, afterCreateUser }: CreateUserModalProps) => {
-  const { firebaseUser } = useContext(UserContext);
+export const ChangePasswordModal = ({
+  isOpen,
+  onClose,
+  uid,
+  afterChangePassword,
+}: ChangePasswordModalProps) => {
+  const { firebaseUser, setSuccessNotificationOpen, setErrorNotificationOpen } =
+    useContext(UserContext);
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
-  const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
 
   const {
     handleSubmit,
@@ -38,30 +39,24 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreateUser }: CreateUser
     reset,
     formState: { errors, isValid },
     watch,
-  } = useForm<ICreateUserFormInput>();
+  } = useForm<IChangePasswordFormInput>();
 
-  const onSubmit: SubmitHandler<ICreateUserFormInput> = async (data) => {
+  const onSubmit: SubmitHandler<IChangePasswordFormInput> = async (data) => {
     setLoading(true);
-    setSuccessNotificationOpen(false);
-    setErrorNotificationOpen(false);
-
-    const createUserRequest: CreateUserRequest = {
-      name: data.name,
-      email: data.email,
-      password: data.password,
-    };
+    setSuccessNotificationOpen(null);
+    setErrorNotificationOpen(null);
 
     const firebaseToken = await firebaseUser?.getIdToken();
-    const result = await createUser(firebaseToken!, createUserRequest);
+    const result = await changeUserPassword(uid, data.password, firebaseToken!);
     if (result.success) {
-      setSuccessNotificationOpen(true);
+      setSuccessNotificationOpen("changePassword");
     } else {
-      console.error(`Creating user failed with error: ${result.error}`);
-      setErrorNotificationOpen(true);
+      console.error(`Changing password failed with error: ${result.error}`);
+      setErrorNotificationOpen("changePassword");
     }
     setLoading(false);
     reset();
-    afterCreateUser();
+    afterChangePassword();
     onClose();
   };
 
@@ -70,52 +65,21 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreateUser }: CreateUser
       <BaseModal
         isOpen={isOpen}
         onClose={onClose}
-        title="Create Account"
+        title="Change User's Password"
         content={
           <div className={styles.root}>
-            <p className={styles.subtitle}>
-              Invite a new staff member by entering their information below!
-            </p>
+            <p className={styles.subtitle}>Change this user’s login credentials</p>
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
               <TextField
-                label="Name"
+                label="New Password"
                 variant="outlined"
-                placeholder="Justine Roberts"
-                {...register("name", {
-                  required: "Name is required",
-                })}
-                required={false}
-                error={!!errors.name}
-                helperText={errors.name?.message}
-              />
-
-              <TextField
-                label="Email"
-                variant="outlined"
-                placeholder="e.g. johndoe@gmail.com"
-                {...register("email", {
-                  required: "Email is required",
-                  validate: {
-                    validate: (emailAddress) =>
-                      emailValidator.validate(emailAddress) ||
-                      "This field must be a valid email address",
-                  },
-                })}
-                required={false}
-                error={!!errors.email}
-                helperText={errors.email?.message}
-              />
-
-              <TextField
-                label="Password"
-                variant="outlined"
-                placeholder="Enter Password"
+                placeholder="Enter New Password"
                 {...register("password", {
-                  required: "Password is required",
+                  required: "New password is required",
 
                   validate: {
                     validate: (password) =>
-                      password.length >= 6 || "Password must be at least 6 characters",
+                      password.length >= 6 || "New password must be at least 6 characters",
                   },
                 })}
                 required={false}
@@ -140,9 +104,9 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreateUser }: CreateUser
               />
 
               <TextField
-                label="Confirm Password"
+                label="Confirm New Password"
                 variant="outlined"
-                placeholder="Re-enter Password"
+                placeholder="Re-enter New Password"
                 {...register("confirmPassword", {
                   required: "Confirm Password is required",
                   validate: {
@@ -174,7 +138,7 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreateUser }: CreateUser
               <Button
                 variant="primary"
                 outlined={false}
-                text="Create User"
+                text="Change Password"
                 loading={loading}
                 type="submit"
                 className={`${styles.submitButton} ${isValid ? "" : styles.disabledButton}`}
@@ -183,20 +147,6 @@ export const CreateUserModal = ({ isOpen, onClose, afterCreateUser }: CreateUser
           </div>
         }
         bottomRow={null}
-      />
-
-      <NotificationBanner
-        variant="success"
-        isOpen={successNotificationOpen}
-        mainText="User created successfully"
-        onDismissClicked={() => setSuccessNotificationOpen(false)}
-      />
-      <NotificationBanner
-        variant="error"
-        isOpen={errorNotificationOpen}
-        mainText="Error creating user"
-        subText="Could not create user, please try again."
-        onDismissClicked={() => setErrorNotificationOpen(false)}
       />
     </>
   );

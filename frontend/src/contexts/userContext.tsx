@@ -5,11 +5,17 @@ import { User as FirebaseUser, onAuthStateChanged } from "firebase/auth";
 import { User, getWhoAmI } from "@/api/Users";
 import { initFirebase } from "@/firebase/firebase";
 
+type Notification = "deleteUser" | "changePassword" | null;
+
 interface IUserContext {
   firebaseUser: FirebaseUser | null;
   papUser: User | null;
   loadingUser: boolean;
   reloadUser: () => unknown;
+  successNotificationOpen: Notification;
+  setSuccessNotificationOpen: (notification: Notification) => unknown;
+  errorNotificationOpen: Notification;
+  setErrorNotificationOpen: (notification: Notification) => unknown;
 }
 
 /**
@@ -21,6 +27,10 @@ export const UserContext = createContext<IUserContext>({
   papUser: null,
   loadingUser: true,
   reloadUser: () => {},
+  successNotificationOpen: null,
+  setSuccessNotificationOpen: () => {},
+  errorNotificationOpen: null,
+  setErrorNotificationOpen: () => {},
 });
 
 /**
@@ -32,6 +42,8 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [papUser, setPapUser] = useState<User | null>(null);
   const [loadingUser, setLoadingUser] = useState(true);
+  const [successNotificationOpen, setSuccessNotificationOpen] = useState<Notification>(null);
+  const [errorNotificationOpen, setErrorNotificationOpen] = useState<Notification>(null);
 
   const { auth } = initFirebase();
 
@@ -68,7 +80,18 @@ export const UserContextProvider = ({ children }: { children: ReactNode }) => {
   useEffect(reloadUser, [initialLoading, firebaseUser]);
 
   return (
-    <UserContext.Provider value={{ firebaseUser, papUser, loadingUser, reloadUser }}>
+    <UserContext.Provider
+      value={{
+        firebaseUser,
+        papUser,
+        loadingUser,
+        reloadUser,
+        successNotificationOpen,
+        setSuccessNotificationOpen,
+        errorNotificationOpen,
+        setErrorNotificationOpen,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

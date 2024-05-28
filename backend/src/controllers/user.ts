@@ -4,6 +4,7 @@ import { firebaseAuth } from "src/services/firebase";
 import UserModel, { DisplayUser, UserRole } from "src/models/user";
 import { validationResult } from "express-validator";
 import validationErrorParser from "src/util/validationErrorParser";
+import createHttpError from "http-errors";
 
 /**
  * Retrieves data about the current user (their MongoDB ID, Firebase UID, and role).
@@ -77,6 +78,47 @@ export const createUser: RequestHandler = async (req: PAPRequest, res, next) => 
     });
 
     res.status(201).json(user);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Changes a user's password, finding the user by their UID
+ */
+export const changeUserPassword: RequestHandler = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+
+    validationErrorParser(errors);
+
+    const { password } = req.body;
+    const { uid } = req.params;
+
+    const updatedUser = await firebaseAuth.updateUser(uid, {
+      password,
+    });
+
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * Deletes a user from the Firebase and MongoDB databases
+ */
+export const deleteUser: RequestHandler = async (req, res, next) => {
+  try {
+    const { uid } = req.params;
+
+    await firebaseAuth.deleteUser(uid);
+
+    const deletedUser = await UserModel.deleteOne({ uid });
+    if (deletedUser === null) {
+      throw createHttpError(404, "User not found at uid " + uid);
+    }
+    return res.status(204).send();
   } catch (error) {
     next(error);
   }

@@ -1,7 +1,7 @@
 import { body } from "express-validator";
 
 /**
- * Validators for creating users
+ * Validators for creating and updating users
  */
 
 const makeNameValidator = () =>
@@ -26,3 +26,5 @@ const makePasswordValidator = () =>
     .withMessage("Password must be a string");
 
 export const createUser = [makeNameValidator(), makeEmailValidator(), makePasswordValidator()];
+
+export const changeUserPassword = [makePasswordValidator()];

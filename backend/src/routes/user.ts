@@ -15,5 +15,13 @@ router.post(
   UserValidator.createUser,
   UserController.createUser,
 );
+router.patch(
+  "/:uid/password",
+  requireSignedIn,
+  requireAdmin,
+  UserValidator.changeUserPassword,
+  UserController.changeUserPassword,
+);
+router.delete("/:uid", requireSignedIn, requireAdmin, UserController.deleteUser);
 
 export default router;

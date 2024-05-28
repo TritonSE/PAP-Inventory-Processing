@@ -21,7 +21,14 @@ enum AllUsersError {
 }
 
 export default function Profile() {
-  const { firebaseUser, papUser } = useContext(UserContext);
+  const {
+    firebaseUser,
+    papUser,
+    successNotificationOpen,
+    setSuccessNotificationOpen,
+    errorNotificationOpen,
+    setErrorNotificationOpen,
+  } = useContext(UserContext);
   const [users, setUsers] = useState<DisplayUser[]>();
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [usersError, setUsersError] = useState<AllUsersError>(AllUsersError.NONE);
@@ -52,6 +59,11 @@ export default function Profile() {
   useEffect(() => {
     fetchUsers();
   }, [firebaseUser, papUser]);
+
+  useEffect(() => {
+    setSuccessNotificationOpen(null);
+    setErrorNotificationOpen(null);
+  }, []);
 
   useRedirectToLoginIfNotSignedIn();
 
@@ -108,7 +120,13 @@ export default function Profile() {
               </div>
               {users?.map((user, index) =>
                 user.uid != firebaseUser?.uid ? (
-                  <UserProfile key={index} email={user.email ?? ""} name={user.displayName ?? ""} />
+                  <UserProfile
+                    key={index}
+                    afterChangeUser={fetchUsers}
+                    uid={user.uid}
+                    email={user.email ?? ""}
+                    name={user.displayName ?? ""}
+                  />
                 ) : null,
               )}
             </>
@@ -121,6 +139,28 @@ export default function Profile() {
         isOpen={createUserModalOpen}
         onClose={() => setCreateUserModalOpen(false)}
         afterCreateUser={fetchUsers}
+      />
+
+      <NotificationBanner
+        variant="success"
+        isOpen={successNotificationOpen !== null}
+        mainText={
+          successNotificationOpen === "deleteUser"
+            ? "User Successfully Deleted"
+            : "Password Changed Successfully"
+        }
+        onDismissClicked={() => setSuccessNotificationOpen(null)}
+      />
+      <NotificationBanner
+        variant="error"
+        isOpen={errorNotificationOpen !== null}
+        mainText={
+          errorNotificationOpen === "deleteUser"
+            ? "Unable to Delete User"
+            : "Unable to Change password"
+        }
+        subText="An error occurred, please check your internet connection or try again later"
+        onDismissClicked={() => setErrorNotificationOpen(null)}
       />
     </div>
   );

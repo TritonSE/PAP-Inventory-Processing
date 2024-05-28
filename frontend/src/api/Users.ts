@@ -1,4 +1,5 @@
-import { APIResult, get, handleAPIError, post } from "@/api/requests";
+import { APIResult, get, handleAPIError, httpDelete, patch, post } from "@/api/requests";
+import { User as FirebaseUser } from "firebase/auth";
 
 export interface User {
   _id: string;
@@ -38,6 +39,33 @@ export const getAllUsers = async (firebaseToken: string): Promise<APIResult<Disp
     const response = await get("/api/user", createAuthHeader(firebaseToken));
     const json = (await response.json()) as DisplayUser[];
     return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+};
+
+export const changeUserPassword = async (
+  uid: string,
+  password: string,
+  firebaseToken: string,
+): Promise<APIResult<FirebaseUser>> => {
+  try {
+    const response = await patch(
+      `/api/user/${uid}/password`,
+      { password },
+      createAuthHeader(firebaseToken),
+    );
+    const json = (await response.json()) as FirebaseUser;
+    return { success: true, data: json };
+  } catch (error) {
+    return handleAPIError(error);
+  }
+};
+
+export const deleteUser = async (uid: string, firebaseToken: string): Promise<APIResult<null>> => {
+  try {
+    await httpDelete(`/api/user/${uid}`, createAuthHeader(firebaseToken));
+    return { success: true, data: null };
   } catch (error) {
     return handleAPIError(error);
   }
