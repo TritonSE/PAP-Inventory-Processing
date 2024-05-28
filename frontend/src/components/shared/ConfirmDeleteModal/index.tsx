@@ -29,32 +29,30 @@ export const ConfirmDeleteModal = ({
   onConfirm,
 }: ConfirmDeleteModalProps) => {
   return (
-    <>
-      <BaseModal
-        isOpen={isOpen}
-        onClose={onClose}
-        title={title}
-        content={content}
-        bottomRow={
-          <div className={styles.buttonContainer}>
-            <Button
-              variant="primary"
-              outlined
-              text={cancelText}
-              onClick={onClose}
-              className={styles.button}
-            />
-            <Button
-              variant="error"
-              outlined={false}
-              text={confirmText}
-              onClick={onConfirm}
-              loading={buttonLoading}
-              className={styles.button}
-            />
-          </div>
-        }
-      />
-    </>
+    <BaseModal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={title}
+      content={content}
+      bottomRow={
+        <div className={styles.buttonContainer}>
+          <Button
+            variant="primary"
+            outlined
+            text={cancelText}
+            onClick={onClose}
+            className={styles.button}
+          />
+          <Button
+            variant="error"
+            outlined={false}
+            text={confirmText}
+            onClick={onConfirm}
+            loading={buttonLoading}
+            className={styles.button}
+          />
+        </div>
+      }
+    />
   );
 };

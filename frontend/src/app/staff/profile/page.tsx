@@ -12,6 +12,7 @@ import styles from "@/app/staff/profile/page.module.css";
 import { ADMIN_ROLE } from "@/constants/roles";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
+import { CreateUserModal } from "@/components/Profile/CreateUserModal";
 
 enum AllUsersError {
   NO_INTERNET,
@@ -24,6 +25,7 @@ export default function Profile() {
   const [users, setUsers] = useState<DisplayUser[]>();
   const [loadingUsers, setLoadingUsers] = useState(false);
   const [usersError, setUsersError] = useState<AllUsersError>(AllUsersError.NONE);
+  const [createUserModalOpen, setCreateUserModalOpen] = useState(false);
 
   const fetchUsers = async () => {
     if (!firebaseUser || !papUser || papUser.role !== ADMIN_ROLE) {
@@ -101,7 +103,7 @@ export default function Profile() {
                   iconAlt="Add"
                   text="Add Account"
                   hideTextOnMobile
-                  // TODO: create new user
+                  onClick={() => setCreateUserModalOpen(true)}
                 />
               </div>
               {users?.map((user, index) =>
@@ -114,6 +116,12 @@ export default function Profile() {
         </div>
       )}
       {renderErrorNotification()}
+
+      <CreateUserModal
+        isOpen={createUserModalOpen}
+        onClose={() => setCreateUserModalOpen(false)}
+        afterCreateUser={fetchUsers}
+      />
     </div>
   );
 }
