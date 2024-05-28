@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { InferSchemaType, Schema, model } from "mongoose";
 
 /**
@@ -26,6 +27,14 @@ export enum UserRole {
   STAFF = "staff",
   // eslint-disable-next-line no-unused-vars
   ADMIN = "admin",
+}
+
+export interface DisplayUser {
+  _id: ObjectId;
+  uid: string;
+  email: string;
+  displayName: string;
+  photoURL: string;
 }
 
 type User = InferSchemaType<typeof userSchema>;

@@ -1,0 +1,43 @@
+/* .page {
+  background-color: var(--color-background);
+  padding-bottom: 67px;
+  min-height: 100vh;
+} */
+.main {
+  padding: 64px;
+  padding-top: 105px;
+  background-color: var(--color-background);
+  display: flex;
+  flex-direction: column;
+  color: var(--Accent-Blue-1, #102d5f);
+  text-align: left;
+
+  padding: 105px 120px 0;
+  gap: 40px;
+
+  /* gap: 32px; */
+  /* Desktop/H1 */
+  font-family: var(--font-title);
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 40px;
+}
+
+.subtitle {
+  font-size: 24px;
+}

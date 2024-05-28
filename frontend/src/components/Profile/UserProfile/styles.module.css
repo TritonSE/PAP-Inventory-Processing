@@ -1,0 +1,60 @@
+.user {
+  display: flex;
+  flex-direction: row;
+  border-radius: 6px;
+  background: var(--Functional-Background, #f9f9f9);
+
+  display: flex;
+  padding: 26px 34px;
+  align-items: flex-start;
+  gap: 10px;
+  align-self: stretch;
+  margin-bottom: 32px;
+}
+
+.name {
+  color: var(--Accent-Blue-1, #102d5f);
+
+  /* Desktop/H2 */
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  margin-bottom: 14px;
+}
+
+.email {
+  color: var(--Neutral-Gray6, #484848);
+
+  /* Desktop/Body 2 */
+  font-family: var(--font-open-sans);
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.pfp {
+  border-radius: 50%;
+  margin-left: 22px;
+}
+
+.row_justify {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.column_right {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-left: 41px;
+}
