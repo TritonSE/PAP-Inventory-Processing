@@ -288,7 +288,7 @@ export default function VSRTableView() {
 
   return (
     <div className={styles.page}>
-      <HeaderBar showLogoutButton />
+      <HeaderBar veteranVersion={false} />
       <div className={styles.column}>
         <PageTitle />
         <div className={styles.button_row}>

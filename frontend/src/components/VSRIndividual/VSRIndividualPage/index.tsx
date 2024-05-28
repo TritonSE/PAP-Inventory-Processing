@@ -560,7 +560,7 @@ export const VSRIndividualPage = () => {
 
   return (
     <>
-      <HeaderBar showLogoutButton />
+      <HeaderBar veteranVersion={false} />
       <div className={styles.page}>
         <div className={`${styles.headerRow} ${styles.toDashboardRow}`}>
           <a href="/staff/vsr" style={isEditing ? { opacity: 0.5 } : {}}>

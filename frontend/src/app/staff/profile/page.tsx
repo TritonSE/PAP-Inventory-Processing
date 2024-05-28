@@ -80,7 +80,7 @@ export default function Profile() {
 
   return (
     <div>
-      <HeaderBar showLogoutButton />
+      <HeaderBar veteranVersion={false} />
       {loadingUsers ? (
         <LoadingScreen />
       ) : (

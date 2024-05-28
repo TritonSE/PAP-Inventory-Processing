@@ -419,7 +419,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={styles.main}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>
@@ -691,7 +691,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={styles.main}>
             <div id="contactInformation" className={styles.formContainer}>
               <div className={styles.form}>
@@ -1082,7 +1082,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(onReview)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={styles.main}>
             <div id="furnishings" className={styles.formContainer}>
               <div className={styles.form}>
@@ -1139,7 +1139,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={`${styles.main} ${styles.mainReview}`}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>

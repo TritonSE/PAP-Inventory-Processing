@@ -55,7 +55,7 @@ export default function furnitureItemTemplate() {
 
   return (
     <>
-      <HeaderBar showLogoutButton />
+      <HeaderBar veteranVersion={false} />
       <div className={styles.main}>
         <h1 className={styles.title}>Furnishing Request Form Template</h1>
         <p className={styles.description}>
