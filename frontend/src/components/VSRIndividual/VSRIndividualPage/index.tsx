@@ -29,10 +29,10 @@ import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
-import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 import { useMediaQuery } from "@mui/material";
 import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
+import { ConfirmDiscardEditsModal } from "@/components/shared/ConfirmDiscardEditsModal";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -661,35 +661,13 @@ export const VSRIndividualPage = () => {
         onConfirm={onDelete}
         buttonLoading={loadingDelete}
       />
-      <BaseModal
+      <ConfirmDiscardEditsModal
         isOpen={discardEditsConfirmationModalOpen}
         onClose={() => setDiscardEditsConfirmationModalOpen(false)}
-        title="Discard Changes"
-        content="Are you sure you want to discard your changes?"
-        bottomRow={
-          <div className={styles.modalBottomRow}>
-            <Button
-              variant="primary"
-              outlined
-              text="Keep Editing"
-              className={styles.modalButton}
-              onClick={() => setDiscardEditsConfirmationModalOpen(false)}
-              style={{ width: "100%" }}
-            />
-            <Button
-              variant="error"
-              outlined={false}
-              text="Discard Changes"
-              className={styles.modalButton}
-              onClick={() => {
-                fetchVSR();
-                setDiscardEditsConfirmationModalOpen(false);
-                setIsEditing(false);
-              }}
-              style={{ width: "100%" }}
-            />
-          </div>
-        }
+        onDiscardChanges={() => {
+          fetchVSR();
+          setIsEditing(false);
+        }}
       />
 
       {/* Modals & notifications for saving changes to VSR */}

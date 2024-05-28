@@ -13,8 +13,7 @@
 }
 
 .main {
-  padding: 64px;
-  padding-top: 128px;
+  padding: 128px 64px;
   background-color: #eceff3;
   display: flex;
   flex-direction: column;
@@ -57,4 +56,51 @@
   flex-direction: column;
   gap: 64px;
   align-self: flex-start;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .main {
+    padding: 64px 48px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .description {
+    font-size: 18px;
+  }
+
+  .formContainer {
+    margin-top: 0;
+    padding: 32px;
+  }
+
+  .sectionTitle {
+    font-size: 28px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .main {
+    padding: 36px 24px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .description {
+    font-size: 14px;
+  }
+
+  .formContainer {
+    padding: 32px 16px;
+  }
+
+  .sectionTitle {
+    font-size: 20px;
+  }
 }

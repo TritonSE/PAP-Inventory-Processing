@@ -8,6 +8,8 @@ export interface FurnitureItemSelectionProps {
   selection?: FurnitureInput;
   onChangeSelection?: (newSelection: FurnitureInput) => unknown;
   isActive: boolean;
+  isDisabled?: boolean;
+  isSelected?: boolean;
   onChipClicked?: () => unknown;
 }
 
@@ -20,6 +22,8 @@ export const FurnitureItemSelection = ({
   selection,
   onChangeSelection,
   isActive,
+  isDisabled,
+  isSelected,
   onChipClicked,
 }: FurnitureItemSelectionProps) => {
   const handleChipClicked = () => {
@@ -52,11 +56,13 @@ export const FurnitureItemSelection = ({
     }
   };
 
+  isSelected = isSelected || (selection && selection.quantity > 0);
+
   return (
     <div
       className={`${styles.chip} ${
-        selection && selection.quantity > 0 ? styles.chipSelected : styles.chipUnselected
-      }`}
+        isSelected ? styles.chipSelected : styles.chipUnselected
+      } ${isDisabled ? (isSelected ? styles.selectedDisabled : styles.unselectedDisabled) : ""}`}
       onClick={handleChipClicked}
     >
       <div className={styles.chipContent}>
@@ -72,9 +78,7 @@ export const FurnitureItemSelection = ({
               type="button"
             >
               <Image
-                className={`${styles.dec} ${
-                  selection && selection.quantity > 0 ? styles.decSelected : styles.dec
-                }`}
+                className={`${styles.dec} ${isSelected ? styles.decSelected : styles.dec}`}
                 src="/icon_minus.svg"
                 width={22}
                 height={22}
@@ -91,9 +95,7 @@ export const FurnitureItemSelection = ({
               type="button"
             >
               <Image
-                className={`${styles.inc} ${
-                  selection && selection.quantity > 0 ? styles.incSelected : styles.inc
-                }`}
+                className={`${styles.inc} ${isSelected ? styles.incSelected : styles.inc}`}
                 src="/icon_plus.svg"
                 width={22}
                 height={22}

@@ -27,6 +27,20 @@
   background: #c7def1;
 }
 
+.unselectedDisabled {
+  opacity: 0.5;
+}
+
+.selectedDisabled:hover {
+  cursor: unset !important;
+  background: #102d5f !important;
+}
+
+.unselectedDisabled:hover {
+  cursor: unset !important;
+  background: rgba(255, 255, 255, 0) !important;
+}
+
 .chipSelected {
   color: white;
   background: #102d5f;

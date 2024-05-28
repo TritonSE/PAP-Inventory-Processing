@@ -1,10 +1,11 @@
-.row {
+.column {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  gap: 16px;
 }
 
-.row:not(:last-child) {
+.column:not(:last-child) {
   padding-bottom: 32px;
 }
 
@@ -15,22 +16,8 @@
   gap: 16px;
 }
 
-.chip {
-  white-space: nowrap;
-  text-align: center;
-  font-family: "OpenSans";
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: normal;
+.roundButton {
   border-radius: 64px;
-  border: 1px solid var(--Secondary-1, #102d5f);
-  background-color: #102d5f;
-}
-
-.chip:hover {
-  cursor: pointer;
-  background: #c7def1;
 }
 
 .boxShadow {
@@ -41,21 +28,21 @@
 }
 
 .selectTag {
-  margin-bottom: 32px;
   color: var(--Primary-Background-Dark, #232220);
-  font-family: Lora;
+  font-family: "Open Sans";
   font-size: 18px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
+  font-weight: 400;
+  margin-bottom: 16px;
 }
 
 .buttonsRow {
-  margin-top: 32px;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .editButton {
-  margin-top: 16px;
   border-radius: 64px;
 }
 
@@ -64,5 +51,30 @@
 }
 
 .spacer {
-  height: 32px;
+  width: 100%;
+}
+
+.checkboxRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.multipleQuantityText {
+  color: var(--Primary-Background-Dark, #232220);
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .selectTag {
+    font-size: 14px;
+  }
+
+  .multipleQuantityText {
+    font-size: 14px;
+  }
 }
