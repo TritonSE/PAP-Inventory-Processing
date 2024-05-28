@@ -32,9 +32,8 @@ export enum UserRole {
 export interface DisplayUser {
   _id: ObjectId;
   uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string;
+  email: string | undefined;
+  displayName: string | undefined;
 }
 
 type User = InferSchemaType<typeof userSchema>;

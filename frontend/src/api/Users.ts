@@ -9,9 +9,8 @@ export interface User {
 export interface DisplayUser {
   _id: string;
   uid: string;
-  email: string;
-  displayName: string;
-  photoURL: string;
+  email: string | undefined;
+  displayName: string | undefined;
 }
 
 export const createAuthHeader = (firebaseToken: string) => ({

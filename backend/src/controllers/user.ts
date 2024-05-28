@@ -22,33 +22,28 @@ export const getWhoAmI: RequestHandler = async (req: PAPRequest, res, next) => {
   }
 };
 
+/**
+ * Retrieves a list of all users in our database
+ */
 export const getUsers: RequestHandler = async (req: PAPRequest, res, next) => {
   try {
-    const users = await UserModel.find();
-    const displayUsers = [];
-    for (const user of users) {
-      const { uid, _id } = user;
+    const papUsers = await UserModel.find();
+    const displayUsers: DisplayUser[] = [];
+    for (const papUser of papUsers) {
+      const { uid, _id } = papUser;
 
       try {
-        // const userRecord = await firebaseAuth.getUser(uid);
+        const firebaseUser = await firebaseAuth.getUser(uid);
+        const { displayName, email } = firebaseUser!;
 
-        await firebaseAuth.updateUser(uid, {
-          displayName: "Samvrit Srinath",
-          photoURL:
-            "https://www.google.com/url?sa=i&url=https%3A%2F%2Fstackoverflow.com%2Fquestions%2F42893664%2Ffirebase-photourl-from-a-google-auth-provider-returns-a-jpg-with-colors-inverted&psig=AOvVaw1rsKyabxOup86UrqGbfpsp&ust=1714873347675000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCIDx4Jjv8oUDFQAAAAAdAAAAABAD",
-        });
-
-        const newUser = await firebaseAuth.getUser(uid);
-        const { displayName, email, photoURL } = newUser!;
-
-        const displayUser = { _id, uid, displayName, email, photoURL };
+        const displayUser = { _id, uid, displayName, email };
         displayUsers.push(displayUser);
       } catch (error) {
         next(error);
       }
     }
 
-    res.status(200).json(displayUsers as DisplayUser[]);
+    res.status(200).json(displayUsers);
   } catch (error) {
     next(error);
   }

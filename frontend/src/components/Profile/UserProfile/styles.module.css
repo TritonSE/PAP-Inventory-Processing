@@ -1,60 +1,62 @@
-.user {
+.root {
   display: flex;
   flex-direction: row;
   border-radius: 6px;
   background: var(--Functional-Background, #f9f9f9);
 
-  display: flex;
   padding: 26px 34px;
-  align-items: flex-start;
-  gap: 10px;
-  align-self: stretch;
-  margin-bottom: 32px;
+  align-items: center;
+  gap: 40px;
+  position: relative;
 }
 
 .name {
   color: var(--Accent-Blue-1, #102d5f);
-
-  /* Desktop/H2 */
-  font-family: var(--font-title);
+  font-family: Lora;
   font-size: 24px;
-  font-style: normal;
   font-weight: 700;
-  line-height: normal;
-  margin-bottom: 14px;
 }
 
 .email {
   color: var(--Neutral-Gray6, #484848);
-
-  /* Desktop/Body 2 */
-  font-family: var(--font-open-sans);
-  font-size: 16px;
-  font-style: normal;
+  font-family: "Open Sans";
+  font-size: 20px;
   font-weight: 400;
-  line-height: normal;
 }
 
-.pfp {
-  border-radius: 50%;
-  margin-left: 22px;
-}
-
-.row_justify {
+.row {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
 }
 
-.column {
-  display: flex;
-  flex-direction: column;
+.settingsIcon {
+  cursor: pointer;
+  position: absolute;
+  right: 26px;
+  top: 26px;
 }
 
-.column_right {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-left: 41px;
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .email {
+    font-size: 14px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .root {
+    flex-direction: column;
+    align-items: start;
+    gap: 32px;
+  }
+
+  .row {
+    flex-direction: column;
+    align-items: start;
+    gap: 16px;
+  }
 }

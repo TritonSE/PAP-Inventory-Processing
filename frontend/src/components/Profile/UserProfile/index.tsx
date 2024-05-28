@@ -1,33 +1,31 @@
 import React from "react";
 import styles from "@/components/Profile/UserProfile/styles.module.css";
 import Image from "next/image";
-import { User } from "firebase/auth";
+import { Avatar } from "@mui/material";
 
 export interface UserProps {
   name: string;
   email: string;
-  photoURL: string;
 }
-export function UserProfile({ name, email, photoURL }: UserProps) {
+export function UserProfile({ name, email }: UserProps) {
   return (
-    <div className={styles.user}>
-      <div className={styles.column}>
-        <Image className={styles.pfp} src={photoURL} alt="Internal Error" width={93} height={93} />
-      </div>
-      <div className={styles.column_right}>
-        <div className={styles.row_justify}>
-          <p className={styles.name}>{name}</p>
-          <Image
-            src="/ic_settings.svg"
-            alt="Internal Error"
-            // width={isMobile ? 100 : 155}
-            // height={isMobile ? 69 : 106}
-            width={18}
-            height={18}
-          />
-        </div>
+    <div className={styles.root}>
+      <Avatar style={{ width: 93, height: 93, fontSize: 48 }}>{name?.slice(0, 1)}</Avatar>
+      <div className={styles.row}>
+        <p className={styles.name}>{name}</p>
         <p className={styles.email}>{email}</p>
+        <div />
       </div>
+      <Image
+        src="/ic_settings.svg"
+        alt="Gear"
+        width={24}
+        height={24}
+        className={styles.settingsIcon}
+        onClick={() => {
+          // TODO: show account options (delete acct/change pwd)
+        }}
+      />
     </div>
   );
 }

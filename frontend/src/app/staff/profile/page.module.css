@@ -1,26 +1,15 @@
-/* .page {
-  background-color: var(--color-background);
-  padding-bottom: 67px;
-  min-height: 100vh;
-} */
 .main {
   padding: 64px;
-  padding-top: 105px;
   background-color: var(--color-background);
   display: flex;
   flex-direction: column;
   color: var(--Accent-Blue-1, #102d5f);
   text-align: left;
 
-  padding: 105px 120px 0;
+  padding: 105px 120px;
   gap: 40px;
-
-  /* gap: 32px; */
-  /* Desktop/H1 */
   font-family: var(--font-title);
-  font-style: normal;
   font-weight: 700;
-  line-height: normal;
 }
 
 .row {
@@ -40,4 +29,34 @@
 
 .subtitle {
   font-size: 24px;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .main {
+    padding: 64px 48px;
+  }
+
+  .title {
+    font-size: 36px;
+  }
+
+  .subtitle {
+    font-size: 28px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .main {
+    padding: 36px 24px;
+  }
+
+  .title {
+    font-size: 28px;
+  }
+
+  .subtitle {
+    font-size: 20px;
+  }
 }
