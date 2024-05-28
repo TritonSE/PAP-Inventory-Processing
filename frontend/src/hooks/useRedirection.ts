@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 export const LOGIN_URL = "/login";
-export const HOME_URL = "/staff/vsr";
+export const HOME_URL = "/staff/profile";
 
 /**
  * An interface for the user's current authentication credentials
