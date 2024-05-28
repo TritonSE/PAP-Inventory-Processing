@@ -17,6 +17,7 @@ import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
 import { Button } from "@/components/shared/Button";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import { ConfirmDiscardEditsModal } from "@/components/shared/ConfirmDiscardEditsModal";
+import { useDirtyForm } from "@/hooks/useDirtyForm";
 
 enum FurnitureItemAction {
   NONE,
@@ -178,6 +179,13 @@ export const EditTemplate = ({
 
   const canSelectAnotherItem = isEditing && !isAddingNewItem && !editingItemId;
 
+  const hasUnsavedChanges =
+    (isAddingNewItem && (itemName !== "" || allowMultiple)) ||
+    (editingItemId !== null &&
+      (itemName !== getFurnitureItemById(editingItemId)?.name ||
+        allowMultiple !== getFurnitureItemById(editingItemId)?.allowMultiple));
+  useDirtyForm({ isDirty: hasUnsavedChanges });
+
   return (
     <>
       <div className={`${styles.column} ${isEditing ? styles.boxShadow : ""}`}>
@@ -264,12 +272,7 @@ export const EditTemplate = ({
                     variant="error"
                     outlined
                     onClick={() => {
-                      if (
-                        (isAddingNewItem && (itemName || allowMultiple)) ||
-                        (editingItemId &&
-                          (itemName !== getFurnitureItemById(editingItemId)?.name ||
-                            allowMultiple !== getFurnitureItemById(editingItemId)?.allowMultiple))
-                      ) {
+                      if (hasUnsavedChanges) {
                         setDiscardEditsConfirmationModalOpen(true);
                       } else {
                         onFinishEditing();

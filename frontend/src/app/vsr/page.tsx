@@ -35,6 +35,7 @@ import { ICreateVSRFormInput, IVSRFormInput } from "@/components/VSRForm/VSRForm
 import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 import { ListDetail, SingleDetail } from "@/components/VSRIndividual";
 import styles from "@/app/vsr/page.module.css";
+import { useDirtyForm } from "@/hooks/useDirtyForm";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -56,10 +57,12 @@ const VeteranServiceRequest: React.FC = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, dirtyFields },
     watch,
     reset,
   } = formProps;
+
+  useDirtyForm({ isDirty: Object.keys(dirtyFields).length > 0 });
 
   /**
    * Internal state for fields that are complicated and cannot be controlled with a

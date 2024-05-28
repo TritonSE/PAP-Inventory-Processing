@@ -45,7 +45,6 @@ export default function furnitureItemTemplate() {
 
   const handleBeginEditing = (category: string) => {
     setEditingCategory(category);
-    console.log(category);
   };
 
   const handleFinishEditing = () => {

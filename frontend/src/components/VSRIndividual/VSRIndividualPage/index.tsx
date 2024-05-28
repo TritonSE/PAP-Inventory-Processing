@@ -34,6 +34,7 @@ import { useMediaQuery } from "@mui/material";
 import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 import { ConfirmDiscardEditsModal } from "@/components/shared/ConfirmDiscardEditsModal";
 import { ADMIN_ROLE } from "@/constants/roles";
+import { useDirtyForm } from "@/hooks/useDirtyForm";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -60,7 +61,14 @@ export const VSRIndividualPage = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const formProps = useForm<IEditVSRFormInput>();
-  const { handleSubmit } = formProps;
+  const {
+    handleSubmit,
+    formState: { dirtyFields },
+    reset,
+  } = formProps;
+
+  const isDirty = Object.keys(dirtyFields).length > 0;
+  useDirtyForm({ isDirty });
 
   const [updateStatusSuccessNotificationOpen, setUpdateStatusSuccessNotificationOpen] =
     useState(false);
@@ -148,6 +156,7 @@ export const VSRIndividualPage = () => {
 
     // Handle success/error
     if (response.success) {
+      reset();
       setIsEditing(false);
       setVSR(response.data);
       setEditSuccessNotificationOpen(true);
@@ -277,6 +286,12 @@ export const VSRIndividualPage = () => {
     setLoadingDownload(false);
   };
 
+  const discardChanges = () => {
+    reset();
+    fetchVSR();
+    setIsEditing(false);
+  };
+
   /**
    * Conditionally renders the "Approve" button on the page, if the VSR's status is "Received"
    */
@@ -312,7 +327,13 @@ export const VSRIndividualPage = () => {
               iconAlt="Close"
               text="Discard Changes"
               hideTextOnMobile
-              onClick={() => setDiscardEditsConfirmationModalOpen(true)}
+              onClick={() => {
+                if (isDirty) {
+                  setDiscardEditsConfirmationModalOpen(true);
+                } else {
+                  discardChanges();
+                }
+              }}
             />
             <Button
               variant="primary"
@@ -665,10 +686,7 @@ export const VSRIndividualPage = () => {
       <ConfirmDiscardEditsModal
         isOpen={discardEditsConfirmationModalOpen}
         onClose={() => setDiscardEditsConfirmationModalOpen(false)}
-        onDiscardChanges={() => {
-          fetchVSR();
-          setIsEditing(false);
-        }}
+        onDiscardChanges={discardChanges}
       />
 
       {/* Modals & notifications for saving changes to VSR */}
