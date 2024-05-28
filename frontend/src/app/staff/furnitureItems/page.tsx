@@ -4,7 +4,10 @@ import { EditTemplate } from "@/components/FurnitureRequest/EditTemplate";
 import { useMemo } from "react";
 import { FurnitureItem, getFurnitureItems } from "@/api/FurnitureItems";
 import React, { useEffect, useState } from "react";
-import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
+import {
+  useRedirectToHomeIfNotAdmin,
+  useRedirectToLoginIfNotSignedIn,
+} from "@/hooks/useRedirection";
 import styles from "@/app/staff/furnitureItems/page.module.css";
 
 export default function furnitureItemTemplate() {
@@ -12,6 +15,7 @@ export default function furnitureItemTemplate() {
   const [editingCategory, setEditingCategory] = useState<string>();
 
   useRedirectToLoginIfNotSignedIn();
+  useRedirectToHomeIfNotAdmin();
 
   useEffect(() => {
     fetchFurnitureItems();

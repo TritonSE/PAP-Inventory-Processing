@@ -20,6 +20,7 @@ import { Button } from "@/components/shared/Button";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import FilterChip from "@/components/VSRTable/FilterChip";
 import styles from "@/app/staff/vsr/page.module.css";
+import { ADMIN_ROLE } from "@/constants/roles";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -308,7 +309,7 @@ export default function VSRTableView() {
             </div>
           </div>
           <div className={styles.row_right}>
-            {papUser?.role === "admin" && atLeastOneRowSelected ? (
+            {papUser?.role === ADMIN_ROLE && atLeastOneRowSelected ? (
               <Button
                 variant="error"
                 outlined

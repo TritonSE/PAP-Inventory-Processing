@@ -1,5 +1,5 @@
 import express from "express";
-import { requireSignedIn, requireStaffOrAdmin } from "src/middleware/auth";
+import { requireSignedIn, requireAdmin } from "src/middleware/auth";
 import * as FurnitureItemController from "src/controllers/furnitureItem";
 import * as FurnitureItemValidator from "src/validators/furnitureItem";
 
@@ -9,20 +9,15 @@ router.get("/", FurnitureItemController.getFurnitureItems);
 router.post(
   "/",
   requireSignedIn,
-  requireStaffOrAdmin,
+  requireAdmin,
   FurnitureItemValidator.createFurnitureItem,
   FurnitureItemController.createFurnitureItem,
 );
-router.delete(
-  "/:id",
-  requireSignedIn,
-  requireStaffOrAdmin,
-  FurnitureItemController.deleteFurnitureItem,
-);
+router.delete("/:id", requireSignedIn, requireAdmin, FurnitureItemController.deleteFurnitureItem);
 router.put(
   "/:id",
   requireSignedIn,
-  requireStaffOrAdmin,
+  requireAdmin,
   FurnitureItemValidator.updateFurnitureItem,
   FurnitureItemController.updateFurnitureItem,
 );

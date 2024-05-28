@@ -33,6 +33,7 @@ import { Button } from "@/components/shared/Button";
 import { useMediaQuery } from "@mui/material";
 import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
 import { ConfirmDiscardEditsModal } from "@/components/shared/ConfirmDiscardEditsModal";
+import { ADMIN_ROLE } from "@/constants/roles";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -326,7 +327,7 @@ export const VSRIndividualPage = () => {
         ) : (
           <>
             {/* Show delete button only if user is an admin */}
-            {papUser?.role === "admin" ? (
+            {papUser?.role === ADMIN_ROLE ? (
               <Button
                 variant="error"
                 outlined
