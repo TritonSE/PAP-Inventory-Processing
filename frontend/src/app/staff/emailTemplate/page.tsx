@@ -7,19 +7,31 @@ import {
   useRedirectToHomeIfNotAdmin,
   useRedirectToLoginIfNotSignedIn,
 } from "@/hooks/useRedirection";
-import { useContext, useEffect, useState } from "react";
+import { ComponentType, useContext, useEffect, useState } from "react";
 import { Button } from "@/components/shared/Button";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
-import htmlToDraft from "html-to-draftjs";
 import { ContentState, EditorState, convertToRaw } from "draft-js";
-import { Editor } from "react-draft-wysiwyg";
+import { EditorProps } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
 import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import draftToHtml from "draftjs-to-html";
 import { useDirtyForm } from "@/hooks/useDirtyForm";
-import styles from "@/app/staff/emailTemplate/page.module.css";
 import { ConfirmDiscardEditsModal } from "@/components/shared/ConfirmDiscardEditsModal";
+import dynamic from "next/dynamic";
+import styles from "@/app/staff/emailTemplate/page.module.css";
+
+const Editor = dynamic(
+  () =>
+    import("react-draft-wysiwyg").then(
+      (mod) => mod.Editor as unknown as ComponentType<EditorProps>,
+    ),
+  {
+    ssr: false,
+  },
+);
+const htmlToDraft =
+  typeof window === "undefined" ? null : import("html-to-draftjs").then((mod) => mod.default);
 
 export default function EditEmailTemplate() {
   const { firebaseUser } = useContext(UserContext);
@@ -43,8 +55,11 @@ export default function EditEmailTemplate() {
   useRedirectToLoginIfNotSignedIn();
   useRedirectToHomeIfNotAdmin();
 
-  const htmlToEditorState = (html: string) => {
-    const contentBlock = htmlToDraft(html);
+  const htmlToEditorState = async (html: string) => {
+    if (!htmlToDraft) {
+      return EditorState.createEmpty();
+    }
+    const contentBlock = (await htmlToDraft)(html);
     const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
     return EditorState.createWithContent(contentState);
   };
@@ -58,7 +73,7 @@ export default function EditEmailTemplate() {
     const result = await getConfirmationEmail(firebaseToken);
     if (result.success) {
       setInitialHTML(result.data.html);
-      setEditorState(htmlToEditorState(result.data.html));
+      htmlToEditorState(result.data.html).then(setEditorState);
       setPAPLogoHTML(result.data.papLogoHTML.replace("cid:", "/"));
     } else {
       console.error(`Error retrieving confirmation email: ${result.error}`);
@@ -80,7 +95,7 @@ export default function EditEmailTemplate() {
     const result = await updateConfirmationEmail(firebaseToken!, newHTML);
     if (result.success) {
       setInitialHTML(result.data.html);
-      setEditorState(htmlToEditorState(result.data.html));
+      htmlToEditorState(result.data.html).then(setEditorState);
       setSuccessSave(true);
     } else {
       console.error(`Error saving email changes: ${result.error}`);
@@ -91,7 +106,7 @@ export default function EditEmailTemplate() {
   };
 
   const discardChanges = async () => {
-    setEditorState(htmlToEditorState(initialHTML));
+    htmlToEditorState(initialHTML).then(setEditorState);
     setIsDirty(false);
   };
 
