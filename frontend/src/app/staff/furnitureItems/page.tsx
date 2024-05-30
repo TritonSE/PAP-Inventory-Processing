@@ -10,7 +10,7 @@ import {
 } from "@/hooks/useRedirection";
 import styles from "@/app/staff/furnitureItems/page.module.css";
 
-export default function furnitureItemTemplate() {
+export default function FurnitureItemTemplate() {
   const [furnitureItems, setFurnitureItems] = useState<FurnitureItem[]>();
   const [editingCategory, setEditingCategory] = useState<string>();
 
