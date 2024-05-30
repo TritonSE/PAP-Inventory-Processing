@@ -51,4 +51,5 @@ const vsrSchema = new mongoose_1.Schema({
     lastUpdated: { type: Date, required: true },
     status: { type: String, required: true },
 });
+vsrSchema.index({ name: "text" });
 exports.default = (0, mongoose_1.model)("VSR", vsrSchema);

@@ -13,6 +13,7 @@ const http_errors_1 = require("http-errors");
 const vsr_1 = __importDefault(require("./routes/vsr"));
 const furnitureItem_1 = __importDefault(require("./routes/furnitureItem"));
 const user_1 = __importDefault(require("./routes/user"));
+const confirmationEmail_1 = __importDefault(require("./routes/confirmationEmail"));
 const validateEnv_1 = __importDefault(require("./util/validateEnv"));
 const app = (0, express_1.default)();
 // initializes Express to accept JSON in the request/response body
@@ -29,6 +30,7 @@ app.use((0, cors_1.default)({
 app.use("/api/user", user_1.default);
 app.use("/api/vsr", vsr_1.default);
 app.use("/api/furnitureItems", furnitureItem_1.default);
+app.use("/api/confirmationEmail", confirmationEmail_1.default);
 /**
  * Error handler; all errors thrown by server are handled here.
  * Explicit typings required here because TypeScript cannot infer the argument types.
