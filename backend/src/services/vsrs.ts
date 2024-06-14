@@ -11,7 +11,7 @@ export const retrieveVSRs = async (
     ...(search
       ? [
           {
-            $match: { name: { $regex: new RegExp(search) } },
+            $match: { name: { $regex: new RegExp(search, "i") } },
           },
         ]
       : []),
