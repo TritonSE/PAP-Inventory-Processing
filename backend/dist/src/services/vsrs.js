@@ -19,7 +19,7 @@ const retrieveVSRs = (search, status, incomeLevel, zipCodes, vsrIds) => __awaite
         ...(search
             ? [
                 {
-                    $match: { name: { $regex: new RegExp(search) } },
+                    $match: { name: { $regex: new RegExp(search, "i") } },
                 },
             ]
             : []),
