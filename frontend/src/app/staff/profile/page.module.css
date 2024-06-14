@@ -1,6 +1,10 @@
+.page {
+  background-color: var(--color-background);
+  min-height: 100vh;
+}
+
 .main {
   padding: 64px;
-  background-color: var(--color-background);
   display: flex;
   flex-direction: column;
   color: var(--Accent-Blue-1, #102d5f);

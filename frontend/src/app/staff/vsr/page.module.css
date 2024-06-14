@@ -96,6 +96,13 @@
   text-wrap: nowrap;
 }
 
+.noVsrs {
+  color: var(--Accent-Blue-1, #102d5f);
+  font-family: Lora;
+  font-size: 40px;
+  font-weight: 700;
+}
+
 /* shrink the margins at a screen size larger than tablet to avoid overflow */
 @media screen and (max-width: 1150px) {
   .column {
@@ -117,6 +124,10 @@
   .appliedText {
     font-size: 14px;
   }
+
+  .noVsrs {
+    font-size: 36px;
+  }
 }
 
 @media screen and (max-width: 600px) {
@@ -137,6 +148,10 @@
 
   .statusLabel {
     font-size: 12px;
+  }
+
+  .noVsrs {
+    font-size: 28px;
   }
 }
 

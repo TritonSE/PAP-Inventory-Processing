@@ -1,7 +1,7 @@
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { Portal } from "@mui/material";
 import Image from "next/image";
-import { CSSProperties } from "react";
+import { CSSProperties, useEffect } from "react";
 import styles from "@/components/shared/NotificationBanner/styles.module.css";
 
 interface NotificationBannerProps {
@@ -35,6 +35,14 @@ export const NotificationBanner = ({
     variant === "undone" ? "Arrow Back" : variant === "error" ? "Exclamation Mark" : "Checkmark";
   const variantColor =
     variant === "undone" ? "#102D5F" : variant === "error" ? "#BE2D46" : "#3bb966";
+
+  useEffect(() => {
+    if (isOpen) {
+      // Automatically dismiss banner after 5 seconds
+      const timeout = setTimeout(onDismissClicked, 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [isOpen]);
 
   return isOpen ? (
     <Portal>
