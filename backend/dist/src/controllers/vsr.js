@@ -18,16 +18,16 @@ const http_errors_1 = __importDefault(require("http-errors"));
 const furnitureItem_1 = __importDefault(require("../models/furnitureItem"));
 const vsr_1 = __importDefault(require("../models/vsr"));
 const emails_1 = require("../services/emails");
+const vsrs_1 = require("../services/vsrs");
 const validationErrorParser_1 = __importDefault(require("../util/validationErrorParser"));
 const exceljs_1 = __importDefault(require("exceljs"));
-const mongodb_1 = require("mongodb");
 /**
  * Gets all VSRs in the database. Requires the user to be signed in and have
  * staff or admin permission.
  */
 const getAllVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const vsrs = yield vsr_1.default.find();
+        const vsrs = yield (0, vsrs_1.retrieveVSRs)(req.query.search, req.query.status, req.query.incomeLevel, req.query.zipCode ? req.query.zipCode.split(",") : undefined, undefined);
         res.status(200).json({ vsrs });
     }
     catch (error) {
@@ -238,30 +238,14 @@ const writeSpreadsheet = (plainVsrs, res) => __awaiter(void 0, void 0, void 0, f
     yield workbook.xlsx.write(res);
 });
 const bulkExportVSRS = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b;
     try {
-        const filename = "vsrs.xlsx";
+        const filename = `vsrs_${new Date().toISOString()}.xlsx`;
         // Set some headers on the response so the client knows that a file is attached
         res.set({
             "Content-Disposition": `attachment; filename="${filename}"`,
             "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         });
-        let vsrs;
-        if (req.query.vsrIds && ((_a = req.query.vsrIds.length) !== null && _a !== void 0 ? _a : 0) > 0) {
-            // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
-            // with an _id in the vsrIds list
-            // Need to convert each ID string to an ObjectId object
-            const vsrObjectIds = (_b = req.query.vsrIds) === null || _b === void 0 ? void 0 : _b.split(",").map((_id) => new mongodb_1.ObjectId(_id));
-            vsrs = (yield vsr_1.default.find({
-                _id: {
-                    $in: vsrObjectIds,
-                },
-            })).map((doc) => doc.toObject());
-        }
-        else {
-            // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
-            vsrs = (yield vsr_1.default.find()).map((doc) => doc.toObject());
-        }
+        const vsrs = yield (0, vsrs_1.retrieveVSRs)(req.query.search, req.query.status, req.query.incomeLevel, req.query.zipCode ? req.query.zipCode.split(",") : undefined, req.query.vsrIds ? req.query.vsrIds.split(",") : undefined);
         yield writeSpreadsheet(vsrs, res);
     }
     catch (error) {

@@ -83,6 +83,7 @@ export const RequestedFurnishings = ({
               <div className={styles.chipContainer}>
                 {furnitureCategoriesToItems[categoryName].map((furnitureItem) => (
                   <FurnitureItemSelection
+                    isActive
                     key={furnitureItem._id}
                     furnitureItem={furnitureItem}
                     selection={

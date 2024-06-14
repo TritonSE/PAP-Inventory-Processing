@@ -7,6 +7,7 @@ import {
   sendVSRConfirmationEmailToVeteran,
   sendVSRNotificationEmailToStaff,
 } from "src/services/emails";
+import { retrieveVSRs } from "src/services/vsrs";
 import validationErrorParser from "src/util/validationErrorParser";
 import ExcelJS from "exceljs";
 import { ObjectId } from "mongodb";
@@ -19,7 +20,13 @@ type FurnitureItemEntry = FurnitureItem & { _id: ObjectId };
  */
 export const getAllVSRS: RequestHandler = async (req, res, next) => {
   try {
-    const vsrs = await VSRModel.find();
+    const vsrs = await retrieveVSRs(
+      req.query.search as string | undefined,
+      req.query.status as string | undefined,
+      req.query.incomeLevel as string | undefined,
+      req.query.zipCode ? (req.query.zipCode as string).split(",") : undefined,
+      undefined,
+    );
 
     res.status(200).json({ vsrs });
   } catch (error) {
@@ -289,32 +296,20 @@ const writeSpreadsheet = async (plainVsrs: VSR[], res: Response) => {
 
 export const bulkExportVSRS: RequestHandler = async (req, res, next) => {
   try {
-    const filename = "vsrs.xlsx";
+    const filename = `vsrs_${new Date().toISOString()}.xlsx`;
     // Set some headers on the response so the client knows that a file is attached
     res.set({
       "Content-Disposition": `attachment; filename="${filename}"`,
       "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
     });
 
-    let vsrs: VSR[];
-
-    if (req.query.vsrIds && ((req.query.vsrIds.length ?? 0) as number) > 0) {
-      // If the "vsrIds" query parameter exists and is non-empty, then find & export all VSRs
-      // with an _id in the vsrIds list
-
-      // Need to convert each ID string to an ObjectId object
-      const vsrObjectIds = (req.query.vsrIds as string)?.split(",").map((_id) => new ObjectId(_id));
-      vsrs = (
-        await VSRModel.find({
-          _id: {
-            $in: vsrObjectIds,
-          },
-        })
-      ).map((doc) => doc.toObject());
-    } else {
-      // If the "vsrIds" query parameter is not provided or is empty, export all VSRs in the database
-      vsrs = (await VSRModel.find()).map((doc) => doc.toObject());
-    }
+    const vsrs = await retrieveVSRs(
+      req.query.search as string | undefined,
+      req.query.status as string | undefined,
+      req.query.incomeLevel as string | undefined,
+      req.query.zipCode ? (req.query.zipCode as string).split(",") : undefined,
+      req.query.vsrIds ? (req.query.vsrIds as string).split(",") : undefined,
+    );
 
     await writeSpreadsheet(vsrs, res);
   } catch (error) {

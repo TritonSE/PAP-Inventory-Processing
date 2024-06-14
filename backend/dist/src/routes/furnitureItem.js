@@ -27,7 +27,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const auth_1 = require("../middleware/auth");
 const FurnitureItemController = __importStar(require("../controllers/furnitureItem"));
+const FurnitureItemValidator = __importStar(require("../validators/furnitureItem"));
 const router = express_1.default.Router();
 router.get("/", FurnitureItemController.getFurnitureItems);
+router.post("/", auth_1.requireSignedIn, auth_1.requireAdmin, FurnitureItemValidator.createFurnitureItem, FurnitureItemController.createFurnitureItem);
+router.delete("/:id", auth_1.requireSignedIn, auth_1.requireAdmin, FurnitureItemController.deleteFurnitureItem);
+router.put("/:id", auth_1.requireSignedIn, auth_1.requireAdmin, FurnitureItemValidator.updateFurnitureItem, FurnitureItemController.updateFurnitureItem);
 exports.default = router;

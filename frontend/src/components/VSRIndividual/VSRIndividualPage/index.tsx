@@ -15,6 +15,7 @@ import {
   updateVSRStatus,
   UpdateVSRRequest,
   updateVSR,
+  deleteVSR,
   exportVSRPDF,
 } from "@/api/VSRs";
 import { useParams, useRouter } from "next/navigation";
@@ -25,13 +26,15 @@ import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import { UserContext } from "@/contexts/userContext";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
-import { DeleteVSRsModal } from "@/components/shared/DeleteVSRsModal";
+import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { IEditVSRFormInput } from "@/components/VSRForm/VSRFormTypes";
-import { BaseModal } from "@/components/shared/BaseModal";
 import { Button } from "@/components/shared/Button";
 import { useMediaQuery } from "@mui/material";
 import styles from "@/components/VSRIndividual/VSRIndividualPage/styles.module.css";
+import { ConfirmDiscardEditsModal } from "@/components/shared/ConfirmDiscardEditsModal";
+import { ADMIN_ROLE } from "@/constants/roles";
+import { useDirtyForm } from "@/hooks/useDirtyForm";
 
 enum VSRIndividualError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -58,7 +61,14 @@ export const VSRIndividualPage = () => {
   const [isEditing, setIsEditing] = useState(false);
 
   const formProps = useForm<IEditVSRFormInput>();
-  const { handleSubmit } = formProps;
+  const {
+    handleSubmit,
+    formState: { dirtyFields },
+    reset,
+  } = formProps;
+
+  const isDirty = Object.keys(dirtyFields).length > 0;
+  useDirtyForm({ isDirty });
 
   const [updateStatusSuccessNotificationOpen, setUpdateStatusSuccessNotificationOpen] =
     useState(false);
@@ -67,7 +77,6 @@ export const VSRIndividualPage = () => {
   const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
 
   const [discardEditsConfirmationModalOpen, setDiscardEditsConfirmationModalOpen] = useState(false);
-  const [saveEditsConfirmationModalOpen, setSaveEditsConfirmationModalOpen] = useState(false);
   const [editSuccessNotificationOpen, setEditSuccessNotificationOpen] = useState(false);
   const [editErrorNotificationOpen, setEditErrorNotificationOpen] = useState(false);
   const [loadingEdit, setLoadingEdit] = useState(false);
@@ -77,6 +86,9 @@ export const VSRIndividualPage = () => {
   const [loadingDownload, setLoadingDownload] = useState(false);
 
   const [deleteVsrModalOpen, setDeleteVsrModalOpen] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [successNotificationOpen, setSuccessNotificationOpen] = useState(false);
+  const [errorNotificationOpen, setErrorNotificationOpen] = useState(false);
 
   const { isMobile, isTablet } = useScreenSizes();
   const useColumn = useMediaQuery("@media screen and (max-width: 1000px)");
@@ -144,6 +156,7 @@ export const VSRIndividualPage = () => {
 
     // Handle success/error
     if (response.success) {
+      reset();
       setIsEditing(false);
       setVSR(response.data);
       setEditSuccessNotificationOpen(true);
@@ -183,6 +196,43 @@ export const VSRIndividualPage = () => {
       setUpdateStatusErrorNotificationOpen(true);
     }
     setLoadingUpdateStatus(false);
+  };
+
+  const onDelete = async () => {
+    if (loadingDelete || !firebaseUser) {
+      return;
+    }
+
+    setSuccessNotificationOpen(false);
+    setErrorNotificationOpen(false);
+    setLoadingDelete(true);
+
+    try {
+      const firebaseToken = await firebaseUser.getIdToken();
+      if (!firebaseToken) {
+        setLoadingDelete(false);
+        return;
+      }
+
+      await deleteVSR(vsr._id, firebaseToken).then((res) => {
+        if (res.success) {
+          return Promise.resolve();
+        } else {
+          return Promise.reject(res.error);
+        }
+      }),
+        setSuccessNotificationOpen(true);
+      // Redirect user to dashboard after deleting VSR, but give them some time to see the success message first
+      setTimeout(() => {
+        router.push("/staff/vsr");
+      }, 1000);
+    } catch (error) {
+      console.error(`Error deleting VSR(s): ${error}`);
+      setErrorNotificationOpen(true);
+    } finally {
+      setLoadingDelete(false);
+      setDeleteVsrModalOpen(false);
+    }
   };
 
   /**
@@ -236,6 +286,12 @@ export const VSRIndividualPage = () => {
     setLoadingDownload(false);
   };
 
+  const discardChanges = () => {
+    reset();
+    fetchVSR();
+    setIsEditing(false);
+  };
+
   /**
    * Conditionally renders the "Approve" button on the page, if the VSR's status is "Received"
    */
@@ -271,7 +327,13 @@ export const VSRIndividualPage = () => {
               iconAlt="Close"
               text="Discard Changes"
               hideTextOnMobile
-              onClick={() => setDiscardEditsConfirmationModalOpen(true)}
+              onClick={() => {
+                if (isDirty) {
+                  setDiscardEditsConfirmationModalOpen(true);
+                } else {
+                  discardChanges();
+                }
+              }}
             />
             <Button
               variant="primary"
@@ -280,13 +342,13 @@ export const VSRIndividualPage = () => {
               iconAlt="Check"
               text="Save Changes"
               hideTextOnMobile
-              onClick={() => setSaveEditsConfirmationModalOpen(true)}
+              onClick={(e) => handleSubmit(onSubmitEdits)(e)}
             />
           </>
         ) : (
           <>
             {/* Show delete button only if user is an admin */}
-            {papUser?.role === "admin" ? (
+            {papUser?.role === ADMIN_ROLE ? (
               <Button
                 variant="error"
                 outlined
@@ -519,7 +581,7 @@ export const VSRIndividualPage = () => {
 
   return (
     <>
-      <HeaderBar showLogoutButton />
+      <HeaderBar veteranVersion={false} />
       <div className={styles.page}>
         <div className={`${styles.headerRow} ${styles.toDashboardRow}`}>
           <a href="/staff/vsr" style={isEditing ? { opacity: 0.5 } : {}}>
@@ -603,79 +665,31 @@ export const VSRIndividualPage = () => {
         subText="An error occurred, please check your internet connection or try again later"
         onDismissClicked={() => setUpdateStatusErrorNotificationOpen(false)}
       />
-      <DeleteVSRsModal
+      <ConfirmDeleteModal
         isOpen={deleteVsrModalOpen}
         onClose={() => setDeleteVsrModalOpen(false)}
-        afterDelete={() => {
-          // Redirect user to dashboard after deleting VSR, but give them some time to see the success message first
-          setTimeout(() => {
-            router.push("/staff/vsr");
-          }, 1000);
-        }}
-        vsrIds={[vsr._id]}
+        title="Delete VSR(s)"
+        content={
+          <>
+            {"Deleted VSR’s "}
+            <span style={{ fontWeight: 700 }}>cannot</span>
+            {" be recovered. Are you sure you’d like to delete the selected VSR forms ("}
+            {1}
+            {")?"}
+          </>
+        }
+        cancelText="Cancel"
+        confirmText="Delete VSR(s)"
+        onConfirm={onDelete}
+        buttonLoading={loadingDelete}
       />
-      <BaseModal
+      <ConfirmDiscardEditsModal
         isOpen={discardEditsConfirmationModalOpen}
         onClose={() => setDiscardEditsConfirmationModalOpen(false)}
-        title="Discard Changes"
-        content="Are you sure you want to discard your changes?"
-        bottomRow={
-          <div className={styles.modalBottomRow}>
-            <Button
-              variant="primary"
-              outlined
-              text="Keep Editing"
-              className={styles.modalButton}
-              onClick={() => setDiscardEditsConfirmationModalOpen(false)}
-              style={{ width: "100%" }}
-            />
-            <Button
-              variant="error"
-              outlined={false}
-              text="Discard Changes"
-              className={styles.modalButton}
-              onClick={() => {
-                fetchVSR();
-                setDiscardEditsConfirmationModalOpen(false);
-                setIsEditing(false);
-              }}
-              style={{ width: "100%" }}
-            />
-          </div>
-        }
+        onDiscardChanges={discardChanges}
       />
 
       {/* Modals & notifications for saving changes to VSR */}
-      <BaseModal
-        isOpen={saveEditsConfirmationModalOpen}
-        onClose={() => setSaveEditsConfirmationModalOpen(false)}
-        title="Save Changes"
-        content="Would you like to save your changes?"
-        bottomRow={
-          <div className={styles.modalBottomRow}>
-            <Button
-              variant="primary"
-              outlined
-              text="Keep Editing"
-              className={styles.modalButton}
-              onClick={() => setSaveEditsConfirmationModalOpen(false)}
-              style={{ width: "100%" }}
-            />
-            <Button
-              variant="primary"
-              outlined={false}
-              text="Save Changes"
-              className={styles.modalButton}
-              onClick={(e) => {
-                // Close the confirmation modal to enable user to see any errors on the form
-                setSaveEditsConfirmationModalOpen(false);
-                handleSubmit(onSubmitEdits)(e);
-              }}
-              style={{ width: "100%" }}
-            />
-          </div>
-        }
-      />
       <NotificationBanner
         variant="success"
         isOpen={editSuccessNotificationOpen}
@@ -702,6 +716,19 @@ export const VSRIndividualPage = () => {
         mainText="Unable to Download PDF"
         subText="An error occurred, please check your internet connection or try again later"
         onDismissClicked={() => setDownloadErrorNotificationOpen(false)}
+      />
+      <NotificationBanner
+        variant="success"
+        isOpen={successNotificationOpen}
+        mainText="VSR(s) Deleted Successfully"
+        onDismissClicked={() => setSuccessNotificationOpen(false)}
+      />
+      <NotificationBanner
+        variant="error"
+        isOpen={errorNotificationOpen}
+        mainText="Unable to Delete VSR(s)"
+        subText="There was an error deleting the VSR(s). Please try again later."
+        onDismissClicked={() => setErrorNotificationOpen(false)}
       />
     </>
   );

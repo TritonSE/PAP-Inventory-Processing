@@ -1,11 +1,12 @@
 import { User } from "@/api/Users";
+import { ADMIN_ROLE } from "@/constants/roles";
 import { UserContext } from "@/contexts/userContext";
 import { User as FirebaseUser } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { useContext, useEffect } from "react";
 
 export const LOGIN_URL = "/login";
-export const HOME_URL = "/staff/vsr";
+export const HOME_URL = "/staff/profile";
 
 /**
  * An interface for the user's current authentication credentials
@@ -62,5 +63,15 @@ export const useRedirectToLoginIfNotSignedIn = () => {
   useRedirection({
     checkShouldRedirect: ({ firebaseUser, papUser }) => firebaseUser === null || papUser === null,
     redirectURL: LOGIN_URL,
+  });
+};
+
+/**
+ * A hook that redirects the user to the staff home page if they are signed in, but not an admin
+ */
+export const useRedirectToHomeIfNotAdmin = () => {
+  useRedirection({
+    checkShouldRedirect: ({ papUser }) => papUser !== null && papUser.role !== ADMIN_ROLE,
+    redirectURL: HOME_URL,
   });
 };

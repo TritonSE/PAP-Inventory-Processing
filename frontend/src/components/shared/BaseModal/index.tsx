@@ -24,7 +24,7 @@ export const BaseModal = ({ isOpen, onClose, title, content, bottomRow }: BaseMo
           </button>
           <h2 className={styles.title}>{title}</h2>
           <p className={styles.content}>{content}</p>
-          <div className={styles.bottomRowContainer}>{bottomRow}</div>
+          {bottomRow ? <div className={styles.bottomRowContainer}>{bottomRow}</div> : null}
         </div>
       </Modal>
     </>

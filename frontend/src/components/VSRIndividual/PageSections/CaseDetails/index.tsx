@@ -55,6 +55,7 @@ export const CaseDetails = ({
       <StatusDropdown
         onChanged={onUpdateVSRStatus}
         value={vsr.status != undefined ? vsr.status : "Received"}
+        includeAllStatuses={false}
       />
     );
   };

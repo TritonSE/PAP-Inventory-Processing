@@ -35,6 +35,7 @@ import { ICreateVSRFormInput, IVSRFormInput } from "@/components/VSRForm/VSRForm
 import { vsrInputFieldValidators } from "@/components/VSRForm/VSRFormValidators";
 import { ListDetail, SingleDetail } from "@/components/VSRIndividual";
 import styles from "@/app/vsr/page.module.css";
+import { useDirtyForm } from "@/hooks/useDirtyForm";
 
 enum VSRFormError {
   CANNOT_RETRIEVE_FURNITURE_NO_INTERNET,
@@ -56,10 +57,12 @@ const VeteranServiceRequest: React.FC = () => {
     register,
     handleSubmit,
     control,
-    formState: { errors, isValid },
+    formState: { errors, isValid, dirtyFields },
     watch,
     reset,
   } = formProps;
+
+  useDirtyForm({ isDirty: Object.keys(dirtyFields).length > 0 });
 
   /**
    * Internal state for fields that are complicated and cannot be controlled with a
@@ -419,7 +422,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={styles.main}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>
@@ -691,7 +694,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(incrementPageNumber)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={styles.main}>
             <div id="contactInformation" className={styles.formContainer}>
               <div className={styles.form}>
@@ -1082,7 +1085,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(onReview)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={styles.main}>
             <div id="furnishings" className={styles.formContainer}>
               <div className={styles.form}>
@@ -1098,6 +1101,7 @@ const VeteranServiceRequest: React.FC = () => {
                           <div className={styles.chipContainer}>
                             {(items ?? []).map((furnitureItem) => (
                               <FurnitureItemSelection
+                                isActive
                                 key={furnitureItem._id}
                                 furnitureItem={furnitureItem}
                                 selection={
@@ -1138,7 +1142,7 @@ const VeteranServiceRequest: React.FC = () => {
     return (
       <div>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <HeaderBar showLogoutButton={false} />
+          <HeaderBar veteranVersion />
           <div className={`${styles.main} ${styles.mainReview}`}>
             <h1 className={styles.title}>Veteran Service Request Form</h1>
             <p className={styles.description}>

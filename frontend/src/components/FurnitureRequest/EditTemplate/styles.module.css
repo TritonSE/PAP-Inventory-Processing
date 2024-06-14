@@ -1,0 +1,80 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.column:not(:last-child) {
+  padding-bottom: 32px;
+}
+
+.chipContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.roundButton {
+  border-radius: 64px;
+}
+
+.boxShadow {
+  padding: 32px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0px 0px 14.6px 0px rgba(0, 0, 0, 0.1);
+}
+
+.selectTag {
+  color: var(--Primary-Background-Dark, #232220);
+  font-family: "Open Sans";
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 16px;
+}
+
+.buttonsRow {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.editButton {
+  border-radius: 64px;
+}
+
+.textField {
+  margin-top: 32px;
+}
+
+.spacer {
+  width: 100%;
+}
+
+.checkboxRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.multipleQuantityText {
+  color: var(--Primary-Background-Dark, #232220);
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 400;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .selectTag {
+    font-size: 14px;
+  }
+
+  .multipleQuantityText {
+    font-size: 14px;
+  }
+}

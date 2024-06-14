@@ -9,6 +9,7 @@ import { isHttpError } from "http-errors";
 import vsrRoutes from "src/routes/vsr";
 import furnitureItemRoutes from "src/routes/furnitureItem";
 import userRoutes from "src/routes/user";
+import confirmationEmailRoutes from "src/routes/confirmationEmail";
 import env from "src/util/validateEnv";
 
 const app = express();
@@ -31,6 +32,7 @@ app.use(
 app.use("/api/user", userRoutes);
 app.use("/api/vsr", vsrRoutes);
 app.use("/api/furnitureItems", furnitureItemRoutes);
+app.use("/api/confirmationEmail", confirmationEmailRoutes);
 
 /**
  * Error handler; all errors thrown by server are handled here.

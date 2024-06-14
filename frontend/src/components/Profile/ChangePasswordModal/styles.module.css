@@ -1,0 +1,57 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+.subtitle {
+  color: #000;
+  font-family: "Open Sans";
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.submitButton {
+  padding: 12px 32px;
+  text-align: center;
+  font-family: Lora;
+  font-size: 24px;
+  font-weight: 700;
+  width: 100%;
+}
+
+.disabledButton {
+  background: grey !important;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .subtitle {
+    font-size: 18px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .root {
+    gap: 32px;
+  }
+
+  .form {
+    gap: 16px;
+  }
+
+  .subtitle {
+    font-size: 14px;
+  }
+
+  .submitButton {
+    font-size: 18px;
+  }
+}

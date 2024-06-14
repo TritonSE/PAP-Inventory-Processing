@@ -1,5 +1,5 @@
 .root {
-  position: fixed;
+  position: absolute;
   top: 133px;
   left: 50%;
   transform: translateX(-50%);
@@ -11,6 +11,7 @@
   padding: 12px 24px;
   gap: 16px;
   background-color: white;
+  z-index: 2;
 }
 
 .icon {

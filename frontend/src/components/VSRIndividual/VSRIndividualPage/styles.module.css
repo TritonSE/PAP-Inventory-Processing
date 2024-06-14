@@ -44,12 +44,6 @@
   flex-direction: row;
 }
 
-.modalButton {
-  font-size: 24px;
-  text-align: center;
-  width: 100%;
-}
-
 .blueOutlinedButton {
   background-color: transparent;
   border: 1px solid var(--color-tse-accent-blue-1);
@@ -64,12 +58,6 @@
 
 .redButton {
   background-color: #be2d46;
-}
-
-.modalBottomRow {
-  display: flex;
-  flex-direction: row;
-  gap: 32px;
 }
 
 #edit:hover {
@@ -183,10 +171,6 @@
   .page {
     padding: 0 48px;
   }
-
-  .modalButton {
-    font-size: 18px;
-  }
 }
 
 /* mobile version */
@@ -201,9 +185,5 @@
 
   .actions {
     gap: 16px;
-  }
-
-  .modalButton {
-    font-size: 14px;
   }
 }

@@ -1,0 +1,25 @@
+.modalBottomRow {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+
+.modalButton {
+  font-size: 24px;
+  text-align: center;
+  width: 100%;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .modalButton {
+    font-size: 18px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .modalButton {
+    font-size: 14px;
+  }
+}
