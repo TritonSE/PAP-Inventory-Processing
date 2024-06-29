@@ -1,4 +1,13 @@
-import { APIResult, get, handleAPIError, httpDelete, patch, post, put } from "@/api/requests";
+import {
+  APIResult,
+  assertOk,
+  get,
+  handleAPIError,
+  httpDelete,
+  patch,
+  post,
+  put,
+} from "@/api/requests";
 import { createAuthHeader } from "@/api/Users";
 
 export interface FurnitureInput {
@@ -299,9 +308,10 @@ export async function bulkExportVSRS(
 export async function exportVSRPDF(firebaseToken: string, vsrId: string): Promise<APIResult<null>> {
   try {
     // Note: we need to fetch from the frontend API, not the backend API
-    const response = await fetch(`/api/vsr/pdf?id=${vsrId}`, {
+    const response = await fetch(`/next_api/vsr/pdf?id=${vsrId}`, {
       headers: createAuthHeader(firebaseToken),
     });
+    await assertOk(response);
     const blob = await response.blob();
 
     const url = window.URL.createObjectURL(blob);

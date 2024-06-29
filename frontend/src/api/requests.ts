@@ -45,7 +45,7 @@ async function fetchRequest(
  * @throws An error if the response was not successful (200-299) or a redirect
  * (300-399)
  */
-async function assertOk(response: Response): Promise<void> {
+export async function assertOk(response: Response): Promise<void> {
   if (response.ok) {
     return;
   }
