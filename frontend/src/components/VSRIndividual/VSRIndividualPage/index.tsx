@@ -281,7 +281,7 @@ export const VSRIndividualPage = () => {
       setDownloadSuccessNotificationOpen(true);
     } else {
       console.error(`Error downloading VSR PDF: ${result.error}`);
-      setEditErrorNotificationOpen(true);
+      setDownloadErrorNotificationOpen(true);
     }
     setLoadingDownload(false);
   };

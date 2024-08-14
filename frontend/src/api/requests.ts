@@ -32,6 +32,7 @@ async function fetchRequest(
     method,
     headers: newHeaders,
     body: hasBody ? JSON.stringify(body) : undefined,
+    cache: "no-store",
   });
 
   return response;
