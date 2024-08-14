@@ -51,6 +51,7 @@ export const branchOptions = [
   "Marine Corps",
   "Navy",
   "Navy Reserve",
+  'CSG"',
 ];
 
 export const conflictsOptions = [
