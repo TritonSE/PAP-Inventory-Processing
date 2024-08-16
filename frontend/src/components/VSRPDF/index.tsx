@@ -283,11 +283,50 @@ export const VSRPDF = ({ vsr, furnitureItems }: VSRPDFProps) => {
         </View>
 
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Personal Information</Text>
           <View style={styles.fullWidthRow}>
             {renderTextField("First and Last Name", vsr.name)}
+            {renderTextField("Date", vsr.dateReceived.toDateString())}
+          </View>
+
+          <View style={styles.fullWidthRow}>
+            {renderTextField("Street Address", vsr.streetAddress)}
+            {renderTextField("City", vsr.city)}
+            {renderTextField("Zip Code", vsr.zipCode)}
+            {renderTextField("State", vsr.state)}
+          </View>
+
+          <View style={styles.fullWidthRow}>
+            {renderTextField("Phone Number", vsr.phoneNumber)}
+            {renderTextField("Email Address", vsr.email)}
+          </View>
+
+          <View style={styles.fullWidthRow}>
             {renderTextField("Gender", vsr.gender)}
             {renderTextField("Age", vsr.age)}
+          </View>
+        </View>
+
+        <View style={styles.sectionContainer}>
+          <View style={styles.fullWidthRow}>{renderChipField("Ethnicity", vsr.ethnicity)}</View>
+
+          <View style={styles.fullWidthRow}>
+            {renderChipField("Branch", vsr.branch)}
+            {renderChipField("Conflicts", vsr.conflicts)}
+          </View>
+
+          <View style={styles.fullWidthRow}>
+            {renderChipField("Discharge Status", vsr.dischargeStatus)}
+            {renderChipField("Service Connected", vsr.serviceConnected ? "Yes" : "No")}
+          </View>
+
+          <View style={styles.fullWidthRow}>
+            {renderTextField("Last Rank", vsr.lastRank)}
+            {renderTextField("Military ID Number", vsr.militaryID)}
+          </View>
+
+          <View style={styles.fullWidthRow}>
+            {renderChipField("Employment Status", vsr.employmentStatus)}
+            {renderChipField("Income Level", vsr.incomeLevel)}
           </View>
 
           <View style={styles.fullWidthRow}>
@@ -304,50 +343,10 @@ export const VSRPDF = ({ vsr, furnitureItems }: VSRPDFProps) => {
             {renderTextField("Age(s) of Girl(s)", vsr.agesOfGirls.join(", ") || "N/A")}
           </View>
 
-          <View style={styles.fullWidthRow}>
-            {renderChipField("Ethnicity", vsr.ethnicity)}
-            {renderChipField("Employment Status", vsr.employmentStatus)}
-            {renderChipField("Income Level", vsr.incomeLevel)}
-            {renderChipField("Size of Home", vsr.sizeOfHome)}
-          </View>
+          <View style={styles.fullWidthRow}>{renderChipField("Size of Home", vsr.sizeOfHome)}</View>
         </View>
 
         <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Contact Information</Text>
-          <View style={styles.fullWidthRow}>
-            {renderTextField("Street Address", vsr.streetAddress)}
-            {renderTextField("City", vsr.city)}
-            {renderTextField("Zip Code", vsr.zipCode)}
-            {renderTextField("State", vsr.state)}
-          </View>
-
-          <View style={styles.fullWidthRow}>
-            {renderTextField("Phone Number", vsr.phoneNumber)}
-            {renderTextField("Email Address", vsr.email)}
-          </View>
-        </View>
-
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Branch</Text>
-          <View style={styles.fullWidthRow}>
-            {renderChipField("Branch", vsr.branch)}
-            {renderChipField("Conflicts", vsr.conflicts)}
-          </View>
-
-          <View style={styles.fullWidthRow}>
-            {renderChipField("Discharge Status", vsr.dischargeStatus)}
-            {renderChipField("Service Connected", vsr.serviceConnected ? "Yes" : "No")}
-          </View>
-
-          <View style={styles.fullWidthRow}>
-            {renderTextField("Last Rank", vsr.lastRank)}
-            {renderTextField("Military ID Number", vsr.militaryID)}
-          </View>
-        </View>
-
-        <View style={styles.sectionContainer}>
-          <Text style={styles.sectionTitle}>Additional Information</Text>
-
           <View style={styles.fullWidthRow}>
             {renderChipField("Interested in companionship animal", vsr.petCompanion ? "Yes" : "No")}
             {renderChipField("How did you hear about us?", vsr.hearFrom)}
