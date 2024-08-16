@@ -285,7 +285,7 @@ export const VSRPDF = ({ vsr, furnitureItems }: VSRPDFProps) => {
         <View style={styles.sectionContainer}>
           <Text style={styles.sectionTitle}>Personal Information</Text>
           <View style={styles.fullWidthRow}>
-            {renderTextField("Name", vsr.name)}
+            {renderTextField("First and Last Name", vsr.name)}
             {renderTextField("Gender", vsr.gender)}
             {renderTextField("Age", vsr.age)}
           </View>

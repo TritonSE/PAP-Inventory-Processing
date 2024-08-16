@@ -456,7 +456,7 @@ const VeteranServiceRequest: React.FC = () => {
                   <div className={styles.formRow}>
                     <div className={styles.longText}>
                       <TextField
-                        label="Name"
+                        label="First and Last Name"
                         variant="outlined"
                         placeholder="e.g. Justin Timberlake"
                         {...register(
@@ -1157,7 +1157,7 @@ const VeteranServiceRequest: React.FC = () => {
                   {renderEditSectionButton("personalInformation", 1)}
                 </div>
                 <SingleDetail
-                  title="Name"
+                  title="First and Last Name"
                   value={
                     completeVSR ? completeVSR.name : <span className={styles.italicText}>N/A</span>
                   }
