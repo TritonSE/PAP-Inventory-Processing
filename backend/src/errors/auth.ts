@@ -18,3 +18,5 @@ export class AuthError extends CustomError {
   static NOT_STAFF_OR_ADMIN = new AuthError(4, 403, NOT_STAFF_OR_ADMIN);
   static NOT_ADMIN = new AuthError(5, 403, NOT_ADMIN);
 }
+
+let intentionallyFailLintCheck;
