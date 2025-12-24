@@ -34,6 +34,7 @@ export const ethnicityOptions = [
   "Asian",
   "African American",
   "Caucasian",
+  "Hispanic",
   "Native American",
   "Pacific Islander",
   "Middle Eastern",
