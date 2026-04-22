@@ -12,7 +12,7 @@ import { useMediaQuery } from "@mui/material";
 import { useRedirectToLoginIfNotSignedIn } from "@/hooks/useRedirection";
 import { UserContext } from "@/contexts/userContext";
 import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
-import { VSR, getAllVSRs, bulkExportVSRS, deleteVSR } from "@/api/VSRs";
+import { VSR, getAllVSRs, bulkExportVSRS, deleteVSR, updateVSRStatus } from "@/api/VSRs";
 import { VSRErrorModal } from "@/components/VSRForm/VSRErrorModal";
 import { useScreenSizes } from "@/hooks/useScreenSizes";
 import { LoadingScreen } from "@/components/shared/LoadingScreen";
@@ -21,6 +21,7 @@ import { NotificationBanner } from "@/components/shared/NotificationBanner";
 import FilterChip from "@/components/VSRTable/FilterChip";
 import styles from "@/app/staff/vsr/page.module.css";
 import { ADMIN_ROLE } from "@/constants/roles";
+import { BaseModal } from "@/components/shared/BaseModal";
 
 enum VSRTableError {
   CANNOT_FETCH_VSRS_NO_INTERNET,
@@ -54,6 +55,17 @@ export default function VSRTableView() {
   const [loadingDelete, setLoadingDelete] = useState(false);
   const [deleteSuccessNotificationOpen, setDeleteSuccessNotificationOpen] = useState(false);
   const [deleteErrorNotificationOpen, setDeleteErrorNotificationOpen] = useState(false);
+  const [updateStatusModalOpen, setUpdateStatusModalOpen] = useState(false);
+  const [loadingUpdateStatus, setLoadingUpdateStatus] = useState(false);
+  const [newStatus, setNewStatus] = useState("Select a status");
+  const [updateStatusSuccessNotificationOpen, setUpdateStatusSuccessNotificationOpen] =
+    useState(false);
+  const [updateStatusErrorNotificationOpen, setUpdateStatusErrorNotificationOpen] = useState(false);
+
+  const closeUpdateStatusModal = () => {
+    setUpdateStatusModalOpen(false);
+    setNewStatus("Select a status");
+  };
 
   const [filterModalAnchorElement, setFilterModalAnchorElement] = useState<HTMLElement | null>(
     null,
@@ -134,6 +146,45 @@ export default function VSRTableView() {
     } finally {
       setLoadingDelete(false);
       setDeleteVsrModalOpen(false);
+    }
+  };
+
+  const onUpdateStatus = async () => {
+    if (loadingUpdateStatus || !firebaseUser) {
+      return;
+    }
+
+    setUpdateStatusSuccessNotificationOpen(false);
+    setUpdateStatusErrorNotificationOpen(false);
+    setLoadingUpdateStatus(true);
+
+    try {
+      const firebaseToken = await firebaseUser.getIdToken();
+      if (!firebaseToken) {
+        setLoadingUpdateStatus(false);
+        return;
+      }
+
+      await Promise.all(
+        selectedVsrIds.map((vsrId) =>
+          updateVSRStatus(vsrId, newStatus, firebaseToken).then((res) => {
+            if (res.success) {
+              return Promise.resolve();
+            } else {
+              return Promise.reject(res.error);
+            }
+          }),
+        ),
+      );
+      setUpdateStatusSuccessNotificationOpen(true);
+      setSelectedVsrIds([]);
+      fetchVSRs();
+    } catch (error) {
+      console.error(`Error updating VSR(s) status: ${error}`);
+      setUpdateStatusErrorNotificationOpen(true);
+    } finally {
+      setLoadingUpdateStatus(false);
+      closeUpdateStatusModal();
     }
   };
 
@@ -315,12 +366,19 @@ export default function VSRTableView() {
                 outlined
                 iconPath="/mdi_trash.svg"
                 iconAlt="Delete"
-                text="Delete VSR(s)"
+                text={`Delete ${selectedVsrIds.length} VSR(s)`}
                 hideTextOnMobile
                 onClick={() => setDeleteVsrModalOpen(true)}
               />
             ) : null}
-            {atLeastOneRowSelected ? null : (
+            {atLeastOneRowSelected ? (
+              <Button
+                variant="primary"
+                outlined={false}
+                text={`Update Status (${selectedVsrIds.length})`}
+                onClick={() => setUpdateStatusModalOpen(true)}
+              />
+            ) : (
               <Button
                 variant="primary"
                 outlined={false}
@@ -417,6 +475,44 @@ export default function VSRTableView() {
         buttonLoading={loadingDelete}
       />
 
+      <BaseModal
+        isOpen={updateStatusModalOpen}
+        onClose={closeUpdateStatusModal}
+        title="Update status"
+        content={
+          <>
+            Select a status below to update the status of all selected VSR(s) (
+            {selectedVsrIds.length})
+            <StatusDropdown
+              onChanged={setNewStatus}
+              value={newStatus}
+              includeAllStatuses={false}
+              includePlaceholder
+            />
+          </>
+        }
+        bottomRow={
+          <div className={styles.buttonContainer}>
+            <Button
+              variant="primary"
+              outlined
+              text="Cancel"
+              onClick={closeUpdateStatusModal}
+              className={styles.button}
+            />
+            <Button
+              disabled={newStatus === "Select a status"}
+              variant="primary"
+              outlined={false}
+              text="Update status"
+              onClick={onUpdateStatus}
+              loading={loadingUpdateStatus}
+              className={styles.button}
+            />
+          </div>
+        }
+      />
+
       <NotificationBanner
         variant="success"
         isOpen={deleteSuccessNotificationOpen}
@@ -430,6 +526,21 @@ export default function VSRTableView() {
         subText="There was an error deleting the VSR(s). Please try again later."
         onDismissClicked={() => setDeleteErrorNotificationOpen(false)}
       />
+
+      <NotificationBanner
+        variant="success"
+        isOpen={updateStatusSuccessNotificationOpen}
+        mainText="Status Updated Successfully"
+        onDismissClicked={() => setUpdateStatusSuccessNotificationOpen(false)}
+      />
+      <NotificationBanner
+        variant="error"
+        isOpen={updateStatusErrorNotificationOpen}
+        mainText="Unable to Update VSR(s) Status"
+        subText="There was an error updating the VSR(s) status. Please try again later."
+        onDismissClicked={() => setUpdateStatusErrorNotificationOpen(false)}
+      />
+
       <FilterModal
         anchorElement={filterModalAnchorElement}
         onClose={() => {

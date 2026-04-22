@@ -213,14 +213,11 @@ export const VSRPDF = ({ vsr, furnitureItems }: VSRPDFProps) => {
       Array.isArray(chip) && chip.length === 0 ? (
         <Text style={styles.fieldContents}>N/A</Text>
       ) : (
-        <>
-          <View style={styles.filledChip}>
-            <Text style={styles.chipText}>{Array.isArray(chip) ? chip[0] : chip}</Text>
+        (Array.isArray(chip) ? chip : [chip]).map((item) => (
+          <View key={item} style={styles.filledChip}>
+            <Text style={styles.chipText}>{item}</Text>
           </View>
-          {Array.isArray(chip) && chip.length > 1 ? (
-            <Text style={styles.italicText}>+{chip.length - 1} more</Text>
-          ) : null}
-        </>
+        ))
       ),
     );
 

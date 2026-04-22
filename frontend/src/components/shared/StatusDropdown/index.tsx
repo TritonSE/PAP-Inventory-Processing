@@ -49,6 +49,11 @@ export const ALL_STATUSES_OPTION: StatusOption = {
   color: "transparent",
 };
 
+export const PLACEHOLDER_STATUS_OPTION: StatusOption = {
+  value: "Select a status",
+  color: "transparent",
+};
+
 /**
  * An input component that displays a dropdown menu with all available status
  * options and enables the user to select a status.
@@ -57,9 +62,15 @@ export interface StatusDropdownProps {
   value: string;
   onChanged?: (value: string) => void;
   includeAllStatuses: boolean;
+  includePlaceholder?: boolean;
 }
 
-export function StatusDropdown({ value, onChanged, includeAllStatuses }: StatusDropdownProps) {
+export function StatusDropdown({
+  value,
+  onChanged,
+  includeAllStatuses,
+  includePlaceholder = false,
+}: StatusDropdownProps) {
   const [selectedValue, setSelectedValue] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -142,6 +153,7 @@ export function StatusDropdown({ value, onChanged, includeAllStatuses }: StatusD
           IconComponent={DropdownIcon}
         >
           {...(includeAllStatuses ? [ALL_STATUSES_OPTION] : [])
+            .concat(...(includePlaceholder ? [PLACEHOLDER_STATUS_OPTION] : []))
             .concat(STATUS_OPTIONS)
             .map((status) => (
               <MenuItem key={status.value} value={status.value}>

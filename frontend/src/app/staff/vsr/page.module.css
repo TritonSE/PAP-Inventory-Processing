@@ -103,6 +103,13 @@
   font-weight: 700;
 }
 
+@media screen and (max-width: 1300px) {
+  .row_right {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
 /* shrink the margins at a screen size larger than tablet to avoid overflow */
 @media screen and (max-width: 1150px) {
   .column {
@@ -130,12 +137,6 @@
   }
 }
 
-@media screen and (max-width: 600px) {
-  .row_right {
-    gap: 4px;
-  }
-}
-
 /* mobile version */
 @media screen and (max-width: 550px) {
   .column {
@@ -158,5 +159,39 @@
 @media screen and (max-width: 475px) {
   .statusWrapper {
     min-width: unset;
+  }
+}
+
+/* For update status modal */
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+}
+
+.button {
+  width: 100%;
+  padding: 12px 24px;
+  text-align: center;
+  font-family: "Lora";
+  font-size: 24px;
+  font-weight: 700;
+}
+
+/* tablet version */
+@media screen and (max-width: 850px) {
+  .button {
+    font-size: 18px;
+  }
+}
+
+/* mobile version */
+@media screen and (max-width: 550px) {
+  .buttonContainer {
+    gap: 16px;
+  }
+
+  .button {
+    font-size: 14px;
   }
 }
